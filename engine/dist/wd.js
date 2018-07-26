@@ -35759,6 +35759,19 @@
 
 	/* Contract-WonderLog Not a pure module */
 
+	function isSupportRenderWorkerAndSharedArrayBuffer$2() {
+	  var isSupportSharedArrayBuffer$$1 = isSupportSharedArrayBuffer(/* () */0);
+	  var match = !isSupportSharedArrayBuffer$$1;
+	  if (match) {
+	    return false;
+	  } else {
+	    return _2(hasProperty, "transferControlToOffscreen", buildCanvas(/* () */0));
+	  }
+	}
+
+
+	/* Worker-Wonderjs Not a pure module */
+
 	function createBasicMaterial$1(state) {
 	  return create$29(state);
 	}
@@ -40261,6 +40274,8 @@
 
 	var createArcballCameraController = createArcballCameraController$1;
 
+	var isSupportRenderWorkerAndSharedArrayBuffer = isSupportRenderWorkerAndSharedArrayBuffer$2;
+
 	var getPointEventEventOfEvent = getPointEventEventOfEvent$1;
 
 	var getPointEventMovementDeltaOfEvent = getPointEventMovementDeltaOfEvent$1;
@@ -40864,6 +40879,7 @@
 	exports.unsafeGetArcballCameraControllerDistance = unsafeGetArcballCameraControllerDistance;
 	exports.unsafeGetArcballCameraControllerGameObject = unsafeGetArcballCameraControllerGameObject;
 	exports.createArcballCameraController = createArcballCameraController;
+	exports.isSupportRenderWorkerAndSharedArrayBuffer = isSupportRenderWorkerAndSharedArrayBuffer;
 	exports.getPointEventEventOfEvent = getPointEventEventOfEvent;
 	exports.getPointEventMovementDeltaOfEvent = getPointEventMovementDeltaOfEvent;
 	exports.getPointEventWheelOfEvent = getPointEventWheelOfEvent;

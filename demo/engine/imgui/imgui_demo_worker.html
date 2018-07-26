@@ -22,6 +22,11 @@
     <script src="../js/WorkerTool.js"></script>
 
     <script src="../../../engine/dist/wd.js"></script>
+
+
+    <h1 id="detect" style="display: none">your browser not support sharedArrayBuffer or offscreenCanvas</h1>
+
+
     <script>
 
 
@@ -508,6 +513,19 @@
 
 
         window.onload = function () {
+            if (wd.isSupportRenderWorkerAndSharedArrayBuffer() === false) {
+                document.querySelector("#detect").style.display = "block";
+
+                return;
+            }
+            else {
+                document.querySelector("#detect").style.display = "none";
+            }
+
+
+
+
+
             return AssetTool.loadConfig(["../../../engine/data/setting_worker.json", "../../../engine/data/"], null, function () {
                 return AssetTool.loadIMGUIAsset("../asset/font/Lato-Regular-64.fnt", "../asset/font/lato.png",
                     [
