@@ -1,0 +1,26 @@
+{
+    "name": "wonder-demo.github.io",
+    "version": "0.0.1",
+    "authors": "Wonder",
+    "description": "3d webgl engine and editor",
+    "scripts": {
+    },
+    "keywords": [
+      "wonder",
+      "webgl",
+      "functional-programming",
+      "high-performance",
+      "3d",
+      "engine",
+      "reasonml"
+    ],
+    "devDependencies": {
+      "express": "^4.16.1",
+      "http": "^0.0.0"
+    },
+    "dependencies": {
+    },
+    "resolutions": {
+    }
+  }
+  
