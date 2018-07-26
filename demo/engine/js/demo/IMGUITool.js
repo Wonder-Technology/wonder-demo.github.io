@@ -89,7 +89,7 @@ var ImguiTool = (function () {
         },
         buildImguiFunc: function (api, fps, screenWidth, screenHeight, getIMGUIRegionFunc, state) {
             var intervalX = screenWidth / 5;
-            var intervalY = screenHeight / 6;
+            var intervalY = screenHeight / 4;
 
             var controlWidth = screenWidth / 5;
             var controlHeight = screenHeight / 8;
