@@ -18,8 +18,10 @@
     <script src="../js/CustomGeometryTool.js"></script>
     <script src="../js/BasicMaterialTool.js"></script>
     <script src="../js/LightMaterialTool.js"></script>
-    <script src="../js/IMGUITool.js"></script>
     <script src="../js/WorkerTool.js"></script>
+
+
+    <script src="../js/demo/IMGUITool.js"></script>
 
     <script src="../../../engine/dist/wd.js"></script>
 
@@ -30,7 +32,7 @@
     <script>
 
 
-        function createControls(api, truckGameObject, boxGameObject, state) {
+        function createControls(api, truckGameObject, boxGameObject, screenWidth, screenHeight, buildImguiFunc, getIMGUIRegion, state) {
             function syncCustomDataBetweenMainWorkerAndRenderWorker(api, state) {
                 var customData = api.getCustomDataFromMainWorkerToRenderWorker(state);
 
@@ -114,86 +116,12 @@
             }
 
 
-            var state = api.beginGroup([1200, 20], state);
-
-
-            var state = api.box([0, 0, 1000, 950], boxColorArr, state);
-
-
-            var state = api.beginGroup([0, 0], state);
-
-            var state = api.label(
-                [x, 0, 300, 100], "fps: " + customData.fps.toFixed(2), 0, state
-            );
-
-
-            var state = api.endGroup(state);
-
-
-            var state = api.beginGroup([0, 220], state);
-
-
-            var [state, selectIndex_radioButton] = api.radioButton(
-                [
-                    [
-
-                        [x, 0, radioButtonWidth, radioButtonHeight], "truck"
-
-                    ],
-                    [
-
-                        [intervalX, 0, radioButtonWidth, radioButtonHeight],
-                        "box"
-
-                    ]
-                ],
-                0,
-                "group1",
-                state
-            );
-
-
-
-            var [state, selectIndex_checkbox1] = api.checkbox(
-                [x, 200, 600, 100],
-                true,
-                "has specular light",
-                state
-            );
-
-            // var [state, selectIndex_checkbox2] = api.checkbox(
-            //     [intervalX, 200, 400, 100],
-            //     true,
-            //     "checkbox2",
-            //     state
-            // );
-
-
-
-
-
-
-
-
-            var [state, isSelected_shininess, value_shininess] = api.sliderFloat(
-                [
-                    [x, 400, 300, 100],
-                    300
-                ],
-                [
-                    0.0, 64.0, 2
-                ],
-                [
-                    32.0, "shininess"
-                ],
-                state
-            );
-
-
-
-
-
             var customData = api.getCustomDataFromRenderWorkerToMainWorker(state);
+
+
+            var [state, selectIndex_radioButton, selectIndex_checkbox1, value_shininess] = buildImguiFunc(api, customData.fps, screenWidth, screenHeight, getIMGUIRegion, state);
+
+
 
             customData.selectIndex_radioButton = selectIndex_radioButton;
             customData.selectIndex_checkbox1 = selectIndex_checkbox1;
@@ -202,54 +130,6 @@
             var state = api.setCustomDataFromRenderWorkerToMainWorker(customData, state);
 
 
-
-
-
-            // var [state, isSelected_sliderInt, value_sliderInt] = api.sliderInt(
-            //     [
-            //         [intervalX, 400, 300, 100],
-            //         300
-            //     ],
-            //     [
-            //         2, 7
-            //     ],
-            //     [
-            //         3, "int"
-            //     ],
-            //     state
-            // );
-
-
-            // var [state, isClick_button2] = api.button(
-            //     [x, 600, 300, 100], "button1", state
-            // );
-
-
-
-            // var state = api.label(
-            //     [intervalX, 600, 300, 100], "label1", 0, state
-            // );
-
-
-
-            var state = api.image(
-                [x, 600, 100, 100], [0, 0, 1, 1], "wonder", state
-            );
-
-
-            var state = api.image(
-                [intervalX / 2, 600, 100, 100], [0, 0, 1, 1], "1", state
-            );
-
-
-
-            var state = api.image(
-                [intervalX / 2 * 2, 600, 100, 100], [0, 0, 1, 1], "2", state
-            );
-
-            var state = api.endGroup(state);
-
-            var state = api.endGroup(state);
 
             return state
 
@@ -273,7 +153,11 @@
             var state = wd.setIMGUIFunc(
                 [
                     WorkerTool.serializeFunction(createControls),
-                    truckGameObject, boxGameObject
+                    WorkerTool.serializeFunction(ImguiTool.buildImguiFunc),
+                    WorkerTool.serializeFunction(ImguiTool.getIMGUIRegion),
+                    truckGameObject, boxGameObject,
+                    window.innerWidth,
+                    window.innerHeight
                 ],
                 (customData, api, state) => {
                     function deserializeFunction(funcStr) {
@@ -282,11 +166,15 @@
 
 
                     var createControls = deserializeFunction(customData[0]);
-                    var truckGameObject = customData[1];
-                    var boxGameObject = customData[2];
+                    var buildImguiFunc = deserializeFunction(customData[1]);
+                    var getIMGUIRegion = deserializeFunction(customData[2]);
+                    var truckGameObject = customData[3];
+                    var boxGameObject = customData[4];
+                    var screenWidth = customData[5];
+                    var screenHeight = customData[6];
 
 
-                    var state = createControls(api, truckGameObject, boxGameObject, state);
+                    var state = createControls(api, truckGameObject, boxGameObject, screenWidth, screenHeight, buildImguiFunc, getIMGUIRegion, state);
 
 
 
@@ -370,10 +258,11 @@
 
                     var customData = wd.getRenderWorkerCustomData(state);
 
+                    var [regionX, regionY, regionWidth, regionHeight] = ImguiTool.getIMGUIRegion(window.innerWidth, window.innerHeight);
 
                     if (
                         customData.isShowPanel === true &&
-                        x >= 1200
+                        x >= regionX && y >= regionY
                     ) {
                         return [
                             state,

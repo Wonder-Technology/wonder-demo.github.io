@@ -18,8 +18,10 @@
     <script src="../js/CustomGeometryTool.js"></script>
     <script src="../js/BasicMaterialTool.js"></script>
     <script src="../js/LightMaterialTool.js"></script>
-    <script src="../js/IMGUITool.js"></script>
     <script src="../js/WorkerTool.js"></script>
+
+
+    <script src="../js/demo/IMGUITool.js"></script>
 
     <script src="../../../engine/dist/wd.js"></script>
     <script>
@@ -52,7 +54,6 @@
 
             var intervalX = 400;
 
-            var boxColorArr = [0.0, 0.5, 0.5];
 
 
             var buttonText = null;
@@ -85,84 +86,7 @@
             }
 
 
-            var state = api.beginGroup([1200, 20], state);
-
-
-            var state = api.box([0, 0, 1000, 950], boxColorArr, state);
-
-
-            var state = api.beginGroup([0, 0], state);
-
-            var state = api.label(
-                [x, 0, 300, 100], "fps: " + wd.getFps(state).toFixed(2), 0, state
-            );
-
-
-            var state = api.endGroup(state);
-
-
-            var state = api.beginGroup([0, 220], state);
-
-
-            var [state, selectIndex_radioButton] = api.radioButton(
-                [
-                    [
-
-                        [x, 0, radioButtonWidth, radioButtonHeight], "truck"
-
-                    ],
-                    [
-
-                        [intervalX, 0, radioButtonWidth, radioButtonHeight],
-                        "box"
-
-                    ]
-                ],
-                0,
-                "group1",
-                state
-            );
-
-
-
-            var [state, selectIndex_checkbox1] = api.checkbox(
-                [x, 200, 600, 100],
-                true,
-                "has specular light",
-                state
-            );
-
-            // var [state, selectIndex_checkbox2] = api.checkbox(
-            //     [intervalX, 200, 400, 100],
-            //     true,
-            //     "checkbox2",
-            //     state
-            // );
-
-
-
-
-
-
-
-
-            var [state, isSelected_shininess, value_shininess] = api.sliderFloat(
-                [
-                    [x, 400, 300, 100],
-                    300
-                ],
-                [
-                    0.0, 64.0, 2
-                ],
-                [
-                    32.0, "shininess"
-                ],
-                state
-            );
-
-
-
-
+            var [state, selectIndex_radioButton, selectIndex_checkbox1, value_shininess] = ImguiTool.buildImguiFunc(api, wd.getFps(state), window.innerWidth, window.innerHeight, ImguiTool.getIMGUIRegion, state);
 
             var targetGameObject = null;
 
@@ -235,25 +159,6 @@
 
 
 
-            var state = api.image(
-                [x, 600, 100, 100], [0, 0, 1, 1], "wonder", state
-            );
-
-
-            var state = api.image(
-                [intervalX / 2, 600, 100, 100], [0, 0, 1, 1], "1", state
-            );
-
-
-
-            var state = api.image(
-                [intervalX / 2 * 2, 600, 100, 100], [0, 0, 1, 1], "2", state
-            );
-
-            var state = api.endGroup(state);
-
-            var state = api.endGroup(state);
-
             return state
 
         }
@@ -268,7 +173,7 @@
 
             var state = wd.setIMGUIFunc(
                 [
-                    truckGameObject, boxGameObject
+                    truckGameObject, boxGameObject,
                 ],
                 (customData, api, state) => {
                     function deserializeFunction(funcStr) {
@@ -361,10 +266,11 @@
                     var [x, y] = wd.getPointEventLocationInViewOfEvent(pointEvent);
 
 
+                    var [regionX, regionY, regionWidth, regionHeight] = ImguiTool.getIMGUIRegion(window.innerWidth, window.innerHeight);
 
                     if (
                         window.isShowPanel === true &&
-                        x >= 1200
+                        x >= regionX && y >= regionY
                     ) {
                         return [
                             state,
