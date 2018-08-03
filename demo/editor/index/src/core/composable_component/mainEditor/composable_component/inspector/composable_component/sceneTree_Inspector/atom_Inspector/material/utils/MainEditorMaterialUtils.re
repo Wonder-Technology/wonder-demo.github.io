@@ -55,7 +55,7 @@ let _getOperateSourceMaterialFunc =
       |> GameObjectComponentEngineService.getBasicMaterialComponent(
            gameObject,
          ),
-      GameObjectEngineService.disposeGameObjectBasicMaterialComponent,
+      GameObjectComponentEngineService.disposeBasicMaterialComponent,
     )
   | LightMaterial => (
       DiffType.LightMaterial,
@@ -63,7 +63,7 @@ let _getOperateSourceMaterialFunc =
       |> GameObjectComponentEngineService.getLightMaterialComponent(
            gameObject,
          ),
-      GameObjectEngineService.disposeGameObjectLightMaterialComponent,
+      GameObjectComponentEngineService.disposeLightMaterialComponent,
     )
   };
 
@@ -87,6 +87,7 @@ let _getOperateTargetMaterialFunc =
       GameObjectComponentEngineService.addLightMaterialComponent,
     )
   };
+
 
 let replaceMaterialByType = (sourceMateralType, targetMaterialType) => {
   let gameObject =
@@ -135,3 +136,26 @@ let replaceMaterialByType = (sourceMateralType, targetMaterialType) => {
   |> DirectorEngineService.loopBody(0.)
   |> StateLogicService.setEditEngineState;
 };
+
+let disposeMaterialByMaterialType =
+    (materialType, currentSceneTreeNode, (editorState, engineState)) =>
+  switch (materialType) {
+  | BasicMaterial =>
+    (editorState, engineState)
+    |> GameObjectLogicService.disposeBasicMaterialComponent(
+         currentSceneTreeNode,
+         engineState
+         |> GameObjectComponentEngineService.getBasicMaterialComponent(
+              currentSceneTreeNode,
+            ),
+       )
+  | LightMaterial =>
+    (editorState, engineState)
+    |> GameObjectLogicService.disposeLightMaterialComponent(
+         currentSceneTreeNode,
+         engineState
+         |> GameObjectComponentEngineService.getLightMaterialComponent(
+              currentSceneTreeNode,
+            ),
+       )
+  };

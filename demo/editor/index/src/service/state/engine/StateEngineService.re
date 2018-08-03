@@ -12,4 +12,9 @@ let getStateFromData = StateAPI.getStateFromData;
 
 let setStateToData = StateAPI.setStateToData;
 
+
 let setIsDebug = StateAPI.setIsDebug;
+
+let setUnsafeGetStateFunc = StateAPI.setUnsafeGetStateFunc;
+
+let setSetStateFunc = StateAPI.setSetStateFunc;

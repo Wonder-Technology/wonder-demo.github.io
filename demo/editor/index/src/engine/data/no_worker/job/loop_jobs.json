@@ -20,7 +20,7 @@
     {
         "name": "clear_color",
         "flags": [
-            "#000000"
+            "#AAAAAA"
         ]
     },
     {
@@ -48,5 +48,8 @@
     },
     {
         "name": "reallocate_cpu_memory"
+    },
+    {
+        "name": "render_imgui"
     }
 ]

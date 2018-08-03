@@ -6074,7 +6074,7 @@
 	                        return filterTargetName(param[/* name */0], subJobName);
 	                      }));
 	                if (match !== undefined) {
-	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */1][/* workerCustomMainInitTargetJobMap */2], stateData$$1, push(_3(findFunc, /* tuple */[
+	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */2][/* workerCustomMainInitTargetJobMap */2], stateData$$1, push(_3(findFunc, /* tuple */[
 	                                      match,
 	                                      pipelineJobs,
 	                                      jobHandleMap,
@@ -6084,10 +6084,10 @@
 	                } else {
 	                  var match$1 = getExecutableJob(jobs, subJobName);
 	                  var handleFunc = _2(getJobHandleFunc, subJobName, jobHandleMap);
-	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */1][/* workerCustomMainInitTargetJobMap */2], stateData$$1, push(_2(handleFunc, match$1[/* flags */1], stateData$$1), streamArr));
+	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */2][/* workerCustomMainInitTargetJobMap */2], stateData$$1, push(_2(handleFunc, match$1[/* flags */1], stateData$$1), streamArr));
 	                }
 	              }), /* array */[], param[2].filter((function (param) {
-	                    return !has(param[/* name */0], state[/* jobRecord */1][/* workerCustomMainInitRemovedDefaultJobMap */4]);
+	                    return !has(param[/* name */0], state[/* jobRecord */2][/* workerCustomMainInitRemovedDefaultJobMap */4]);
 	                  })));
 	}
 
@@ -6136,7 +6136,7 @@
 	}
 
 	function getMainInitJobStream$1(jobHandleMap, stateData$$1, getJobHandleFunc, state) {
-	  var match = unsafeGet$1(state[/* workerJobRecord */3]);
+	  var match = unsafeGet$1(state[/* workerJobRecord */4]);
 	  var setting = match[/* setting */0];
 	  var match$1 = unsafeFindFirst(match[/* mainInitPipelines */1], setting[/* mainInitPipeline */1], (function (param) {
 	          return filterTargetName(param[/* name */0], setting[/* mainInitPipeline */1]);
@@ -6165,7 +6165,7 @@
 	                        return filterTargetName(param[/* name */0], subJobName);
 	                      }));
 	                if (match !== undefined) {
-	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */1][/* workerCustomMainLoopTargetJobMap */5], stateData$$1, push(_3(findFunc, /* tuple */[
+	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */2][/* workerCustomMainLoopTargetJobMap */5], stateData$$1, push(_3(findFunc, /* tuple */[
 	                                      match,
 	                                      pipelineJobs,
 	                                      jobHandleMap,
@@ -6175,10 +6175,10 @@
 	                } else {
 	                  var match$1 = getExecutableJob(jobs, subJobName);
 	                  var handleFunc = _2(getJobHandleFunc, subJobName, jobHandleMap);
-	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */1][/* workerCustomMainLoopTargetJobMap */5], stateData$$1, push(_2(handleFunc, match$1[/* flags */1], stateData$$1), streamArr));
+	                  return addCustomJobHandleToStreamArr(subJobName, state[/* jobRecord */2][/* workerCustomMainLoopTargetJobMap */5], stateData$$1, push(_2(handleFunc, match$1[/* flags */1], stateData$$1), streamArr));
 	                }
 	              }), /* array */[], param[2].filter((function (param) {
-	                    return !has(param[/* name */0], state[/* jobRecord */1][/* workerCustomMainLoopRemovedDefaultJobMap */7]);
+	                    return !has(param[/* name */0], state[/* jobRecord */2][/* workerCustomMainLoopRemovedDefaultJobMap */7]);
 	                  })));
 	}
 
@@ -6227,7 +6227,7 @@
 	}
 
 	function getMainLoopJobStream$1(jobHandleMap, stateData$$1, getJobHandleFunc, state) {
-	  var match = unsafeGet$1(state[/* workerJobRecord */3]);
+	  var match = unsafeGet$1(state[/* workerJobRecord */4]);
 	  var setting = match[/* setting */0];
 	  var match$1 = unsafeFindFirst(match[/* mainLoopPipelines */2], setting[/* mainLoopPipeline */2], (function (param) {
 	          return filterTargetName(param[/* name */0], setting[/* mainLoopPipeline */2]);
@@ -6257,16 +6257,16 @@
 	  var sourceJobName = param[1];
 	  var targetJobName = param[0];
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
+	  var init = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
 	    /* noWorkerInitJobList */init[/* noWorkerInitJobList */0],
 	    /* noWorkerLoopJobList */init[/* noWorkerLoopJobList */1],
 	    /* workerCustomMainInitTargetJobMap */set(sourceJobName, /* tuple */[
 	          targetJobName,
 	          action,
 	          targetHandleFunc
-	        ], state[/* jobRecord */1][/* workerCustomMainInitTargetJobMap */2]),
-	    /* workerCustomMainInitSourceJobMap */set(targetJobName, sourceJobName, state[/* jobRecord */1][/* workerCustomMainInitSourceJobMap */3]),
+	        ], state[/* jobRecord */2][/* workerCustomMainInitTargetJobMap */2]),
+	    /* workerCustomMainInitSourceJobMap */set(targetJobName, sourceJobName, state[/* jobRecord */2][/* workerCustomMainInitSourceJobMap */3]),
 	    /* workerCustomMainInitRemovedDefaultJobMap */init[/* workerCustomMainInitRemovedDefaultJobMap */4],
 	    /* workerCustomMainLoopTargetJobMap */init[/* workerCustomMainLoopTargetJobMap */5],
 	    /* workerCustomMainLoopSourceJobMap */init[/* workerCustomMainLoopSourceJobMap */6],
@@ -6276,14 +6276,14 @@
 	}
 
 	function removeWorkerMainInitJob$2(targetJobName, state) {
-	  var match = get(targetJobName, state[/* jobRecord */1][/* workerCustomMainInitSourceJobMap */3]);
+	  var match = get(targetJobName, state[/* jobRecord */2][/* workerCustomMainInitSourceJobMap */3]);
 	  if (match !== undefined) {
 	    var newrecord = caml_array_dup(state);
-	    var init = state[/* jobRecord */1];
-	    newrecord[/* jobRecord */1] = /* record */[
+	    var init = state[/* jobRecord */2];
+	    newrecord[/* jobRecord */2] = /* record */[
 	      /* noWorkerInitJobList */init[/* noWorkerInitJobList */0],
 	      /* noWorkerLoopJobList */init[/* noWorkerLoopJobList */1],
-	      /* workerCustomMainInitTargetJobMap */deleteVal(match, state[/* jobRecord */1][/* workerCustomMainInitTargetJobMap */2]),
+	      /* workerCustomMainInitTargetJobMap */deleteVal(match, state[/* jobRecord */2][/* workerCustomMainInitTargetJobMap */2]),
 	      /* workerCustomMainInitSourceJobMap */init[/* workerCustomMainInitSourceJobMap */3],
 	      /* workerCustomMainInitRemovedDefaultJobMap */init[/* workerCustomMainInitRemovedDefaultJobMap */4],
 	      /* workerCustomMainLoopTargetJobMap */init[/* workerCustomMainLoopTargetJobMap */5],
@@ -6293,13 +6293,13 @@
 	    return newrecord;
 	  } else {
 	    var newrecord$1 = caml_array_dup(state);
-	    var init$1 = state[/* jobRecord */1];
-	    newrecord$1[/* jobRecord */1] = /* record */[
+	    var init$1 = state[/* jobRecord */2];
+	    newrecord$1[/* jobRecord */2] = /* record */[
 	      /* noWorkerInitJobList */init$1[/* noWorkerInitJobList */0],
 	      /* noWorkerLoopJobList */init$1[/* noWorkerLoopJobList */1],
 	      /* workerCustomMainInitTargetJobMap */init$1[/* workerCustomMainInitTargetJobMap */2],
 	      /* workerCustomMainInitSourceJobMap */init$1[/* workerCustomMainInitSourceJobMap */3],
-	      /* workerCustomMainInitRemovedDefaultJobMap */set(targetJobName, true, state[/* jobRecord */1][/* workerCustomMainInitRemovedDefaultJobMap */4]),
+	      /* workerCustomMainInitRemovedDefaultJobMap */set(targetJobName, true, state[/* jobRecord */2][/* workerCustomMainInitRemovedDefaultJobMap */4]),
 	      /* workerCustomMainLoopTargetJobMap */init$1[/* workerCustomMainLoopTargetJobMap */5],
 	      /* workerCustomMainLoopSourceJobMap */init$1[/* workerCustomMainLoopSourceJobMap */6],
 	      /* workerCustomMainLoopRemovedDefaultJobMap */init$1[/* workerCustomMainLoopRemovedDefaultJobMap */7]
@@ -6312,8 +6312,8 @@
 	  var sourceJobName = param[1];
 	  var targetJobName = param[0];
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
+	  var init = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
 	    /* noWorkerInitJobList */init[/* noWorkerInitJobList */0],
 	    /* noWorkerLoopJobList */init[/* noWorkerLoopJobList */1],
 	    /* workerCustomMainInitTargetJobMap */init[/* workerCustomMainInitTargetJobMap */2],
@@ -6323,33 +6323,33 @@
 	          targetJobName,
 	          action,
 	          targetHandleFunc
-	        ], state[/* jobRecord */1][/* workerCustomMainLoopTargetJobMap */5]),
-	    /* workerCustomMainLoopSourceJobMap */set(targetJobName, sourceJobName, state[/* jobRecord */1][/* workerCustomMainLoopSourceJobMap */6]),
+	        ], state[/* jobRecord */2][/* workerCustomMainLoopTargetJobMap */5]),
+	    /* workerCustomMainLoopSourceJobMap */set(targetJobName, sourceJobName, state[/* jobRecord */2][/* workerCustomMainLoopSourceJobMap */6]),
 	    /* workerCustomMainLoopRemovedDefaultJobMap */init[/* workerCustomMainLoopRemovedDefaultJobMap */7]
 	  ];
 	  return newrecord;
 	}
 
 	function removeWorkerMainLoopJob$2(targetJobName, state) {
-	  var match = get(targetJobName, state[/* jobRecord */1][/* workerCustomMainLoopSourceJobMap */6]);
+	  var match = get(targetJobName, state[/* jobRecord */2][/* workerCustomMainLoopSourceJobMap */6]);
 	  if (match !== undefined) {
 	    var newrecord = caml_array_dup(state);
-	    var init = state[/* jobRecord */1];
-	    newrecord[/* jobRecord */1] = /* record */[
+	    var init = state[/* jobRecord */2];
+	    newrecord[/* jobRecord */2] = /* record */[
 	      /* noWorkerInitJobList */init[/* noWorkerInitJobList */0],
 	      /* noWorkerLoopJobList */init[/* noWorkerLoopJobList */1],
 	      /* workerCustomMainInitTargetJobMap */init[/* workerCustomMainInitTargetJobMap */2],
 	      /* workerCustomMainInitSourceJobMap */init[/* workerCustomMainInitSourceJobMap */3],
 	      /* workerCustomMainInitRemovedDefaultJobMap */init[/* workerCustomMainInitRemovedDefaultJobMap */4],
-	      /* workerCustomMainLoopTargetJobMap */deleteVal(match, state[/* jobRecord */1][/* workerCustomMainLoopTargetJobMap */5]),
+	      /* workerCustomMainLoopTargetJobMap */deleteVal(match, state[/* jobRecord */2][/* workerCustomMainLoopTargetJobMap */5]),
 	      /* workerCustomMainLoopSourceJobMap */init[/* workerCustomMainLoopSourceJobMap */6],
 	      /* workerCustomMainLoopRemovedDefaultJobMap */init[/* workerCustomMainLoopRemovedDefaultJobMap */7]
 	    ];
 	    return newrecord;
 	  } else {
 	    var newrecord$1 = caml_array_dup(state);
-	    var init$1 = state[/* jobRecord */1];
-	    newrecord$1[/* jobRecord */1] = /* record */[
+	    var init$1 = state[/* jobRecord */2];
+	    newrecord$1[/* jobRecord */2] = /* record */[
 	      /* noWorkerInitJobList */init$1[/* noWorkerInitJobList */0],
 	      /* noWorkerLoopJobList */init$1[/* noWorkerLoopJobList */1],
 	      /* workerCustomMainInitTargetJobMap */init$1[/* workerCustomMainInitTargetJobMap */2],
@@ -6357,7 +6357,7 @@
 	      /* workerCustomMainInitRemovedDefaultJobMap */init$1[/* workerCustomMainInitRemovedDefaultJobMap */4],
 	      /* workerCustomMainLoopTargetJobMap */init$1[/* workerCustomMainLoopTargetJobMap */5],
 	      /* workerCustomMainLoopSourceJobMap */init$1[/* workerCustomMainLoopSourceJobMap */6],
-	      /* workerCustomMainLoopRemovedDefaultJobMap */set(targetJobName, true, state[/* jobRecord */1][/* workerCustomMainLoopRemovedDefaultJobMap */7])
+	      /* workerCustomMainLoopRemovedDefaultJobMap */set(targetJobName, true, state[/* jobRecord */2][/* workerCustomMainLoopRemovedDefaultJobMap */7])
 	    ];
 	    return newrecord$1;
 	  }
@@ -6496,21 +6496,21 @@
 	function execNoWorkerInitJobs(state) {
 	  return fold_left((function (state, param) {
 	                return _1(param[1], state);
-	              }), state, state[/* jobRecord */1][/* noWorkerInitJobList */0]);
+	              }), state, state[/* jobRecord */2][/* noWorkerInitJobList */0]);
 	}
 
 	function execNoWorkerLoopJobs(state) {
 	  return fold_left((function (state, param) {
 	                return _1(param[1], state);
-	              }), state, state[/* jobRecord */1][/* noWorkerLoopJobList */1]);
+	              }), state, state[/* jobRecord */2][/* noWorkerLoopJobList */1]);
 	}
 
 	function init(param, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init$1 = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
-	    /* noWorkerInitJobList */_getAllNoWorkerJobs(getInitPipelineExecutableJobs(getSetting$2(state[/* noWorkerJobRecord */2]), getInitPipelines(state[/* noWorkerJobRecord */2]), getInitJobs(state[/* noWorkerJobRecord */2])), _1(param[0], /* () */0), state),
-	    /* noWorkerLoopJobList */_getAllNoWorkerJobs(getLoopPipelineExecutableJobs(getSetting$2(state[/* noWorkerJobRecord */2]), getLoopPipelines(state[/* noWorkerJobRecord */2]), getLoopJobs(state[/* noWorkerJobRecord */2])), _1(param[1], /* () */0), state),
+	  var init$1 = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
+	    /* noWorkerInitJobList */_getAllNoWorkerJobs(getInitPipelineExecutableJobs(getSetting$2(state[/* noWorkerJobRecord */3]), getInitPipelines(state[/* noWorkerJobRecord */3]), getInitJobs(state[/* noWorkerJobRecord */3])), _1(param[0], /* () */0), state),
+	    /* noWorkerLoopJobList */_getAllNoWorkerJobs(getLoopPipelineExecutableJobs(getSetting$2(state[/* noWorkerJobRecord */3]), getLoopPipelines(state[/* noWorkerJobRecord */3]), getLoopJobs(state[/* noWorkerJobRecord */3])), _1(param[1], /* () */0), state),
 	    /* workerCustomMainInitTargetJobMap */init$1[/* workerCustomMainInitTargetJobMap */2],
 	    /* workerCustomMainInitSourceJobMap */init$1[/* workerCustomMainInitSourceJobMap */3],
 	    /* workerCustomMainInitRemovedDefaultJobMap */init$1[/* workerCustomMainInitRemovedDefaultJobMap */4],
@@ -6523,14 +6523,14 @@
 
 	function addNoWorkerInitJob$2(param, action, targetHandleFunc, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
+	  var init = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
 	    /* noWorkerInitJobList */addJob(/* tuple */[
 	          param[0],
 	          param[1],
 	          action,
 	          targetHandleFunc
-	        ], state[/* jobRecord */1][/* noWorkerInitJobList */0]),
+	        ], state[/* jobRecord */2][/* noWorkerInitJobList */0]),
 	    /* noWorkerLoopJobList */init[/* noWorkerLoopJobList */1],
 	    /* workerCustomMainInitTargetJobMap */init[/* workerCustomMainInitTargetJobMap */2],
 	    /* workerCustomMainInitSourceJobMap */init[/* workerCustomMainInitSourceJobMap */3],
@@ -6544,15 +6544,15 @@
 
 	function addNoWorkerLoopJob$2(param, action, targetHandleFunc, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
+	  var init = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
 	    /* noWorkerInitJobList */init[/* noWorkerInitJobList */0],
 	    /* noWorkerLoopJobList */addJob(/* tuple */[
 	          param[0],
 	          param[1],
 	          action,
 	          targetHandleFunc
-	        ], state[/* jobRecord */1][/* noWorkerLoopJobList */1]),
+	        ], state[/* jobRecord */2][/* noWorkerLoopJobList */1]),
 	    /* workerCustomMainInitTargetJobMap */init[/* workerCustomMainInitTargetJobMap */2],
 	    /* workerCustomMainInitSourceJobMap */init[/* workerCustomMainInitSourceJobMap */3],
 	    /* workerCustomMainInitRemovedDefaultJobMap */init[/* workerCustomMainInitRemovedDefaultJobMap */4],
@@ -6565,9 +6565,9 @@
 
 	function removeNoWorkerInitJob$2(targetJobName, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
-	    /* noWorkerInitJobList */removeJob(targetJobName, state[/* jobRecord */1][/* noWorkerInitJobList */0]),
+	  var init = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
+	    /* noWorkerInitJobList */removeJob(targetJobName, state[/* jobRecord */2][/* noWorkerInitJobList */0]),
 	    /* noWorkerLoopJobList */init[/* noWorkerLoopJobList */1],
 	    /* workerCustomMainInitTargetJobMap */init[/* workerCustomMainInitTargetJobMap */2],
 	    /* workerCustomMainInitSourceJobMap */init[/* workerCustomMainInitSourceJobMap */3],
@@ -6581,10 +6581,10 @@
 
 	function removeNoWorkerLoopJob$2(targetJobName, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* jobRecord */1];
-	  newrecord[/* jobRecord */1] = /* record */[
+	  var init = state[/* jobRecord */2];
+	  newrecord[/* jobRecord */2] = /* record */[
 	    /* noWorkerInitJobList */init[/* noWorkerInitJobList */0],
-	    /* noWorkerLoopJobList */removeJob(targetJobName, state[/* jobRecord */1][/* noWorkerLoopJobList */1]),
+	    /* noWorkerLoopJobList */removeJob(targetJobName, state[/* jobRecord */2][/* noWorkerLoopJobList */1]),
 	    /* workerCustomMainInitTargetJobMap */init[/* workerCustomMainInitTargetJobMap */2],
 	    /* workerCustomMainInitSourceJobMap */init[/* workerCustomMainInitSourceJobMap */3],
 	    /* workerCustomMainInitRemovedDefaultJobMap */init[/* workerCustomMainInitRemovedDefaultJobMap */4],
@@ -6944,12 +6944,16 @@
 	  return unsafeGetBuffer(record)[/* lightMaterialCount */4];
 	}
 
+	function getMeshRendererCount(record) {
+	  return unsafeGetBuffer(record)[/* meshRendererCount */8];
+	}
+
 	function getSourceInstanceCount(record) {
-	  return unsafeGetBuffer(record)[/* instanceBuffer */8][/* sourceInstanceCount */0];
+	  return unsafeGetBuffer(record)[/* instanceBuffer */9][/* sourceInstanceCount */0];
 	}
 
 	function getObjectInstanceCountPerSourceInstance(record) {
-	  return unsafeGetBuffer(record)[/* instanceBuffer */8][/* objectInstanceCountPerSourceInstance */1];
+	  return unsafeGetBuffer(record)[/* instanceBuffer */9][/* objectInstanceCountPerSourceInstance */1];
 	}
 
 	function getTextureCountPerMaterial(record) {
@@ -7190,6 +7194,14 @@
 	  return element;
 	}
 
+	var requestPointerLock = function (element){
+	  element.requestPointerLock();
+	  };
+
+	var exitPointerLock = function (){
+	  document.exitPointerLock();
+	  };
+
 
 	/* No side effect */
 
@@ -7232,6 +7244,7 @@
 	              /* textureCountPerMaterial */16,
 	              /* basicSourceTextureCount */64,
 	              /* arrayBufferViewSourceTextureCount */64,
+	              /* meshRendererCount */10000,
 	              /* instanceBuffer : record */[
 	                /* sourceInstanceCount */2,
 	                /* objectInstanceCountPerSourceInstance */10000
@@ -7282,7 +7295,7 @@
 	  var isSupportSharedArrayBuffer$$1 = isSupportSharedArrayBuffer(/* () */0);
 	  var newrecord = caml_array_dup(state);
 	  var match = !isSupportSharedArrayBuffer$$1;
-	  newrecord[/* workerDetectRecord */39] = /* record */[
+	  newrecord[/* workerDetectRecord */40] = /* record */[
 	    /* isSupportSharedArrayBuffer */isSupportSharedArrayBuffer$$1,
 	    /* isSupportRenderWorkerAndSharedArrayBuffer */match ? false : _2(hasProperty, "transferControlToOffscreen", buildCanvas(/* () */0))
 	  ];
@@ -7290,8 +7303,8 @@
 	}
 
 	function isUseWorker(state) {
-	  if (unsafeGetWorker(state[/* settingRecord */0])[/* useWorker */0]) {
-	    return state[/* workerDetectRecord */39][/* isSupportRenderWorkerAndSharedArrayBuffer */1];
+	  if (unsafeGetWorker(state[/* settingRecord */1])[/* useWorker */0]) {
+	    return state[/* workerDetectRecord */40][/* isSupportRenderWorkerAndSharedArrayBuffer */1];
 	  } else {
 	    return false;
 	  }
@@ -7582,7 +7595,7 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function getRecord$1(param) {
-	  return unsafeGet$1(param[/* transformRecord */11]);
+	  return unsafeGet$1(param[/* transformRecord */12]);
 	}
 
 	function setAllTypeArrDataToDefault(count, param, param$1) {
@@ -7632,7 +7645,7 @@
 	function _createForWorker(transformCount, defaultDataTuple, param, state) {
 	  var match = _initBufferData(transformCount, defaultDataTuple);
 	  var match$1 = match[1];
-	  state[/* transformRecord */11] = /* record */[
+	  state[/* transformRecord */12] = /* record */[
 	    /* index */0,
 	    /* buffer */param[0],
 	    /* localToWorldMatrices */param[1],
@@ -7660,7 +7673,7 @@
 	}
 
 	function _createForNoWorker(param, param$1, state) {
-	  state[/* transformRecord */11] = /* record */[
+	  state[/* transformRecord */12] = /* record */[
 	    /* index */0,
 	    /* buffer */param$1[0],
 	    /* localToWorldMatrices */param$1[1],
@@ -7688,7 +7701,7 @@
 	}
 
 	function create$6(state) {
-	  var transformCount = getTransformCount(state[/* settingRecord */0]);
+	  var transformCount = getTransformCount(state[/* settingRecord */1]);
 	  var defaultLocalToWorldMatrix = /* array */[
 	    1,
 	    0,
@@ -7769,7 +7782,7 @@
 	  var dirtyMap = record[/* dirtyMap */18];
 	  var disposedIndexArray = record[/* disposedIndexArray */21];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* transformRecord */11] = /* record */[
+	  newrecord[/* transformRecord */12] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* localToWorldMatrices */copyFloat32ArrayWithEndIndex(imul(index, getLocalToWorldMatricesSize(/* () */0)), localToWorldMatrices),
@@ -7830,8 +7843,8 @@
 	}
 
 	function createWithoutMarkNotDirty(state) {
-	  var match = createWithoutMarkNotDirtyWithRecord(state[/* settingRecord */0], getRecord$1(state));
-	  state[/* transformRecord */11] = match[0];
+	  var match = createWithoutMarkNotDirtyWithRecord(state[/* settingRecord */1], getRecord$1(state));
+	  state[/* transformRecord */12] = match[0];
 	  return /* tuple */[
 	          state,
 	          match[1]
@@ -7842,7 +7855,7 @@
 	  var match = createWithoutMarkNotDirty(state);
 	  var index = match[1];
 	  var state$1 = match[0];
-	  state$1[/* transformRecord */11] = mark(index, true, getRecord$1(state$1));
+	  state$1[/* transformRecord */12] = mark(index, true, getRecord$1(state$1));
 	  return /* tuple */[
 	          state$1,
 	          index
@@ -7960,7 +7973,8 @@
 	          /* gameObjectMap */addComponentToGameObjectMap(material, gameObjectUid, record[/* gameObjectMap */8]),
 	          /* groupCountMap */record[/* groupCountMap */9],
 	          /* disposedIndexArray */record[/* disposedIndexArray */10],
-	          /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */11]
+	          /* nameMap */record[/* nameMap */11],
+	          /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */12]
 	        ];
 	}
 
@@ -8078,6 +8092,28 @@
 
 	/* No side effect */
 
+	var getMappedIndex = unsafeGet$2;
+
+	var setMappedIndex = set$1;
+
+	function markDisposed(index, mappedIndexMap) {
+	  return set$1(index, -1, mappedIndexMap);
+	}
+
+	function isComponentAlive(component, mappedIndexMap) {
+	  return unsafeGet$2(component, mappedIndexMap) !== -1;
+	}
+
+
+	/* No side effect */
+
+	function getMappedIndexMap(param) {
+	  return param[/* mappedIndexMap */4];
+	}
+
+
+	/* No side effect */
+
 	function handleAddComponent$6(light, gameObjectUid, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
@@ -8085,7 +8121,7 @@
 	          /* colors */record[/* colors */2],
 	          /* intensities */record[/* intensities */3],
 	          /* mappedIndexMap */record[/* mappedIndexMap */4],
-	          /* gameObjectMap */addComponentToGameObjectMap(light, gameObjectUid, record[/* gameObjectMap */5])
+	          /* gameObjectMap */addComponentToGameObjectMap(getMappedIndex(light, getMappedIndexMap(record)), gameObjectUid, record[/* gameObjectMap */5])
 	        ];
 	}
 
@@ -8145,7 +8181,8 @@
 	          /* gameObjectMap */record[/* gameObjectMap */8],
 	          /* groupCountMap */increaseGroupCount$1(material, record[/* groupCountMap */9]),
 	          /* disposedIndexArray */record[/* disposedIndexArray */10],
-	          /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */11]
+	          /* nameMap */record[/* nameMap */11],
+	          /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */12]
 	        ];
 	}
 
@@ -8162,7 +8199,8 @@
 	          /* gameObjectMap */record[/* gameObjectMap */8],
 	          /* groupCountMap */decreaseGroupCount$1(material, record[/* groupCountMap */9]),
 	          /* disposedIndexArray */record[/* disposedIndexArray */10],
-	          /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */11]
+	          /* nameMap */record[/* nameMap */11],
+	          /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */12]
 	        ];
 	}
 
@@ -8275,6 +8313,14 @@
 	        ];
 	}
 
+	function scale(_, scalar, param) {
+	  return /* tuple */[
+	          param[0] * scalar,
+	          param[1] * scalar,
+	          param[2] * scalar
+	        ];
+	}
+
 	function lerp(param, param$1, t) {
 	  var z1 = param[2];
 	  var y1 = param[1];
@@ -8320,6 +8366,40 @@
 	          ];
 	  }
 	}
+
+	var transformQuat = function (a,q){
+	     // benchmarks: https://jsperf.com/quaternion-transform-vec3-implementations-fixed
+	    let qx = q[0], qy = q[1], qz = q[2], qw = q[3];
+	    let x = a[0], y = a[1], z = a[2];
+	    // var qvec = [qx, qy, qz];
+	    // var uv = vec3.cross([], qvec, a);
+	    let uvx = qy * z - qz * y,
+	        uvy = qz * x - qx * z,
+	        uvz = qx * y - qy * x;
+	    // var uuv = vec3.cross([], qvec, uv);
+	    let uuvx = qy * uvz - qz * uvy,
+	        uuvy = qz * uvx - qx * uvz,
+	        uuvz = qx * uvy - qy * uvx;
+	    // vec3.scale(uv, uv, 2 * w);
+	    let w2 = qw * 2;
+	    uvx *= w2;
+	    uvy *= w2;
+	    uvz *= w2;
+	    // vec3.scale(uuv, uuv, 2);
+	    uuvx *= 2;
+	    uuvy *= 2;
+	    uuvz *= 2;
+	    // return vec3.add(out, a, vec3.add(out, uv, uuv));
+
+	    return [
+
+	x + uvx + uuvx,
+	y + uvy + uuvy,
+	z + uvz + uuvz
+
+	    ]
+
+	  };
 
 
 	/* No side effect */
@@ -9017,11 +9097,131 @@
 
 	/* ComponentMapService-Wonderjs Not a pure module */
 
+	function getDefaultDrawMode() {
+	  return /* Triangles */4;
+	}
+
+	function getDrawModesSize() {
+	  return 1;
+	}
+
+	function getDrawModesLength(meshRendererCount) {
+	  return (meshRendererCount << 0);
+	}
+
+	function getDrawModesOffset() {
+	  return 0;
+	}
+
+	function getDrawModeIndex(index) {
+	  return (index << 0);
+	}
+
+	function getTotalByteLength$2(meshRendererCount) {
+	  return (imul(meshRendererCount, Uint8Array.BYTES_PER_ELEMENT) << 0);
+	}
+
+	function createBuffer$2(meshRendererCount) {
+	  return newSharedArrayBuffer(getTotalByteLength$2(meshRendererCount));
+	}
+
+
+	/* Worker-Wonderjs Not a pure module */
+
+	function getDefaultShaderIndex() {
+	  return 429496729;
+	}
+
+	function getDefaultSourceInstance() {
+	  return 429496729;
+	}
+
+
+	/* No side effect */
+
+	function createTypeArrays$1(buffer, meshRendererCount) {
+	  return new Uint8Array(buffer, getDrawModesOffset(meshRendererCount), getDrawModesLength(meshRendererCount));
+	}
+
+
+	/* BufferMeshRendererService-Wonderjs Not a pure module */
+
+	function getDrawMode(index, typeArr) {
+	  return getUint8_1(getDrawModeIndex(index), typeArr);
+	}
+
+	function setDrawMode(index, data, typeArr) {
+	  return setUint8_1(getDrawModeIndex(index), data, typeArr);
+	}
+
+
+	/* TypeArrayService-Wonderjs Not a pure module */
+
+	function getRecord$2(param) {
+	  return unsafeGet$1(param[/* meshRendererRecord */25]);
+	}
+
+	function setAllTypeArrDataToDefault$1(meshRendererCount, defaultDrawMode, drawModes) {
+	  return reduceOneParam((function (drawModes, index) {
+	                return setDrawMode(index, defaultDrawMode, drawModes);
+	              }), drawModes, range(0, meshRendererCount - 1 | 0));
+	}
+
+	function _setAllTypeArrDataToDefault$1(meshRendererCount, defaultDrawMode, param) {
+	  return /* tuple */[
+	          param[0],
+	          setAllTypeArrDataToDefault$1(meshRendererCount, defaultDrawMode, param[1])
+	        ];
+	}
+
+	function _initBufferData$1(meshRendererCount, defaultDrawMode) {
+	  var buffer = createBuffer$2(meshRendererCount);
+	  var drawModes = createTypeArrays$1(buffer, meshRendererCount);
+	  return _setAllTypeArrDataToDefault$1(meshRendererCount, defaultDrawMode, /* tuple */[
+	              buffer,
+	              drawModes
+	            ]);
+	}
+
+	function create$7(state) {
+	  var defaultDrawMode = getDefaultDrawMode(/* () */0);
+	  var match = _initBufferData$1(getMeshRendererCount(state[/* settingRecord */1]), defaultDrawMode);
+	  state[/* meshRendererRecord */25] = /* record */[
+	    /* index */0,
+	    /* buffer */match[0],
+	    /* drawModes */match[1],
+	    /* basicMaterialRenderGameObjectMap */createEmpty$2(/* () */0),
+	    /* lightMaterialRenderGameObjectMap */createEmpty$2(/* () */0),
+	    /* gameObjectMap */createEmpty$2(/* () */0),
+	    /* disposedIndexArray */createEmpty$1(/* () */0)
+	  ];
+	  return state;
+	}
+
+	function deepCopyForRestore$2(state) {
+	  var record = getRecord$2(state);
+	  var index = record[/* index */0];
+	  var newrecord = caml_array_dup(state);
+	  newrecord[/* meshRendererRecord */25] = /* record */[
+	    /* index */index,
+	    /* buffer */record[/* buffer */1],
+	    /* drawModes */copyUint8ArrayWithEndIndex(imul(index, getDrawModesSize(/* () */0)), record[/* drawModes */2]),
+	    /* basicMaterialRenderGameObjectMap */copy$3(record[/* basicMaterialRenderGameObjectMap */3]),
+	    /* lightMaterialRenderGameObjectMap */copy$3(record[/* lightMaterialRenderGameObjectMap */4]),
+	    /* gameObjectMap */copy$3(record[/* gameObjectMap */5]),
+	    /* disposedIndexArray */record[/* disposedIndexArray */6].slice()
+	  ];
+	  return newrecord;
+	}
+
+
+	/* OptionService-Wonderjs Not a pure module */
+
 	function handleAddComponent$10(meshRenderer, gameObjectUid, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var meshRendererRecord = state[/* meshRendererRecord */24];
-	  var lightMaterialRenderGameObjectMap = meshRendererRecord[/* lightMaterialRenderGameObjectMap */2];
-	  var basicMaterialRenderGameObjectMap = meshRendererRecord[/* basicMaterialRenderGameObjectMap */1];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var meshRendererRecord = getRecord$2(state);
+	  var lightMaterialRenderGameObjectMap = meshRendererRecord[/* lightMaterialRenderGameObjectMap */4];
+	  var basicMaterialRenderGameObjectMap = meshRendererRecord[/* basicMaterialRenderGameObjectMap */3];
 	  var match = hasBasicMaterialComponent(gameObjectUid, gameObjectRecord);
 	  var basicMaterialRenderGameObjectMap$1 = match ? set$1(meshRenderer, gameObjectUid, basicMaterialRenderGameObjectMap) : basicMaterialRenderGameObjectMap;
 	  var match$1 = hasLightMaterialComponent(gameObjectUid, gameObjectRecord);
@@ -9029,15 +9229,17 @@
 	  var newrecord = caml_array_dup(state);
 	  return ensureCheck((function (state) {
 	                return test(buildAssertMessage("should add material component before add meshRenderer component", "not(the gameObjectUid is " + (String(gameObjectUid) + ")")), (function () {
-	                              var match = state[/* meshRendererRecord */24];
-	                              return assertTrue(match[/* basicMaterialRenderGameObjectMap */1].includes(gameObjectUid) || match[/* lightMaterialRenderGameObjectMap */2].includes(gameObjectUid));
+	                              var match = getRecord$2(state);
+	                              return assertTrue(match[/* basicMaterialRenderGameObjectMap */3].includes(gameObjectUid) || match[/* lightMaterialRenderGameObjectMap */4].includes(gameObjectUid));
 	                            }));
-	              }), getIsDebug(stateData), (newrecord[/* meshRendererRecord */24] = /* record */[
+	              }), getIsDebug(stateData), (newrecord[/* meshRendererRecord */25] = /* record */[
 	                /* index */meshRendererRecord[/* index */0],
+	                /* buffer */meshRendererRecord[/* buffer */1],
+	                /* drawModes */meshRendererRecord[/* drawModes */2],
 	                /* basicMaterialRenderGameObjectMap */basicMaterialRenderGameObjectMap$1,
 	                /* lightMaterialRenderGameObjectMap */lightMaterialRenderGameObjectMap$1,
-	                /* gameObjectMap */addComponentToGameObjectMap(meshRenderer, gameObjectUid, meshRendererRecord[/* gameObjectMap */3]),
-	                /* disposedIndexArray */meshRendererRecord[/* disposedIndexArray */4]
+	                /* gameObjectMap */addComponentToGameObjectMap(meshRenderer, gameObjectUid, meshRendererRecord[/* gameObjectMap */5]),
+	                /* disposedIndexArray */meshRendererRecord[/* disposedIndexArray */6]
 	              ], newrecord));
 	}
 
@@ -9112,11 +9314,11 @@
 
 	/* GameObjectMapService-Wonderjs Not a pure module */
 
-	function getRecord$2(param) {
-	  return param[/* boxGeometryRecord */22];
+	function getRecord$3(param) {
+	  return param[/* boxGeometryRecord */23];
 	}
 
-	function create$7() {
+	function create$8() {
 	  var match = generateAllFaces(/* () */0);
 	  return /* record */[
 	          /* index */0,
@@ -9130,11 +9332,11 @@
 	        ];
 	}
 
-	function deepCopyForRestore$2(state) {
-	  var match = getRecord$2(state);
+	function deepCopyForRestore$3(state) {
+	  var match = getRecord$3(state);
 	  var disposedIndexArray = match[/* disposedIndexArray */7];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* boxGeometryRecord */22] = /* record */[
+	  newrecord[/* boxGeometryRecord */23] = /* record */[
 	    /* index */match[/* index */0],
 	    /* vertices */match[/* vertices */1],
 	    /* texCoords */match[/* texCoords */2],
@@ -9178,17 +9380,6 @@
 
 	function hasMap(mapUnit) {
 	  return mapUnit !== 255;
-	}
-
-
-	/* No side effect */
-
-	function getDefaultShaderIndex() {
-	  return 429496729;
-	}
-
-	function getDefaultSourceInstance() {
-	  return 429496729;
 	}
 
 
@@ -9284,12 +9475,12 @@
 	  return (index << 0);
 	}
 
-	function getTotalByteLength$2(basicMaterialCount, textureCountPerMaterial) {
+	function getTotalByteLength$3(basicMaterialCount, textureCountPerMaterial) {
 	  return imul(basicMaterialCount, ((imul(Uint32Array.BYTES_PER_ELEMENT, getShaderIndicesSize(/* () */0)) + imul(Float32Array.BYTES_PER_ELEMENT, 3) | 0) + imul(Uint32Array.BYTES_PER_ELEMENT, getTextureIndicesSize(textureCountPerMaterial)) | 0) + (Uint8Array.BYTES_PER_ELEMENT << 0) | 0);
 	}
 
-	function createBuffer$2(basicMaterialCount, textureCountPerMaterial) {
-	  return newSharedArrayBuffer(getTotalByteLength$2(basicMaterialCount, textureCountPerMaterial));
+	function createBuffer$3(basicMaterialCount, textureCountPerMaterial) {
+	  return newSharedArrayBuffer(getTotalByteLength$3(basicMaterialCount, textureCountPerMaterial));
 	}
 
 	var getTextureIndicesLength$1 = getTextureIndicesLength;
@@ -9297,7 +9488,7 @@
 
 	/* Worker-Wonderjs Not a pure module */
 
-	function createTypeArrays$1(buffer, basicMaterialCount, textureCountPerMaterial) {
+	function createTypeArrays$2(buffer, basicMaterialCount, textureCountPerMaterial) {
 	  return /* tuple */[
 	          new Uint32Array(buffer, getShaderIndicesOffset(basicMaterialCount), getShaderIndicesLength(basicMaterialCount)),
 	          new Float32Array(buffer, getColorsOffset(basicMaterialCount), getColorsLength(basicMaterialCount)),
@@ -9343,11 +9534,11 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function getRecord$3(param) {
-	  return unsafeGet$1(param[/* basicMaterialRecord */15]);
+	function getRecord$4(param) {
+	  return unsafeGet$1(param[/* basicMaterialRecord */16]);
 	}
 
-	function setAllTypeArrDataToDefault$1(basicMaterialCount, defaultShaderIndex, defaultColor, param) {
+	function setAllTypeArrDataToDefault$2(basicMaterialCount, defaultShaderIndex, defaultColor, param) {
 	  var defaultUnit = getDefaultUnit(/* () */0);
 	  var match = reduceOneParam((function (param, index) {
 	          return /* tuple */[
@@ -9368,10 +9559,10 @@
 	        ];
 	}
 
-	function _setAllTypeArrDataToDefault$1(basicMaterialCount, defaultShaderIndex, defaultColor, param) {
+	function _setAllTypeArrDataToDefault$2(basicMaterialCount, defaultShaderIndex, defaultColor, param) {
 	  return /* tuple */[
 	          param[0],
-	          setAllTypeArrDataToDefault$1(basicMaterialCount, defaultShaderIndex, defaultColor, /* tuple */[
+	          setAllTypeArrDataToDefault$2(basicMaterialCount, defaultShaderIndex, defaultColor, /* tuple */[
 	                param[1],
 	                param[2],
 	                param[3],
@@ -9380,10 +9571,10 @@
 	        ];
 	}
 
-	function _initBufferData$1(basicMaterialCount, textureCountPerMaterial, defaultShaderIndex, defaultColor) {
-	  var buffer = createBuffer$2(basicMaterialCount, textureCountPerMaterial);
-	  var match = createTypeArrays$1(buffer, basicMaterialCount, textureCountPerMaterial);
-	  return _setAllTypeArrDataToDefault$1(basicMaterialCount, defaultShaderIndex, defaultColor, /* tuple */[
+	function _initBufferData$2(basicMaterialCount, textureCountPerMaterial, defaultShaderIndex, defaultColor) {
+	  var buffer = createBuffer$3(basicMaterialCount, textureCountPerMaterial);
+	  var match = createTypeArrays$2(buffer, basicMaterialCount, textureCountPerMaterial);
+	  return _setAllTypeArrDataToDefault$2(basicMaterialCount, defaultShaderIndex, defaultColor, /* tuple */[
 	              buffer,
 	              match[0],
 	              match[1],
@@ -9392,17 +9583,17 @@
 	            ]);
 	}
 
-	function create$8(state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function create$9(state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var defaultShaderIndex = getDefaultShaderIndex(/* () */0);
 	  var defaultColor = /* array */[
 	    1,
 	    1,
 	    1
 	  ];
-	  var match = _initBufferData$1(getBasicMaterialCount(settingRecord), getTextureCountPerMaterial(settingRecord), defaultShaderIndex, defaultColor);
+	  var match = _initBufferData$2(getBasicMaterialCount(settingRecord), getTextureCountPerMaterial(settingRecord), defaultShaderIndex, defaultColor);
 	  var match$1 = match[1];
-	  state[/* basicMaterialRecord */15] = /* record */[
+	  state[/* basicMaterialRecord */16] = /* record */[
 	    /* index */0,
 	    /* buffer */match[0],
 	    /* shaderIndices */match$1[0],
@@ -9414,28 +9605,30 @@
 	    /* gameObjectMap */createEmpty$2(/* () */0),
 	    /* groupCountMap */createEmpty$2(/* () */0),
 	    /* disposedIndexArray */createEmpty$1(/* () */0),
+	    /* nameMap */createEmpty$2(/* () */0),
 	    /* materialArrayForWorkerInit */createEmpty$1(/* () */0)
 	  ];
 	  return state;
 	}
 
-	function deepCopyForRestore$3(state) {
-	  var record = getRecord$3(state);
+	function deepCopyForRestore$4(state) {
+	  var record = getRecord$4(state);
 	  var index = record[/* index */0];
-	  var materialArrayForWorkerInit = record[/* materialArrayForWorkerInit */11];
+	  var materialArrayForWorkerInit = record[/* materialArrayForWorkerInit */12];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */index,
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */copyUint32ArrayWithEndIndex(imul(index, getShaderIndicesSize$1(/* () */0)), record[/* shaderIndices */2]),
 	    /* colors */copyFloat32ArrayWithEndIndex(imul(index, getColorsSize(/* () */0)), record[/* colors */3]),
-	    /* textureIndices */copyUint32ArrayWithEndIndex(imul(index, getTextureIndicesSize(getTextureCountPerMaterial(state[/* settingRecord */0]))), record[/* textureIndices */4]),
+	    /* textureIndices */copyUint32ArrayWithEndIndex(imul(index, getTextureIndicesSize(getTextureCountPerMaterial(state[/* settingRecord */1]))), record[/* textureIndices */4]),
 	    /* mapUnits */copyUint8ArrayWithEndIndex(imul(index, getMapUnitsSize(/* () */0)), record[/* mapUnits */5]),
 	    /* textureCountMap */copy$3(record[/* textureCountMap */6]),
 	    /* defaultColor */record[/* defaultColor */7],
 	    /* gameObjectMap */copy$3(record[/* gameObjectMap */8]),
 	    /* groupCountMap */copy$3(record[/* groupCountMap */9]),
 	    /* disposedIndexArray */record[/* disposedIndexArray */10].slice(),
+	    /* nameMap */copy$3(record[/* nameMap */11]),
 	    /* materialArrayForWorkerInit */materialArrayForWorkerInit.slice()
 	  ];
 	  return newrecord;
@@ -9528,12 +9721,12 @@
 	  return (index << 0);
 	}
 
-	function getTotalByteLength$3(lightMaterialCount, textureCountPerMaterial) {
+	function getTotalByteLength$4(lightMaterialCount, textureCountPerMaterial) {
 	  return imul(lightMaterialCount, ((imul(Uint32Array.BYTES_PER_ELEMENT, getShaderIndicesSize(/* () */0)) + imul(Float32Array.BYTES_PER_ELEMENT, 7) | 0) + imul(Uint32Array.BYTES_PER_ELEMENT, getTextureIndicesSize(textureCountPerMaterial)) | 0) + (Uint8Array.BYTES_PER_ELEMENT << 1) | 0);
 	}
 
-	function createBuffer$3(lightMaterialCount, textureCountPerMaterial) {
-	  return newSharedArrayBuffer(getTotalByteLength$3(lightMaterialCount, textureCountPerMaterial));
+	function createBuffer$4(lightMaterialCount, textureCountPerMaterial) {
+	  return newSharedArrayBuffer(getTotalByteLength$4(lightMaterialCount, textureCountPerMaterial));
 	}
 
 	var getTextureIndicesLength$2 = getTextureIndicesLength;
@@ -9541,7 +9734,7 @@
 
 	/* Worker-Wonderjs Not a pure module */
 
-	function createTypeArrays$2(buffer, lightMaterialCount, textureCountPerMaterial) {
+	function createTypeArrays$3(buffer, lightMaterialCount, textureCountPerMaterial) {
 	  return /* tuple */[
 	          new Uint32Array(buffer, getShaderIndicesOffset(lightMaterialCount), getShaderIndicesLength(lightMaterialCount)),
 	          new Float32Array(buffer, getDiffuseColorsOffset(lightMaterialCount), getDiffuseColorsLength(lightMaterialCount)),
@@ -9603,11 +9796,11 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function getRecord$4(param) {
-	  return unsafeGet$1(param[/* lightMaterialRecord */16]);
+	function getRecord$5(param) {
+	  return unsafeGet$1(param[/* lightMaterialRecord */17]);
 	}
 
-	function setAllTypeArrDataToDefault$2(lightMaterialCount, param, param$1) {
+	function setAllTypeArrDataToDefault$3(lightMaterialCount, param, param$1) {
 	  var defaultShininess = param[3];
 	  var defaultSpecularColor = param[2];
 	  var defaultDiffuseColor = param[1];
@@ -9641,10 +9834,10 @@
 	        ];
 	}
 
-	function _setAllTypeArrDataToDefault$2(lightMaterialCount, param, param$1) {
+	function _setAllTypeArrDataToDefault$3(lightMaterialCount, param, param$1) {
 	  return /* tuple */[
 	          param$1[0],
-	          setAllTypeArrDataToDefault$2(lightMaterialCount, /* tuple */[
+	          setAllTypeArrDataToDefault$3(lightMaterialCount, /* tuple */[
 	                param[0],
 	                param[1],
 	                param[2],
@@ -9661,10 +9854,10 @@
 	        ];
 	}
 
-	function _initBufferData$2(lightMaterialCount, textureCountPerMaterial, param) {
-	  var buffer = createBuffer$3(lightMaterialCount, textureCountPerMaterial);
-	  var match = createTypeArrays$2(buffer, lightMaterialCount, textureCountPerMaterial);
-	  return _setAllTypeArrDataToDefault$2(lightMaterialCount, /* tuple */[
+	function _initBufferData$3(lightMaterialCount, textureCountPerMaterial, param) {
+	  var buffer = createBuffer$4(lightMaterialCount, textureCountPerMaterial);
+	  var match = createTypeArrays$3(buffer, lightMaterialCount, textureCountPerMaterial);
+	  return _setAllTypeArrDataToDefault$3(lightMaterialCount, /* tuple */[
 	              param[0],
 	              param[1],
 	              param[2],
@@ -9681,8 +9874,8 @@
 	            ]);
 	}
 
-	function create$9(state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function create$10(state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var defaultShaderIndex = getDefaultShaderIndex(/* () */0);
 	  var defaultDiffuseColor = /* array */[
 	    1,
@@ -9694,14 +9887,14 @@
 	    1,
 	    1
 	  ];
-	  var match = _initBufferData$2(getLightMaterialCount(settingRecord), getTextureCountPerMaterial(settingRecord), /* tuple */[
+	  var match = _initBufferData$3(getLightMaterialCount(settingRecord), getTextureCountPerMaterial(settingRecord), /* tuple */[
 	        defaultShaderIndex,
 	        defaultDiffuseColor,
 	        defaultSpecularColor,
 	        32.0
 	      ]);
 	  var match$1 = match[1];
-	  state[/* lightMaterialRecord */16] = /* record */[
+	  state[/* lightMaterialRecord */17] = /* record */[
 	    /* index */0,
 	    /* buffer */match[0],
 	    /* shaderIndices */match$1[0],
@@ -9724,19 +9917,19 @@
 	  return state;
 	}
 
-	function deepCopyForRestore$4(state) {
-	  var record = getRecord$4(state);
+	function deepCopyForRestore$5(state) {
+	  var record = getRecord$5(state);
 	  var index = record[/* index */0];
 	  var materialArrayForWorkerInit = record[/* materialArrayForWorkerInit */17];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */index,
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */copyUint32ArrayWithEndIndex(imul(index, getShaderIndicesSize$2(/* () */0)), record[/* shaderIndices */2]),
 	    /* diffuseColors */copyFloat32ArrayWithEndIndex(imul(index, getDiffuseColorsSize(/* () */0)), record[/* diffuseColors */3]),
 	    /* specularColors */copyFloat32ArrayWithEndIndex(imul(index, getSpecularColorsSize(/* () */0)), record[/* specularColors */4]),
 	    /* shininess */copyFloat32ArrayWithEndIndex(imul(index, getShininessSize(/* () */0)), record[/* shininess */5]),
-	    /* textureIndices */copyUint32ArrayWithEndIndex(imul(index, getTextureIndicesSize(getTextureCountPerMaterial(state[/* settingRecord */0]))), record[/* textureIndices */6]),
+	    /* textureIndices */copyUint32ArrayWithEndIndex(imul(index, getTextureIndicesSize(getTextureCountPerMaterial(state[/* settingRecord */1]))), record[/* textureIndices */6]),
 	    /* diffuseMapUnits */copyUint8ArrayWithEndIndex(imul(index, getMapUnitsSize$1(/* () */0)), record[/* diffuseMapUnits */7]),
 	    /* specularMapUnits */copyUint8ArrayWithEndIndex(imul(index, getMapUnitsSize$1(/* () */0)), record[/* specularMapUnits */8]),
 	    /* textureCountMap */copy$3(record[/* textureCountMap */9]),
@@ -9766,7 +9959,7 @@
 
 	/* GameObjectMapService-Wonderjs Not a pure module */
 
-	function createTypeArrays$3(buffer, customGeometryPointCount, customGeometryCount) {
+	function createTypeArrays$4(buffer, customGeometryPointCount, customGeometryCount) {
 	  return /* tuple */[
 	          new Float32Array(buffer, getVerticesOffset(customGeometryPointCount), getVertexLength(customGeometryPointCount)),
 	          new Float32Array(buffer, getTexCoordsOffset(customGeometryPointCount), getTexCoordsLength(customGeometryPointCount)),
@@ -9782,11 +9975,11 @@
 
 	/* BufferCustomGeometryService-Wonderjs Not a pure module */
 
-	function getRecord$5(param) {
-	  return unsafeGet$1(param[/* customGeometryRecord */23]);
+	function getRecord$6(param) {
+	  return unsafeGet$1(param[/* customGeometryRecord */24]);
 	}
 
-	function setAllTypeArrDataToDefault$3(geometryCount, geometryPointCount, param) {
+	function setAllTypeArrDataToDefault$4(geometryCount, geometryPointCount, param) {
 	  return /* tuple */[
 	          param[0].fill(0, 0, imul(imul(geometryCount, geometryPointCount), getVertexSize(/* () */0))),
 	          param[1].fill(0, 0, imul(imul(geometryCount, geometryPointCount), getTexCoordsSize(/* () */0))),
@@ -9795,9 +9988,9 @@
 	        ];
 	}
 
-	function _initBufferData$3(geometryPointCount, geometryCount) {
+	function _initBufferData$4(geometryPointCount, geometryCount) {
 	  var buffer = createBuffer$1(geometryPointCount, geometryCount);
-	  var match = createTypeArrays$3(buffer, geometryPointCount, geometryCount);
+	  var match = createTypeArrays$4(buffer, geometryPointCount, geometryCount);
 	  return /* tuple */[
 	          buffer,
 	          match[0],
@@ -9811,12 +10004,12 @@
 	        ];
 	}
 
-	function create$10(state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function create$11(state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var geometryPointCount = getCustomGeometryPointCount(settingRecord);
 	  var geometryCount = getCustomGeometryCount(settingRecord);
-	  var match = _initBufferData$3(geometryPointCount, geometryCount);
-	  state[/* customGeometryRecord */23] = /* record */[
+	  var match = _initBufferData$4(geometryPointCount, geometryCount);
+	  state[/* customGeometryRecord */24] = /* record */[
 	    /* index */0,
 	    /* buffer */match[0],
 	    /* vertices */match[1],
@@ -9841,9 +10034,8 @@
 	  return state;
 	}
 
-	function deepCopyForRestore$5(state) {
-	  var record = getRecord$5(state);
-	  var index = record[/* index */0];
+	function deepCopyForRestore$6(state) {
+	  var record = getRecord$6(state);
 	  var verticesOffset = record[/* verticesOffset */10];
 	  var texCoordsOffset = record[/* texCoordsOffset */11];
 	  var normalsOffset = record[/* normalsOffset */12];
@@ -9852,13 +10044,13 @@
 	  var disposedIndexArray = record[/* disposedIndexArray */17];
 	  var disposedIndexMap = record[/* disposedIndexMap */18];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* customGeometryRecord */23] = /* record */[
-	    /* index */index,
+	  newrecord[/* customGeometryRecord */24] = /* record */[
+	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
-	    /* vertices */copyFloat32ArrayWithEndIndex(imul(index, getVertexSize(/* () */0)), record[/* vertices */2]),
-	    /* texCoords */copyFloat32ArrayWithEndIndex(imul(index, getTexCoordsSize(/* () */0)), record[/* texCoords */3]),
-	    /* normals */copyFloat32ArrayWithEndIndex(imul(index, getVertexSize(/* () */0)), record[/* normals */4]),
-	    /* indices */copyUint16ArrayWithEndIndex(imul(index, getIndexSize(/* () */0)), record[/* indices */5]),
+	    /* vertices */copyFloat32ArrayWithEndIndex(verticesOffset, record[/* vertices */2]),
+	    /* texCoords */copyFloat32ArrayWithEndIndex(texCoordsOffset, record[/* texCoords */3]),
+	    /* normals */copyFloat32ArrayWithEndIndex(normalsOffset, record[/* normals */4]),
+	    /* indices */copyUint16ArrayWithEndIndex(indicesOffset, record[/* indices */5]),
 	    /* verticesInfos */record[/* verticesInfos */6],
 	    /* texCoordsInfos */record[/* texCoordsInfos */7],
 	    /* normalsInfos */record[/* normalsInfos */8],
@@ -9912,12 +10104,12 @@
 	  return imul(sourceInstance, objectInstanceCountPerSourceInstance) + objectInstanceTransformIndex | 0;
 	}
 
-	function getTotalByteLength$4(sourceInstanceCount, objectInstanceCountPerSourceInstance) {
+	function getTotalByteLength$5(sourceInstanceCount, objectInstanceCountPerSourceInstance) {
 	  return imul(sourceInstanceCount, imul(Uint32Array.BYTES_PER_ELEMENT, objectInstanceCountPerSourceInstance) + (Uint8Array.BYTES_PER_ELEMENT << 0) | 0);
 	}
 
-	function createBuffer$4(sourceInstanceCount, objectInstanceCountPerSourceInstance) {
-	  return newSharedArrayBuffer(getTotalByteLength$4(sourceInstanceCount, objectInstanceCountPerSourceInstance));
+	function createBuffer$5(sourceInstanceCount, objectInstanceCountPerSourceInstance) {
+	  return newSharedArrayBuffer(getTotalByteLength$5(sourceInstanceCount, objectInstanceCountPerSourceInstance));
 	}
 
 
@@ -9954,7 +10146,7 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function createTypeArrays$4(buffer, sourceInstanceCount, objectInstanceCountPerSourceInstance) {
+	function createTypeArrays$5(buffer, sourceInstanceCount, objectInstanceCountPerSourceInstance) {
 	  return /* tuple */[
 	          new Uint32Array(buffer, getObjectInstanceTransformCollectionsOffset(sourceInstanceCount, objectInstanceCountPerSourceInstance), getObjectInstanceTransformCollectionsLength(sourceInstanceCount, objectInstanceCountPerSourceInstance)),
 	          new Uint8Array(buffer, getIsTransformStaticsOffset(sourceInstanceCount, objectInstanceCountPerSourceInstance), getIsTransformStaticsLength(sourceInstanceCount))
@@ -9964,11 +10156,11 @@
 
 	/* BufferSourceInstanceService-Wonderjs Not a pure module */
 
-	function getRecord$6(param) {
-	  return unsafeGet$1(param[/* sourceInstanceRecord */6]);
+	function getRecord$7(param) {
+	  return unsafeGet$1(param[/* sourceInstanceRecord */7]);
 	}
 
-	function setAllTypeArrDataToDefault$4(sourceInstanceCount, defaultIsTransformStatic, param) {
+	function setAllTypeArrDataToDefault$5(sourceInstanceCount, defaultIsTransformStatic, param) {
 	  return /* tuple */[
 	          param[0].fill(0),
 	          reduceOneParam((function (isTransformStatics, index) {
@@ -9977,34 +10169,34 @@
 	        ];
 	}
 
-	function _setAllTypeArrDataToDefault$3(sourceInstanceCount, defaultIsTransformStatic, param) {
+	function _setAllTypeArrDataToDefault$4(sourceInstanceCount, defaultIsTransformStatic, param) {
 	  return /* tuple */[
 	          param[0],
-	          setAllTypeArrDataToDefault$4(sourceInstanceCount, defaultIsTransformStatic, /* tuple */[
+	          setAllTypeArrDataToDefault$5(sourceInstanceCount, defaultIsTransformStatic, /* tuple */[
 	                param[1],
 	                param[2]
 	              ])
 	        ];
 	}
 
-	function _initBufferData$4(sourceInstanceCount, objectInstanceCountPerSourceInstance, defaultIsTransformStatic) {
-	  var buffer = createBuffer$4(sourceInstanceCount, objectInstanceCountPerSourceInstance);
-	  var match = createTypeArrays$4(buffer, sourceInstanceCount, objectInstanceCountPerSourceInstance);
-	  return _setAllTypeArrDataToDefault$3(sourceInstanceCount, defaultIsTransformStatic, /* tuple */[
+	function _initBufferData$5(sourceInstanceCount, objectInstanceCountPerSourceInstance, defaultIsTransformStatic) {
+	  var buffer = createBuffer$5(sourceInstanceCount, objectInstanceCountPerSourceInstance);
+	  var match = createTypeArrays$5(buffer, sourceInstanceCount, objectInstanceCountPerSourceInstance);
+	  return _setAllTypeArrDataToDefault$4(sourceInstanceCount, defaultIsTransformStatic, /* tuple */[
 	              buffer,
 	              match[0],
 	              match[1]
 	            ]);
 	}
 
-	function create$11(state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function create$12(state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var sourceInstanceCount = getSourceInstanceCount(settingRecord);
 	  var objectInstanceCountPerSourceInstance = getObjectInstanceCountPerSourceInstance(settingRecord);
 	  var defaultIsTransformStatic = getDefault(/* () */0);
-	  var match = _initBufferData$4(sourceInstanceCount, objectInstanceCountPerSourceInstance, defaultIsTransformStatic);
+	  var match = _initBufferData$5(sourceInstanceCount, objectInstanceCountPerSourceInstance, defaultIsTransformStatic);
 	  var match$1 = match[1];
-	  state[/* sourceInstanceRecord */6] = /* record */[
+	  state[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */0,
 	    /* objectInstanceTransformIndexMap */createEmpty$2(/* () */0),
 	    /* buffer */match[0],
@@ -10019,16 +10211,16 @@
 	  return state;
 	}
 
-	function deepCopyForRestore$6(state) {
-	  var record = getRecord$6(state);
+	function deepCopyForRestore$7(state) {
+	  var record = getRecord$7(state);
 	  var index = record[/* index */0];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* sourceInstanceRecord */6] = /* record */[
+	  newrecord[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */index,
 	    /* objectInstanceTransformIndexMap */copy$3(record[/* objectInstanceTransformIndexMap */1]),
 	    /* buffer */record[/* buffer */2],
 	    /* isTransformStatics */copyUint8ArrayWithEndIndex(imul(index, getIsTransformStaticsSize(/* () */0)), record[/* isTransformStatics */3]),
-	    /* objectInstanceTransformCollections */copyUint32ArrayWithEndIndex(imul(index, getObjectInstanceTransformCollectionsSize(getObjectInstanceCountPerSourceInstance(state[/* settingRecord */0]))), record[/* objectInstanceTransformCollections */4]),
+	    /* objectInstanceTransformCollections */copyUint32ArrayWithEndIndex(imul(index, getObjectInstanceTransformCollectionsSize(getObjectInstanceCountPerSourceInstance(state[/* settingRecord */1]))), record[/* objectInstanceTransformCollections */4]),
 	    /* matrixInstanceBufferCapacityMap */copy$3(record[/* matrixInstanceBufferCapacityMap */5]),
 	    /* matrixFloat32ArrayMap */deepCopyFloat32ArrayArray(record[/* matrixFloat32ArrayMap */6]),
 	    /* isSendTransformMatrixDataMap */record[/* isSendTransformMatrixDataMap */7],
@@ -10044,22 +10236,24 @@
 	function handleAddComponent$11(cameraController, gameObjectUid, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */addComponentToGameObjectMap(cameraController, gameObjectUid, record[/* gameObjectMap */15]),
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */addComponentToGameObjectMap(cameraController, gameObjectUid, record[/* gameObjectMap */17]),
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
@@ -10109,9 +10303,9 @@
 	}
 
 	function addBasicCameraViewComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var basicCameraViewRecord = state[/* basicCameraViewRecord */13];
-	  state[/* basicCameraViewRecord */13] = _addComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var basicCameraViewRecord = state[/* basicCameraViewRecord */14];
+	  state[/* basicCameraViewRecord */14] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* basicCameraViewMap */23]
@@ -10120,9 +10314,9 @@
 	}
 
 	function addPerspectiveCameraProjectionComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
-	  state[/* perspectiveCameraProjectionRecord */14] = _addComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
+	  state[/* perspectiveCameraProjectionRecord */15] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* perspectiveCameraProjectionMap */24]
@@ -10131,19 +10325,19 @@
 	}
 
 	function addArcballCameraControllerComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = _addComponent(/* tuple */[
+	  newrecord[/* arcballCameraControllerRecord */26] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* arcballCameraControllerMap */25]
-	      ], handleAddComponent$11, state[/* arcballCameraControllerRecord */25]);
+	      ], handleAddComponent$11, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function addTransformComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  state[/* transformRecord */11] = _addComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  state[/* transformRecord */12] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* transformMap */22]
@@ -10169,10 +10363,10 @@
 	}
 
 	function addBoxGeometryComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  _addCurrentBoxGeometryComponentData(uid, component, gameObjectRecord);
-	  var boxGeometryRecord = getRecord$2(state);
-	  state[/* boxGeometryRecord */22] = _addSharableGeometryComponent(/* tuple */[
+	  var boxGeometryRecord = getRecord$3(state);
+	  state[/* boxGeometryRecord */23] = _addSharableGeometryComponent(/* tuple */[
 	        uid,
 	        component,
 	        getGameObject$2(component, boxGeometryRecord)
@@ -10192,10 +10386,10 @@
 	}
 
 	function addCustomGeometryComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  _addCurrentCustomGeometryComponentData(uid, component, gameObjectRecord);
-	  var customGeometryRecord = getRecord$5(state);
-	  state[/* customGeometryRecord */23] = _addSharableGeometryComponent(/* tuple */[
+	  var customGeometryRecord = getRecord$6(state);
+	  state[/* customGeometryRecord */24] = _addSharableGeometryComponent(/* tuple */[
 	        uid,
 	        component,
 	        getGameObject$5(component, customGeometryRecord)
@@ -10207,9 +10401,9 @@
 	}
 
 	function addBasicMaterialComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var basicMaterialRecord = getRecord$3(state);
-	  state[/* basicMaterialRecord */15] = _addSharableComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var basicMaterialRecord = getRecord$4(state);
+	  state[/* basicMaterialRecord */16] = _addSharableComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* basicMaterialMap */27],
@@ -10222,9 +10416,9 @@
 	}
 
 	function addLightMaterialComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var lightMaterialRecord = getRecord$4(state);
-	  state[/* lightMaterialRecord */16] = _addSharableComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var lightMaterialRecord = getRecord$5(state);
+	  state[/* lightMaterialRecord */17] = _addSharableComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* lightMaterialMap */28],
@@ -10237,7 +10431,7 @@
 	}
 
 	function addMeshRendererComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return _addComponentWithState(/* tuple */[
 	              uid,
 	              component,
@@ -10246,9 +10440,9 @@
 	}
 
 	function addDirectionLightComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  state[/* directionLightRecord */20] = _addComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  state[/* directionLightRecord */21] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* directionLightMap */31]
@@ -10257,9 +10451,9 @@
 	}
 
 	function addPointLightComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var pointLightRecord = state[/* pointLightRecord */21];
-	  state[/* pointLightRecord */21] = _addComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var pointLightRecord = state[/* pointLightRecord */22];
+	  state[/* pointLightRecord */22] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* pointLightMap */32]
@@ -10268,19 +10462,19 @@
 	}
 
 	function addSourceInstanceComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  state[/* sourceInstanceRecord */6] = _addComponent(/* tuple */[
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  state[/* sourceInstanceRecord */7] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* sourceInstanceMap */29]
-	      ], handleAddComponent$8, getRecord$6(state));
+	      ], handleAddComponent$8, getRecord$7(state));
 	  return state;
 	}
 
 	function addObjectInstanceComponent(uid, component, state) {
-	  var objectInstanceRecord = state[/* objectInstanceRecord */7];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  state[/* objectInstanceRecord */7] = _addComponent(/* tuple */[
+	  var objectInstanceRecord = state[/* objectInstanceRecord */8];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  state[/* objectInstanceRecord */8] = _addComponent(/* tuple */[
 	        uid,
 	        component,
 	        gameObjectRecord[/* objectInstanceMap */30]
@@ -10298,7 +10492,7 @@
 
 	/* No side effect */
 
-	function create$12(record) {
+	function create$13(record) {
 	  var uid = record[/* uid */0];
 	  var aliveUidArray = record[/* aliveUidArray */20];
 	  record[/* uid */0] = increase(uid);
@@ -10313,10 +10507,10 @@
 	/* No side effect */
 
 	function create$4(state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var match = create$12(gameObjectRecord);
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = create$13(gameObjectRecord);
 	  var uid = match[1];
-	  state[/* gameObjectRecord */10] = match[0];
+	  state[/* gameObjectRecord */11] = match[0];
 	  var match$1 = create$5(state);
 	  return /* tuple */[
 	          addTransformComponent(uid, match$1[1], match$1[0]),
@@ -10328,13 +10522,13 @@
 	/* CreateTransformMainService-Wonderjs Not a pure module */
 
 	function getRecord(state) {
-	  return unsafeGet$1(state[/* sceneRecord */12]);
+	  return unsafeGet$1(state[/* sceneRecord */13]);
 	}
 
 	function create$3(state) {
 	  var match = create$4(state);
 	  var newrecord = caml_array_dup(match[0]);
-	  newrecord[/* sceneRecord */12] = /* record */[
+	  newrecord[/* sceneRecord */13] = /* record */[
 	    /* currentCameraGameObject */undefined,
 	    /* ambientLight : record */[/* color */getDefaultColor(/* () */0)],
 	    /* sceneGameObject */match[1]
@@ -10591,9 +10785,9 @@
 	}
 
 	function addChild(childGameObject, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* transformRecord */11] = setParent(unsafeGetTransformComponent(getRecord(state)[/* sceneGameObject */2], gameObjectRecord), unsafeGetTransformComponent(childGameObject, gameObjectRecord), getRecord$1(state));
+	  newrecord[/* transformRecord */12] = setParent(unsafeGetTransformComponent(getRecord(state)[/* sceneGameObject */2], gameObjectRecord), unsafeGetTransformComponent(childGameObject, gameObjectRecord), getRecord$1(state));
 	  return newrecord;
 	}
 
@@ -10613,7 +10807,7 @@
 	function setAmbientLightColor$2(color, state) {
 	  var newrecord = caml_array_dup(state);
 	  var init = getRecord(state);
-	  newrecord[/* sceneRecord */12] = /* record */[
+	  newrecord[/* sceneRecord */13] = /* record */[
 	    /* currentCameraGameObject */init[/* currentCameraGameObject */0],
 	    /* ambientLight : record */[/* color */color],
 	    /* sceneGameObject */init[/* sceneGameObject */2]
@@ -10625,12 +10819,12 @@
 	/* RecordSceneMainService-Wonderjs Not a pure module */
 
 	function getCurrentCameraGameObject$1(state) {
-	  return getCurrentCameraGameObject$2(state[/* basicCameraViewRecord */13], getRecord(state));
+	  return getCurrentCameraGameObject$2(state[/* basicCameraViewRecord */14], getRecord(state));
 	}
 
 	function setCurrentCameraGameObject$1(uid, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* sceneRecord */12] = setCurrentCameraGameObject$2(uid, getRecord(state));
+	  newrecord[/* sceneRecord */13] = setCurrentCameraGameObject$2(uid, getRecord(state));
 	  return newrecord;
 	}
 
@@ -10647,6 +10841,37 @@
 
 	/* CameraSceneMainService-Wonderjs Not a pure module */
 
+	function getUnsafeGetStateFunc(state) {
+	  return state[/* stateRecord */0][/* unsafeGetStateFunc */0];
+	}
+
+	function setUnsafeGetStateFunc$2(unsafeGetStateFunc, state) {
+	  var newrecord = caml_array_dup(state);
+	  var init = state[/* stateRecord */0];
+	  newrecord[/* stateRecord */0] = /* record */[
+	    /* unsafeGetStateFunc */unsafeGetStateFunc,
+	    /* setStateFunc */init[/* setStateFunc */1]
+	  ];
+	  return newrecord;
+	}
+
+	function getSetStateFunc(state) {
+	  return state[/* stateRecord */0][/* setStateFunc */1];
+	}
+
+	function setSetStateFunc$2(setStateFunc, state) {
+	  var newrecord = caml_array_dup(state);
+	  var init = state[/* stateRecord */0];
+	  newrecord[/* stateRecord */0] = /* record */[
+	    /* unsafeGetStateFunc */init[/* unsafeGetStateFunc */0],
+	    /* setStateFunc */setStateFunc
+	  ];
+	  return newrecord;
+	}
+
+
+	/* No side effect */
+
 	function unsafeGetState$2(stateData) {
 	  return unsafeGet$1(stateData[/* state */0]);
 	}
@@ -10656,10 +10881,19 @@
 	  return state;
 	}
 
+	function unsafeGetStateByFunc(state) {
+	  return getUnsafeGetStateFunc(state)();
+	}
+
+	function setStateByFunc(state) {
+	  var setStateFunc = getSetStateFunc(state);
+	  return setStateFunc(state);
+	}
+
 
 	/* OptionService-Wonderjs Not a pure module */
 
-	function create$13() {
+	function create$14() {
 	  return /* record */[
 	          /* noWorkerInitJobList : [] */0,
 	          /* noWorkerLoopJobList : [] */0,
@@ -10675,11 +10909,11 @@
 
 	/* HashMapService-WonderCommonlib Not a pure module */
 
-	function create$14() {
+	function create$15() {
 	  return /* record */[/* precision */undefined];
 	}
 
-	function deepCopyForRestore$8(param) {
+	function deepCopyForRestore$9(param) {
 	  var precision = param[/* precision */0];
 	  return /* record */[/* precision */precision];
 	}
@@ -10687,7 +10921,7 @@
 
 	/* No side effect */
 
-	function create$15() {
+	function create$16() {
 	  return /* record */[/* canvas */undefined];
 	}
 
@@ -10709,7 +10943,7 @@
 	        ];
 	}
 
-	function create$16() {
+	function create$17() {
 	  return /* record */[/* chunkMap */set("webgl1_basic_map_fragment", _buildChunk(/* tuple */[
 	                    "\n\n",
 	                    "\n\n"
@@ -10859,7 +11093,7 @@
 	                                                                                                                    "\n\n"
 	                                                                                                                  ], "\nvarying vec3 v_normal;\n", /* tuple */[
 	                                                                                                                    "\nvec3 getNormal();\n",
-	                                                                                                                    "\nvec3 getNormal(){\n    return v_normal;\n}\n\n#if POINT_LIGHTS_COUNT > 0\nvec3 getPointLightDir(int index){\n    //workaround '[] : Index expression must be constant' error\n    for (int x = 0; x <= POINT_LIGHTS_COUNT; x++) {\n        if(x == index){\n            return getPointLightDirByLightPos(u_pointLights[x].position);\n        }\n    }\n    /*!\n    solve error in window7 chrome/firefox:\n    not all control paths return a value.\n    failed to create d3d shaders\n    */\n    return vec3(0.0);\n}\n#endif\n\n#if DIRECTION_LIGHTS_COUNT > 0\nvec3 getDirectionLightDir(int index){\n    //workaround '[] : Index expression must be constant' error\n    for (int x = 0; x <= DIRECTION_LIGHTS_COUNT; x++) {\n        if(x == index){\n            return getDirectionLightDirByLightPos(u_directionLights[x].position);\n        }\n    }\n\n    /*!\n    solve error in window7 chrome/firefox:\n    not all control paths return a value.\n    failed to create d3d shaders\n    */\n    return vec3(0.0);\n}\n#endif\n\n\nvec3 getViewDir(){\n    return normalize(u_cameraPos - v_worldPosition);\n}\n"
+	                                                                                                                    "\nvec3 getNormal(){\n    return v_normal;\n}\n\n#if POINT_LIGHTS_COUNT > 0\nvec3 getPointLightDir(int index){\n    //workaround '[] : Index expression must be constant' error\n    for (int x = 0; x <= POINT_LIGHTS_COUNT; x++) {\n        if(x == index){\n            return getPointLightDirByLightPos(u_pointLights[x].position);\n        }\n    }\n    /*!\n    solve error in window7 chrome/firefox:\n    not all control paths return a value.\n    failed to create d3d shaders\n    */\n    return vec3(0.0);\n}\n#endif\n\n#if DIRECTION_LIGHTS_COUNT > 0\nvec3 getDirectionLightDir(int index){\n    //workaround '[] : Index expression must be constant' error\n    for (int x = 0; x <= DIRECTION_LIGHTS_COUNT; x++) {\n        if(x == index){\n            return getDirectionLightDir(u_directionLights[x].direction);\n        }\n    }\n\n    /*!\n    solve error in window7 chrome/firefox:\n    not all control paths return a value.\n    failed to create d3d shaders\n    */\n    return vec3(0.0);\n}\n#endif\n\n\nvec3 getViewDir(){\n    return normalize(u_cameraPos - v_worldPosition);\n}\n"
 	                                                                                                                  ], "\n\n"), set("webgl1_no_normal_map_vertex", _buildChunk(/* tuple */[
 	                                                                                                                        "\n\n",
 	                                                                                                                        "\n\n"
@@ -10899,21 +11133,21 @@
 	                                                                                                                                          ], "\n\n"), set("webgl1_frontLight_common_fragment", _buildChunk(/* tuple */[
 	                                                                                                                                                "\n\n",
 	                                                                                                                                                "\n\n"
-	                                                                                                                                              ], "\nvarying vec3 v_worldPosition;\n\n#if POINT_LIGHTS_COUNT > 0\nstruct PointLight {\n    vec3 position;\n    vec3 color;\n    float intensity;\n\n    float range;\n    float constant;\n    float linear;\n    float quadratic;\n};\nuniform PointLight u_pointLights[POINT_LIGHTS_COUNT];\n\n#endif\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\nstruct DirectionLight {\n    vec3 position;\n\n    float intensity;\n\n    vec3 color;\n};\nuniform DirectionLight u_directionLights[DIRECTION_LIGHTS_COUNT];\n#endif\n", /* tuple */[
-	                                                                                                                                                "\nvec3 getDirectionLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition);\n",
-	                                                                                                                                                "\nvec3 getDirectionLightDirByLightPos(vec3 lightPos){\n    return lightPos - vec3(0.0);\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos){\n    return lightPos - v_worldPosition;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition){\n    return lightPos - worldPosition;\n}\n"
+	                                                                                                                                              ], "\nvarying vec3 v_worldPosition;\n\n#if POINT_LIGHTS_COUNT > 0\nstruct PointLight {\n    vec3 position;\n    vec3 color;\n    float intensity;\n\n    float range;\n    float constant;\n    float linear;\n    float quadratic;\n};\nuniform PointLight u_pointLights[POINT_LIGHTS_COUNT];\n\n#endif\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\nstruct DirectionLight {\n    vec3 direction;\n\n    float intensity;\n\n    vec3 color;\n};\nuniform DirectionLight u_directionLights[DIRECTION_LIGHTS_COUNT];\n#endif\n", /* tuple */[
+	                                                                                                                                                "\nvec3 getDirectionLightDir(vec3 lightDirection);\nvec3 getPointLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition);\n",
+	                                                                                                                                                "\nvec3 getDirectionLightDir(vec3 lightDirection){\n    lightDirection =  normalize(lightDirection);\n\n    return -lightDirection;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos){\n    return lightPos - v_worldPosition;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition){\n    return lightPos - worldPosition;\n}\n"
 	                                                                                                                                              ], "\n\n"), set("webgl1_frontLight_common_vertex", _buildChunk(/* tuple */[
 	                                                                                                                                                    "\n\n",
 	                                                                                                                                                    "\n\n"
-	                                                                                                                                                  ], "\nvarying vec3 v_worldPosition;\n\n#if POINT_LIGHTS_COUNT > 0\nstruct PointLight {\n    vec3 position;\n    vec3 color;\n    float intensity;\n\n    float range;\n    float constant;\n    float linear;\n    float quadratic;\n};\nuniform PointLight u_pointLights[POINT_LIGHTS_COUNT];\n\n#endif\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\nstruct DirectionLight {\n    vec3 position;\n\n    float intensity;\n\n    vec3 color;\n};\nuniform DirectionLight u_directionLights[DIRECTION_LIGHTS_COUNT];\n#endif\n", /* tuple */[
-	                                                                                                                                                    "\nvec3 getDirectionLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition);\n",
-	                                                                                                                                                    "\nvec3 getDirectionLightDirByLightPos(vec3 lightPos){\n    return lightPos - vec3(0.0);\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos){\n    return lightPos - v_worldPosition;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition){\n    return lightPos - worldPosition;\n}\n"
+	                                                                                                                                                  ], "\nvarying vec3 v_worldPosition;\n\n#if POINT_LIGHTS_COUNT > 0\nstruct PointLight {\n    vec3 position;\n    vec3 color;\n    float intensity;\n\n    float range;\n    float constant;\n    float linear;\n    float quadratic;\n};\nuniform PointLight u_pointLights[POINT_LIGHTS_COUNT];\n\n#endif\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\nstruct DirectionLight {\n    vec3 direction;\n\n    float intensity;\n\n    vec3 color;\n};\nuniform DirectionLight u_directionLights[DIRECTION_LIGHTS_COUNT];\n#endif\n", /* tuple */[
+	                                                                                                                                                    "\nvec3 getDirectionLightDir(vec3 lightDirection);\nvec3 getPointLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition);\n",
+	                                                                                                                                                    "\nvec3 getDirectionLightDir(vec3 lightDirection){\n    lightDirection =  normalize(lightDirection);\n\n    return -lightDirection;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos){\n    return lightPos - v_worldPosition;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition){\n    return lightPos - worldPosition;\n}\n"
 	                                                                                                                                                  ], "\n\n"), set("webgl1_frontLight_common", _buildChunk(/* tuple */[
 	                                                                                                                                                        "\n\n",
 	                                                                                                                                                        "\n\n"
-	                                                                                                                                                      ], "\nvarying vec3 v_worldPosition;\n\n#if POINT_LIGHTS_COUNT > 0\nstruct PointLight {\n    vec3 position;\n    vec3 color;\n    float intensity;\n\n    float range;\n    float constant;\n    float linear;\n    float quadratic;\n};\nuniform PointLight u_pointLights[POINT_LIGHTS_COUNT];\n\n#endif\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\nstruct DirectionLight {\n    vec3 position;\n\n    float intensity;\n\n    vec3 color;\n};\nuniform DirectionLight u_directionLights[DIRECTION_LIGHTS_COUNT];\n#endif\n", /* tuple */[
-	                                                                                                                                                        "\nvec3 getDirectionLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition);\n",
-	                                                                                                                                                        "\nvec3 getDirectionLightDirByLightPos(vec3 lightPos){\n    return lightPos - vec3(0.0);\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos){\n    return lightPos - v_worldPosition;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition){\n    return lightPos - worldPosition;\n}\n"
+	                                                                                                                                                      ], "\nvarying vec3 v_worldPosition;\n\n#if POINT_LIGHTS_COUNT > 0\nstruct PointLight {\n    vec3 position;\n    vec3 color;\n    float intensity;\n\n    float range;\n    float constant;\n    float linear;\n    float quadratic;\n};\nuniform PointLight u_pointLights[POINT_LIGHTS_COUNT];\n\n#endif\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\nstruct DirectionLight {\n    vec3 direction;\n\n    float intensity;\n\n    vec3 color;\n};\nuniform DirectionLight u_directionLights[DIRECTION_LIGHTS_COUNT];\n#endif\n", /* tuple */[
+	                                                                                                                                                        "\nvec3 getDirectionLightDir(vec3 lightDirection);\nvec3 getPointLightDirByLightPos(vec3 lightPos);\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition);\n",
+	                                                                                                                                                        "\nvec3 getDirectionLightDir(vec3 lightDirection){\n    lightDirection =  normalize(lightDirection);\n\n    return -lightDirection;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos){\n    return lightPos - v_worldPosition;\n}\nvec3 getPointLightDirByLightPos(vec3 lightPos, vec3 worldPosition){\n    return lightPos - worldPosition;\n}\n"
 	                                                                                                                                                      ], "\n\n"), set("webgl1_frontLight_end_fragment", _buildChunk(/* tuple */[
 	                                                                                                                                                            "\n\n",
 	                                                                                                                                                            "\n\n"
@@ -10925,7 +11159,7 @@
 	                                                                                                                                                                "\n\n"
 	                                                                                                                                                              ], "\n\n", /* tuple */[
 	                                                                                                                                                                "\n\n",
-	                                                                                                                                                                "\nfloat getBlinnShininess(float shininess, vec3 normal, vec3 lightDir, vec3 viewDir, float dotResultBetweenNormAndLight){\n        vec3 halfAngle = normalize(lightDir + viewDir);\n\n        float blinnTerm = dot(normal, halfAngle);\n\n        blinnTerm = clamp(blinnTerm, 0.0, 1.0);\n        blinnTerm = dotResultBetweenNormAndLight != 0.0 ? blinnTerm : 0.0;\n        blinnTerm = pow(blinnTerm, shininess);\n\n        return blinnTerm;\n}\n\n// float getPhongShininess(float shininess, vec3 normal, vec3 lightDir, vec3 viewDir, float dotResultBetweenNormAndLight){\n//         vec3 reflectDir = reflect(-lightDir, normal);\n//         float phongTerm = dot(viewDir, reflectDir);\n\n//         phongTerm = clamp(phongTerm, 0.0, 1.0);\n//         phongTerm = dotResultBetweenNormAndLight != 0.0 ? phongTerm : 0.0;\n//         phongTerm = pow(phongTerm, shininess);\n\n//         return phongTerm;\n// }\n\nvec3 calcAmbientColor(vec3 materialDiffuse){\n        vec3 materialLight = getMaterialLight();\n\n        return (u_ambient + materialLight) * materialDiffuse.rgb;\n}\n\nvec3 calcLight(vec3 lightDir, vec3 color, float intensity, float attenuation, vec3 normal, vec3 viewDir)\n{\n        vec3 materialDiffuse = getMaterialDiffuse();\n        vec3 materialSpecular = u_specular;\n        vec3 materialEmission = getMaterialEmission();\n\n        float specularStrength = getSpecularStrength();\n\n        float dotResultBetweenNormAndLight = dot(normal, lightDir);\n        float diff = max(dotResultBetweenNormAndLight, 0.0);\n\n        vec3 emissionColor = materialEmission;\n\n        vec3 ambientColor = calcAmbientColor(materialDiffuse);\n\n\n        // if(u_lightModel == 3){\n        //     return emissionColor + ambientColor;\n        // }\n\n//        vec4 diffuseColor = vec4(color * materialDiffuse.rgb * diff * intensity, materialDiffuse.a);\n        vec3 diffuseColor = color * materialDiffuse.rgb * diff * intensity;\n\n        float spec = 0.0;\n\n        // if(u_lightModel == 2){\n        //         spec = getPhongShininess(u_shininess, normal, lightDir, viewDir, diff);\n        // }\n        // else if(u_lightModel == 1){\n        //         spec = getBlinnShininess(u_shininess, normal, lightDir, viewDir, diff);\n        // }\n\n        spec = getBlinnShininess(u_shininess, normal, lightDir, viewDir, diff);\n\n\n        vec3 specularColor = spec * materialSpecular * specularStrength * intensity;\n\n//        return vec4(emissionColor + ambientColor + attenuation * (diffuseColor.rgb + specularColor), diffuseColor.a);\n        return emissionColor + ambientColor + attenuation * (diffuseColor.rgb + specularColor);\n}\n\n\n\n\n#if POINT_LIGHTS_COUNT > 0\n        vec3 calcPointLight(vec3 lightDir, PointLight light, vec3 normal, vec3 viewDir)\n{\n        //lightDir is not normalize computing distance\n        float distance = length(lightDir);\n\n        float attenuation = 0.0;\n\n        if(distance < light.range)\n        {\n            attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));\n        }\n\n        lightDir = normalize(lightDir);\n\n        return calcLight(lightDir, light.color, light.intensity, attenuation, normal, viewDir);\n}\n#endif\n\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\n        vec3 calcDirectionLight(vec3 lightDir, DirectionLight light, vec3 normal, vec3 viewDir)\n{\n        float attenuation = 1.0;\n\n        lightDir = normalize(lightDir);\n\n        return calcLight(lightDir, light.color, light.intensity, attenuation, normal, viewDir);\n}\n#endif\n\n\n\nvec4 calcTotalLight(vec3 norm, vec3 viewDir){\n    vec4 totalLight = vec4(0.0, 0.0, 0.0, 1.0);\n\n\n    #if (DIRECTION_LIGHTS_COUNT == 0 && POINT_LIGHTS_COUNT == 0 )\n        return vec4(calcAmbientColor(getMaterialDiffuse()), 1.0);\n    #endif\n\n\n    #if POINT_LIGHTS_COUNT > 0\n                for(int i = 0; i < POINT_LIGHTS_COUNT; i++){\n                totalLight += vec4(calcPointLight(getPointLightDir(i), u_pointLights[i], norm, viewDir), 0.0);\n        }\n    #endif\n\n    #if DIRECTION_LIGHTS_COUNT > 0\n                for(int i = 0; i < DIRECTION_LIGHTS_COUNT; i++){\n                totalLight += vec4(calcDirectionLight(getDirectionLightDir(i), u_directionLights[i], norm, viewDir), 0.0);\n        }\n    #endif\n\n        return totalLight;\n}\n"
+	                                                                                                                                                                "\nfloat getBlinnShininess(float shininess, vec3 normal, vec3 lightDir, vec3 viewDir, float dotResultBetweenNormAndLight){\n        vec3 halfAngle = normalize(lightDir + viewDir);\n\n        float blinnTerm = dot(normal, halfAngle);\n\n        blinnTerm = clamp(blinnTerm, 0.0, 1.0);\n        blinnTerm = dotResultBetweenNormAndLight != 0.0 ? blinnTerm : 0.0;\n        blinnTerm = pow(blinnTerm, shininess);\n\n        return blinnTerm;\n}\n\n// float getPhongShininess(float shininess, vec3 normal, vec3 lightDir, vec3 viewDir, float dotResultBetweenNormAndLight){\n//         vec3 reflectDir = reflect(-lightDir, normal);\n//         float phongTerm = dot(viewDir, reflectDir);\n\n//         phongTerm = clamp(phongTerm, 0.0, 1.0);\n//         phongTerm = dotResultBetweenNormAndLight != 0.0 ? phongTerm : 0.0;\n//         phongTerm = pow(phongTerm, shininess);\n\n//         return phongTerm;\n// }\n\nvec3 calcAmbientColor(vec3 materialDiffuse){\n        vec3 materialLight = getMaterialLight();\n\n        return (u_ambient + materialLight) * materialDiffuse.rgb;\n}\n\nvec3 calcLight(vec3 lightDir, vec3 color, float intensity, float attenuation, vec3 normal, vec3 viewDir)\n{\n        vec3 materialDiffuse = getMaterialDiffuse();\n        vec3 materialSpecular = u_specular;\n        vec3 materialEmission = getMaterialEmission();\n\n        float specularStrength = getSpecularStrength();\n\n        float dotResultBetweenNormAndLight = dot(normal, lightDir);\n        float diff = max(dotResultBetweenNormAndLight, 0.0);\n\n        vec3 emissionColor = materialEmission;\n\n        vec3 ambientColor = calcAmbientColor(materialDiffuse);\n\n\n        // if(u_lightModel == 3){\n        //     return emissionColor + ambientColor;\n        // }\n\n//        vec4 diffuseColor = vec4(color * materialDiffuse.rgb * diff * intensity, materialDiffuse.a);\n        vec3 diffuseColor = color * materialDiffuse.rgb * diff * intensity;\n\n        float spec = 0.0;\n\n        // if(u_lightModel == 2){\n        //         spec = getPhongShininess(u_shininess, normal, lightDir, viewDir, diff);\n        // }\n        // else if(u_lightModel == 1){\n        //         spec = getBlinnShininess(u_shininess, normal, lightDir, viewDir, diff);\n        // }\n\n        spec = getBlinnShininess(u_shininess, normal, lightDir, viewDir, diff);\n\n\n        vec3 specularColor = spec * materialSpecular * specularStrength * intensity;\n\n//        return vec4(emissionColor + ambientColor + attenuation * (diffuseColor.rgb + specularColor), diffuseColor.a);\n        return emissionColor + ambientColor + attenuation * (diffuseColor.rgb + specularColor);\n}\n\n\n\n\n#if POINT_LIGHTS_COUNT > 0\n        vec3 calcPointLight(vec3 lightDir, PointLight light, vec3 normal, vec3 viewDir)\n{\n        //lightDir is not normalize computing distance\n        float distance = length(lightDir);\n\n        float attenuation = 0.0;\n\n        if(distance < light.range)\n        {\n            attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));\n        }\n\n        lightDir = normalize(lightDir);\n\n        return calcLight(lightDir, light.color, light.intensity, attenuation, normal, viewDir);\n}\n#endif\n\n\n\n#if DIRECTION_LIGHTS_COUNT > 0\n        vec3 calcDirectionLight(vec3 lightDir, DirectionLight light, vec3 normal, vec3 viewDir)\n{\n        float attenuation = 1.0;\n\n        // lightDir = normalize(lightDir);\n\n        return calcLight(lightDir, light.color, light.intensity, attenuation, normal, viewDir);\n}\n#endif\n\n\n\nvec4 calcTotalLight(vec3 norm, vec3 viewDir){\n    vec4 totalLight = vec4(0.0, 0.0, 0.0, 1.0);\n\n\n    #if (DIRECTION_LIGHTS_COUNT == 0 && POINT_LIGHTS_COUNT == 0 )\n        return vec4(calcAmbientColor(getMaterialDiffuse()), 1.0);\n    #endif\n\n\n    #if POINT_LIGHTS_COUNT > 0\n                for(int i = 0; i < POINT_LIGHTS_COUNT; i++){\n                totalLight += vec4(calcPointLight(getPointLightDir(i), u_pointLights[i], norm, viewDir), 0.0);\n        }\n    #endif\n\n    #if DIRECTION_LIGHTS_COUNT > 0\n                for(int i = 0; i < DIRECTION_LIGHTS_COUNT; i++){\n                totalLight += vec4(calcDirectionLight(getDirectionLightDir(i), u_directionLights[i], norm, viewDir), 0.0);\n        }\n    #endif\n\n        return totalLight;\n}\n"
 	                                                                                                                                                              ], "\nvec3 normal = normalize(getNormal());\n\n// #ifdef BOTH_SIdE\n// normal = normal * (-1.0 + 2.0 * float(gl_FrontFacing));\n// #endif\n\nvec3 viewDir = normalize(getViewDir());\n\nvec4 totalColor = calcTotalLight(normal, viewDir);\n\n// totalColor.a *= u_opacity;\n\ntotalColor.rgb = totalColor.rgb * getShadowVisibility();\n"), set("webgl1_frontLight_setWorldPosition_vertex", _buildChunk(/* tuple */[
 	                                                                                                                                                                    "\n\n",
 	                                                                                                                                                                    "\n\n"
@@ -10944,24 +11178,36 @@
 
 	/* HashMapService-WonderCommonlib Not a pure module */
 
-	function create$17() {
+	function copy$4(map$$1) {
+	  return reduceOneParam((function (newMap, param) {
+	                return set(param[0], param[1], newMap);
+	              }), createEmpty(/* () */0), entries(map$$1));
+	}
+
+
+	/* Js_dict Not a pure module */
+
+	function create$18() {
 	  return /* record */[
 	          /* index */0,
-	          /* shaderIndexMap */createEmpty(/* () */0)
+	          /* shaderIndexMap */createEmpty(/* () */0),
+	          /* usedShaderIndexArray : array */[]
 	        ];
 	}
 
-	function deepCopyForRestore$9(param) {
+	function deepCopyForRestore$10(param) {
 	  var index = param[/* index */0];
 	  var shaderIndexMap = param[/* shaderIndexMap */1];
+	  var usedShaderIndexArray = param[/* usedShaderIndexArray */2];
 	  return /* record */[
 	          /* index */index,
-	          /* shaderIndexMap */shaderIndexMap
+	          /* shaderIndexMap */copy$4(shaderIndexMap),
+	          /* usedShaderIndexArray */usedShaderIndexArray.slice()
 	        ];
 	}
 
 
-	/* HashMapService-WonderCommonlib Not a pure module */
+	/* HashMapService-Wonderjs Not a pure module */
 
 	function iter$1(x, f) {
 	  if (x == null) {
@@ -10990,6 +11236,17 @@
 
 
 	/* GameObjectMapService-Wonderjs Not a pure module */
+
+	function getDegToRad() {
+	  return Math.PI / 180;
+	}
+
+	function getRadToDeg() {
+	  return 180 / Math.PI;
+	}
+
+
+	/* No side effect */
 
 	// Generated by BUCKLESCRIPT VERSION 4.0.0, PLEASE EDIT WITH CARE
 
@@ -11160,6 +11417,40 @@
 	          Math.sqrt(m21 * m21 + m22 * m22 + m23 * m23),
 	          Math.sqrt(m31 * m31 + m32 * m32 + m33 * m33)
 	        ];
+	}
+
+	function getEulerAngles(matTypeArr) {
+	  var match = getScaleTuple(matTypeArr);
+	  var sy = match[1];
+	  var sx = match[0];
+	  var a00 = matTypeArr[0];
+	  var a01 = matTypeArr[1];
+	  var a02 = matTypeArr[2];
+	  var a10 = matTypeArr[4];
+	  var a11 = matTypeArr[5];
+	  var a12 = matTypeArr[6];
+	  var a22 = matTypeArr[10];
+	  var y = Math.asin(-a02 / sx);
+	  var halfPi = Math.PI * 0.5;
+	  var x = 0;
+	  var z = 0;
+	  if (y < halfPi) {
+	    if (y > -halfPi) {
+	      x = Math.atan2(a12 / sy, a22 / match[2]);
+	      z = Math.atan2(a01 / sx, a00 / sx);
+	    } else {
+	      z = 0;
+	      x = -Math.atan2(a11 / sy, a10 / sy);
+	    }
+	  } else {
+	    z = 0;
+	    x = Math.atan2(a11 / sy, a10 / sy);
+	  }
+	  return scale(/* Float */0, getRadToDeg(/* () */0), /* tuple */[
+	              x,
+	              y,
+	              z
+	            ]);
 	}
 
 	function multiply$1(aMatTypeArr, bMatTypeArr, resultFloat32Arr) {
@@ -11517,6 +11808,57 @@
 	            return [x,y,z,w]
 	  };
 
+	function setFromEulerAngles(param) {
+	  var halfToRad = 0.5 * getDegToRad(/* () */0);
+	  var ex = param[0] * halfToRad;
+	  var ey = param[1] * halfToRad;
+	  var ez = param[2] * halfToRad;
+	  var sx = Math.sin(ex);
+	  var cx = Math.cos(ex);
+	  var sy = Math.sin(ey);
+	  var cy = Math.cos(ey);
+	  var sz = Math.sin(ez);
+	  var cz = Math.cos(ez);
+	  return /* tuple */[
+	          sx * cy * cz - cx * sy * sz,
+	          cx * sy * cz + sx * cy * sz,
+	          cx * cy * sz - sx * sy * cz,
+	          cx * cy * cz + sx * sy * sz
+	        ];
+	}
+
+	var _getEulerAngles = function (quat){
+	            var x, y, z, qx, qy, qz, qw, a2;
+
+	            qx = quat[0];
+	            qy = quat[1];
+	            qz = quat[2];
+	            qw = quat[3];
+
+	            a2 = 2 * (qw * qy - qx * qz);
+	            if (a2 <= -0.99999) {
+	                x = 2 * Math.atan2(qx, qw);
+	                y = -Math.PI / 2;
+	                z = 0;
+	            } else if (a2 >= 0.99999) {
+	                x = 2 * Math.atan2(qx, qw);
+	                y = Math.PI / 2;
+	                z = 0;
+	            } else {
+	                x = Math.atan2(2 * (qw * qx + qy * qz), 1 - 2 * (qx * qx + qy * qy));
+	                y = Math.asin(a2);
+	                z = Math.atan2(2 * (qw * qz + qx * qy), 1 - 2 * (qy * qy + qz * qz));
+	            }
+
+	            //return Vector3.create(x, y, z).scale(RAD_TO_DEG);
+	            return [x, y, z];
+	    };
+
+	function getEulerAngles$1(quat) {
+	  var rad_to_deg = 180 / Math.PI;
+	  return scale(/* Float */0, rad_to_deg, _getEulerAngles(quat));
+	}
+
 
 	/* No side effect */
 
@@ -11607,6 +11949,16 @@
 	function setLocalRotationByTuple$1(transform, dataTuple, record) {
 	  var localRotations = record[/* localRotations */4];
 	  setLocalRotationByTuple(transform, dataTuple, localRotations);
+	  return markHierachyDirty(transform, record);
+	}
+
+	function getLocalEulerAnglesTuple(transform, localRotations) {
+	  return getEulerAngles$1(getLocalRotationTuple(transform, localRotations));
+	}
+
+	function setLocalEulerAnglesByTuple(transform, eulerAngles, record) {
+	  var localRotations = record[/* localRotations */4];
+	  setLocalRotationByTuple(transform, setFromEulerAngles(eulerAngles), localRotations);
 	  return markHierachyDirty(transform, record);
 	}
 
@@ -11722,6 +12074,17 @@
 	  }
 	}
 
+	function updateAndGetEulerAnglesTuple(transform, globalTempRecord, record) {
+	  var match = update(transform, globalTempRecord, record);
+	  var localToWorldMatrices = match[/* localToWorldMatrices */2];
+	  var localToWorldMatrixCacheMap = match[/* localToWorldMatrixCacheMap */19];
+	  return getEulerAngles(getLocalToWorldMatrixTypeArray$1(transform, localToWorldMatrices, localToWorldMatrixCacheMap));
+	}
+
+	function updateAndSetEulerAnglesByTuple(transform, eulerAngles, globalTempRecord, record) {
+	  return updateAndSetRotationByTuple(transform, setFromEulerAngles(eulerAngles), globalTempRecord, record);
+	}
+
 
 	/* Matrix4Service-Wonderjs Not a pure module */
 
@@ -11731,10 +12094,10 @@
 	      1,
 	      0
 	    ];
-	  var globalTempRecord = state[/* globalTempRecord */35];
+	  var globalTempRecord = state[/* globalTempRecord */36];
 	  var transformRecord = getRecord$1(state);
 	  var __x = setFromMatrix(setLookAt(updateAndGetPositionTuple(transform, globalTempRecord, transformRecord), target, up));
-	  state[/* transformRecord */11] = updateAndSetRotationByTuple(transform, __x, globalTempRecord, transformRecord);
+	  state[/* transformRecord */12] = updateAndSetRotationByTuple(transform, __x, globalTempRecord, transformRecord);
 	  return state;
 	}
 
@@ -11833,7 +12196,7 @@
 	  var transformRecord = getRecord$1(state);
 	  var disposedIndexArray = transformRecord[/* disposedIndexArray */21];
 	  transformRecord[/* disposedIndexArray */21] = disposedIndexArray.concat(transformArray);
-	  var transformCount = getTransformCount(state[/* settingRecord */0]);
+	  var transformCount = getTransformCount(state[/* settingRecord */1]);
 	  var dataTuple = /* tuple */[
 	    transformCount,
 	    maxTypeArrayPoolSize,
@@ -11842,7 +12205,7 @@
 	  var transformRecord$1 = reduceOneParam((function (transformRecord, transform) {
 	          return _disposeData$1(transform, dataTuple, transformRecord);
 	        }), transformRecord, transformArray);
-	  state[/* transformRecord */11] = transformRecord$1;
+	  state[/* transformRecord */12] = transformRecord$1;
 	  return state;
 	}
 
@@ -11874,7 +12237,7 @@
 
 	function _setTransformParent(parent, child, setParentFunc, state) {
 	  _checkParentAndChildTransformShouldAlive(parent, child, state);
-	  state[/* transformRecord */11] = setParentFunc((parent == null) ? undefined : some$1(parent), child, getRecord$1(state));
+	  state[/* transformRecord */12] = setParentFunc((parent == null) ? undefined : some$1(parent), child, getRecord$1(state));
 	  return state;
 	}
 
@@ -11904,7 +12267,7 @@
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  state[/* transformRecord */11] = setLocalPositionByTuple$1(transform, localPosition, getRecord$1(state));
+	  state[/* transformRecord */12] = setLocalPositionByTuple$1(transform, localPosition, getRecord$1(state));
 	  return state;
 	}
 
@@ -11912,14 +12275,14 @@
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  return updateAndGetPositionTuple(transform, state[/* globalTempRecord */35], getRecord$1(state));
+	  return updateAndGetPositionTuple(transform, state[/* globalTempRecord */36], getRecord$1(state));
 	}
 
 	function setTransformPosition$1(transform, position, state) {
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  state[/* transformRecord */11] = updateAndSetPositionByTuple(transform, position, state[/* globalTempRecord */35], getRecord$1(state));
+	  state[/* transformRecord */12] = updateAndSetPositionByTuple(transform, position, state[/* globalTempRecord */36], getRecord$1(state));
 	  return state;
 	}
 
@@ -11934,7 +12297,7 @@
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  state[/* transformRecord */11] = setLocalRotationByTuple$1(transform, localRotation, getRecord$1(state));
+	  state[/* transformRecord */12] = setLocalRotationByTuple$1(transform, localRotation, getRecord$1(state));
 	  return state;
 	}
 
@@ -11942,14 +12305,14 @@
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  return updateAndGetRotationTuple(transform, state[/* globalTempRecord */35], getRecord$1(state));
+	  return updateAndGetRotationTuple(transform, state[/* globalTempRecord */36], getRecord$1(state));
 	}
 
 	function setTransformRotation$1(transform, rotation, state) {
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  state[/* transformRecord */11] = updateAndSetRotationByTuple(transform, rotation, state[/* globalTempRecord */35], getRecord$1(state));
+	  state[/* transformRecord */12] = updateAndSetRotationByTuple(transform, rotation, state[/* globalTempRecord */36], getRecord$1(state));
 	  return state;
 	}
 
@@ -11964,7 +12327,7 @@
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  state[/* transformRecord */11] = setLocalScaleByTuple$1(transform, localScale, getRecord$1(state));
+	  state[/* transformRecord */12] = setLocalScaleByTuple$1(transform, localScale, getRecord$1(state));
 	  return state;
 	}
 
@@ -11972,14 +12335,44 @@
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  return updateAndGetScaleTuple(transform, state[/* globalTempRecord */35], getRecord$1(state));
+	  return updateAndGetScaleTuple(transform, state[/* globalTempRecord */36], getRecord$1(state));
 	}
 
 	function setTransformScale$1(transform, scale, state) {
 	  requireCheck((function () {
 	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
 	        }), getIsDebug(stateData));
-	  state[/* transformRecord */11] = updateAndSetScaleByTuple(transform, scale, state[/* globalTempRecord */35], getRecord$1(state));
+	  state[/* transformRecord */12] = updateAndSetScaleByTuple(transform, scale, state[/* globalTempRecord */36], getRecord$1(state));
+	  return state;
+	}
+
+	function getTransformLocalEulerAngles$1(transform, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
+	        }), getIsDebug(stateData));
+	  return getLocalEulerAnglesTuple(transform, getRecord$1(state)[/* localRotations */4]);
+	}
+
+	function setTransformLocalEulerAngles$1(transform, eulerAngles, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
+	        }), getIsDebug(stateData));
+	  state[/* transformRecord */12] = setLocalEulerAnglesByTuple(transform, eulerAngles, getRecord$1(state));
+	  return state;
+	}
+
+	function getTransformEulerAngles$1(transform, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
+	        }), getIsDebug(stateData));
+	  return updateAndGetEulerAnglesTuple(transform, state[/* globalTempRecord */36], getRecord$1(state));
+	}
+
+	function setTransformEulerAngles$1(transform, eulerAngles, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(transform, isAlive$2, getRecord$1(state));
+	        }), getIsDebug(stateData));
+	  state[/* transformRecord */12] = updateAndSetEulerAnglesByTuple(transform, eulerAngles, state[/* globalTempRecord */36], getRecord$1(state));
 	  return state;
 	}
 
@@ -12001,6 +12394,86 @@
 
 
 	/* Contract-WonderLog Not a pure module */
+
+	function unsafeGetPMatrix(index, pMatrixMap) {
+	  return ensureCheck((function (pMatrix) {
+	                return test(buildAssertMessage("pMatrix exist", "not"), (function () {
+	                              return assertNullableExist(pMatrix);
+	                            }));
+	              }), getIsDebug(stateData), unsafeGet$2(index, pMatrixMap));
+	}
+
+	function setDefaultPMatrix(index, pMatrixMap) {
+	  return set$1(index, createIdentityMatrix4(/* () */0), pMatrixMap);
+	}
+
+
+	/* Log-WonderLog Not a pure module */
+
+	function transformMat4Tuple$1(param, mat4) {
+	  var w = param[3];
+	  var z = param[2];
+	  var y = param[1];
+	  var x = param[0];
+	  return /* tuple */[
+	          mat4[0] * x + mat4[4] * y + mat4[8] * z + mat4[12] * w,
+	          mat4[1] * x + mat4[5] * y + mat4[9] * z + mat4[13] * w,
+	          mat4[2] * x + mat4[6] * y + mat4[10] * z + mat4[14] * w,
+	          mat4[3] * x + mat4[7] * y + mat4[11] * z + mat4[15] * w
+	        ];
+	}
+
+
+	/* No side effect */
+
+	function getWorldToCameraMatrix(cameraToWorldMatrix) {
+	  return invert(cameraToWorldMatrix, createIdentityMatrix4(/* () */0));
+	}
+
+
+	/* Matrix4Service-Wonderjs Not a pure module */
+
+	function getBasicCameraViewWorldToCameraMatrix$1(cameraView, state) {
+	  var match = getRecord$1(state);
+	  var localToWorldMatrices = match[/* localToWorldMatrices */2];
+	  var localToWorldMatrixCacheMap = match[/* localToWorldMatrixCacheMap */19];
+	  return getWorldToCameraMatrix(getLocalToWorldMatrixTypeArray$1(unsafeGetTransformComponent(unsafeGetGameObject(cameraView, state[/* basicCameraViewRecord */14]), state[/* gameObjectRecord */11]), localToWorldMatrices, localToWorldMatrixCacheMap));
+	}
+
+
+	/* VMatrixService-Wonderjs Not a pure module */
+
+	function convertWorldToScreen$2(cameraView, cameraProjection, param, state) {
+	  var normalizedDeviceCoordinate = transformMat4Tuple$1(/* tuple */[
+	        param[0],
+	        param[1],
+	        param[2],
+	        1
+	      ], multiply$1(unsafeGetPMatrix(cameraProjection, state[/* perspectiveCameraProjectionRecord */15][/* pMatrixMap */2]), getBasicCameraViewWorldToCameraMatrix$1(cameraView, state), createIdentityMatrix4(/* () */0)));
+	  var w = normalizedDeviceCoordinate[3];
+	  var ndcSpacePos_000 = normalizedDeviceCoordinate[0] / w;
+	  var ndcSpacePos_001 = normalizedDeviceCoordinate[1] / w;
+	  return /* tuple */[
+	          Math.round((ndcSpacePos_000 + 1) / 2 * param[3]),
+	          Math.round((1 - ndcSpacePos_001) / 2 * param[4])
+	        ];
+	}
+
+
+	/* Matrix4Service-Wonderjs Not a pure module */
+
+	function convertWorldToScreen$1(cameraView, cameraProjection, param, state) {
+	  return convertWorldToScreen$2(cameraView, cameraProjection, /* tuple */[
+	              param[0],
+	              param[1],
+	              param[2],
+	              param[3],
+	              param[4]
+	            ], state);
+	}
+
+
+	/* CoordinateMainService-Wonderjs Not a pure module */
 
 	function unsafeGetGl$1(record) {
 	  var gl = record[/* gl */0];
@@ -12336,7 +12809,7 @@
 	/* GPUDetectService-Wonderjs Not a pure module */
 
 	function isSupportInstance(state) {
-	  return isSupportInstance$1(unsafeGetGPU(state[/* settingRecord */0])[/* useHardwareInstance */0], state[/* gpuDetectRecord */5]);
+	  return isSupportInstance$1(unsafeGetGPU(state[/* settingRecord */1])[/* useHardwareInstance */0], state[/* gpuDetectRecord */6]);
 	}
 
 	function isSourceInstance(materialIndex, gameObjectMap, gameObjectRecord) {
@@ -12408,6 +12881,25 @@
 	}
 
 	var initMaterial$1 = _initMaterialShader;
+
+	function reInitMaterial(gl, param, param$1, param$2) {
+	  var state = param$2[2];
+	  var renderConfigRecord = param$2[1];
+	  var materialIndex = param[0];
+	  var shaders = getShaders(renderConfigRecord);
+	  param$1[2](materialIndex, _4(param$1[0], materialIndex, /* tuple */[
+	            gl,
+	            param$1[4](materialIndex, /* tuple */[
+	                  param[1],
+	                  param[2]
+	                ], /* tuple */[
+	                  shaders,
+	                  _1(param$1[3], shaders),
+	                  getShaderLibs(renderConfigRecord)
+	                ], state)
+	          ], param$1[1], state), param$2[0]);
+	  return state;
+	}
 
 	function init$2(gl, param, initMaterialFunc, param$1) {
 	  var disposedIndexArray = param$1[1];
@@ -12491,10 +12983,27 @@
 	  return program;
 	}
 
+	function clearLastSendProgram(record) {
+	  return /* record */[
+	          /* programMap */record[/* programMap */0],
+	          /* lastUsedProgram */undefined
+	        ];
+	}
+
 
 	/* Log-WonderLog Not a pure module */
 
-	function _genereateShaderIndex(record) {
+	function getShaderIndex$1(key, param) {
+	  var shaderIndexMap = param[/* shaderIndexMap */1];
+	  return get(key, shaderIndexMap);
+	}
+
+	function setShaderIndex$1(key, shaderIndex, param) {
+	  var shaderIndexMap = param[/* shaderIndexMap */1];
+	  return set(key, shaderIndex, shaderIndexMap);
+	}
+
+	function genereateShaderIndex(record) {
 	  var index = record[/* index */0];
 	  record[/* index */0] = index + 1 | 0;
 	  return ensureCheck((function (r) {
@@ -12505,15 +13014,26 @@
 	              }), getIsDebug(stateData), index);
 	}
 
-	function _getShaderIndex(key, param) {
-	  var shaderIndexMap = param[/* shaderIndexMap */1];
-	  return get(key, shaderIndexMap);
+	function useShaderIndex(shaderIndex, record) {
+	  var usedShaderIndexArray = record[/* usedShaderIndexArray */2];
+	  push(shaderIndex, usedShaderIndexArray);
+	  return record;
 	}
 
-	function _setShaderIndex(key, shaderIndex, param) {
-	  var shaderIndexMap = param[/* shaderIndexMap */1];
-	  return set(key, shaderIndex, shaderIndexMap);
+	function unuseShaderIndex(shaderIndex, record) {
+	  var usedShaderIndexArray = record[/* usedShaderIndexArray */2];
+	  var index = usedShaderIndexArray.indexOf(shaderIndex);
+	  var match = index === -1;
+	  if (match) {
+	    return record;
+	  } else {
+	    usedShaderIndexArray.splice(index, 1);
+	    return record;
+	  }
 	}
+
+
+	/* Log-WonderLog Not a pure module */
 
 	function _join(array) {
 	  var output = "";
@@ -12527,44 +13047,86 @@
 	  return initShader(param[0], param[1], gl, registerProgram(shaderIndex, programRecord, gl.createProgram()));
 	}
 
+	function _initNewShader(materialIndex, shaderIndex, key, param, param$1, param$2) {
+	  var shaderLibDataArr = param[1];
+	  var gl = param[0];
+	  setShaderIndex$1(key, shaderIndex, useShaderIndex(shaderIndex, param$2[0]));
+	  var match = param$1[0](materialIndex, shaderLibDataArr, param$1[1], /* tuple */[
+	        param$2[2],
+	        param$2[5]
+	      ]);
+	  var program = _createProgramAndInit(gl, shaderIndex, /* tuple */[
+	        match[0],
+	        match[1]
+	      ], param$2[1]);
+	  var recordTuple = param$1[2](/* tuple */[
+	        gl,
+	        shaderIndex,
+	        program
+	      ], shaderLibDataArr, /* tuple */[
+	        param$2[3],
+	        param$2[4]
+	      ]);
+	  param$1[3](gl, /* tuple */[
+	        program,
+	        shaderIndex,
+	        shaderLibDataArr
+	      ], recordTuple);
+	  return shaderIndex;
+	}
+
 	function initMaterialShader$1(materialIndex, param, param$1, param$2) {
 	  var shaderRecord = param$2[0];
 	  var shaderLibDataArr = param[1];
-	  var gl = param[0];
 	  var key = _join(shaderLibDataArr);
-	  var match = _getShaderIndex(key, shaderRecord);
+	  var match = getShaderIndex$1(key, shaderRecord);
 	  if (match !== undefined) {
 	    return match;
 	  } else {
-	    var shaderIndex = _genereateShaderIndex(shaderRecord);
-	    _setShaderIndex(key, shaderIndex, shaderRecord);
-	    var match$1 = param$1[0](materialIndex, shaderLibDataArr, param$1[1], /* tuple */[
-	          param$2[2],
-	          param$2[5]
-	        ]);
-	    var program = _createProgramAndInit(gl, shaderIndex, /* tuple */[
-	          match$1[0],
-	          match$1[1]
-	        ], param$2[1]);
-	    var recordTuple = param$1[2](/* tuple */[
-	          gl,
-	          shaderIndex,
-	          program
-	        ], shaderLibDataArr, /* tuple */[
-	          param$2[3],
-	          param$2[4]
-	        ]);
-	    param$1[3](gl, /* tuple */[
-	          program,
-	          shaderIndex,
-	          shaderLibDataArr
-	        ], recordTuple);
-	    return shaderIndex;
+	    return _initNewShader(materialIndex, genereateShaderIndex(shaderRecord), key, /* tuple */[
+	                param[0],
+	                shaderLibDataArr
+	              ], /* tuple */[
+	                param$1[0],
+	                param$1[1],
+	                param$1[2],
+	                param$1[3]
+	              ], /* tuple */[
+	                shaderRecord,
+	                param$2[1],
+	                param$2[2],
+	                param$2[3],
+	                param$2[4],
+	                param$2[5]
+	              ]);
 	  }
 	}
 
+	function reInitMaterialShader(materialIndex, param, param$1, param$2) {
+	  var shaderRecord = param$2[0];
+	  var shaderLibDataArr = param[1];
+	  var key = _join(shaderLibDataArr);
+	  var shaderIndex = genereateShaderIndex(shaderRecord);
+	  return _initNewShader(materialIndex, shaderIndex, key, /* tuple */[
+	              param[0],
+	              shaderLibDataArr
+	            ], /* tuple */[
+	              param$1[0],
+	              param$1[1],
+	              param$1[2],
+	              param$1[3]
+	            ], /* tuple */[
+	              shaderRecord,
+	              param$2[1],
+	              param$2[2],
+	              param$2[3],
+	              param$2[4],
+	              param$2[5]
+	            ]);
+	}
 
-	/* Log-WonderLog Not a pure module */
+
+	/* ProgramService-Wonderjs Not a pure module */
 
 	function getHandle(name) {
 	  return fatal(buildFatalMessage("getHandle", "unknown handle name: " + (String(name) + ""), "", "", ""));
@@ -12769,12 +13331,12 @@
 	/* Log-WonderLog Not a pure module */
 
 	function getLocalToWorldMatrixTypeArray$2(transform, state) {
-	  var transformRecord = state[/* transformRecord */14];
+	  var transformRecord = state[/* transformRecord */15];
 	  return getLocalToWorldMatrixTypeArray$1(transform, transformRecord[/* localToWorldMatrices */0], transformRecord[/* localToWorldMatrixCacheMap */1]);
 	}
 
 	function getNormalMatrixTypeArray$1(transform, param) {
-	  var transformRecord = param[/* transformRecord */14];
+	  var transformRecord = param[/* transformRecord */15];
 	  return getNormalMatrixTypeArray(transform, transformRecord[/* localToWorldMatrices */0], /* tuple */[
 	              transformRecord[/* localToWorldMatrixCacheMap */1],
 	              transformRecord[/* normalMatrixCacheMap */2]
@@ -13239,19 +13801,10 @@
 	            ], shaderLibDataArr);
 	}
 
-	function _checkShouldNotAddBefore(shaderIndex, glslSenderRecord) {
-	  return requireCheck((function () {
-	                return test(buildAssertMessage("not be added before", "be"), (function () {
-	                              return assertNotExist(get$3(shaderIndex, glslSenderRecord[/* uniformRenderObjectSendModelDataMap */3]));
-	                            }));
-	              }), getIsDebug(stateData));
-	}
-
 	function addUniformSendData$1(gl, param, readUniformSendDataFunc, param$1) {
 	  var glslLocationRecord = param$1[1];
 	  var glslSenderRecord = param$1[0];
 	  var shaderIndex = param[1];
-	  _checkShouldNotAddBefore(shaderIndex, glslSenderRecord);
 	  var uniformLocationMap = getOrCreateHashMap(getUniformLocationMap(shaderIndex, glslLocationRecord));
 	  return /* tuple */[
 	          _setToUniformSendMap(shaderIndex, glslSenderRecord, readUniformSendDataFunc(param[2], gl, param[0], /* tuple */[
@@ -13421,22 +13974,16 @@
 
 	function addAttributeSendData$1(param, shaderLibDataArr, readAttributeSendDataFunc, param$1) {
 	  var glslLocationRecord = param$1[1];
-	  var glslSenderRecord = param$1[0];
 	  var shaderIndex = param[1];
-	  requireCheck((function () {
-	          return test(buildAssertMessage("not be added before", "be"), (function () {
-	                        return assertNotExist(get$3(shaderIndex, glslSenderRecord[/* attributeSendDataMap */0]));
-	                      }));
-	        }), getIsDebug(stateData));
 	  var attributeLocationMap = getOrCreateHashMap(getAttributeLocationMap(shaderIndex, glslLocationRecord));
 	  return /* tuple */[
-	          _setToAttributeSendMap(shaderIndex, attributeLocationMap, glslSenderRecord, readAttributeSendDataFunc(shaderLibDataArr, param[0], param[2], attributeLocationMap)),
+	          _setToAttributeSendMap(shaderIndex, attributeLocationMap, param$1[0], readAttributeSendDataFunc(shaderLibDataArr, param[0], param[2], attributeLocationMap)),
 	          setAttributeLocationMap(shaderIndex, attributeLocationMap, glslLocationRecord)
 	        ];
 	}
 
 
-	/* Log-WonderLog Not a pure module */
+	/* ArrayService-Wonderjs Not a pure module */
 
 	function _readAttributes(param, sendDataArrTuple, attributes) {
 	  var attributeLocationMap = param[2];
@@ -13957,15 +14504,15 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
-	function getRecord$7(state) {
-	  return unsafeGet$1(state[/* renderConfigRecord */4]);
+	function getRecord$8(state) {
+	  return unsafeGet$1(state[/* renderConfigRecord */5]);
 	}
 
 
 	/* OptionService-Wonderjs Not a pure module */
 
 	function createInitMaterialState(param, state) {
-	  var match = getRecord$3(state);
+	  var match = getRecord$4(state);
 	  return /* record */[
 	          /* materialRecord : record */[
 	            /* index */param[0],
@@ -13973,13 +14520,13 @@
 	            /* shaderIndices */match[/* shaderIndices */2],
 	            /* mapUnits */match[/* mapUnits */5]
 	          ],
-	          /* renderConfigRecord */getRecord$7(state),
-	          /* shaderRecord */state[/* shaderRecord */26],
-	          /* programRecord */state[/* programRecord */28],
-	          /* glslRecord */state[/* glslRecord */27],
-	          /* glslSenderRecord */state[/* glslSenderRecord */30],
-	          /* glslLocationRecord */state[/* glslLocationRecord */29],
-	          /* glslChunkRecord */state[/* glslChunkRecord */31]
+	          /* renderConfigRecord */getRecord$8(state),
+	          /* shaderRecord */state[/* shaderRecord */27],
+	          /* programRecord */state[/* programRecord */29],
+	          /* glslRecord */state[/* glslRecord */28],
+	          /* glslSenderRecord */state[/* glslSenderRecord */31],
+	          /* glslLocationRecord */state[/* glslLocationRecord */30],
+	          /* glslChunkRecord */state[/* glslChunkRecord */32]
 	        ];
 	}
 
@@ -13987,10 +14534,10 @@
 	/* RecordRenderConfigMainService-Wonderjs Not a pure module */
 
 	function initMaterials(materialIndexArr, gl, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var gameObjectMap = getRecord$3(state)[/* gameObjectMap */8];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var gameObjectMap = getRecord$4(state)[/* gameObjectMap */8];
 	  var isSupportInstance$$1 = isSupportInstance(state);
-	  var match = getRecord$3(state);
+	  var match = getRecord$4(state);
 	  reduceOneParam((function (state, materialIndex) {
 	          return initMaterial(gl, /* tuple */[
 	                      materialIndex,
@@ -14005,21 +14552,21 @@
 	}
 
 	function handleInitComponent(materialIndex, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var match = getRecord$3(state);
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = getRecord$4(state);
 	  var match$1 = isNeedInitMaterial(materialIndex, match[/* shaderIndices */2]);
 	  if (match$1) {
 	    var match$2 = isUseWorker(state);
 	    if (match$2) {
-	      var match$3 = getRecord$3(state);
-	      var materialArrayForWorkerInit = match$3[/* materialArrayForWorkerInit */11];
+	      var match$3 = getRecord$4(state);
+	      var materialArrayForWorkerInit = match$3[/* materialArrayForWorkerInit */12];
 	      addMaterialToMaterialArrayForWorkerInit(materialIndex, materialArrayForWorkerInit);
 	      return state;
 	    } else {
-	      var gl = unsafeGetGl$1(state[/* deviceManagerRecord */9]);
-	      var gameObjectMap = getRecord$3(state)[/* gameObjectMap */8];
+	      var gl = unsafeGetGl$1(state[/* deviceManagerRecord */10]);
+	      var gameObjectMap = getRecord$4(state)[/* gameObjectMap */8];
 	      var isSupportInstance$$1 = isSupportInstance(state);
-	      var match$4 = getRecord$3(state);
+	      var match$4 = getRecord$4(state);
 	      initMaterial(gl, /* tuple */[
 	            materialIndex,
 	            isSourceInstance(materialIndex, gameObjectMap, gameObjectRecord),
@@ -14074,12 +14621,12 @@
 	  return 4;
 	}
 
-	function getTotalByteLength$5(count) {
+	function getTotalByteLength$6(count) {
 	  return (imul(count, Float32Array.BYTES_PER_ELEMENT) << 2);
 	}
 
-	function createBuffer$5(count) {
-	  return newSharedArrayBuffer(getTotalByteLength$5(count));
+	function createBuffer$6(count) {
+	  return newSharedArrayBuffer(getTotalByteLength$6(count));
 	}
 
 
@@ -14177,12 +14724,12 @@
 	  return 4;
 	}
 
-	function getTotalByteLength$6(count) {
+	function getTotalByteLength$7(count) {
 	  return (imul(count, Float32Array.BYTES_PER_ELEMENT) << 3);
 	}
 
-	function createBuffer$6(count) {
-	  return newSharedArrayBuffer(getTotalByteLength$6(count));
+	function createBuffer$7(count) {
+	  return newSharedArrayBuffer(getTotalByteLength$7(count));
 	}
 
 
@@ -14234,7 +14781,7 @@
 
 	/* No side effect */
 
-	function createTypeArrays$5(buffer, _) {
+	function createTypeArrays$6(buffer, _) {
 	  return /* tuple */[
 	          new Float32Array(buffer, getColorsOffset$2(/* () */0), getColorsLength$2(/* () */0)),
 	          new Float32Array(buffer, getIntensitiesOffset$1(/* () */0), getIntensitiesLength$1(/* () */0)),
@@ -14329,7 +14876,7 @@
 	  return 65;
 	}
 
-	function setAllTypeArrDataToDefault$5(count, param) {
+	function setAllTypeArrDataToDefault$6(count, param) {
 	  var defaultColor = /* array */[
 	    1,
 	    1,
@@ -14354,10 +14901,10 @@
 	            ], range(0, count - 1 | 0));
 	}
 
-	function _setAllTypeArrDataToDefault$4(count, param) {
+	function _setAllTypeArrDataToDefault$5(count, param) {
 	  return /* tuple */[
 	          param[0],
-	          setAllTypeArrDataToDefault$5(count, /* tuple */[
+	          setAllTypeArrDataToDefault$6(count, /* tuple */[
 	                param[1],
 	                param[2],
 	                param[3],
@@ -14368,11 +14915,11 @@
 	        ];
 	}
 
-	function _initBufferData$5() {
+	function _initBufferData$6() {
 	  var count = getBufferMaxCount$1(/* () */0);
-	  var buffer = createBuffer$6(count);
-	  var match = createTypeArrays$5(buffer, count);
-	  return _setAllTypeArrDataToDefault$4(count, /* tuple */[
+	  var buffer = createBuffer$7(count);
+	  var match = createTypeArrays$6(buffer, count);
+	  return _setAllTypeArrDataToDefault$5(count, /* tuple */[
 	              buffer,
 	              match[0],
 	              match[1],
@@ -14383,8 +14930,8 @@
 	            ]);
 	}
 
-	function create$19() {
-	  var match = _initBufferData$5(/* () */0);
+	function create$20() {
+	  var match = _initBufferData$6(/* () */0);
 	  var match$1 = match[1];
 	  return /* record */[
 	          /* index */0,
@@ -14400,11 +14947,11 @@
 	        ];
 	}
 
-	function deepCopyForRestore$10(state) {
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	function deepCopyForRestore$11(state) {
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var index = pointLightRecord[/* index */0];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = /* record */[
+	  newrecord[/* pointLightRecord */22] = /* record */[
 	    /* index */index,
 	    /* buffer */pointLightRecord[/* buffer */1],
 	    /* colors */copyFloat32ArrayWithEndIndex(imul(index, getColorsSize$2(/* () */0)), pointLightRecord[/* colors */2]),
@@ -14519,7 +15066,7 @@
 	}
 
 	function send(gl, param, param$1) {
-	  var pointLightRecord = param$1[/* pointLightRecord */13];
+	  var pointLightRecord = param$1[/* pointLightRecord */14];
 	  var uniformLocationMap = param[2];
 	  var uniformCacheMap = param[1];
 	  var program = param[0];
@@ -14579,7 +15126,12 @@
 
 	/* GLSLLocationService-Wonderjs Not a pure module */
 
-	function createTypeArrays$6(buffer, _) {
+	var getDirection = unsafeGet$2;
+
+
+	/* No side effect */
+
+	function createTypeArrays$7(buffer, _) {
 	  return /* tuple */[
 	          new Float32Array(buffer, getColorsOffset$1(/* () */0), getColorsLength$1(/* () */0)),
 	          new Float32Array(buffer, getIntensitiesOffset(/* () */0), getIntensitiesLength(/* () */0))
@@ -14617,7 +15169,7 @@
 	  return setFloat1(getIntensityIndex(index), intensity, typeArr);
 	}
 
-	function setAllTypeArrDataToDefault$6(count, param) {
+	function setAllTypeArrDataToDefault$7(count, param) {
 	  var defaultColor = /* array */[
 	    1,
 	    1,
@@ -14634,29 +15186,29 @@
 	            ], range(0, count - 1 | 0));
 	}
 
-	function _setAllTypeArrDataToDefault$5(count, param) {
+	function _setAllTypeArrDataToDefault$6(count, param) {
 	  return /* tuple */[
 	          param[0],
-	          setAllTypeArrDataToDefault$6(count, /* tuple */[
+	          setAllTypeArrDataToDefault$7(count, /* tuple */[
 	                param[1],
 	                param[2]
 	              ])
 	        ];
 	}
 
-	function _initBufferData$6() {
+	function _initBufferData$7() {
 	  var count = getBufferMaxCount(/* () */0);
-	  var buffer = createBuffer$5(count);
-	  var match = createTypeArrays$6(buffer, count);
-	  return _setAllTypeArrDataToDefault$5(count, /* tuple */[
+	  var buffer = createBuffer$6(count);
+	  var match = createTypeArrays$7(buffer, count);
+	  return _setAllTypeArrDataToDefault$6(count, /* tuple */[
 	              buffer,
 	              match[0],
 	              match[1]
 	            ]);
 	}
 
-	function create$20() {
-	  var match = _initBufferData$6(/* () */0);
+	function create$21() {
+	  var match = _initBufferData$7(/* () */0);
 	  var match$1 = match[1];
 	  return /* record */[
 	          /* index */0,
@@ -14668,11 +15220,11 @@
 	        ];
 	}
 
-	function deepCopyForRestore$11(state) {
-	  var directionLightRecord = state[/* directionLightRecord */20];
+	function deepCopyForRestore$12(state) {
+	  var directionLightRecord = state[/* directionLightRecord */21];
 	  var index = directionLightRecord[/* index */0];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* directionLightRecord */20] = /* record */[
+	  newrecord[/* directionLightRecord */21] = /* record */[
 	    /* index */index,
 	    /* buffer */directionLightRecord[/* buffer */1],
 	    /* colors */copyFloat32ArrayWithEndIndex(imul(index, getColorsSize$1(/* () */0)), directionLightRecord[/* colors */2]),
@@ -14698,7 +15250,7 @@
 	/* RecordDirectionLightMainService-Wonderjs Not a pure module */
 
 	function send$2(gl, param, param$1) {
-	  var directionLightRecord = param$1[/* directionLightRecord */12];
+	  var directionLightRecord = param$1[/* directionLightRecord */13];
 	  var uniformLocationMap = param[2];
 	  var uniformCacheMap = param[1];
 	  var program = param[0];
@@ -14710,36 +15262,36 @@
 	        }), getIsDebug(stateData));
 	  var lightGLSLDataStructureMemberNameArr = /* array */[
 	    /* record */[
-	      /* position */"u_directionLights[0].position",
+	      /* direction */"u_directionLights[0].direction",
 	      /* color */"u_directionLights[0].color",
 	      /* intensity */"u_directionLights[0].intensity"
 	    ],
 	    /* record */[
-	      /* position */"u_directionLights[1].position",
+	      /* direction */"u_directionLights[1].direction",
 	      /* color */"u_directionLights[1].color",
 	      /* intensity */"u_directionLights[1].intensity"
 	    ],
 	    /* record */[
-	      /* position */"u_directionLights[2].position",
+	      /* direction */"u_directionLights[2].direction",
 	      /* color */"u_directionLights[2].color",
 	      /* intensity */"u_directionLights[2].intensity"
 	    ],
 	    /* record */[
-	      /* position */"u_directionLights[3].position",
+	      /* direction */"u_directionLights[3].direction",
 	      /* color */"u_directionLights[3].color",
 	      /* intensity */"u_directionLights[3].intensity"
 	    ]
 	  ];
-	  var positionMap = directionLightRecord[/* positionMap */3];
+	  var directionMap = directionLightRecord[/* directionMap */3];
 	  reduceOneParam((function (directionLightRecord, index) {
 	          var match = caml_array_get(lightGLSLDataStructureMemberNameArr, index);
 	          var intensity = match[/* intensity */2];
 	          var color = match[/* color */1];
-	          var position = match[/* position */0];
+	          var direction = match[/* direction */0];
 	          sendVec3(gl, uniformCacheMap, /* tuple */[
-	                position,
-	                getUniformLocation(program, position, uniformLocationMap, gl)
-	              ], getPosition(index, positionMap));
+	                direction,
+	                getUniformLocation(program, direction, uniformLocationMap, gl)
+	              ], getDirection(index, directionMap));
 	          sendFloat3(gl, uniformCacheMap, /* tuple */[
 	                color,
 	                getUniformLocation(program, color, uniformLocationMap, gl)
@@ -14997,6 +15549,33 @@
 	            ]);
 	}
 
+	function reInitMaterialShader$1(materialIndex, param, buildGLSLSourceFunc, state) {
+	  var partial_arg_000 = state[/* directionLightRecord */1];
+	  var partial_arg_001 = state[/* pointLightRecord */2];
+	  var partial_arg = /* tuple */[
+	    partial_arg_000,
+	    partial_arg_001
+	  ];
+	  return reInitMaterialShader(materialIndex, /* tuple */[
+	              param[0],
+	              param[1]
+	            ], /* tuple */[
+	              buildGLSLSourceFunc,
+	              (function (param) {
+	                  return getHandle$1(partial_arg, param);
+	                }),
+	              addAttributeSendData$2,
+	              addUniformSendData$2
+	            ], /* tuple */[
+	              state[/* shaderRecord */4],
+	              state[/* programRecord */5],
+	              state[/* glslRecord */6],
+	              state[/* glslSenderRecord */7],
+	              state[/* glslLocationRecord */8],
+	              state[/* glslChunkRecord */9]
+	            ]);
+	}
+
 
 	/* InitShaderInitMaterialService-Wonderjs Not a pure module */
 
@@ -15084,6 +15663,20 @@
 	            ]);
 	}
 
+	function reInitMaterial$1(gl, dataTuple, state) {
+	  return reInitMaterial(gl, dataTuple, /* tuple */[
+	              reInitMaterialShader$1,
+	              buildGLSLSource,
+	              setShaderIndex,
+	              _getShaderLibItems$1,
+	              getMaterialShaderLibDataArr$2
+	            ], /* tuple */[
+	              state[/* materialRecord */0][/* shaderIndices */2],
+	              state[/* renderConfigRecord */3],
+	              state
+	            ]);
+	}
+
 	function init$3(gl, instanceTuple, state) {
 	  var materialRecord = state[/* materialRecord */0];
 	  return init$2(gl, instanceTuple, initMaterial$2, /* tuple */[
@@ -15097,9 +15690,9 @@
 	/* JobConfigService-Wonderjs Not a pure module */
 
 	function createInitMaterialState$1(param, state) {
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  var pointLightRecord = state[/* pointLightRecord */21];
-	  var match = getRecord$4(state);
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
+	  var match = getRecord$5(state);
 	  return /* record */[
 	          /* materialRecord : record */[
 	            /* index */param[0],
@@ -15110,13 +15703,13 @@
 	          ],
 	          /* directionLightRecord : record */[/* index */directionLightRecord[/* index */0]],
 	          /* pointLightRecord : record */[/* index */pointLightRecord[/* index */0]],
-	          /* renderConfigRecord */getRecord$7(state),
-	          /* shaderRecord */state[/* shaderRecord */26],
-	          /* programRecord */state[/* programRecord */28],
-	          /* glslRecord */state[/* glslRecord */27],
-	          /* glslSenderRecord */state[/* glslSenderRecord */30],
-	          /* glslLocationRecord */state[/* glslLocationRecord */29],
-	          /* glslChunkRecord */state[/* glslChunkRecord */31]
+	          /* renderConfigRecord */getRecord$8(state),
+	          /* shaderRecord */state[/* shaderRecord */27],
+	          /* programRecord */state[/* programRecord */29],
+	          /* glslRecord */state[/* glslRecord */28],
+	          /* glslSenderRecord */state[/* glslSenderRecord */31],
+	          /* glslLocationRecord */state[/* glslLocationRecord */30],
+	          /* glslChunkRecord */state[/* glslChunkRecord */32]
 	        ];
 	}
 
@@ -15124,10 +15717,10 @@
 	/* RecordRenderConfigMainService-Wonderjs Not a pure module */
 
 	function initMaterials$1(materialIndexArr, gl, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var gameObjectMap = getRecord$4(state)[/* gameObjectMap */13];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var gameObjectMap = getRecord$5(state)[/* gameObjectMap */13];
 	  var isSupportInstance$$1 = isSupportInstance(state);
-	  var match = getRecord$4(state);
+	  var match = getRecord$5(state);
 	  reduceOneParam((function (state, materialIndex) {
 	          return initMaterial$2(gl, /* tuple */[
 	                      materialIndex,
@@ -15142,21 +15735,21 @@
 	}
 
 	function handleInitComponent$1(materialIndex, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var match = getRecord$4(state);
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = getRecord$5(state);
 	  var match$1 = isNeedInitMaterial$1(materialIndex, match[/* shaderIndices */2]);
 	  if (match$1) {
 	    var match$2 = isUseWorker(state);
 	    if (match$2) {
-	      var match$3 = getRecord$4(state);
+	      var match$3 = getRecord$5(state);
 	      var materialArrayForWorkerInit = match$3[/* materialArrayForWorkerInit */17];
 	      addMaterialToMaterialArrayForWorkerInit(materialIndex, materialArrayForWorkerInit);
 	      return state;
 	    } else {
-	      var gl = unsafeGetGl$1(state[/* deviceManagerRecord */9]);
-	      var gameObjectMap = getRecord$4(state)[/* gameObjectMap */13];
+	      var gl = unsafeGetGl$1(state[/* deviceManagerRecord */10]);
+	      var gameObjectMap = getRecord$5(state)[/* gameObjectMap */13];
 	      var isSupportInstance$$1 = isSupportInstance(state);
-	      var match$4 = getRecord$4(state);
+	      var match$4 = getRecord$5(state);
 	      initMaterial$2(gl, /* tuple */[
 	            materialIndex,
 	            isSourceInstance(materialIndex, gameObjectMap, gameObjectRecord),
@@ -15172,8 +15765,35 @@
 	  }
 	}
 
+	function reInitComponents(materialIndices, state) {
+	  return reduceOneParam((function (state, materialIndex) {
+	                var gameObjectRecord = state[/* gameObjectRecord */11];
+	                var match = getRecord$5(state);
+	                var currentShaderIndex = getShaderIndex(materialIndex, match[/* shaderIndices */2]);
+	                unuseShaderIndex(currentShaderIndex, state[/* shaderRecord */27]);
+	                var match$1 = isUseWorker(state);
+	                if (match$1) {
+	                  return fatal(buildFatalMessage("reInitComponents", "not support worker", "", "", ""));
+	                } else {
+	                  var gl = unsafeGetGl$1(state[/* deviceManagerRecord */10]);
+	                  var gameObjectMap = getRecord$5(state)[/* gameObjectMap */13];
+	                  var isSupportInstance$$1 = isSupportInstance(state);
+	                  var match$2 = getRecord$5(state);
+	                  reInitMaterial$1(gl, /* tuple */[
+	                        materialIndex,
+	                        isSourceInstance(materialIndex, gameObjectMap, gameObjectRecord),
+	                        isSupportInstance$$1
+	                      ], createInitMaterialState$1(/* tuple */[
+	                            match$2[/* index */0],
+	                            match$2[/* disposedIndexArray */15]
+	                          ], state));
+	                  return state;
+	                }
+	              }), state, materialIndices);
+	}
 
-	/* ArrayService-WonderCommonlib Not a pure module */
+
+	/* Log-WonderLog Not a pure module */
 
 	var getTexture = get$3;
 
@@ -15235,13 +15855,13 @@
 	/* Log-WonderLog Not a pure module */
 
 	function getArrayBufferViewSourceTextureIndexOffset$1(state) {
-	  return getArrayBufferViewSourceTextureIndexOffset(getBasicSourceTextureCount(state[/* settingRecord */0]));
+	  return getArrayBufferViewSourceTextureIndexOffset(getBasicSourceTextureCount(state[/* settingRecord */1]));
 	}
 
 	var generateBasicSourceTextureIndex$1 = generateBasicSourceTextureIndex;
 
 	function generateArrayBufferViewSourceTextureIndex$1(arrayBufferViewSourceTextureIndex, state) {
-	  return generateArrayBufferViewSourceTextureIndex(arrayBufferViewSourceTextureIndex, getBasicSourceTextureCount(state[/* settingRecord */0]));
+	  return generateArrayBufferViewSourceTextureIndex(arrayBufferViewSourceTextureIndex, getBasicSourceTextureCount(state[/* settingRecord */1]));
 	}
 
 
@@ -15304,12 +15924,12 @@
 
 	var getArrayBufferViewSourceTextureOffset = _getBasicSourceTotalByteLength;
 
-	function getTotalByteLength$7(basicSourceTextureCount, arrayBufferViewSourceTextureCount) {
+	function getTotalByteLength$8(basicSourceTextureCount, arrayBufferViewSourceTextureCount) {
 	  return _getBasicSourceTotalByteLength(basicSourceTextureCount) + _getArrayBufferViewSourceTotalByteLength(arrayBufferViewSourceTextureCount) | 0;
 	}
 
-	function createBuffer$7(basicSourceTextureCount, arrayBufferViewSourceTextureCount) {
-	  return newSharedArrayBuffer(getTotalByteLength$7(basicSourceTextureCount, arrayBufferViewSourceTextureCount));
+	function createBuffer$8(basicSourceTextureCount, arrayBufferViewSourceTextureCount) {
+	  return newSharedArrayBuffer(getTotalByteLength$8(basicSourceTextureCount, arrayBufferViewSourceTextureCount));
 	}
 
 	function getNotNeedUpdate() {
@@ -15351,16 +15971,16 @@
 
 	/* Worker-Wonderjs Not a pure module */
 
-	function getRecord$9(param) {
-	  return unsafeGet$1(param[/* sourceTextureRecord */17]);
+	function getRecord$10(param) {
+	  return unsafeGet$1(param[/* sourceTextureRecord */18]);
 	}
 
-	function create$22(state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function create$23(state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var basicSourceTextureCount = getBasicSourceTextureCount(settingRecord);
 	  getArrayBufferViewSourceTextureCount(settingRecord);
 	  var arrayBufferViewSourceTextureCount = getArrayBufferViewSourceTextureCount(settingRecord);
-	  state[/* sourceTextureRecord */17] = /* record */[/* buffer */createBuffer$7(basicSourceTextureCount, arrayBufferViewSourceTextureCount)];
+	  state[/* sourceTextureRecord */18] = /* record */[/* buffer */createBuffer$8(basicSourceTextureCount, arrayBufferViewSourceTextureCount)];
 	  return state;
 	}
 
@@ -15511,7 +16131,7 @@
 
 	/* BufferSourceTextureService-Wonderjs Not a pure module */
 
-	function createTypeArrays$7(buffer, basicSourceTextureCount) {
+	function createTypeArrays$8(buffer, basicSourceTextureCount) {
 	  return /* tuple */[
 	          new Uint8Array(buffer, getWrapSsOffset(basicSourceTextureCount), getWrapSsLength(basicSourceTextureCount)),
 	          new Uint8Array(buffer, getWrapTsOffset(basicSourceTextureCount), getWrapTsLength(basicSourceTextureCount)),
@@ -15598,11 +16218,11 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function getRecord$8(param) {
-	  return unsafeGet$1(param[/* basicSourceTextureRecord */18]);
+	function getRecord$9(param) {
+	  return unsafeGet$1(param[/* basicSourceTextureRecord */19]);
 	}
 
-	function setAllTypeArrDataToDefault$7(basicSourceTextureCount, param) {
+	function setAllTypeArrDataToDefault$8(basicSourceTextureCount, param) {
 	  var defaultWrapS = getDefaultWrapS(/* () */0);
 	  var defaultWrapT = getDefaultWrapT(/* () */0);
 	  var defaultMagFilter = getDefaultMagFilter(/* () */0);
@@ -15634,9 +16254,9 @@
 	            ], range(0, basicSourceTextureCount - 1 | 0));
 	}
 
-	function _initBufferData$7(basicSourceTextureCount, buffer) {
-	  var match = createTypeArrays$7(buffer, basicSourceTextureCount);
-	  return setAllTypeArrDataToDefault$7(basicSourceTextureCount, /* tuple */[
+	function _initBufferData$8(basicSourceTextureCount, buffer) {
+	  var match = createTypeArrays$8(buffer, basicSourceTextureCount);
+	  return setAllTypeArrDataToDefault$8(basicSourceTextureCount, /* tuple */[
 	              match[0],
 	              match[1],
 	              match[2],
@@ -15648,11 +16268,11 @@
 	            ]);
 	}
 
-	function create$21(state) {
-	  var basicSourceTextureCount = getBasicSourceTextureCount(state[/* settingRecord */0]);
-	  var match = getRecord$9(state);
-	  var match$1 = _initBufferData$7(basicSourceTextureCount, match[/* buffer */0]);
-	  state[/* basicSourceTextureRecord */18] = /* record */[
+	function create$22(state) {
+	  var basicSourceTextureCount = getBasicSourceTextureCount(state[/* settingRecord */1]);
+	  var match = getRecord$10(state);
+	  var match$1 = _initBufferData$8(basicSourceTextureCount, match[/* buffer */0]);
+	  state[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */0,
 	    /* wrapSs */match$1[0],
 	    /* wrapTs */match$1[1],
@@ -15673,11 +16293,11 @@
 	  return state;
 	}
 
-	function deepCopyForRestore$12(state) {
-	  var record = getRecord$8(state);
+	function deepCopyForRestore$13(state) {
+	  var record = getRecord$9(state);
 	  var index = record[/* index */0];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicSourceTextureRecord */18] = /* record */[
+	  newrecord[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */index,
 	    /* wrapSs */copyUint8ArrayWithEndIndex(imul(index, getWrapSsSize(/* () */0)), record[/* wrapSs */1]),
 	    /* wrapTs */copyUint8ArrayWithEndIndex(imul(index, getWrapTsSize(/* () */0)), record[/* wrapTs */2]),
@@ -15858,7 +16478,7 @@
 
 	/* BufferSourceTextureService-Wonderjs Not a pure module */
 
-	function createTypeArrays$8(buffer, basicSourceTextureCount, arrayBufferViewSourceTextureCount) {
+	function createTypeArrays$9(buffer, basicSourceTextureCount, arrayBufferViewSourceTextureCount) {
 	  return /* tuple */[
 	          new Uint8Array(buffer, getWrapSsOffset$1(basicSourceTextureCount, arrayBufferViewSourceTextureCount), getWrapSsLength$1(arrayBufferViewSourceTextureCount)),
 	          new Uint8Array(buffer, getWrapTsOffset$1(basicSourceTextureCount, arrayBufferViewSourceTextureCount), getWrapTsLength$1(arrayBufferViewSourceTextureCount)),
@@ -15963,11 +16583,11 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function getRecord$10(param) {
-	  return unsafeGet$1(param[/* arrayBufferViewSourceTextureRecord */19]);
+	function getRecord$11(param) {
+	  return unsafeGet$1(param[/* arrayBufferViewSourceTextureRecord */20]);
 	}
 
-	function setAllTypeArrDataToDefault$8(arrayBufferViewSourceTextureCount, _, param) {
+	function setAllTypeArrDataToDefault$9(arrayBufferViewSourceTextureCount, _, param) {
 	  var defaultWrapS = getDefaultWrapS$1(/* () */0);
 	  var defaultWrapT = getDefaultWrapT$1(/* () */0);
 	  var defaultMagFilter = getDefaultMagFilter$1(/* () */0);
@@ -16005,9 +16625,9 @@
 	            ], range$1(0, arrayBufferViewSourceTextureCount - 1 | 0));
 	}
 
-	function _initBufferData$8(basicSourceTextureCount, arrayBufferViewSourceTextureCount, buffer, arrayBufferViewSourceTextureIndexOffset) {
-	  var match = createTypeArrays$8(buffer, basicSourceTextureCount, arrayBufferViewSourceTextureCount);
-	  return setAllTypeArrDataToDefault$8(arrayBufferViewSourceTextureCount, arrayBufferViewSourceTextureIndexOffset, /* tuple */[
+	function _initBufferData$9(basicSourceTextureCount, arrayBufferViewSourceTextureCount, buffer, arrayBufferViewSourceTextureIndexOffset) {
+	  var match = createTypeArrays$9(buffer, basicSourceTextureCount, arrayBufferViewSourceTextureCount);
+	  return setAllTypeArrDataToDefault$9(arrayBufferViewSourceTextureCount, arrayBufferViewSourceTextureIndexOffset, /* tuple */[
 	              match[0],
 	              match[1],
 	              match[2],
@@ -16021,13 +16641,13 @@
 	            ]);
 	}
 
-	function create$23(state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function create$24(state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var basicSourceTextureCount = getBasicSourceTextureCount(settingRecord);
 	  var arrayBufferViewSourceTextureCount = getArrayBufferViewSourceTextureCount(settingRecord);
-	  var match = getRecord$9(state);
-	  var match$1 = _initBufferData$8(basicSourceTextureCount, arrayBufferViewSourceTextureCount, match[/* buffer */0], getArrayBufferViewSourceTextureIndexOffset$1(state));
-	  state[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  var match = getRecord$10(state);
+	  var match$1 = _initBufferData$9(basicSourceTextureCount, arrayBufferViewSourceTextureCount, match[/* buffer */0], getArrayBufferViewSourceTextureIndexOffset$1(state));
+	  state[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */0,
 	    /* wrapSs */match$1[0],
 	    /* wrapTs */match$1[1],
@@ -16050,11 +16670,11 @@
 	  return state;
 	}
 
-	function deepCopyForRestore$13(state) {
-	  var record = getRecord$10(state);
+	function deepCopyForRestore$14(state) {
+	  var record = getRecord$11(state);
 	  var index = record[/* index */0];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  newrecord[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */index,
 	    /* wrapSs */copyUint8ArrayWithEndIndex(imul(index, getWrapSsSize(/* () */0)), record[/* wrapSs */1]),
 	    /* wrapTs */copyUint8ArrayWithEndIndex(imul(index, getWrapTsSize(/* () */0)), record[/* wrapTs */2]),
@@ -16085,11 +16705,11 @@
 	    var texture$1 = texture;
 	    return handleByJudgeSourceTextureIndex(texture$1, getArrayBufferViewSourceTextureIndexOffset$1(state), state, /* tuple */[
 	                (function (_, state) {
-	                    push(texture$1, getRecord$8(state)[/* needInitedTextureIndexArray */14]);
+	                    push(texture$1, getRecord$9(state)[/* needInitedTextureIndexArray */14]);
 	                    return state;
 	                  }),
 	                (function (_, state) {
-	                    push(texture$1, getRecord$10(state)[/* needInitedTextureIndexArray */16]);
+	                    push(texture$1, getRecord$11(state)[/* needInitedTextureIndexArray */16]);
 	                    return state;
 	                  })
 	              ]);
@@ -16102,11 +16722,11 @@
 	  if (texture !== undefined) {
 	    return handleByJudgeSourceTextureIndex(texture, getArrayBufferViewSourceTextureIndexOffset$1(state), state, /* tuple */[
 	                (function (basicSourceTextureInTypeArray, state) {
-	                    initTexture$1(unsafeGetGl$1(state[/* deviceManagerRecord */9]), basicSourceTextureInTypeArray, getRecord$8(state)[/* glTextureMap */10]);
+	                    initTexture$1(unsafeGetGl$1(state[/* deviceManagerRecord */10]), basicSourceTextureInTypeArray, getRecord$9(state)[/* glTextureMap */10]);
 	                    return state;
 	                  }),
 	                (function (arrayBufferViewTextureInTypeArray, state) {
-	                    initTexture$1(unsafeGetGl$1(state[/* deviceManagerRecord */9]), arrayBufferViewTextureInTypeArray, getRecord$10(state)[/* glTextureMap */12]);
+	                    initTexture$1(unsafeGetGl$1(state[/* deviceManagerRecord */10]), arrayBufferViewTextureInTypeArray, getRecord$11(state)[/* glTextureMap */12]);
 	                    return state;
 	                  })
 	              ]);
@@ -16126,8 +16746,8 @@
 
 	function clearNeedInitedTextureIndexArray(state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = getRecord$8(state);
-	  newrecord[/* basicSourceTextureRecord */18] = /* record */[
+	  var init = getRecord$9(state);
+	  newrecord[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */init[/* index */0],
 	    /* wrapSs */init[/* wrapSs */1],
 	    /* wrapTs */init[/* wrapTs */2],
@@ -16145,8 +16765,8 @@
 	    /* needInitedTextureIndexArray : array */[],
 	    /* nameMap */init[/* nameMap */15]
 	  ];
-	  var init$1 = getRecord$10(state);
-	  newrecord[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  var init$1 = getRecord$11(state);
+	  newrecord[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */init$1[/* index */0],
 	    /* wrapSs */init$1[/* wrapSs */1],
 	    /* wrapTs */init$1[/* wrapTs */2],
@@ -16232,8 +16852,8 @@
 	/* No side effect */
 
 	function getMap$1(material, state) {
-	  var match = getRecord$3(state);
-	  return getMap$2(material, getTextureCountPerMaterial(state[/* settingRecord */0]), /* tuple */[
+	  var match = getRecord$4(state);
+	  return getMap$2(material, getTextureCountPerMaterial(state[/* settingRecord */1]), /* tuple */[
 	              getMapUnit,
 	              getTextureIndex
 	            ], /* tuple */[
@@ -16247,19 +16867,19 @@
 	}
 
 	function setMap$1(material, texture, state) {
-	  var basicMaterialRecord = getRecord$3(state);
+	  var basicMaterialRecord = getRecord$4(state);
 	  var match = setMap$2(material, texture, /* tuple */[
 	        getMapUnit,
 	        setMapUnit,
 	        setTextureIndex
 	      ], /* tuple */[
-	        getTextureCountPerMaterial(state[/* settingRecord */0]),
+	        getTextureCountPerMaterial(state[/* settingRecord */1]),
 	        basicMaterialRecord[/* textureIndices */4],
 	        basicMaterialRecord[/* mapUnits */5],
 	        basicMaterialRecord[/* textureCountMap */6]
 	      ]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */basicMaterialRecord[/* index */0],
 	    /* buffer */basicMaterialRecord[/* buffer */1],
 	    /* shaderIndices */basicMaterialRecord[/* shaderIndices */2],
@@ -16271,7 +16891,8 @@
 	    /* gameObjectMap */basicMaterialRecord[/* gameObjectMap */8],
 	    /* groupCountMap */basicMaterialRecord[/* groupCountMap */9],
 	    /* disposedIndexArray */basicMaterialRecord[/* disposedIndexArray */10],
-	    /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */11]
+	    /* nameMap */basicMaterialRecord[/* nameMap */11],
+	    /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */12]
 	  ];
 	  return newrecord;
 	}
@@ -16284,13 +16905,13 @@
 	/* OptionService-Wonderjs Not a pure module */
 
 	function getColor$7(material, state) {
-	  return getColor(material, getRecord$3(state)[/* colors */3]);
+	  return getColor(material, getRecord$4(state)[/* colors */3]);
 	}
 
 	function setColor$3(material, color, state) {
-	  var basicMaterialRecord = getRecord$3(state);
+	  var basicMaterialRecord = getRecord$4(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */basicMaterialRecord[/* index */0],
 	    /* buffer */basicMaterialRecord[/* buffer */1],
 	    /* shaderIndices */basicMaterialRecord[/* shaderIndices */2],
@@ -16302,7 +16923,8 @@
 	    /* gameObjectMap */basicMaterialRecord[/* gameObjectMap */8],
 	    /* groupCountMap */basicMaterialRecord[/* groupCountMap */9],
 	    /* disposedIndexArray */basicMaterialRecord[/* disposedIndexArray */10],
-	    /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */11]
+	    /* nameMap */basicMaterialRecord[/* nameMap */11],
+	    /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */12]
 	  ];
 	  return newrecord;
 	}
@@ -16319,8 +16941,8 @@
 	/* RecordBasicMaterialMainService-Wonderjs Not a pure module */
 
 	function getDiffuseMap$1(material, state) {
-	  var match = getRecord$4(state);
-	  return getMap$2(material, getTextureCountPerMaterial(state[/* settingRecord */0]), /* tuple */[
+	  var match = getRecord$5(state);
+	  return getMap$2(material, getTextureCountPerMaterial(state[/* settingRecord */1]), /* tuple */[
 	              getDiffuseMapUnit,
 	              getTextureIndex$2
 	            ], /* tuple */[
@@ -16334,19 +16956,19 @@
 	}
 
 	function setDiffuseMap$1(material, texture, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var match = setMap$2(material, texture, /* tuple */[
 	        getDiffuseMapUnit,
 	        setDiffuseMapUnit,
 	        setTextureIndex$2
 	      ], /* tuple */[
-	        getTextureCountPerMaterial(state[/* settingRecord */0]),
+	        getTextureCountPerMaterial(state[/* settingRecord */1]),
 	        lightMaterialRecord[/* textureIndices */6],
 	        lightMaterialRecord[/* diffuseMapUnits */7],
 	        lightMaterialRecord[/* textureCountMap */9]
 	      ]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */lightMaterialRecord[/* index */0],
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -16374,8 +16996,8 @@
 	}
 
 	function getSpecularMap$1(material, state) {
-	  var match = getRecord$4(state);
-	  return getMap$2(material, getTextureCountPerMaterial(state[/* settingRecord */0]), /* tuple */[
+	  var match = getRecord$5(state);
+	  return getMap$2(material, getTextureCountPerMaterial(state[/* settingRecord */1]), /* tuple */[
 	              getSpecularMapUnit,
 	              getTextureIndex$2
 	            ], /* tuple */[
@@ -16389,19 +17011,19 @@
 	}
 
 	function setSpecularMap$1(material, texture, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var match = setMap$2(material, texture, /* tuple */[
 	        getSpecularMapUnit,
 	        setSpecularMapUnit,
 	        setTextureIndex$2
 	      ], /* tuple */[
-	        getTextureCountPerMaterial(state[/* settingRecord */0]),
+	        getTextureCountPerMaterial(state[/* settingRecord */1]),
 	        lightMaterialRecord[/* textureIndices */6],
 	        lightMaterialRecord[/* specularMapUnits */8],
 	        lightMaterialRecord[/* textureCountMap */9]
 	      ]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */lightMaterialRecord[/* index */0],
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -16432,13 +17054,13 @@
 	/* OptionService-Wonderjs Not a pure module */
 
 	function getDiffuseColor$2(material, state) {
-	  return getDiffuseColor(material, getRecord$4(state)[/* diffuseColors */3]);
+	  return getDiffuseColor(material, getRecord$5(state)[/* diffuseColors */3]);
 	}
 
 	function setDiffuseColor$1(material, color, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */lightMaterialRecord[/* index */0],
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -16462,13 +17084,13 @@
 	}
 
 	function getSpecularColor$2(material, state) {
-	  return getSpecularColor(material, getRecord$4(state)[/* specularColors */4]);
+	  return getSpecularColor(material, getRecord$5(state)[/* specularColors */4]);
 	}
 
 	function setSpecularColor$1(material, color, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */lightMaterialRecord[/* index */0],
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -16492,13 +17114,13 @@
 	}
 
 	function getShininess$2(material, state) {
-	  return getShininess(material, getRecord$4(state)[/* shininess */5]);
+	  return getShininess(material, getRecord$5(state)[/* shininess */5]);
 	}
 
 	function setShininess$1(material, value, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */lightMaterialRecord[/* index */0],
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -16539,6 +17161,33 @@
 
 
 	/* RecordLightMaterialMainService-Wonderjs Not a pure module */
+
+	function getCanvas(param) {
+	  return param[/* canvas */0];
+	}
+
+	function unsafeGetCanvas(record) {
+	  return unsafeGet$1(record[/* canvas */0]);
+	}
+
+	function setCanvas(canvas, _) {
+	  return /* record */[/* canvas */some$1(canvas)];
+	}
+
+	var getOffset = function (canvas){
+	                var offset = [canvas.offsetLeft,  canvas.offsetTop];
+	                var offsetParent = canvas;
+
+	            while (offsetParent = offsetParent.offsetParent) {
+	                offset[0] += offsetParent.offsetLeft;
+	                offset[1] += offsetParent.offsetTop;
+	            }
+
+	            return offset;
+	};
+
+
+	/* OptionService-Wonderjs Not a pure module */
 
 	function getPointDownEventName$1() {
 	  return "wd_pointdown";
@@ -16583,9 +17232,9 @@
 	}
 
 	function bindGlobalEvent(eventName, priority, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16618,9 +17267,9 @@
 	}
 
 	function unbindGlobalEventByHandleFunc(eventName, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16635,9 +17284,9 @@
 	}
 
 	function unbindGlobalEventByEventName(eventName, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16654,7 +17303,7 @@
 	function bindGameObjectEvent(param, handleFunc, state) {
 	  var target = param[2];
 	  var eventName = param[0];
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var customGameObjectEventArrMap = eventRecord[/* customGameObjectEventArrMap */5];
 	  var eventData_000 = /* priority */param[1];
 	  var eventData = /* record */[
@@ -16671,7 +17320,7 @@
 	  } else {
 	    tmp = set(eventName, set$1(target, /* array */[eventData], createEmpty$2(/* () */0)), customGameObjectEventArrMap);
 	  }
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16686,11 +17335,11 @@
 	}
 
 	function unbindGameObjectEventByTarget(param, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var customGameObjectEventArrMap = eventRecord[/* customGameObjectEventArrMap */5];
 	  var newrecord = caml_array_dup(state);
 	  var match = get(param[0], customGameObjectEventArrMap);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16707,7 +17356,7 @@
 	function unbindGameObjectEventByHandleFunc(param, handleFunc, state) {
 	  var target = param[1];
 	  var eventName = param[0];
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var customGameObjectEventArrMap = eventRecord[/* customGameObjectEventArrMap */5];
 	  var newrecord = caml_array_dup(state);
 	  var match = get(eventName, customGameObjectEventArrMap);
@@ -16719,7 +17368,7 @@
 	  } else {
 	    tmp = customGameObjectEventArrMap;
 	  }
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16779,9 +17428,9 @@
 	}
 
 	function bind$1(eventName, priority, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */_addToEventArr$1(eventName, /* record */[
 	          /* priority */priority,
@@ -16799,9 +17448,9 @@
 	}
 
 	function unbindByHandleFunc(eventName, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */_removeFromEventArrMapByHandleFunc$1(eventName, handleFunc, eventRecord[/* mouseDomEventDataArrMap */1]),
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16834,9 +17483,9 @@
 	}
 
 	function bind$2(eventName, priority, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16854,9 +17503,9 @@
 	}
 
 	function unbindByHandleFunc$1(eventName, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -16903,7 +17552,7 @@
 	}
 
 	function triggerGlobalEvent(customEvent, state) {
-	  var match = get(customEvent[/* name */0], state[/* eventRecord */41][/* customGlobalEventArrMap */4]);
+	  var match = get(customEvent[/* name */0], state[/* eventRecord */42][/* customGlobalEventArrMap */4]);
 	  if (match !== undefined) {
 	    return _triggerHandleFunc(customEvent, match, state);
 	  } else {
@@ -16915,7 +17564,7 @@
 	}
 
 	function triggerGameObjectEvent(target, customEvent, state) {
-	  var match = get(customEvent[/* name */0], state[/* eventRecord */41][/* customGameObjectEventArrMap */5]);
+	  var match = get(customEvent[/* name */0], state[/* eventRecord */42][/* customGameObjectEventArrMap */5]);
 	  if (match !== undefined) {
 	    var match$1 = get$3(target, match);
 	    if (match$1 !== undefined) {
@@ -16947,7 +17596,7 @@
 	  var transformRecord = getRecord$1(state$1);
 	  return reduceOneParam((function (state, child) {
 	                return _broadcastGameObjectEvent(eventName, child, customEvent$1, state);
-	              }), state$1, unsafeGetChildren(unsafeGetTransformComponent(target, state$1[/* gameObjectRecord */10]), transformRecord));
+	              }), state$1, unsafeGetChildren(unsafeGetTransformComponent(target, state$1[/* gameObjectRecord */11]), transformRecord));
 	}
 
 	function broadcastGameObjectEvent(target, customEvent, state) {
@@ -16968,7 +17617,7 @@
 	    var match = triggerGameObjectEvent(target, customEvent, state);
 	    var state$1 = match[0];
 	    var transformRecord = getRecord$1(state$1);
-	    var match$1 = getParent(unsafeGetTransformComponent(target, state$1[/* gameObjectRecord */10]), transformRecord);
+	    var match$1 = getParent(unsafeGetTransformComponent(target, state$1[/* gameObjectRecord */11]), transformRecord);
 	    if (match$1 !== undefined) {
 	      _state = state$1;
 	      _customEvent = match[1];
@@ -17013,9 +17662,9 @@
 	}
 
 	function bind$3(eventName, priority, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */_addToEventArr$3(eventName, /* record */[
@@ -17033,9 +17682,9 @@
 	}
 
 	function unbindByHandleFunc$2(eventName, handleFunc, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */_removeFromEventArrMapByHandleFunc$3(eventName, handleFunc, eventRecord[/* keyboardDomEventDataArrMap */2]),
@@ -17122,9 +17771,9 @@
 	}
 
 	function setDomEventStreamSubscription(domEventStreamSubscription, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */some$1(domEventStreamSubscription),
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -17141,35 +17790,90 @@
 
 	/* BindCustomEventMainService-Wonderjs Not a pure module */
 
-	function getCanvas(param) {
-	  return param[/* canvas */0];
+	var _isFirefox = (
+	    function(){
+	      var userAgent = navigator.userAgent.toLowerCase();
+
+	        return userAgent.indexOf("firefox") > -1 && userAgent.indexOf("mobile") === -1;
+	    }
+	    );
+
+	var _isChrome = (
+	    function(){
+	      var userAgent = navigator.userAgent.toLowerCase();
+
+	        return userAgent.indexOf("chrome") > -1 && userAgent.indexOf("mobile") === -1;
+	    }
+	    );
+
+	var _isAndroid = (
+	    function(){
+	        return /Android/i.test(navigator.userAgent)
+	    }
+	    );
+
+	var _isIOS = (
+	    function(){
+	        return /iPhone|iPad|iPod/i.test(navigator.userAgent)
+	    }
+	    );
+
+	function detect$2(state) {
+	  var newrecord = caml_array_dup(state);
+	  var match = _1(_isFirefox, /* () */0) === true;
+	  var tmp;
+	  if (match) {
+	    tmp = /* Firefox */1;
+	  } else {
+	    var match$1 = _1(_isChrome, /* () */0) === true;
+	    if (match$1) {
+	      tmp = /* Chrome */0;
+	    } else {
+	      var match$2 = _1(_isAndroid, /* () */0);
+	      if (match$2) {
+	        tmp = /* Android */2;
+	      } else {
+	        var match$3 = _1(_isIOS, /* () */0);
+	        tmp = match$3 ? /* IOS */3 : /* Unknown */4;
+	      }
+	    }
+	  }
+	  newrecord[/* browserDetectRecord */41] = /* record */[/* browser */tmp];
+	  return newrecord;
 	}
 
-	function unsafeGetCanvas(record) {
-	  return unsafeGet$1(record[/* canvas */0]);
+	function isMobile(state) {
+	  var match = state[/* browserDetectRecord */41][/* browser */0];
+	  return match === 3 || match === 2;
 	}
 
-	function setCanvas(canvas, _) {
-	  return /* record */[/* canvas */some$1(canvas)];
+	function detectMobileNotSupportWorker(state) {
+	  var match = isMobile(state);
+	  if (match) {
+	    return fatal(buildFatalMessage("DetectEnvironmentWorkerJob->execJob", "mobile not support worker", "", "", ""));
+	  } else {
+	    return /* () */0;
+	  }
 	}
 
-	var getOffset = function (canvas){
-	                var offset = [canvas.offsetLeft,  canvas.offsetTop];
-	                var offsetParent = canvas;
 
-	            while (offsetParent = offsetParent.offsetParent) {
-	                offset[0] += offsetParent.offsetLeft;
-	                offset[1] += offsetParent.offsetTop;
-	            }
+	/* _isFirefox Not a pure module */
 
-	            return offset;
-	};
+	var preventDefault$1 = function (event){
+	    if (event.cancelable) {
+	      if (!event.defaultPrevented) {
+	          event.preventDefault();
+	      }
+	  }
+
+	  event.stopPropagation();
+	  };
 
 
-	/* OptionService-Wonderjs Not a pure module */
+	/* No side effect */
 
 	function getLocationInView(domEvent, getLocationFunc, state) {
-	  var viewRecord = state[/* viewRecord */8];
+	  var viewRecord = state[/* viewRecord */9];
 	  var match = getCanvas(viewRecord);
 	  if (match !== undefined) {
 	    var match$1 = getOffset(unsafeGetCanvas(viewRecord));
@@ -17213,15 +17917,7 @@
 	  
 	}
 
-	var preventDefault = function (event){
-	    if (event.cancelable) {
-	      if (!event.defaultPrevented) {
-	          event.preventDefault();
-	      }
-	  }
-
-	  event.stopPropagation();
-	  };
+	var preventDefault = preventDefault$1;
 
 
 	/* Log-WonderLog Not a pure module */
@@ -17272,7 +17968,7 @@
 
 	/* hexFloat_of_string Not a pure module */
 
-	function create$24() {
+	function create$25() {
 	  return createEmpty$1(/* () */0);
 	}
 
@@ -17286,58 +17982,62 @@
 	/* ArrayService-Wonderjs Not a pure module */
 
 	function unsafeGetDistance(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* distanceMap */5]));
+	  return unsafeGet$1(get$3(cameraController, record[/* distanceMap */7]));
 	}
 
 	function unsafeGetWheelSpeed(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* wheelSpeedMap */14]));
+	  return unsafeGet$1(get$3(cameraController, record[/* wheelSpeedMap */16]));
 	}
 
 	function setWheelSpeed(cameraController, wheelSpeed, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */set$1(cameraController, wheelSpeed, record[/* wheelSpeedMap */14]),
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */set$1(cameraController, wheelSpeed, record[/* wheelSpeedMap */16]),
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
 	function unsafeGetMinDistance(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* minDistanceMap */6]));
+	  return unsafeGet$1(get$3(cameraController, record[/* minDistanceMap */8]));
 	}
 
 	function setDistance(cameraController, distance, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */4]),
-	          /* distanceMap */set$1(cameraController, bigThan(distance, unsafeGetMinDistance(cameraController, record)), record[/* distanceMap */5]),
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */6]),
+	          /* distanceMap */set$1(cameraController, bigThan(distance, unsafeGetMinDistance(cameraController, record)), record[/* distanceMap */7]),
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
@@ -17352,22 +18052,24 @@
 
 	function setMinDistance(cameraController, minDistance, record) {
 	  var record_000 = /* index */record[/* index */0];
-	  var record_001 = /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1];
-	  var record_002 = /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2];
-	  var record_003 = /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3];
-	  var record_004 = /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */4]);
-	  var record_005 = /* distanceMap */record[/* distanceMap */5];
-	  var record_006 = /* minDistanceMap */set$1(cameraController, minDistance, record[/* minDistanceMap */6]);
-	  var record_007 = /* phiMap */record[/* phiMap */7];
-	  var record_008 = /* thetaMap */record[/* thetaMap */8];
-	  var record_009 = /* thetaMarginMap */record[/* thetaMarginMap */9];
-	  var record_010 = /* targetMap */record[/* targetMap */10];
-	  var record_011 = /* moveSpeedXMap */record[/* moveSpeedXMap */11];
-	  var record_012 = /* moveSpeedYMap */record[/* moveSpeedYMap */12];
-	  var record_013 = /* rotateSpeedMap */record[/* rotateSpeedMap */13];
-	  var record_014 = /* wheelSpeedMap */record[/* wheelSpeedMap */14];
-	  var record_015 = /* gameObjectMap */record[/* gameObjectMap */15];
-	  var record_016 = /* disposedIndexArray */record[/* disposedIndexArray */16];
+	  var record_001 = /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1];
+	  var record_002 = /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2];
+	  var record_003 = /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3];
+	  var record_004 = /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4];
+	  var record_005 = /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5];
+	  var record_006 = /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */6]);
+	  var record_007 = /* distanceMap */record[/* distanceMap */7];
+	  var record_008 = /* minDistanceMap */set$1(cameraController, minDistance, record[/* minDistanceMap */8]);
+	  var record_009 = /* phiMap */record[/* phiMap */9];
+	  var record_010 = /* thetaMap */record[/* thetaMap */10];
+	  var record_011 = /* thetaMarginMap */record[/* thetaMarginMap */11];
+	  var record_012 = /* targetMap */record[/* targetMap */12];
+	  var record_013 = /* moveSpeedXMap */record[/* moveSpeedXMap */13];
+	  var record_014 = /* moveSpeedYMap */record[/* moveSpeedYMap */14];
+	  var record_015 = /* rotateSpeedMap */record[/* rotateSpeedMap */15];
+	  var record_016 = /* wheelSpeedMap */record[/* wheelSpeedMap */16];
+	  var record_017 = /* gameObjectMap */record[/* gameObjectMap */17];
+	  var record_018 = /* disposedIndexArray */record[/* disposedIndexArray */18];
 	  var record$1 = /* record */[
 	    record_000,
 	    record_001,
@@ -17385,7 +18087,9 @@
 	    record_013,
 	    record_014,
 	    record_015,
-	    record_016
+	    record_016,
+	    record_017,
+	    record_018
 	  ];
 	  var match = minDistance > unsafeGetDistance(cameraController, record$1);
 	  if (match) {
@@ -17396,28 +18100,30 @@
 	}
 
 	function unsafeGetPhi(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* phiMap */7]));
+	  return unsafeGet$1(get$3(cameraController, record[/* phiMap */9]));
 	}
 
 	function setPhi(cameraController, phi, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */4]),
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */set$1(cameraController, phi, record[/* phiMap */7]),
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */6]),
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */set$1(cameraController, phi, record[/* phiMap */9]),
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
@@ -17426,32 +18132,34 @@
 	}
 
 	function unsafeGetTheta(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* thetaMap */8]));
+	  return unsafeGet$1(get$3(cameraController, record[/* thetaMap */10]));
 	}
 
 	function unsafeGetThetaMargin(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* thetaMarginMap */9]));
+	  return unsafeGet$1(get$3(cameraController, record[/* thetaMarginMap */11]));
 	}
 
 	function setThetaMargin(cameraController, thetaMargin, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */4]),
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */set$1(cameraController, _constrainTheta(unsafeGetTheta(cameraController, record), thetaMargin), record[/* thetaMap */8]),
-	          /* thetaMarginMap */set$1(cameraController, thetaMargin, record[/* thetaMarginMap */9]),
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */6]),
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */set$1(cameraController, _constrainTheta(unsafeGetTheta(cameraController, record), thetaMargin), record[/* thetaMap */10]),
+	          /* thetaMarginMap */set$1(cameraController, thetaMargin, record[/* thetaMarginMap */11]),
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
@@ -17459,211 +18167,144 @@
 	  var thetaMargin = unsafeGetThetaMargin(cameraController, record);
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */4]),
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */set$1(cameraController, _constrainTheta(theta, thetaMargin), record[/* thetaMap */8]),
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */6]),
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */set$1(cameraController, _constrainTheta(theta, thetaMargin), record[/* thetaMap */10]),
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
 	function unsafeGetTarget(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* targetMap */10]));
+	  return unsafeGet$1(get$3(cameraController, record[/* targetMap */12]));
 	}
 
 	function setTarget(cameraController, target, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */4]),
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */set$1(cameraController, target, record[/* targetMap */10]),
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */addToDirtyArray(cameraController, record[/* dirtyArray */6]),
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */set$1(cameraController, target, record[/* targetMap */12]),
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
 	function unsafeGetMoveSpeedX(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* moveSpeedXMap */11]));
+	  return unsafeGet$1(get$3(cameraController, record[/* moveSpeedXMap */13]));
 	}
 
 	function setMoveSpeedX(cameraController, moveSpeedX, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */set$1(cameraController, moveSpeedX, record[/* moveSpeedXMap */11]),
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */set$1(cameraController, moveSpeedX, record[/* moveSpeedXMap */13]),
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
 	function unsafeGetMoveSpeedY(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* moveSpeedYMap */12]));
+	  return unsafeGet$1(get$3(cameraController, record[/* moveSpeedYMap */14]));
 	}
 
 	function setMoveSpeedY(cameraController, moveSpeedY, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */set$1(cameraController, moveSpeedY, record[/* moveSpeedYMap */12]),
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */set$1(cameraController, moveSpeedY, record[/* moveSpeedYMap */14]),
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
 	function unsafeGetRotateSpeed(cameraController, record) {
-	  return unsafeGet$1(get$3(cameraController, record[/* rotateSpeedMap */13]));
+	  return unsafeGet$1(get$3(cameraController, record[/* rotateSpeedMap */15]));
 	}
 
 	function setRotateSpeed(cameraController, rotateSpeed, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */set$1(cameraController, rotateSpeed, record[/* rotateSpeedMap */13]),
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */set$1(cameraController, rotateSpeed, record[/* rotateSpeedMap */15]),
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
 
 	/* NumberService-Wonderjs Not a pure module */
 
-	function _setEventHandleFunc(cameraController, handleFunc, eventHandleFuncMap) {
-	  var match = length$2(getValidValues(eventHandleFuncMap)) > 0;
-	  if (match) {
-	    warn("expect only has one arcballCameraController, but actual > 1. please dispose others.");
-	  }
-	  return set$1(cameraController, handleFunc, eventHandleFuncMap);
-	}
-
-	function setPointDragEventHandleFunc(cameraController, handleFunc, record) {
-	  return /* record */[
-	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* pointDragEventHandleFuncMap */1]),
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
-	        ];
-	}
-
-	function setPointScaleEventHandleFunc(cameraController, handleFunc, record) {
-	  return /* record */[
-	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* pointScaleEventHandleFuncMap */2]),
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
-	        ];
-	}
-
-	function setKeydownEventHandleFunc(cameraController, handleFunc, record) {
-	  return /* record */[
-	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* keydownEventHandleFuncMap */3]),
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */record[/* distanceMap */5],
-	          /* minDistanceMap */record[/* minDistanceMap */6],
-	          /* phiMap */record[/* phiMap */7],
-	          /* thetaMap */record[/* thetaMap */8],
-	          /* thetaMarginMap */record[/* thetaMarginMap */9],
-	          /* targetMap */record[/* targetMap */10],
-	          /* moveSpeedXMap */record[/* moveSpeedXMap */11],
-	          /* moveSpeedYMap */record[/* moveSpeedYMap */12],
-	          /* rotateSpeedMap */record[/* rotateSpeedMap */13],
-	          /* wheelSpeedMap */record[/* wheelSpeedMap */14],
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
-	        ];
-	}
-
-
-	/* Log-WonderLog Not a pure module */
-
 	function unsafeGetGameObject$7(cameraController, param) {
-	  return unsafeGetGameObject$1(cameraController, param[/* gameObjectMap */15]);
+	  return unsafeGetGameObject$1(cameraController, param[/* gameObjectMap */17]);
 	}
 
 
@@ -17672,8 +18313,8 @@
 	function _computeTarget(cameraController, param, state) {
 	  var dy = param[1];
 	  var dx = param[0];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  var target = unsafeGetTarget(cameraController, arcballCameraControllerRecord);
 	  var transform = unsafeGetTransformComponent(unsafeGetGameObject$7(cameraController, arcballCameraControllerRecord), gameObjectRecord);
 	  var match = getRecord$1(state);
@@ -17695,7 +18336,7 @@
 	}
 
 	function setTargetByKeyboardEvent(cameraController, keyboardEvent, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  var moveSpeedX = unsafeGetMoveSpeedX(cameraController, arcballCameraControllerRecord);
 	  var moveSpeedY = unsafeGetMoveSpeedY(cameraController, arcballCameraControllerRecord);
 	  var match = keyboardEvent[/* key */6];
@@ -17745,7 +18386,7 @@
 	  }
 	  if (exit === 1) {
 	    var newrecord = caml_array_dup(state);
-	    newrecord[/* arcballCameraControllerRecord */25] = setTarget(cameraController, _computeTarget(cameraController, /* tuple */[
+	    newrecord[/* arcballCameraControllerRecord */26] = setTarget(cameraController, _computeTarget(cameraController, /* tuple */[
 	              dx,
 	              dy
 	            ], state), arcballCameraControllerRecord);
@@ -17757,17 +18398,183 @@
 
 	/* Matrix4Service-Wonderjs Not a pure module */
 
+	function _setEventHandleFunc(cameraController, handleFunc, eventHandleFuncMap) {
+	  var match = length$2(getValidValues(eventHandleFuncMap)) > 0;
+	  if (match) {
+	    warn("expect only has one arcballCameraController, but actual > 1. please dispose others.");
+	  }
+	  return set$1(cameraController, handleFunc, eventHandleFuncMap);
+	}
+
+	function _setPointDownEventHandleFunc(cameraController, handleFunc, record) {
+	  return /* record */[
+	          /* index */record[/* index */0],
+	          /* pointDownEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* pointDownEventHandleFuncMap */1]),
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
+	        ];
+	}
+
+	function _setPointUpEventHandleFunc(cameraController, handleFunc, record) {
+	  return /* record */[
+	          /* index */record[/* index */0],
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* pointUpEventHandleFuncMap */2]),
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
+	        ];
+	}
+
+	function _setPointDragEventHandleFunc(cameraController, handleFunc, record) {
+	  return /* record */[
+	          /* index */record[/* index */0],
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* pointDragEventHandleFuncMap */3]),
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
+	        ];
+	}
+
+	function _setPointScaleEventHandleFunc(cameraController, handleFunc, record) {
+	  return /* record */[
+	          /* index */record[/* index */0],
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* pointScaleEventHandleFuncMap */4]),
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
+	        ];
+	}
+
+	function _setKeydownEventHandleFunc(cameraController, handleFunc, record) {
+	  return /* record */[
+	          /* index */record[/* index */0],
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */_setEventHandleFunc(cameraController, handleFunc, record[/* keydownEventHandleFuncMap */5]),
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */record[/* distanceMap */7],
+	          /* minDistanceMap */record[/* minDistanceMap */8],
+	          /* phiMap */record[/* phiMap */9],
+	          /* thetaMap */record[/* thetaMap */10],
+	          /* thetaMarginMap */record[/* thetaMarginMap */11],
+	          /* targetMap */record[/* targetMap */12],
+	          /* moveSpeedXMap */record[/* moveSpeedXMap */13],
+	          /* moveSpeedYMap */record[/* moveSpeedYMap */14],
+	          /* rotateSpeedMap */record[/* rotateSpeedMap */15],
+	          /* wheelSpeedMap */record[/* wheelSpeedMap */16],
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
+	        ];
+	}
+
 	function _changeOrbit(cameraController, param, arcballCameraControllerRecord) {
 	  var movementDelta = param[/* movementDelta */5];
 	  var rotateSpeed = unsafeGetRotateSpeed(cameraController, arcballCameraControllerRecord);
 	  return setTheta(cameraController, unsafeGetTheta(cameraController, arcballCameraControllerRecord) - movementDelta[1] / (100 / rotateSpeed), setPhi(cameraController, unsafeGetPhi(cameraController, arcballCameraControllerRecord) + movementDelta[0] / (100 / rotateSpeed), arcballCameraControllerRecord));
 	}
 
-	function initArcballCameraController(cameraController, state) {
+	function bindEvent(cameraController, state) {
+	  var pointDownHandleFunc = function ($$event, state) {
+	    var viewRecord = state[/* viewRecord */9];
+	    var match = isMobile(state);
+	    if (match) {
+	      return /* tuple */[
+	              state,
+	              $$event
+	            ];
+	    } else {
+	      var canvas = unsafeGetCanvas(viewRecord);
+	      requestPointerLock(canvas);
+	      return /* tuple */[
+	              state,
+	              $$event
+	            ];
+	    }
+	  };
+	  var pointUpHandleFunc = function ($$event, state) {
+	    var viewRecord = state[/* viewRecord */9];
+	    var match = isMobile(state);
+	    if (match) {
+	      return /* tuple */[
+	              state,
+	              $$event
+	            ];
+	    } else {
+	      var canvas = unsafeGetCanvas(viewRecord);
+	      var $$document$1 = document;
+	      var match$1 = $$document$1.pointerLockElement === canvas;
+	      if (match$1) {
+	        _1(exitPointerLock, /* () */0);
+	      }
+	      return /* tuple */[
+	              state,
+	              $$event
+	            ];
+	    }
+	  };
 	  var pointDragHandleFunc = function ($$event, state) {
 	    var newrecord = caml_array_dup(state);
 	    return /* tuple */[
-	            (newrecord[/* arcballCameraControllerRecord */25] = _changeOrbit(cameraController, unsafeGet$1($$event[/* userData */4]), state[/* arcballCameraControllerRecord */25]), newrecord),
+	            (newrecord[/* arcballCameraControllerRecord */26] = _changeOrbit(cameraController, unsafeGet$1($$event[/* userData */4]), state[/* arcballCameraControllerRecord */26]), newrecord),
 	            $$event
 	          ];
 	  };
@@ -17776,7 +18583,7 @@
 	    preventDefault(pointEvent[/* event */6]);
 	    var newrecord = caml_array_dup(state);
 	    return /* tuple */[
-	            (newrecord[/* arcballCameraControllerRecord */25] = setDistanceByEvent(cameraController, pointEvent, state[/* arcballCameraControllerRecord */25]), newrecord),
+	            (newrecord[/* arcballCameraControllerRecord */26] = setDistanceByEvent(cameraController, pointEvent, state[/* arcballCameraControllerRecord */26]), newrecord),
 	            $$event
 	          ];
 	  };
@@ -17784,35 +18591,205 @@
 	    return setTargetByKeyboardEvent(cameraController, $$event, state);
 	  };
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setKeydownEventHandleFunc(cameraController, keydownHandleFunc, setPointScaleEventHandleFunc(cameraController, pointScaleHandleFunc, setPointDragEventHandleFunc(cameraController, pointDragHandleFunc, state[/* arcballCameraControllerRecord */25])));
-	  var state$1 = onCustomGlobalEvent$1(getPointDragEventName$1(/* () */0), pointDragHandleFunc, newrecord, undefined, /* () */0);
-	  var state$2 = onCustomGlobalEvent$1(getPointScaleEventName$1(/* () */0), pointScaleHandleFunc, state$1, undefined, /* () */0);
-	  return onKeyboardEvent$1(/* KeyDown */7, keydownHandleFunc, state$2, undefined, /* () */0);
+	  newrecord[/* arcballCameraControllerRecord */26] = _setKeydownEventHandleFunc(cameraController, keydownHandleFunc, _setPointScaleEventHandleFunc(cameraController, pointScaleHandleFunc, _setPointDragEventHandleFunc(cameraController, pointDragHandleFunc, _setPointUpEventHandleFunc(cameraController, pointUpHandleFunc, _setPointDownEventHandleFunc(cameraController, pointDownHandleFunc, state[/* arcballCameraControllerRecord */26])))));
+	  var state$1 = onCustomGlobalEvent$1(getPointDownEventName$1(/* () */0), pointDownHandleFunc, newrecord, undefined, /* () */0);
+	  var state$2 = onCustomGlobalEvent$1(getPointUpEventName$1(/* () */0), pointUpHandleFunc, state$1, undefined, /* () */0);
+	  var state$3 = onCustomGlobalEvent$1(getPointDragEventName$1(/* () */0), pointDragHandleFunc, state$2, undefined, /* () */0);
+	  var state$4 = onCustomGlobalEvent$1(getPointScaleEventName$1(/* () */0), pointScaleHandleFunc, state$3, undefined, /* () */0);
+	  return onKeyboardEvent$1(/* KeyDown */8, keydownHandleFunc, state$4, undefined, /* () */0);
 	}
 
-	function init$4(state) {
-	  return reduceOneParam((function (state, dirtyIndex) {
-	                return initArcballCameraController(dirtyIndex, state);
-	              }), state, removeDuplicateItems(state[/* arcballCameraControllerRecord */25][/* dirtyArray */4]));
+	function _disposePointDownEventHandleFuncMap(cameraController, state) {
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
+	  var pointDownEventHandleFuncMap = arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1];
+	  var match = get$3(cameraController, pointDownEventHandleFuncMap);
+	  if (match !== undefined) {
+	    var eventName = getPointDownEventName$1(/* () */0);
+	    var state$1 = offCustomGlobalEventByHandleFunc$1(eventName, valFromOption(match), state);
+	    var newrecord = caml_array_dup(state$1);
+	    newrecord[/* arcballCameraControllerRecord */26] = /* record */[
+	      /* index */arcballCameraControllerRecord[/* index */0],
+	      /* pointDownEventHandleFuncMap */disposeSparseMapData(cameraController, pointDownEventHandleFuncMap),
+	      /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	      /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	      /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	      /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */6],
+	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	      /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	      /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
+	    ];
+	    return newrecord;
+	  } else {
+	    return state;
+	  }
 	}
 
-
-	/* OptionService-Wonderjs Not a pure module */
-
-	function unsafeGetPMatrix(index, pMatrixMap) {
-	  return ensureCheck((function (pMatrix) {
-	                return test(buildAssertMessage("pMatrix exist", "not"), (function () {
-	                              return assertNullableExist(pMatrix);
-	                            }));
-	              }), getIsDebug(stateData), unsafeGet$2(index, pMatrixMap));
+	function _disposePointUpEventHandleFuncMap(cameraController, state) {
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
+	  var pointUpEventHandleFuncMap = arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2];
+	  var match = get$3(cameraController, pointUpEventHandleFuncMap);
+	  if (match !== undefined) {
+	    var eventName = getPointUpEventName$1(/* () */0);
+	    var state$1 = offCustomGlobalEventByHandleFunc$1(eventName, valFromOption(match), state);
+	    var newrecord = caml_array_dup(state$1);
+	    newrecord[/* arcballCameraControllerRecord */26] = /* record */[
+	      /* index */arcballCameraControllerRecord[/* index */0],
+	      /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	      /* pointUpEventHandleFuncMap */disposeSparseMapData(cameraController, pointUpEventHandleFuncMap),
+	      /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	      /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	      /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */6],
+	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	      /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	      /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
+	    ];
+	    return newrecord;
+	  } else {
+	    return state;
+	  }
 	}
 
-	function setDefaultPMatrix(index, pMatrixMap) {
-	  return set$1(index, createIdentityMatrix4(/* () */0), pMatrixMap);
+	function _disposePointDragEventHandleFuncMap(cameraController, state) {
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
+	  var pointDragEventHandleFuncMap = arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3];
+	  var match = get$3(cameraController, pointDragEventHandleFuncMap);
+	  if (match !== undefined) {
+	    var eventName = getPointDragEventName$1(/* () */0);
+	    var state$1 = offCustomGlobalEventByHandleFunc$1(eventName, valFromOption(match), state);
+	    var newrecord = caml_array_dup(state$1);
+	    newrecord[/* arcballCameraControllerRecord */26] = /* record */[
+	      /* index */arcballCameraControllerRecord[/* index */0],
+	      /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	      /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	      /* pointDragEventHandleFuncMap */disposeSparseMapData(cameraController, pointDragEventHandleFuncMap),
+	      /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	      /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */6],
+	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	      /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	      /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
+	    ];
+	    return newrecord;
+	  } else {
+	    return state;
+	  }
+	}
+
+	function _disposePointScaleEventHandleFuncMap(cameraController, state) {
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
+	  var pointScaleEventHandleFuncMap = arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4];
+	  var match = get$3(cameraController, pointScaleEventHandleFuncMap);
+	  if (match !== undefined) {
+	    var eventName = getPointScaleEventName$1(/* () */0);
+	    var state$1 = offCustomGlobalEventByHandleFunc$1(eventName, valFromOption(match), state);
+	    var newrecord = caml_array_dup(state$1);
+	    newrecord[/* arcballCameraControllerRecord */26] = /* record */[
+	      /* index */arcballCameraControllerRecord[/* index */0],
+	      /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	      /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	      /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	      /* pointScaleEventHandleFuncMap */disposeSparseMapData(cameraController, pointScaleEventHandleFuncMap),
+	      /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */6],
+	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	      /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	      /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
+	    ];
+	    return newrecord;
+	  } else {
+	    return state;
+	  }
+	}
+
+	function _disposeKeyDownEventHandleFuncMap(cameraController, state) {
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
+	  var keydownEventHandleFuncMap = arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5];
+	  var match = get$3(cameraController, keydownEventHandleFuncMap);
+	  if (match !== undefined) {
+	    var state$1 = offKeyboardEventByHandleFunc$1(/* KeyDown */8, valFromOption(match), state);
+	    var newrecord = caml_array_dup(state$1);
+	    newrecord[/* arcballCameraControllerRecord */26] = /* record */[
+	      /* index */arcballCameraControllerRecord[/* index */0],
+	      /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	      /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	      /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	      /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	      /* keydownEventHandleFuncMap */disposeSparseMapData(cameraController, keydownEventHandleFuncMap),
+	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */6],
+	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	      /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	      /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
+	    ];
+	    return newrecord;
+	  } else {
+	    return state;
+	  }
+	}
+
+	function unbindEvent(cameraController, state) {
+	  return _disposeKeyDownEventHandleFuncMap(cameraController, _disposePointScaleEventHandleFuncMap(cameraController, _disposePointDragEventHandleFuncMap(cameraController, _disposePointUpEventHandleFuncMap(cameraController, _disposePointDownEventHandleFuncMap(cameraController, state)))));
 	}
 
 
 	/* Log-WonderLog Not a pure module */
+
+	var initArcballCameraController = bindEvent;
+
+	function init$4(state) {
+	  return reduceOneParam((function (state, dirtyIndex) {
+	                return bindEvent(dirtyIndex, state);
+	              }), state, removeDuplicateItems(state[/* arcballCameraControllerRecord */26][/* dirtyArray */6]));
+	}
+
+
+	/* ArrayService-WonderCommonlib Not a pure module */
 
 	function _setMapValue(cameraProjection, dirtyArray, record) {
 	  return /* record */[
@@ -17924,8 +18901,8 @@
 	/* OptionService-Wonderjs Not a pure module */
 
 	function updateCameraProjection(index, state) {
-	  var viewRecord = state[/* viewRecord */8];
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var viewRecord = state[/* viewRecord */9];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  var newrecord = caml_array_dup(state);
 	  var match = getFovy(index, perspectiveCameraProjectionRecord);
 	  var match$1 = getNear(index, perspectiveCameraProjectionRecord);
@@ -17963,16 +18940,16 @@
 	    fatal(buildFatalMessage("update", "fovy,near,far should all exist", "", "", "cameraProjection: " + (String(index) + "")));
 	    tmp = perspectiveCameraProjectionRecord;
 	  }
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = tmp;
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = tmp;
 	  return newrecord;
 	}
 
 	function _clearDirtyArray(state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = /* record */[
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = /* record */[
 	    /* index */perspectiveCameraProjectionRecord[/* index */0],
-	    /* dirtyArray */create$24(/* () */0),
+	    /* dirtyArray */create$25(/* () */0),
 	    /* pMatrixMap */perspectiveCameraProjectionRecord[/* pMatrixMap */2],
 	    /* nearMap */perspectiveCameraProjectionRecord[/* nearMap */3],
 	    /* farMap */perspectiveCameraProjectionRecord[/* farMap */4],
@@ -17985,7 +18962,7 @@
 	}
 
 	function update$1(state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  return _clearDirtyArray(reduceOneParam((function (state, dirtyIndex) {
 	                    return updateCameraProjection(dirtyIndex, state);
 	                  }), state, removeDuplicateItems(perspectiveCameraProjectionRecord[/* dirtyArray */1])));
@@ -17997,7 +18974,7 @@
 	var initPerspepctiveCameraProjection = updateCameraProjection;
 
 	function init$5(state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  var dirtyArray = perspectiveCameraProjectionRecord[/* dirtyArray */1];
 	  var match = getCount(dirtyArray);
 	  if (match !== 0) {
@@ -18013,7 +18990,7 @@
 	/* DirtyArrayService-Wonderjs Not a pure module */
 
 	function _initMaterialComponent(uid, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getBasicMaterialComponent(uid, gameObjectRecord);
 	  var state$1;
 	  if (match !== undefined) {
@@ -18035,7 +19012,7 @@
 	}
 
 	function initGameObject$2(uid, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var state$1 = _initMaterialComponent(uid, state);
 	  var match = getPerspectiveCameraProjectionComponent(uid, gameObjectRecord);
 	  var state$2 = match !== undefined ? initPerspepctiveCameraProjection(match, state$1) : state$1;
@@ -18062,21 +19039,21 @@
 	/* OptionService-Wonderjs Not a pure module */
 
 	function getName(uid, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return getName$1(uid, gameObjectRecord[/* nameMap */1]);
 	}
 
 	function unsafeGetName(uid, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return unsafeGetName$1(uid, gameObjectRecord[/* nameMap */1]);
 	}
 
 	function setName(uid, name, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* nameMap */1] = setName$1(uid, name, gameObjectRecord[/* nameMap */1]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
@@ -18084,7 +19061,7 @@
 	/* NameService-Wonderjs Not a pure module */
 
 	function isAlive$4(uid, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  var disposedUidMap = gameObjectRecord[/* disposedUidMap */3];
 	  var transformMap = gameObjectRecord[/* transformMap */22];
 	  var match = has$1(uid, disposedUidMap);
@@ -18135,22 +19112,7 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
-	var getMappedIndex = unsafeGet$2;
-
-	var setMappedIndex = set$1;
-
-	function markDisposed(index, mappedIndexMap) {
-	  return set$1(index, -1, mappedIndexMap);
-	}
-
-	function isComponentAlive(component, mappedIndexMap) {
-	  return unsafeGet$2(component, mappedIndexMap) !== -1;
-	}
-
-
-	/* No side effect */
-
-	function create$25(record) {
+	function create$26(record) {
 	  var index = record[/* index */0];
 	  return checkNotExceedMaxCount(getBufferMaxCount$1(/* () */0), /* tuple */[
 	              /* record */[
@@ -18340,7 +19302,7 @@
 
 	function handleCloneComponent(sourceComponent, countRangeArr, record) {
 	  return handleCloneComponent$1(sourceComponent, countRangeArr, /* tuple */[
-	              create$25,
+	              create$26,
 	              _getData,
 	              _setData
 	            ], record);
@@ -18361,41 +19323,8 @@
 
 	/* No side effect */
 
-	function create$26(record) {
-	  var match = generateIndex(record[/* index */0], record[/* disposedIndexArray */4]);
-	  return /* tuple */[
-	          /* record */[
-	            /* index */match[1],
-	            /* basicMaterialRenderGameObjectMap */record[/* basicMaterialRenderGameObjectMap */1],
-	            /* lightMaterialRenderGameObjectMap */record[/* lightMaterialRenderGameObjectMap */2],
-	            /* gameObjectMap */record[/* gameObjectMap */3],
-	            /* disposedIndexArray */match[2]
-	          ],
-	          match[0]
-	        ];
-	}
-
-
-	/* No side effect */
-
-	function handleCloneComponent$3(_, countRangeArr, record) {
-	  return reduceOneParam((function (param, _) {
-	                var match = create$26(param[0]);
-	                return /* tuple */[
-	                        match[0],
-	                        push(match[1], param[1])
-	                      ];
-	              }), /* tuple */[
-	              record,
-	              /* array */[]
-	            ], countRangeArr);
-	}
-
-
-	/* ArrayService-Wonderjs Not a pure module */
-
-	function handleCloneComponent$4(sourceComponent, countRangeArr, state) {
-	  var settingRecord = state[/* settingRecord */0];
+	function handleCloneComponent$3(sourceComponent, countRangeArr, state) {
+	  var settingRecord = state[/* settingRecord */1];
 	  var transformRecord = getRecord$1(state);
 	  var localPosition = getLocalPositionTuple$1(sourceComponent, transformRecord[/* localPositions */3]);
 	  var localRotation = getLocalRotationTuple$1(sourceComponent, transformRecord[/* localRotations */4]);
@@ -18411,7 +19340,7 @@
 	        transformRecord,
 	        /* array */[]
 	      ], countRangeArr);
-	  state[/* transformRecord */11] = mark(sourceComponent, true, match[0]);
+	  state[/* transformRecord */12] = mark(sourceComponent, true, match[0]);
 	  return /* tuple */[
 	          state,
 	          match[1]
@@ -18421,7 +19350,7 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
-	function handleCloneComponent$5(sourceComponent, countRangeArr, record) {
+	function handleCloneComponent$4(sourceComponent, countRangeArr, record) {
 	  return /* tuple */[
 	          record,
 	          countRangeArr.map((function () {
@@ -18495,7 +19424,7 @@
 	  return setIntensity$3(sourceComponent, param[1], setColor$5(sourceComponent, param[0], record));
 	}
 
-	function handleCloneComponent$6(sourceComponent, countRangeArr, record) {
+	function handleCloneComponent$5(sourceComponent, countRangeArr, record) {
 	  return handleCloneComponent$1(sourceComponent, countRangeArr, /* tuple */[
 	              create$27,
 	              _getData$1,
@@ -18521,7 +19450,7 @@
 
 	/* No side effect */
 
-	function handleCloneComponent$7(_, countRangeArr, record) {
+	function handleCloneComponent$6(_, countRangeArr, record) {
 	  return reduceOneParam((function (param, _) {
 	                var match = create$28(param[0]);
 	                return /* tuple */[
@@ -18530,6 +19459,72 @@
 	                      ];
 	              }), /* tuple */[
 	              record,
+	              /* array */[]
+	            ], countRangeArr);
+	}
+
+
+	/* ArrayService-Wonderjs Not a pure module */
+
+	function create$29(state) {
+	  var meshRendererRecord = getRecord$2(state);
+	  var match = generateIndex(meshRendererRecord[/* index */0], meshRendererRecord[/* disposedIndexArray */6]);
+	  state[/* meshRendererRecord */25] = /* record */[
+	    /* index */match[1],
+	    /* buffer */meshRendererRecord[/* buffer */1],
+	    /* drawModes */meshRendererRecord[/* drawModes */2],
+	    /* basicMaterialRenderGameObjectMap */meshRendererRecord[/* basicMaterialRenderGameObjectMap */3],
+	    /* lightMaterialRenderGameObjectMap */meshRendererRecord[/* lightMaterialRenderGameObjectMap */4],
+	    /* gameObjectMap */meshRendererRecord[/* gameObjectMap */5],
+	    /* disposedIndexArray */match[2]
+	  ];
+	  return checkNotExceedMaxCount(getMeshRendererCount(state[/* settingRecord */1]), /* tuple */[
+	              state,
+	              match[0]
+	            ]);
+	}
+
+
+	/* BufferService-Wonderjs Not a pure module */
+
+	function getDrawMode$1(meshRenderer, state) {
+	  return getDrawMode(meshRenderer, getRecord$2(state)[/* drawModes */2]);
+	}
+
+	function setDrawMode$1(meshRenderer, drawMode, state) {
+	  var meshRendererRecord = getRecord$2(state);
+	  var newrecord = caml_array_dup(state);
+	  newrecord[/* meshRendererRecord */25] = /* record */[
+	    /* index */meshRendererRecord[/* index */0],
+	    /* buffer */meshRendererRecord[/* buffer */1],
+	    /* drawModes */setDrawMode(meshRenderer, drawMode, meshRendererRecord[/* drawModes */2]),
+	    /* basicMaterialRenderGameObjectMap */meshRendererRecord[/* basicMaterialRenderGameObjectMap */3],
+	    /* lightMaterialRenderGameObjectMap */meshRendererRecord[/* lightMaterialRenderGameObjectMap */4],
+	    /* gameObjectMap */meshRendererRecord[/* gameObjectMap */5],
+	    /* disposedIndexArray */meshRendererRecord[/* disposedIndexArray */6]
+	  ];
+	  return newrecord;
+	}
+
+
+	/* RecordMeshRendererMainService-Wonderjs Not a pure module */
+
+	var _getData$2 = getDrawMode$1;
+
+	var _setData$2 = setDrawMode$1;
+
+	function handleCloneComponent$7(sourceComponent, countRangeArr, state) {
+	  var drawMode = _getData$2(sourceComponent, state);
+	  return reduceOneParam((function (param, _) {
+	                var match = create$29(param[0]);
+	                var index = match[1];
+	                var state = _setData$2(index, drawMode, match[0]);
+	                return /* tuple */[
+	                        state,
+	                        push(index, param[1])
+	                      ];
+	              }), /* tuple */[
+	              state,
 	              /* array */[]
 	            ], countRangeArr);
 	}
@@ -18581,6 +19576,38 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
+	function getName$2(material, state) {
+	  return getName$1(material, getRecord$4(state)[/* nameMap */11]);
+	}
+
+	function unsafeGetName$2(material, state) {
+	  return unsafeGetName$1(material, getRecord$4(state)[/* nameMap */11]);
+	}
+
+	function setName$2(material, name, state) {
+	  var record = getRecord$4(state);
+	  var newrecord = caml_array_dup(state);
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
+	    /* index */record[/* index */0],
+	    /* buffer */record[/* buffer */1],
+	    /* shaderIndices */record[/* shaderIndices */2],
+	    /* colors */record[/* colors */3],
+	    /* textureIndices */record[/* textureIndices */4],
+	    /* mapUnits */record[/* mapUnits */5],
+	    /* textureCountMap */record[/* textureCountMap */6],
+	    /* defaultColor */record[/* defaultColor */7],
+	    /* gameObjectMap */record[/* gameObjectMap */8],
+	    /* groupCountMap */record[/* groupCountMap */9],
+	    /* disposedIndexArray */record[/* disposedIndexArray */10],
+	    /* nameMap */setName$1(material, name, record[/* nameMap */11]),
+	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */12]
+	  ];
+	  return newrecord;
+	}
+
+
+	/* NameService-Wonderjs Not a pure module */
+
 	function _initDataWhenCreate$1(index, basicMaterialRecord) {
 	  return /* record */[
 	          /* index */basicMaterialRecord[/* index */0],
@@ -18594,16 +19621,17 @@
 	          /* gameObjectMap */basicMaterialRecord[/* gameObjectMap */8],
 	          /* groupCountMap */basicMaterialRecord[/* groupCountMap */9],
 	          /* disposedIndexArray */basicMaterialRecord[/* disposedIndexArray */10],
-	          /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */11]
+	          /* nameMap */basicMaterialRecord[/* nameMap */11],
+	          /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */12]
 	        ];
 	}
 
-	function create$29(state) {
-	  var basicMaterialRecord = getRecord$3(state);
+	function create$30(state) {
+	  var basicMaterialRecord = getRecord$4(state);
 	  var match = generateIndex(basicMaterialRecord[/* index */0], basicMaterialRecord[/* disposedIndexArray */10]);
 	  var index = match[0];
 	  var basicMaterialRecord$1 = _initDataWhenCreate$1(index, basicMaterialRecord);
-	  state[/* basicMaterialRecord */15] = /* record */[
+	  state[/* basicMaterialRecord */16] = /* record */[
 	    /* index */match[1],
 	    /* buffer */basicMaterialRecord$1[/* buffer */1],
 	    /* shaderIndices */basicMaterialRecord$1[/* shaderIndices */2],
@@ -18615,9 +19643,10 @@
 	    /* gameObjectMap */basicMaterialRecord$1[/* gameObjectMap */8],
 	    /* groupCountMap */basicMaterialRecord$1[/* groupCountMap */9],
 	    /* disposedIndexArray */match[2],
-	    /* materialArrayForWorkerInit */basicMaterialRecord$1[/* materialArrayForWorkerInit */11]
+	    /* nameMap */basicMaterialRecord$1[/* nameMap */11],
+	    /* materialArrayForWorkerInit */basicMaterialRecord$1[/* materialArrayForWorkerInit */12]
 	  ];
-	  return checkNotExceedMaxCount(getBasicMaterialCount(state[/* settingRecord */0]), /* tuple */[
+	  return checkNotExceedMaxCount(getBasicMaterialCount(state[/* settingRecord */1]), /* tuple */[
 	              state,
 	              index
 	            ]);
@@ -18626,10 +19655,10 @@
 
 	/* BufferService-Wonderjs Not a pure module */
 
-	function setShaderIndex$1(materialIndex, shaderIndex, state) {
-	  var record = getRecord$3(state);
+	function setShaderIndex$2(materialIndex, shaderIndex, state) {
+	  var record = getRecord$4(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */setShaderIndex(materialIndex, shaderIndex, record[/* shaderIndices */2]),
@@ -18641,7 +19670,8 @@
 	    /* gameObjectMap */record[/* gameObjectMap */8],
 	    /* groupCountMap */record[/* groupCountMap */9],
 	    /* disposedIndexArray */record[/* disposedIndexArray */10],
-	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */11]
+	    /* nameMap */record[/* nameMap */11],
+	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */12]
 	  ];
 	  return newrecord;
 	}
@@ -18649,34 +19679,37 @@
 
 	/* ShaderIndicesService-Wonderjs Not a pure module */
 
-	function _getData$2(sourceComponent, state) {
+	function _getData$3(sourceComponent, state) {
 	  return /* tuple */[
+	          getName$2(sourceComponent, state),
 	          getColor$7(sourceComponent, state),
 	          getMap(sourceComponent, state)
 	        ];
 	}
 
-	function _setData$2(sourceComponent, param, state) {
-	  var mapOption = param[1];
-	  var state$1 = setColor$3(sourceComponent, param[0], state);
+	function _setData$3(sourceComponent, param, state) {
+	  var mapOption = param[2];
+	  var nameOption = param[0];
+	  var state$1 = nameOption !== undefined ? setName$2(sourceComponent, nameOption, state) : state;
+	  var state$2 = setColor$3(sourceComponent, param[1], state$1);
 	  if (mapOption !== undefined) {
-	    return setMap(sourceComponent, mapOption, state$1);
+	    return setMap(sourceComponent, mapOption, state$2);
 	  } else {
-	    return state$1;
+	    return state$2;
 	  }
 	}
 
 	function handleCloneComponent$8(sourceComponent, countRangeArr, isShareMaterial, state) {
-	  var match = getRecord$3(state);
+	  var match = getRecord$4(state);
 	  return handleCloneComponent$9(/* tuple */[
 	              sourceComponent,
 	              countRangeArr,
 	              isShareMaterial
 	            ], /* tuple */[
-	              create$29,
-	              _getData$2,
-	              _setData$2,
-	              setShaderIndex$1
+	              create$30,
+	              _getData$3,
+	              _setData$3,
+	              setShaderIndex$2
 	            ], /* tuple */[
 	              match[/* shaderIndices */2],
 	              state
@@ -18685,6 +19718,43 @@
 
 
 	/* CloneMaterialMainService-Wonderjs Not a pure module */
+
+	function getName$3(material, state) {
+	  return getName$1(material, getRecord$5(state)[/* nameMap */16]);
+	}
+
+	function unsafeGetName$3(material, state) {
+	  return unsafeGetName$1(material, getRecord$5(state)[/* nameMap */16]);
+	}
+
+	function setName$3(material, name, state) {
+	  var record = getRecord$5(state);
+	  var newrecord = caml_array_dup(state);
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
+	    /* index */record[/* index */0],
+	    /* buffer */record[/* buffer */1],
+	    /* shaderIndices */record[/* shaderIndices */2],
+	    /* diffuseColors */record[/* diffuseColors */3],
+	    /* specularColors */record[/* specularColors */4],
+	    /* shininess */record[/* shininess */5],
+	    /* textureIndices */record[/* textureIndices */6],
+	    /* diffuseMapUnits */record[/* diffuseMapUnits */7],
+	    /* specularMapUnits */record[/* specularMapUnits */8],
+	    /* textureCountMap */record[/* textureCountMap */9],
+	    /* defaultDiffuseColor */record[/* defaultDiffuseColor */10],
+	    /* defaultSpecularColor */record[/* defaultSpecularColor */11],
+	    /* defaultShininess */record[/* defaultShininess */12],
+	    /* gameObjectMap */record[/* gameObjectMap */13],
+	    /* groupCountMap */record[/* groupCountMap */14],
+	    /* disposedIndexArray */record[/* disposedIndexArray */15],
+	    /* nameMap */setName$1(material, name, record[/* nameMap */16]),
+	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */17]
+	  ];
+	  return newrecord;
+	}
+
+
+	/* NameService-Wonderjs Not a pure module */
 
 	function _initDataWhenCreate$2(index, lightMaterialRecord) {
 	  return /* record */[
@@ -18709,12 +19779,12 @@
 	        ];
 	}
 
-	function create$30(state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	function create$31(state) {
+	  var lightMaterialRecord = getRecord$5(state);
 	  var match = generateIndex(lightMaterialRecord[/* index */0], lightMaterialRecord[/* disposedIndexArray */15]);
 	  var index = match[0];
 	  var lightMaterialRecord$1 = _initDataWhenCreate$2(index, lightMaterialRecord);
-	  state[/* lightMaterialRecord */16] = /* record */[
+	  state[/* lightMaterialRecord */17] = /* record */[
 	    /* index */match[1],
 	    /* buffer */lightMaterialRecord$1[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord$1[/* shaderIndices */2],
@@ -18734,7 +19804,7 @@
 	    /* nameMap */lightMaterialRecord$1[/* nameMap */16],
 	    /* materialArrayForWorkerInit */lightMaterialRecord$1[/* materialArrayForWorkerInit */17]
 	  ];
-	  return checkNotExceedMaxCount(getBasicMaterialCount(state[/* settingRecord */0]), /* tuple */[
+	  return checkNotExceedMaxCount(getBasicMaterialCount(state[/* settingRecord */1]), /* tuple */[
 	              state,
 	              index
 	            ]);
@@ -18743,10 +19813,10 @@
 
 	/* BufferService-Wonderjs Not a pure module */
 
-	function setShaderIndex$2(materialIndex, shaderIndex, state) {
-	  var record = getRecord$4(state);
+	function setShaderIndex$3(materialIndex, shaderIndex, state) {
+	  var record = getRecord$5(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */setShaderIndex(materialIndex, shaderIndex, record[/* shaderIndices */2]),
@@ -18772,8 +19842,9 @@
 
 	/* ShaderIndicesService-Wonderjs Not a pure module */
 
-	function _getData$3(sourceComponent, state) {
+	function _getData$4(sourceComponent, state) {
 	  return /* tuple */[
+	          getName$3(sourceComponent, state),
 	          getDiffuseColor$2(sourceComponent, state),
 	          getSpecularColor$2(sourceComponent, state),
 	          getShininess$2(sourceComponent, state),
@@ -18782,29 +19853,31 @@
 	        ];
 	}
 
-	function _setData$3(sourceComponent, param, state) {
-	  var specularMapOption = param[4];
-	  var diffuseMapOption = param[3];
-	  var state$1 = setShininess$1(sourceComponent, param[2], setSpecularColor$1(sourceComponent, param[1], setDiffuseColor$1(sourceComponent, param[0], state)));
-	  var state$2 = diffuseMapOption !== undefined ? setDiffuseMap(sourceComponent, diffuseMapOption, state$1) : state$1;
+	function _setData$4(sourceComponent, param, state) {
+	  var specularMapOption = param[5];
+	  var diffuseMapOption = param[4];
+	  var nameOption = param[0];
+	  var state$1 = nameOption !== undefined ? setName$3(sourceComponent, nameOption, state) : state;
+	  var state$2 = setShininess$1(sourceComponent, param[3], setSpecularColor$1(sourceComponent, param[2], setDiffuseColor$1(sourceComponent, param[1], state$1)));
+	  var state$3 = diffuseMapOption !== undefined ? setDiffuseMap(sourceComponent, diffuseMapOption, state$2) : state$2;
 	  if (specularMapOption !== undefined) {
-	    return setSpecularMap(sourceComponent, specularMapOption, state$2);
+	    return setSpecularMap(sourceComponent, specularMapOption, state$3);
 	  } else {
-	    return state$2;
+	    return state$3;
 	  }
 	}
 
 	function handleCloneComponent$10(sourceComponent, countRangeArr, isShareMaterial, state) {
-	  var match = getRecord$4(state);
+	  var match = getRecord$5(state);
 	  return handleCloneComponent$9(/* tuple */[
 	              sourceComponent,
 	              countRangeArr,
 	              isShareMaterial
 	            ], /* tuple */[
-	              create$30,
-	              _getData$3,
-	              _setData$3,
-	              setShaderIndex$2
+	              create$31,
+	              _getData$4,
+	              _setData$4,
+	              setShaderIndex$3
 	            ], /* tuple */[
 	              match[/* shaderIndices */2],
 	              state
@@ -18817,51 +19890,55 @@
 	function _setDefaultValue(index, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */1],
-	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */2],
-	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */3],
-	          /* dirtyArray */record[/* dirtyArray */4],
-	          /* distanceMap */set$1(index, 10, record[/* distanceMap */5]),
-	          /* minDistanceMap */set$1(index, 0.05, record[/* minDistanceMap */6]),
-	          /* phiMap */set$1(index, Math.PI / 2, record[/* phiMap */7]),
-	          /* thetaMap */set$1(index, Math.PI / 2, record[/* thetaMap */8]),
-	          /* thetaMarginMap */set$1(index, 0.05, record[/* thetaMarginMap */9]),
+	          /* pointDownEventHandleFuncMap */record[/* pointDownEventHandleFuncMap */1],
+	          /* pointUpEventHandleFuncMap */record[/* pointUpEventHandleFuncMap */2],
+	          /* pointDragEventHandleFuncMap */record[/* pointDragEventHandleFuncMap */3],
+	          /* pointScaleEventHandleFuncMap */record[/* pointScaleEventHandleFuncMap */4],
+	          /* keydownEventHandleFuncMap */record[/* keydownEventHandleFuncMap */5],
+	          /* dirtyArray */record[/* dirtyArray */6],
+	          /* distanceMap */set$1(index, 10, record[/* distanceMap */7]),
+	          /* minDistanceMap */set$1(index, 0.05, record[/* minDistanceMap */8]),
+	          /* phiMap */set$1(index, Math.PI / 2, record[/* phiMap */9]),
+	          /* thetaMap */set$1(index, Math.PI / 2, record[/* thetaMap */10]),
+	          /* thetaMarginMap */set$1(index, 0.05, record[/* thetaMarginMap */11]),
 	          /* targetMap */set$1(index, /* tuple */[
 	                0,
 	                0,
 	                0
-	              ], record[/* targetMap */10]),
-	          /* moveSpeedXMap */set$1(index, 1, record[/* moveSpeedXMap */11]),
-	          /* moveSpeedYMap */set$1(index, 1, record[/* moveSpeedYMap */12]),
-	          /* rotateSpeedMap */set$1(index, 1, record[/* rotateSpeedMap */13]),
-	          /* wheelSpeedMap */set$1(index, 1, record[/* wheelSpeedMap */14]),
-	          /* gameObjectMap */record[/* gameObjectMap */15],
-	          /* disposedIndexArray */record[/* disposedIndexArray */16]
+	              ], record[/* targetMap */12]),
+	          /* moveSpeedXMap */set$1(index, 1, record[/* moveSpeedXMap */13]),
+	          /* moveSpeedYMap */set$1(index, 1, record[/* moveSpeedYMap */14]),
+	          /* rotateSpeedMap */set$1(index, 1, record[/* rotateSpeedMap */15]),
+	          /* wheelSpeedMap */set$1(index, 1, record[/* wheelSpeedMap */16]),
+	          /* gameObjectMap */record[/* gameObjectMap */17],
+	          /* disposedIndexArray */record[/* disposedIndexArray */18]
 	        ];
 	}
 
-	function create$31(record) {
-	  var match = generateIndex(record[/* index */0], record[/* disposedIndexArray */16]);
+	function create$32(record) {
+	  var match = generateIndex(record[/* index */0], record[/* disposedIndexArray */18]);
 	  var index = match[0];
 	  var record$1 = _setDefaultValue(index, record);
 	  return /* tuple */[
 	          /* record */[
 	            /* index */match[1],
-	            /* pointDragEventHandleFuncMap */record$1[/* pointDragEventHandleFuncMap */1],
-	            /* pointScaleEventHandleFuncMap */record$1[/* pointScaleEventHandleFuncMap */2],
-	            /* keydownEventHandleFuncMap */record$1[/* keydownEventHandleFuncMap */3],
-	            /* dirtyArray */addToDirtyArray(index, record[/* dirtyArray */4]),
-	            /* distanceMap */record$1[/* distanceMap */5],
-	            /* minDistanceMap */record$1[/* minDistanceMap */6],
-	            /* phiMap */record$1[/* phiMap */7],
-	            /* thetaMap */record$1[/* thetaMap */8],
-	            /* thetaMarginMap */record$1[/* thetaMarginMap */9],
-	            /* targetMap */record$1[/* targetMap */10],
-	            /* moveSpeedXMap */record$1[/* moveSpeedXMap */11],
-	            /* moveSpeedYMap */record$1[/* moveSpeedYMap */12],
-	            /* rotateSpeedMap */record$1[/* rotateSpeedMap */13],
-	            /* wheelSpeedMap */record$1[/* wheelSpeedMap */14],
-	            /* gameObjectMap */record$1[/* gameObjectMap */15],
+	            /* pointDownEventHandleFuncMap */record$1[/* pointDownEventHandleFuncMap */1],
+	            /* pointUpEventHandleFuncMap */record$1[/* pointUpEventHandleFuncMap */2],
+	            /* pointDragEventHandleFuncMap */record$1[/* pointDragEventHandleFuncMap */3],
+	            /* pointScaleEventHandleFuncMap */record$1[/* pointScaleEventHandleFuncMap */4],
+	            /* keydownEventHandleFuncMap */record$1[/* keydownEventHandleFuncMap */5],
+	            /* dirtyArray */addToDirtyArray(index, record[/* dirtyArray */6]),
+	            /* distanceMap */record$1[/* distanceMap */7],
+	            /* minDistanceMap */record$1[/* minDistanceMap */8],
+	            /* phiMap */record$1[/* phiMap */9],
+	            /* thetaMap */record$1[/* thetaMap */10],
+	            /* thetaMarginMap */record$1[/* thetaMarginMap */11],
+	            /* targetMap */record$1[/* targetMap */12],
+	            /* moveSpeedXMap */record$1[/* moveSpeedXMap */13],
+	            /* moveSpeedYMap */record$1[/* moveSpeedYMap */14],
+	            /* rotateSpeedMap */record$1[/* rotateSpeedMap */15],
+	            /* wheelSpeedMap */record$1[/* wheelSpeedMap */16],
+	            /* gameObjectMap */record$1[/* gameObjectMap */17],
 	            /* disposedIndexArray */match[2]
 	          ],
 	          index
@@ -18883,7 +19960,7 @@
 	  var rotateSpeed = unsafeGetRotateSpeed(sourceComponent, record);
 	  var wheelSpeed = unsafeGetWheelSpeed(sourceComponent, record);
 	  return reduceOneParam((function (param, _) {
-	                var match = create$31(param[0]);
+	                var match = create$32(param[0]);
 	                var index = match[1];
 	                return /* tuple */[
 	                        setWheelSpeed(index, wheelSpeed, setRotateSpeed(index, rotateSpeed, setMoveSpeedY(index, moveSpeedY, setMoveSpeedX(index, moveSpeedX, setTarget(index, target, setThetaMargin(index, thetaMargin, setTheta(index, theta, setPhi(index, phi, setMinDistance(index, minDistance, setDistance(index, distance, match[0])))))))))),
@@ -18898,7 +19975,7 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
-	function create$32(record) {
+	function create$33(record) {
 	  var match = generateIndex(record[/* index */0], record[/* disposedIndexArray */8]);
 	  var index = match[0];
 	  return /* tuple */[
@@ -18926,7 +20003,7 @@
 	  var fovy = unsafeGetFovy(sourceComponent, record);
 	  var aspect = unsafeGetAspect(sourceComponent, record);
 	  return reduceOneParam((function (param, _) {
-	                var match = create$32(param[0]);
+	                var match = create$33(param[0]);
 	                var index = match[1];
 	                return /* tuple */[
 	                        setAspect(index, aspect, setFovy(index, fovy, setFar(index, far, setNear(index, near, match[0])))),
@@ -18942,62 +20019,60 @@
 	/* ArrayService-Wonderjs Not a pure module */
 
 	function cloneBasicCameraViewComponent(sourceComponent, countRangeArr, state) {
-	  var basicCameraViewRecord = state[/* basicCameraViewRecord */13];
-	  var match = handleCloneComponent$7(sourceComponent, countRangeArr, basicCameraViewRecord);
+	  var basicCameraViewRecord = state[/* basicCameraViewRecord */14];
+	  var match = handleCloneComponent$6(sourceComponent, countRangeArr, basicCameraViewRecord);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* basicCameraViewRecord */13] = match[0], newrecord),
+	          (newrecord[/* basicCameraViewRecord */14] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
 	function clonePerspectiveCameraProjectionComponent(sourceComponent, countRangeArr, state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  var match = handleCloneComponent$12(sourceComponent, countRangeArr, perspectiveCameraProjectionRecord);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* perspectiveCameraProjectionRecord */14] = match[0], newrecord),
+	          (newrecord[/* perspectiveCameraProjectionRecord */15] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
 	function cloneArcballCameraControllerComponent(sourceComponent, countRangeArr, state) {
-	  var match = handleCloneComponent$11(sourceComponent, countRangeArr, state[/* arcballCameraControllerRecord */25]);
+	  var match = handleCloneComponent$11(sourceComponent, countRangeArr, state[/* arcballCameraControllerRecord */26]);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* arcballCameraControllerRecord */25] = match[0], newrecord),
+	          (newrecord[/* arcballCameraControllerRecord */26] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
-	var cloneTransformComponent = handleCloneComponent$4;
+	var cloneTransformComponent = handleCloneComponent$3;
 
 	function cloneMeshRendererComponent(sourceComponent, countRangeArr, state) {
-	  var meshRendererRecord = state[/* meshRendererRecord */24];
-	  var match = handleCloneComponent$3(sourceComponent, countRangeArr, meshRendererRecord);
-	  var newrecord = caml_array_dup(state);
+	  var match = handleCloneComponent$7(sourceComponent, countRangeArr, state);
 	  return /* tuple */[
-	          (newrecord[/* meshRendererRecord */24] = match[0], newrecord),
+	          match[0],
 	          match[1]
 	        ];
 	}
 
 	function cloneBoxGeometryComponent(sourceComponent, countRangeArr, state) {
-	  var boxGeometryRecord = state[/* boxGeometryRecord */22];
+	  var boxGeometryRecord = state[/* boxGeometryRecord */23];
 	  var match = handleCloneComponent$2(sourceComponent, countRangeArr, boxGeometryRecord);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* boxGeometryRecord */22] = match[0], newrecord),
+	          (newrecord[/* boxGeometryRecord */23] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
 	function cloneCustomGeometryComponent(sourceComponent, countRangeArr, state) {
-	  var customGeometryRecord = state[/* customGeometryRecord */23];
-	  var match = handleCloneComponent$5(sourceComponent, countRangeArr, customGeometryRecord);
+	  var customGeometryRecord = state[/* customGeometryRecord */24];
+	  var match = handleCloneComponent$4(sourceComponent, countRangeArr, customGeometryRecord);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* customGeometryRecord */23] = match[0], newrecord),
+	          (newrecord[/* customGeometryRecord */24] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
@@ -19011,21 +20086,21 @@
 	}
 
 	function cloneDirectionLightComponent(sourceComponent, countRangeArr, state) {
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  var match = handleCloneComponent$6(sourceComponent, countRangeArr, directionLightRecord);
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  var match = handleCloneComponent$5(sourceComponent, countRangeArr, directionLightRecord);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* directionLightRecord */20] = match[0], newrecord),
+	          (newrecord[/* directionLightRecord */21] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
 	function clonePointLightComponent(sourceComponent, countRangeArr, state) {
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var match = handleCloneComponent(sourceComponent, countRangeArr, pointLightRecord);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* pointLightRecord */21] = match[0], newrecord),
+	          (newrecord[/* pointLightRecord */22] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
@@ -19068,10 +20143,10 @@
 	}
 
 	function _batchAddBasicCameraViewComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var basicCameraViewRecord = state[/* basicCameraViewRecord */13];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var basicCameraViewRecord = state[/* basicCameraViewRecord */14];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicCameraViewRecord */13] = _batchAddComponent(/* tuple */[
+	  newrecord[/* basicCameraViewRecord */14] = _batchAddComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* basicCameraViewMap */23]
@@ -19080,10 +20155,10 @@
 	}
 
 	function _batchAddPerspectiveCameraProjectionComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = _batchAddComponent(/* tuple */[
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = _batchAddComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* perspectiveCameraProjectionMap */24]
@@ -19092,20 +20167,20 @@
 	}
 
 	function _batchAddArcballCameraControllerComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = _batchAddComponent(/* tuple */[
+	  newrecord[/* arcballCameraControllerRecord */26] = _batchAddComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* arcballCameraControllerMap */25]
-	      ], handleAddComponent$11, state[/* arcballCameraControllerRecord */25]);
+	      ], handleAddComponent$11, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function _batchAddTransformComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* transformRecord */11] = _batchAddComponent(/* tuple */[
+	  newrecord[/* transformRecord */12] = _batchAddComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* transformMap */22]
@@ -19114,7 +20189,7 @@
 	}
 
 	function _batchAddMeshRendererComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return _batchAddComponentWithState(/* tuple */[
 	              uidArr,
 	              componentArr,
@@ -19161,9 +20236,9 @@
 	}
 
 	function batchAddBoxGeometryComponentForClone(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* boxGeometryRecord */22] = _batchAddSharableGeometryComponent(/* tuple */[
+	  newrecord[/* boxGeometryRecord */23] = _batchAddSharableGeometryComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        /* tuple */[
@@ -19174,7 +20249,7 @@
 	        increaseGroupCount,
 	        handleAddComponent$2,
 	        _batchAddBoxGeometryComponentDataForClone
-	      ], getRecord$2(state));
+	      ], getRecord$3(state));
 	  return newrecord;
 	}
 
@@ -19186,9 +20261,9 @@
 	}
 
 	function _batchAddCustomGeometryComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* customGeometryRecord */23] = _batchAddSharableGeometryComponent(/* tuple */[
+	  newrecord[/* customGeometryRecord */24] = _batchAddSharableGeometryComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        /* tuple */[
@@ -19199,7 +20274,7 @@
 	        increaseGroupCount$4,
 	        handleAddComponent$5,
 	        _batchAddCustomGeometryComponentData
-	      ], getRecord$5(state));
+	      ], getRecord$6(state));
 	  return newrecord;
 	}
 
@@ -19211,39 +20286,39 @@
 	            ], funcTuple, record);
 	}
 
-	function batchAddBasicMaterialComponentForClone(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	function _batchAddBasicMaterialComponent(uidArr, componentArr, state) {
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicMaterialRecord */15] = _batchAddMaterialComponent(/* tuple */[
+	  newrecord[/* basicMaterialRecord */16] = _batchAddMaterialComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* basicMaterialMap */27]
 	      ], /* tuple */[
 	        increaseGroupCount$2,
 	        handleAddComponent$3
-	      ], getRecord$3(state));
+	      ], getRecord$4(state));
 	  return newrecord;
 	}
 
 	function _batchAddLightMaterialComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = _batchAddMaterialComponent(/* tuple */[
+	  newrecord[/* lightMaterialRecord */17] = _batchAddMaterialComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* lightMaterialMap */28]
 	      ], /* tuple */[
 	        increaseGroupCount$3,
 	        handleAddComponent$4
-	      ], getRecord$4(state));
+	      ], getRecord$5(state));
 	  return newrecord;
 	}
 
 	function _batchAddDirectionLightComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var directionLightRecord = state[/* directionLightRecord */20];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var directionLightRecord = state[/* directionLightRecord */21];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* directionLightRecord */20] = _batchAddComponent(/* tuple */[
+	  newrecord[/* directionLightRecord */21] = _batchAddComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* directionLightMap */31]
@@ -19252,10 +20327,10 @@
 	}
 
 	function _batchAddPointLightComponent(uidArr, componentArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = _batchAddComponent(/* tuple */[
+	  newrecord[/* pointLightRecord */22] = _batchAddComponent(/* tuple */[
 	        uidArr,
 	        componentArr,
 	        gameObjectRecord[/* pointLightMap */32]
@@ -19275,6 +20350,8 @@
 
 	var batchAddCustomGeometryComponentForClone = _batchAddCustomGeometryComponent;
 
+	var batchAddBasicMaterialComponentForClone = _batchAddBasicMaterialComponent;
+
 	var batchAddLightMaterialComponentForClone = _batchAddLightMaterialComponent;
 
 	var batchAddDirectionLightComponentForClone = _batchAddDirectionLightComponent;
@@ -19290,6 +20367,8 @@
 	var batchAddPerspectiveCameraProjectionComponentForCreate = _batchAddPerspectiveCameraProjectionComponent;
 
 	var batchAddArcballCameraControllerComponentForCreate = _batchAddArcballCameraControllerComponent;
+
+	var batchAddBasicMaterialComponentForCreate = _batchAddBasicMaterialComponent;
 
 	var batchAddLightMaterialComponentForCreate = _batchAddLightMaterialComponent;
 
@@ -19313,7 +20392,7 @@
 	}
 
 	function _cloneGeometryComponent(uid, countRangeArr, clonedGameObjectArr, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var boxGeometryType = getBoxGeometryType(/* () */0);
 	  var customGeometryType = getCustomGeometryType(/* () */0);
 	  var match = getGeometryComponentData(uid, gameObjectRecord);
@@ -19346,7 +20425,7 @@
 	  var clonedGameObjectArr = param[2];
 	  var countRangeArr = param[1];
 	  var uid = param[0];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return _clone$1(/* tuple */[
 	              uid,
 	              getPointLightComponent(uid, gameObjectRecord),
@@ -19438,7 +20517,7 @@
 
 	function _createGameObjectArr(countRangeArr, gameObjectRecord) {
 	  return reduceOneParam((function (param, _) {
-	                var match = create$12(param[0]);
+	                var match = create$13(param[0]);
 	                return /* tuple */[
 	                        match[0],
 	                        push(match[1], param[1])
@@ -19458,11 +20537,11 @@
 	function _clone(param, isShareMaterial, state) {
 	  var countRangeArr = param[2];
 	  var transform = param[1];
-	  var match = _createGameObjectArr(countRangeArr, state[/* gameObjectRecord */10]);
+	  var match = _createGameObjectArr(countRangeArr, state[/* gameObjectRecord */11]);
 	  var clonedGameObjectArr = match[1];
 	  var totalClonedGameObjectArr = push(clonedGameObjectArr, param[4]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* gameObjectRecord */10] = match[0];
+	  newrecord[/* gameObjectRecord */11] = match[0];
 	  var match$1 = clone$1(/* tuple */[
 	        param[0],
 	        transform,
@@ -19486,17 +20565,17 @@
 	function clone(uid, count, isShareMaterial, state) {
 	  requireCheck((function () {
 	          test(buildAssertMessage("not clone sourceInstance gameObject", "do"), (function () {
-	                  return assertFalse(hasSourceInstanceComponent(uid, state[/* gameObjectRecord */10]));
+	                  return assertFalse(hasSourceInstanceComponent(uid, state[/* gameObjectRecord */11]));
 	                }));
 	          return test(buildAssertMessage("not clone objectInstance gameObject", "do"), (function () {
-	                        return assertFalse(hasObjectInstanceComponent(uid, state[/* gameObjectRecord */10]));
+	                        return assertFalse(hasObjectInstanceComponent(uid, state[/* gameObjectRecord */11]));
 	                      }));
 	        }), getIsDebug(stateData));
 	  var totalClonedGameObjectArr = /* array */[];
 	  return /* tuple */[
 	          _clone(/* tuple */[
 	                uid,
-	                unsafeGet$1(getTransformComponent(uid, state[/* gameObjectRecord */10])),
+	                unsafeGet$1(getTransformComponent(uid, state[/* gameObjectRecord */11])),
 	                range$1(0, count - 1 | 0),
 	                /* array */[],
 	                totalClonedGameObjectArr
@@ -19525,7 +20604,13 @@
 
 	var isAlive$6 = isComponentAlive;
 
-	var disposeData$1 = disposeSparseMapData;
+	function _deleteBySwapGameObjectMapData(mappedSourceIndex, lastComponentIndex, gameObjectMap) {
+	  var lastGameObject = unsafeGet$2(lastComponentIndex, gameObjectMap);
+	  undefined_to_opt(set$1(mappedSourceIndex, lastGameObject, set$1(lastComponentIndex, unsafeGet$2(mappedSourceIndex, gameObjectMap), gameObjectMap)).pop());
+	  return gameObjectMap;
+	}
+
+	var disposeData$1 = _deleteBySwapGameObjectMapData;
 
 	function _swapIndex(mappedSourceIndex, lastComponentIndex, mappedIndexMap) {
 	  var match = mappedSourceIndex >= lastComponentIndex;
@@ -19569,7 +20654,7 @@
 
 	/* Contract-WonderLog Not a pure module */
 
-	function getMappedIndexMap(param) {
+	function getMappedIndexMap$1(param) {
 	  return param[/* mappedIndexMap */8];
 	}
 
@@ -19577,15 +20662,15 @@
 	/* No side effect */
 
 	function isAlive$5(light, record) {
-	  return isAlive$6(light, getMappedIndexMap(record));
+	  return isAlive$6(light, getMappedIndexMap$1(record));
 	}
 
 	function _disposeData$2(sourceIndex, record) {
 	  var mappedIndexMap = record[/* mappedIndexMap */8];
 	  var index = record[/* index */0];
-	  var gameObjectMap = disposeData$1(sourceIndex, record[/* gameObjectMap */9]);
 	  var lastComponentIndex = index - 1 | 0;
 	  var mappedSourceIndex = getMappedIndex(sourceIndex, mappedIndexMap);
+	  var gameObjectMap = disposeData$1(mappedSourceIndex, lastComponentIndex, record[/* gameObjectMap */9]);
 	  return /* record */[
 	          /* index */index - 1 | 0,
 	          /* buffer */record[/* buffer */1],
@@ -19653,16 +20738,18 @@
 	/* DisposeLightService-Wonderjs Not a pure module */
 
 	function isAlive$7(meshRenderer, param) {
-	  return isAlive$1(meshRenderer, param[/* disposedIndexArray */4]);
+	  return isAlive$1(meshRenderer, param[/* disposedIndexArray */6]);
 	}
 
 	function _disposeData$3(meshRenderer, record) {
 	  return /* record */[
 	          /* index */record[/* index */0],
-	          /* basicMaterialRenderGameObjectMap */disposeSparseMapData(meshRenderer, record[/* basicMaterialRenderGameObjectMap */1]),
-	          /* lightMaterialRenderGameObjectMap */disposeSparseMapData(meshRenderer, record[/* lightMaterialRenderGameObjectMap */2]),
-	          /* gameObjectMap */disposeSparseMapData(meshRenderer, record[/* gameObjectMap */3]),
-	          /* disposedIndexArray */record[/* disposedIndexArray */4]
+	          /* buffer */record[/* buffer */1],
+	          /* drawModes */deleteAndResetUint8(meshRenderer, getDefaultDrawMode(/* () */0), record[/* drawModes */2]),
+	          /* basicMaterialRenderGameObjectMap */disposeSparseMapData(meshRenderer, record[/* basicMaterialRenderGameObjectMap */3]),
+	          /* lightMaterialRenderGameObjectMap */disposeSparseMapData(meshRenderer, record[/* lightMaterialRenderGameObjectMap */4]),
+	          /* gameObjectMap */disposeSparseMapData(meshRenderer, record[/* gameObjectMap */5]),
+	          /* disposedIndexArray */record[/* disposedIndexArray */6]
 	        ];
 	}
 
@@ -19673,16 +20760,20 @@
 	  var match = meshRendererArray.length;
 	  if (match !== 0) {
 	    var record_000 = /* index */record[/* index */0];
-	    var record_001 = /* basicMaterialRenderGameObjectMap */record[/* basicMaterialRenderGameObjectMap */1];
-	    var record_002 = /* lightMaterialRenderGameObjectMap */record[/* lightMaterialRenderGameObjectMap */2];
-	    var record_003 = /* gameObjectMap */record[/* gameObjectMap */3];
-	    var record_004 = /* disposedIndexArray */record[/* disposedIndexArray */4].concat(meshRendererArray);
+	    var record_001 = /* buffer */record[/* buffer */1];
+	    var record_002 = /* drawModes */record[/* drawModes */2];
+	    var record_003 = /* basicMaterialRenderGameObjectMap */record[/* basicMaterialRenderGameObjectMap */3];
+	    var record_004 = /* lightMaterialRenderGameObjectMap */record[/* lightMaterialRenderGameObjectMap */4];
+	    var record_005 = /* gameObjectMap */record[/* gameObjectMap */5];
+	    var record_006 = /* disposedIndexArray */record[/* disposedIndexArray */6].concat(meshRendererArray);
 	    var record$1 = /* record */[
 	      record_000,
 	      record_001,
 	      record_002,
 	      record_003,
-	      record_004
+	      record_004,
+	      record_005,
+	      record_006
 	    ];
 	    return reduceOneParam((function (record, meshRenderer) {
 	                  return _disposeData$3(meshRenderer, record);
@@ -19695,23 +20786,16 @@
 
 	/* Contract-WonderLog Not a pure module */
 
-	function getMappedIndexMap$1(param) {
-	  return param[/* mappedIndexMap */4];
-	}
-
-
-	/* No side effect */
-
 	function isAlive$8(light, record) {
-	  return isAlive$6(light, getMappedIndexMap$1(record));
+	  return isAlive$6(light, getMappedIndexMap(record));
 	}
 
 	function _disposeData$4(sourceIndex, record) {
 	  var mappedIndexMap = record[/* mappedIndexMap */4];
 	  var index = record[/* index */0];
-	  var gameObjectMap = disposeData$1(sourceIndex, record[/* gameObjectMap */5]);
 	  var lastComponentIndex = index - 1 | 0;
 	  var mappedSourceIndex = getMappedIndex(sourceIndex, mappedIndexMap);
+	  var gameObjectMap = disposeData$1(mappedSourceIndex, lastComponentIndex, record[/* gameObjectMap */5]);
 	  return /* record */[
 	          /* index */index - 1 | 0,
 	          /* buffer */record[/* buffer */1],
@@ -19767,9 +20851,9 @@
 
 	function handleBatchDisposeComponent$6(geometryArray, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAliveWithBatchDispose(geometryArray, isAlive$9, getRecord$2(state));
+	          return checkComponentShouldAliveWithBatchDispose(geometryArray, isAlive$9, getRecord$3(state));
 	        }), getIsDebug(stateData));
-	  var boxGeometryRecord = getRecord$2(state);
+	  var boxGeometryRecord = getRecord$3(state);
 	  var match = reduceOneParam((function (param, geometry) {
 	          var boxGeometryRecord = param[1];
 	          var geometryNeedDisposeVboBufferArr = param[0];
@@ -19791,7 +20875,7 @@
 	      ], geometryArray);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* boxGeometryRecord */22] = match[1], newrecord),
+	          (newrecord[/* boxGeometryRecord */23] = match[1], newrecord),
 	          match[0]
 	        ];
 	}
@@ -19833,7 +20917,8 @@
 	          /* gameObjectMap */match[2],
 	          /* groupCountMap */match[1],
 	          /* disposedIndexArray */basicMaterialRecord[/* disposedIndexArray */10],
-	          /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */11]
+	          /* nameMap */disposeSparseMapData(material, basicMaterialRecord[/* nameMap */11]),
+	          /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */12]
 	        ];
 	}
 
@@ -19855,18 +20940,19 @@
 	            /* gameObjectMap */init[/* gameObjectMap */8],
 	            /* groupCountMap */init[/* groupCountMap */9],
 	            /* disposedIndexArray */addDisposeIndex(material, disposedIndexArray),
-	            /* materialArrayForWorkerInit */init[/* materialArrayForWorkerInit */11]
+	            /* nameMap */init[/* nameMap */11],
+	            /* materialArrayForWorkerInit */init[/* materialArrayForWorkerInit */12]
 	          ];
 	  }
 	}
 
 	function handleBatchDisposeComponent$7(materialArray, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAliveWithBatchDispose(materialArray, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAliveWithBatchDispose(materialArray, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
-	  var basicMaterialRecord = getRecord$3(state);
+	  var basicMaterialRecord = getRecord$4(state);
 	  var disposedIndexArray = basicMaterialRecord[/* disposedIndexArray */10];
-	  var textureCountPerMaterial = getTextureCountPerMaterial(state[/* settingRecord */0]);
+	  var textureCountPerMaterial = getTextureCountPerMaterial(state[/* settingRecord */1]);
 	  reduceOneParam((function (basicMaterialRecord, material) {
 	          return _handleDispose(disposedIndexArray, material, textureCountPerMaterial, basicMaterialRecord);
 	        }), basicMaterialRecord, materialArray);
@@ -19939,11 +21025,11 @@
 
 	function handleBatchDisposeComponent$8(materialArray, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAliveWithBatchDispose(materialArray, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAliveWithBatchDispose(materialArray, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var disposedIndexArray = lightMaterialRecord[/* disposedIndexArray */15];
-	  var textureCountPerMaterial = getTextureCountPerMaterial(state[/* settingRecord */0]);
+	  var textureCountPerMaterial = getTextureCountPerMaterial(state[/* settingRecord */1]);
 	  reduceOneParam((function (lightMaterialRecord, material) {
 	          return _handleDispose$1(disposedIndexArray, material, textureCountPerMaterial, lightMaterialRecord);
 	        }), lightMaterialRecord, materialArray);
@@ -19988,9 +21074,9 @@
 
 	function handleBatchDisposeComponent$9(geometryArray, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAliveWithBatchDispose(geometryArray, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAliveWithBatchDispose(geometryArray, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
-	  var customGeometryRecord = getRecord$5(state);
+	  var customGeometryRecord = getRecord$6(state);
 	  var match = reduceOneParam((function (param, geometry) {
 	          var customGeometryRecord = param[1];
 	          var geometryNeedDisposeVboBufferArr = param[0];
@@ -20012,7 +21098,7 @@
 	      ], geometryArray);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* customGeometryRecord */23] = match[1], newrecord),
+	          (newrecord[/* customGeometryRecord */24] = match[1], newrecord),
 	          match[0]
 	        ];
 	}
@@ -20130,9 +21216,9 @@
 	}
 
 	function _disposeData$9(objectInstance, state) {
-	  var objectInstanceRecord = state[/* objectInstanceRecord */7];
+	  var objectInstanceRecord = state[/* objectInstanceRecord */8];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* objectInstanceRecord */7] = /* record */[
+	  newrecord[/* objectInstanceRecord */8] = /* record */[
 	    /* index */objectInstanceRecord[/* index */0],
 	    /* sourceInstanceMap */disposeSparseMapData(objectInstance, objectInstanceRecord[/* sourceInstanceMap */1]),
 	    /* disposedIndexArray */objectInstanceRecord[/* disposedIndexArray */2],
@@ -20142,8 +21228,8 @@
 	}
 
 	function _batchDisposeObjectInstance(sourceInstance, objectInstanceTransformArray, state) {
-	  var match = getRecord$6(state);
-	  var objectInstanceCountPerSourceInstance = getObjectInstanceCountPerSourceInstance(state[/* settingRecord */0]);
+	  var match = getRecord$7(state);
+	  var objectInstanceCountPerSourceInstance = getObjectInstanceCountPerSourceInstance(state[/* settingRecord */1]);
 	  batchRemoveObjectInstanceTransform(sourceInstance, objectInstanceTransformArray, objectInstanceCountPerSourceInstance, /* tuple */[
 	        match[/* objectInstanceTransformIndexMap */1],
 	        match[/* objectInstanceTransformCollections */4]
@@ -20152,8 +21238,8 @@
 	}
 
 	function handleBatchDisposeComponent$10(objectInstanceArray, state) {
-	  var objectInstanceRecord = state[/* objectInstanceRecord */7];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var objectInstanceRecord = state[/* objectInstanceRecord */8];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  requireCheck((function () {
 	          var objectInstanceLen = objectInstanceArray.length;
 	          checkComponentShouldAliveWithBatchDispose(objectInstanceArray, isAlive$13, objectInstanceRecord);
@@ -20182,7 +21268,7 @@
 	        }));
 	  var sourceInstance = _unsafeGetSourceInstance(caml_array_get(objectInstanceArray, 0), objectInstanceRecord$1);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* objectInstanceRecord */7] = objectInstanceRecord$1;
+	  newrecord[/* objectInstanceRecord */8] = objectInstanceRecord$1;
 	  var state$1 = _batchDisposeObjectInstance(sourceInstance, objectInstanceTransformArray, newrecord);
 	  return reduceState((function (state, objectInstance) {
 	                return _disposeData$9(objectInstance, state);
@@ -20269,8 +21355,8 @@
 	/* TypeArrayPoolService-Wonderjs Not a pure module */
 
 	function getObjectInstanceTransformArray$1(sourceInstance, state) {
-	  var match = getRecord$6(state);
-	  return getObjectInstanceTransformArray(sourceInstance, getObjectInstanceCountPerSourceInstance(state[/* settingRecord */0]), match[/* objectInstanceTransformIndexMap */1], match[/* objectInstanceTransformCollections */4]);
+	  var match = getRecord$7(state);
+	  return getObjectInstanceTransformArray(sourceInstance, getObjectInstanceCountPerSourceInstance(state[/* settingRecord */1]), match[/* objectInstanceTransformIndexMap */1], match[/* objectInstanceTransformCollections */4]);
 	}
 
 	function getObjectInstanceArray(sourceInstance, state) {
@@ -20305,17 +21391,17 @@
 	}
 
 	function _disposeData$10(sourceInstance, isKeepOrder, batchDisposeGameObjectFunc, state) {
-	  var record = getRecord$6(state);
+	  var record = getRecord$7(state);
 	  var objectInstanceGameObjectArr = getObjectInstanceArray(sourceInstance, state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* sourceInstanceRecord */6] = /* record */[
+	  newrecord[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */record[/* index */0],
 	    /* objectInstanceTransformIndexMap */resetObjectInstanceTransformIndexMap(sourceInstance, record[/* objectInstanceTransformIndexMap */1]),
 	    /* buffer */record[/* buffer */2],
 	    /* isTransformStatics */deleteAndResetUint8(sourceInstance, getDefault(/* () */0), record[/* isTransformStatics */3]),
 	    /* objectInstanceTransformCollections */record[/* objectInstanceTransformCollections */4],
 	    /* matrixInstanceBufferCapacityMap */disposeMatrixInstanceBufferCapacityMap(sourceInstance, record[/* matrixInstanceBufferCapacityMap */5]),
-	    /* matrixFloat32ArrayMap */disposeMatrixFloat32ArrayMap(sourceInstance, getMaxBigTypeArrayPoolSize(state[/* settingRecord */0]), record[/* matrixFloat32ArrayMap */6], state[/* typeArrayPoolRecord */36]),
+	    /* matrixFloat32ArrayMap */disposeMatrixFloat32ArrayMap(sourceInstance, getMaxBigTypeArrayPoolSize(state[/* settingRecord */1]), record[/* matrixFloat32ArrayMap */6], state[/* typeArrayPoolRecord */37]),
 	    /* isSendTransformMatrixDataMap */disposeIsSendTransformMatrixDataMap(sourceInstance, record[/* isSendTransformMatrixDataMap */7]),
 	    /* disposedIndexArray */record[/* disposedIndexArray */8],
 	    /* gameObjectMap */disposeSparseMapData(sourceInstance, record[/* gameObjectMap */9])
@@ -20325,11 +21411,11 @@
 
 	function handleBatchDisposeComponent$11(sourceInstanceArray, isKeepOrder, batchDisposeGameObjectFunc, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAliveWithBatchDispose(sourceInstanceArray, isAlive$14, getRecord$6(state));
+	          return checkComponentShouldAliveWithBatchDispose(sourceInstanceArray, isAlive$14, getRecord$7(state));
 	        }), getIsDebug(stateData));
-	  var sourceInstanceRecord = getRecord$6(state);
+	  var sourceInstanceRecord = getRecord$7(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* sourceInstanceRecord */6] = /* record */[
+	  newrecord[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */sourceInstanceRecord[/* index */0],
 	    /* objectInstanceTransformIndexMap */sourceInstanceRecord[/* objectInstanceTransformIndexMap */1],
 	    /* buffer */sourceInstanceRecord[/* buffer */2],
@@ -20353,157 +21439,63 @@
 	/* Log-WonderLog Not a pure module */
 
 	function isAlive$15(cameraController, param) {
-	  return isAlive$1(cameraController, param[/* disposedIndexArray */16]);
-	}
-
-	function _disposePointDragEventHandleFuncMap(cameraController, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
-	  var pointDragEventHandleFuncMap = arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */1];
-	  var match = get$3(cameraController, pointDragEventHandleFuncMap);
-	  if (match !== undefined) {
-	    var eventName = getPointDragEventName$1(/* () */0);
-	    var state$1 = offCustomGlobalEventByHandleFunc$1(eventName, valFromOption(match), state);
-	    var newrecord = caml_array_dup(state$1);
-	    newrecord[/* arcballCameraControllerRecord */25] = /* record */[
-	      /* index */arcballCameraControllerRecord[/* index */0],
-	      /* pointDragEventHandleFuncMap */disposeSparseMapData(cameraController, pointDragEventHandleFuncMap),
-	      /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */2],
-	      /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */3],
-	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */4],
-	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */5],
-	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */6],
-	      /* phiMap */arcballCameraControllerRecord[/* phiMap */7],
-	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */8],
-	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */9],
-	      /* targetMap */arcballCameraControllerRecord[/* targetMap */10],
-	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */11],
-	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */12],
-	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */13],
-	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */14],
-	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */15],
-	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */16]
-	    ];
-	    return newrecord;
-	  } else {
-	    return state;
-	  }
-	}
-
-	function _disposePointScaleEventHandleFuncMap(cameraController, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
-	  var pointScaleEventHandleFuncMap = arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */2];
-	  var match = get$3(cameraController, pointScaleEventHandleFuncMap);
-	  if (match !== undefined) {
-	    var eventName = getPointScaleEventName$1(/* () */0);
-	    var state$1 = offCustomGlobalEventByHandleFunc$1(eventName, valFromOption(match), state);
-	    var newrecord = caml_array_dup(state$1);
-	    newrecord[/* arcballCameraControllerRecord */25] = /* record */[
-	      /* index */arcballCameraControllerRecord[/* index */0],
-	      /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */1],
-	      /* pointScaleEventHandleFuncMap */disposeSparseMapData(cameraController, pointScaleEventHandleFuncMap),
-	      /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */3],
-	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */4],
-	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */5],
-	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */6],
-	      /* phiMap */arcballCameraControllerRecord[/* phiMap */7],
-	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */8],
-	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */9],
-	      /* targetMap */arcballCameraControllerRecord[/* targetMap */10],
-	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */11],
-	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */12],
-	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */13],
-	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */14],
-	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */15],
-	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */16]
-	    ];
-	    return newrecord;
-	  } else {
-	    return state;
-	  }
-	}
-
-	function _disposeKeyDownEventHandleFuncMap(cameraController, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
-	  var keydownEventHandleFuncMap = arcballCameraControllerRecord[/* keydownEventHandleFuncMap */3];
-	  var match = get$3(cameraController, keydownEventHandleFuncMap);
-	  if (match !== undefined) {
-	    var state$1 = offKeyboardEventByHandleFunc$1(/* KeyDown */7, valFromOption(match), state);
-	    var newrecord = caml_array_dup(state$1);
-	    newrecord[/* arcballCameraControllerRecord */25] = /* record */[
-	      /* index */arcballCameraControllerRecord[/* index */0],
-	      /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */1],
-	      /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */2],
-	      /* keydownEventHandleFuncMap */disposeSparseMapData(cameraController, keydownEventHandleFuncMap),
-	      /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */4],
-	      /* distanceMap */arcballCameraControllerRecord[/* distanceMap */5],
-	      /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */6],
-	      /* phiMap */arcballCameraControllerRecord[/* phiMap */7],
-	      /* thetaMap */arcballCameraControllerRecord[/* thetaMap */8],
-	      /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */9],
-	      /* targetMap */arcballCameraControllerRecord[/* targetMap */10],
-	      /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */11],
-	      /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */12],
-	      /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */13],
-	      /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */14],
-	      /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */15],
-	      /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */16]
-	    ];
-	    return newrecord;
-	  } else {
-	    return state;
-	  }
+	  return isAlive$1(cameraController, param[/* disposedIndexArray */18]);
 	}
 
 	function _disposeData$11(cameraController, state) {
-	  var state$1 = _disposeKeyDownEventHandleFuncMap(cameraController, _disposePointScaleEventHandleFuncMap(cameraController, _disposePointDragEventHandleFuncMap(cameraController, state)));
-	  var arcballCameraControllerRecord = state$1[/* arcballCameraControllerRecord */25];
+	  var state$1 = unbindEvent(cameraController, state);
+	  var arcballCameraControllerRecord = state$1[/* arcballCameraControllerRecord */26];
 	  var newrecord = caml_array_dup(state$1);
-	  newrecord[/* arcballCameraControllerRecord */25] = /* record */[
+	  newrecord[/* arcballCameraControllerRecord */26] = /* record */[
 	    /* index */arcballCameraControllerRecord[/* index */0],
-	    /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */1],
-	    /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */2],
-	    /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */3],
-	    /* dirtyArray */removeFromArray(cameraController, arcballCameraControllerRecord[/* dirtyArray */4]),
-	    /* distanceMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* distanceMap */5]),
-	    /* minDistanceMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* minDistanceMap */6]),
-	    /* phiMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* phiMap */7]),
-	    /* thetaMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* thetaMap */8]),
-	    /* thetaMarginMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* thetaMarginMap */9]),
-	    /* targetMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* targetMap */10]),
-	    /* moveSpeedXMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* moveSpeedXMap */11]),
-	    /* moveSpeedYMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* moveSpeedYMap */12]),
-	    /* rotateSpeedMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* rotateSpeedMap */13]),
-	    /* wheelSpeedMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* wheelSpeedMap */14]),
-	    /* gameObjectMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* gameObjectMap */15]),
-	    /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */16]
+	    /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	    /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	    /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	    /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	    /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	    /* dirtyArray */removeFromArray(cameraController, arcballCameraControllerRecord[/* dirtyArray */6]),
+	    /* distanceMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* distanceMap */7]),
+	    /* minDistanceMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* minDistanceMap */8]),
+	    /* phiMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* phiMap */9]),
+	    /* thetaMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* thetaMap */10]),
+	    /* thetaMarginMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* thetaMarginMap */11]),
+	    /* targetMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* targetMap */12]),
+	    /* moveSpeedXMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* moveSpeedXMap */13]),
+	    /* moveSpeedYMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* moveSpeedYMap */14]),
+	    /* rotateSpeedMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* rotateSpeedMap */15]),
+	    /* wheelSpeedMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* wheelSpeedMap */16]),
+	    /* gameObjectMap */disposeSparseMapData(cameraController, arcballCameraControllerRecord[/* gameObjectMap */17]),
+	    /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
 	  ];
 	  return newrecord;
 	}
 
 	function handleBatchDisposeComponent$12(cameraControllerArray, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  requireCheck((function () {
 	          return checkComponentShouldAliveWithBatchDispose(cameraControllerArray, isAlive$15, arcballCameraControllerRecord);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = /* record */[
+	  newrecord[/* arcballCameraControllerRecord */26] = /* record */[
 	    /* index */arcballCameraControllerRecord[/* index */0],
-	    /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */1],
-	    /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */2],
-	    /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */3],
-	    /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */4],
-	    /* distanceMap */arcballCameraControllerRecord[/* distanceMap */5],
-	    /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */6],
-	    /* phiMap */arcballCameraControllerRecord[/* phiMap */7],
-	    /* thetaMap */arcballCameraControllerRecord[/* thetaMap */8],
-	    /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */9],
-	    /* targetMap */arcballCameraControllerRecord[/* targetMap */10],
-	    /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */11],
-	    /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */12],
-	    /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */13],
-	    /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */14],
-	    /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */15],
-	    /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */16].concat(cameraControllerArray)
+	    /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	    /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	    /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	    /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	    /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	    /* dirtyArray */arcballCameraControllerRecord[/* dirtyArray */6],
+	    /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	    /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	    /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	    /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	    /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	    /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	    /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	    /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	    /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	    /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	    /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	    /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18].concat(cameraControllerArray)
 	  ];
 	  return reduceOneParam((function (state, cameraController) {
 	                return _disposeData$11(cameraController, state);
@@ -20554,156 +21546,156 @@
 	/* Contract-WonderLog Not a pure module */
 
 	function deferDisposeBasicCameraViewComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
-	  newrecord$1[/* disposedBasicCameraViewArray */6] = push(component, state[/* gameObjectRecord */10][/* disposedBasicCameraViewArray */6]);
+	  newrecord$1[/* disposedBasicCameraViewArray */6] = push(component, state[/* gameObjectRecord */11][/* disposedBasicCameraViewArray */6]);
 	  newrecord$1[/* basicCameraViewMap */23] = removeComponent(uid, gameObjectRecord[/* basicCameraViewMap */23]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposePerspectiveCameraProjectionComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedPerspectiveCameraProjectionArray */9] = push(component, gameObjectRecord[/* disposedPerspectiveCameraProjectionArray */9]);
 	  newrecord$1[/* perspectiveCameraProjectionMap */24] = removeComponent(uid, gameObjectRecord[/* perspectiveCameraProjectionMap */24]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeArcballCameraControllerComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedArcballCameraControllerArray */10] = push(component, gameObjectRecord[/* disposedArcballCameraControllerArray */10]);
 	  newrecord$1[/* arcballCameraControllerMap */25] = removeComponent(uid, gameObjectRecord[/* arcballCameraControllerMap */25]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeTransformComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedTransformArray */7] = push(component, gameObjectRecord[/* disposedTransformArray */7]);
 	  newrecord$1[/* transformMap */22] = removeComponent(uid, gameObjectRecord[/* transformMap */22]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeTransformComponentForKeepOrder(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedTransformArrayForKeepOrder */8] = push(component, gameObjectRecord[/* disposedTransformArrayForKeepOrder */8]);
 	  newrecord$1[/* transformMap */22] = removeComponent(uid, gameObjectRecord[/* transformMap */22]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeBasicMaterialComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedBasicMaterialArray */11] = push(component, gameObjectRecord[/* disposedBasicMaterialArray */11]);
 	  newrecord$1[/* basicMaterialMap */27] = removeComponent(uid, gameObjectRecord[/* basicMaterialMap */27]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeLightMaterialComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedLightMaterialArray */12] = push(component, gameObjectRecord[/* disposedLightMaterialArray */12]);
 	  newrecord$1[/* lightMaterialMap */28] = removeComponent(uid, gameObjectRecord[/* lightMaterialMap */28]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeBoxGeometryComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedBoxGeometryArray */13] = push(component, gameObjectRecord[/* disposedBoxGeometryArray */13]);
 	  newrecord$1[/* geometryDataMap */21] = removeComponent(uid, gameObjectRecord[/* geometryDataMap */21]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeCustomGeometryComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedCustomGeometryArray */14] = push(component, gameObjectRecord[/* disposedCustomGeometryArray */14]);
 	  newrecord$1[/* geometryDataMap */21] = removeComponent(uid, gameObjectRecord[/* geometryDataMap */21]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeSourceInstanceComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedSourceInstanceArray */15] = push(component, gameObjectRecord[/* disposedSourceInstanceArray */15]);
 	  newrecord$1[/* sourceInstanceMap */29] = removeComponent(uid, gameObjectRecord[/* sourceInstanceMap */29]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeObjectInstanceComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedObjectInstanceArray */16] = push(component, gameObjectRecord[/* disposedObjectInstanceArray */16]);
 	  newrecord$1[/* objectInstanceMap */30] = removeComponent(uid, gameObjectRecord[/* objectInstanceMap */30]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeDirectionLightComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedDirectionLightArray */17] = push(component, gameObjectRecord[/* disposedDirectionLightArray */17]);
 	  newrecord$1[/* directionLightMap */31] = removeComponent(uid, gameObjectRecord[/* directionLightMap */31]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposePointLightComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedPointLightArray */18] = push(component, gameObjectRecord[/* disposedPointLightArray */18]);
 	  newrecord$1[/* pointLightMap */32] = removeComponent(uid, gameObjectRecord[/* pointLightMap */32]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function deferDisposeMeshRendererComponent(uid, component, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedMeshRendererComponentArray */19] = push(component, gameObjectRecord[/* disposedMeshRendererComponentArray */19]);
 	  newrecord$1[/* meshRendererMap */26] = removeComponent(uid, gameObjectRecord[/* meshRendererMap */26]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function batchDisposeBasicCameraViewComponent(state, componentArray) {
-	  var basicCameraViewRecord = state[/* basicCameraViewRecord */13];
+	  var basicCameraViewRecord = state[/* basicCameraViewRecord */14];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicCameraViewRecord */13] = batchDisposeComponent(basicCameraViewRecord, handleBatchDisposeComponent, componentArray);
+	  newrecord[/* basicCameraViewRecord */14] = batchDisposeComponent(basicCameraViewRecord, handleBatchDisposeComponent, componentArray);
 	  return newrecord;
 	}
 
 	function batchDisposePerspectiveCameraProjectionComponent(state, componentArray) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = batchDisposeComponent(perspectiveCameraProjectionRecord, handleBatchDisposeComponent$13, componentArray);
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = batchDisposeComponent(perspectiveCameraProjectionRecord, handleBatchDisposeComponent$13, componentArray);
 	  return newrecord;
 	}
 
@@ -20712,14 +21704,13 @@
 	}
 
 	function batchDisposeMeshRendererComponent(state, componentArray) {
-	  var meshRendererRecord = state[/* meshRendererRecord */24];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* meshRendererRecord */24] = handleBatchDisposeComponent$4(componentArray, meshRendererRecord);
+	  newrecord[/* meshRendererRecord */25] = handleBatchDisposeComponent$4(componentArray, getRecord$2(state));
 	  return newrecord;
 	}
 
 	function batchDisposeTransformComponent(state, isKeepOrder, componentArray) {
-	  return handleBatchDisposeComponent$1(componentArray, getMaxTypeArrayPoolSize(state[/* settingRecord */0]), isKeepOrder, state);
+	  return handleBatchDisposeComponent$1(componentArray, getMaxTypeArrayPoolSize(state[/* settingRecord */1]), isKeepOrder, state);
 	}
 
 	function batchDisposeBoxGeometryComponent(state, componentArray) {
@@ -20736,10 +21727,10 @@
 
 	function batchDisposeBasicMaterialComponentForWorker(state, componentArray) {
 	  var state$1 = handleBatchDisposeComponent$7(componentArray, state);
-	  var record = getRecord$3(state$1);
-	  var materialArrayForWorkerInit = record[/* materialArrayForWorkerInit */11];
+	  var record = getRecord$4(state$1);
+	  var materialArrayForWorkerInit = record[/* materialArrayForWorkerInit */12];
 	  var newrecord = caml_array_dup(state$1);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */record[/* shaderIndices */2],
@@ -20751,6 +21742,7 @@
 	    /* gameObjectMap */record[/* gameObjectMap */8],
 	    /* groupCountMap */record[/* groupCountMap */9],
 	    /* disposedIndexArray */record[/* disposedIndexArray */10],
+	    /* nameMap */record[/* nameMap */11],
 	    /* materialArrayForWorkerInit */removeDisposedOnesFromMaterialArrayForWorkerInit(componentArray, materialArrayForWorkerInit)
 	  ];
 	  return newrecord;
@@ -20758,10 +21750,10 @@
 
 	function batchDisposeLightMaterialComponentForWorker(state, componentArray) {
 	  var state$1 = handleBatchDisposeComponent$8(componentArray, state);
-	  var record = getRecord$4(state$1);
+	  var record = getRecord$5(state$1);
 	  var materialArrayForWorkerInit = record[/* materialArrayForWorkerInit */17];
 	  var newrecord = caml_array_dup(state$1);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */record[/* shaderIndices */2],
@@ -20785,16 +21777,16 @@
 	}
 
 	function batchDisposeDirectionLightComponent(state, componentArray) {
-	  var directionLightRecord = state[/* directionLightRecord */20];
+	  var directionLightRecord = state[/* directionLightRecord */21];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* directionLightRecord */20] = batchDisposeComponent(directionLightRecord, handleBatchDisposeComponent$5, componentArray);
+	  newrecord[/* directionLightRecord */21] = batchDisposeComponent(directionLightRecord, handleBatchDisposeComponent$5, componentArray);
 	  return newrecord;
 	}
 
 	function batchDisposePointLightComponent(state, componentArray) {
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = batchDisposeComponent(pointLightRecord, handleBatchDisposeComponent$2, componentArray);
+	  newrecord[/* pointLightRecord */22] = batchDisposeComponent(pointLightRecord, handleBatchDisposeComponent$2, componentArray);
 	  return newrecord;
 	}
 
@@ -20815,27 +21807,27 @@
 	/* ArrayService-Wonderjs Not a pure module */
 
 	function batchGetBasicCameraViewComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* basicCameraViewMap */23]);
 	}
 
 	function batchGetPerspectiveCameraProjectionComponent(uidArray, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* perspectiveCameraProjectionMap */24]);
 	}
 
 	function batchGetArcballCameraControllerComponent(uidArray, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* arcballCameraControllerMap */25]);
 	}
 
 	function batchGetTransformComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* transformMap */22]);
 	}
 
 	function batchGetGeometryComponentData(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  var geometryDataMap = gameObjectRecord[/* geometryDataMap */21];
 	  var boxGeometryType = getBoxGeometryType(/* () */0);
 	  var customGeometryType = getCustomGeometryType(/* () */0);
@@ -20863,37 +21855,37 @@
 	}
 
 	function batchGetBasicMaterialComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* basicMaterialMap */27]);
 	}
 
 	function batchGetLightMaterialComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* lightMaterialMap */28]);
 	}
 
 	function batchGetMeshRendererComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* meshRendererMap */26]);
 	}
 
 	function batchGetDirectionLightComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* directionLightMap */31]);
 	}
 
 	function batchGetPointLightComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* pointLightMap */32]);
 	}
 
 	function batchGetSourceInstanceComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* sourceInstanceMap */29]);
 	}
 
 	function batchGetObjectInstanceComponent(uidArray, param) {
-	  var gameObjectRecord = param[/* gameObjectRecord */10];
+	  var gameObjectRecord = param[/* gameObjectRecord */11];
 	  return batchGetComponent(uidArray, gameObjectRecord[/* objectInstanceMap */30]);
 	}
 
@@ -20945,26 +21937,26 @@
 	/* DisposeComponentGameObjectMainService-Wonderjs Not a pure module */
 
 	function _disposeNameMap(uidArray, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  gameObjectRecord[/* nameMap */1] = reduceOneParam((function (nameMap, uid) {
 	          return disposeSparseMapData(uid, nameMap);
 	        }), gameObjectRecord[/* nameMap */1], uidArray);
-	  state[/* gameObjectRecord */10] = gameObjectRecord;
+	  state[/* gameObjectRecord */11] = gameObjectRecord;
 	  return state;
 	}
 
 	function _setDisposedUidMap(uidArray, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* disposedUidMap */3] = buildMapFromArray(uidArray, gameObjectRecord[/* disposedUidMap */3]);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return newrecord;
 	}
 
 	function batchDispose(param, uidArray, isKeepOrder, state) {
 	  var state$1 = _setDisposedUidMap(uidArray, _disposeNameMap(uidArray, state));
-	  var record = state$1[/* gameObjectRecord */10];
+	  var record = state$1[/* gameObjectRecord */11];
 	  var disposeCount = record[/* disposeCount */2];
 	  record[/* disposeCount */2] = disposeCount + uidArray.length | 0;
 	  var match = batchDispose$1(/* tuple */[
@@ -20984,19 +21976,19 @@
 	}
 
 	function deferBatchDispose(uidArray, state) {
-	  state[/* gameObjectRecord */10][/* disposedUidArray */4] = state[/* gameObjectRecord */10][/* disposedUidArray */4].concat(uidArray);
+	  state[/* gameObjectRecord */11][/* disposedUidArray */4] = state[/* gameObjectRecord */11][/* disposedUidArray */4].concat(uidArray);
 	  return state;
 	}
 
 	function deferBatchDisposeKeepOrder(uidArray, state) {
-	  state[/* gameObjectRecord */10][/* disposedUidArrayForKeepOrder */5] = state[/* gameObjectRecord */10][/* disposedUidArrayForKeepOrder */5].concat(uidArray);
+	  state[/* gameObjectRecord */11][/* disposedUidArrayForKeepOrder */5] = state[/* gameObjectRecord */11][/* disposedUidArrayForKeepOrder */5].concat(uidArray);
 	  return state;
 	}
 
 	function clearDeferDisposeData(state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* gameObjectRecord */10];
-	  newrecord[/* gameObjectRecord */10] = /* record */[
+	  var init = state[/* gameObjectRecord */11];
+	  newrecord[/* gameObjectRecord */11] = /* record */[
 	    /* uid */init[/* uid */0],
 	    /* nameMap */init[/* nameMap */1],
 	    /* disposeCount */init[/* disposeCount */2],
@@ -21071,14 +22063,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetBasicCameraViewComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetBasicCameraViewComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectBasicCameraViewComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasBasicCameraViewComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasBasicCameraViewComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectPerspectiveCameraProjectionComponent$1(gameObject, component, state) {
@@ -21099,14 +22091,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetPerspectiveCameraProjectionComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetPerspectiveCameraProjectionComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectPerspectiveCameraProjectionComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasPerspectiveCameraProjectionComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasPerspectiveCameraProjectionComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectArcballCameraControllerComponent$1(gameObject, component, state) {
@@ -21127,14 +22119,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetArcballCameraControllerComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetArcballCameraControllerComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectArcballCameraControllerComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasArcballCameraControllerComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasArcballCameraControllerComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectTransformComponent$1(gameObject, component, state) {
@@ -21159,14 +22151,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetTransformComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetTransformComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectTransformComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasTransformComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasTransformComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectBoxGeometryComponent$1(gameObject, component, state) {
@@ -21187,7 +22179,7 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasBoxGeometryComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasBoxGeometryComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectCustomGeometryComponent$1(gameObject, component, state) {
@@ -21208,14 +22200,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetGeometryComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetGeometryComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectGeometryComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasGeometryComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasGeometryComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectBasicMaterialComponent$1(gameObject, component, state) {
@@ -21236,14 +22228,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetBasicMaterialComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetBasicMaterialComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectBasicMaterialComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasBasicMaterialComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasBasicMaterialComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectLightMaterialComponent$1(gameObject, component, state) {
@@ -21264,14 +22256,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetLightMaterialComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetLightMaterialComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectLightMaterialComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasLightMaterialComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasLightMaterialComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectMeshRendererComponent$1(gameObject, component, state) {
@@ -21292,14 +22284,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetMeshRendererComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetMeshRendererComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectMeshRendererComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasMeshRendererComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasMeshRendererComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectDirectionLightComponent$1(gameObject, component, state) {
@@ -21320,14 +22312,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetDirectionLightComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetDirectionLightComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectDirectionLightComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasDirectionLightComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasDirectionLightComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectPointLightComponent$1(gameObject, component, state) {
@@ -21348,14 +22340,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetPointLightComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetPointLightComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectPointLightComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasPointLightComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasPointLightComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function addGameObjectSourceInstanceComponent$1(gameObject, component, state) {
@@ -21369,14 +22361,14 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetSourceInstanceComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetSourceInstanceComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function hasGameObjectSourceInstanceComponent$1(gameObject, state) {
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return hasSourceInstanceComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return hasSourceInstanceComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function disposeGameObjectSourceInstanceComponent$1(gameObject, component, state) {
@@ -21397,7 +22389,7 @@
 	  requireCheck((function () {
 	          return _checkGameObjectShouldAlive(gameObject, state);
 	        }), getIsDebug(stateData));
-	  return unsafeGetObjectInstanceComponent(gameObject, state[/* gameObjectRecord */10]);
+	  return unsafeGetObjectInstanceComponent(gameObject, state[/* gameObjectRecord */11]);
 	}
 
 	function disposeGameObjectObjectInstanceComponent$1(gameObject, component, state) {
@@ -21474,163 +22466,135 @@
 
 	/* Log-WonderLog Not a pure module */
 
-	function getName$2(material, state) {
-	  return getName$1(material, getRecord$4(state)[/* nameMap */16]);
-	}
-
-	function unsafeGetName$2(material, state) {
-	  return unsafeGetName$1(material, getRecord$4(state)[/* nameMap */16]);
-	}
-
-	function setName$2(material, name, state) {
-	  var record = getRecord$4(state);
-	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
-	    /* index */record[/* index */0],
-	    /* buffer */record[/* buffer */1],
-	    /* shaderIndices */record[/* shaderIndices */2],
-	    /* diffuseColors */record[/* diffuseColors */3],
-	    /* specularColors */record[/* specularColors */4],
-	    /* shininess */record[/* shininess */5],
-	    /* textureIndices */record[/* textureIndices */6],
-	    /* diffuseMapUnits */record[/* diffuseMapUnits */7],
-	    /* specularMapUnits */record[/* specularMapUnits */8],
-	    /* textureCountMap */record[/* textureCountMap */9],
-	    /* defaultDiffuseColor */record[/* defaultDiffuseColor */10],
-	    /* defaultSpecularColor */record[/* defaultSpecularColor */11],
-	    /* defaultShininess */record[/* defaultShininess */12],
-	    /* gameObjectMap */record[/* gameObjectMap */13],
-	    /* groupCountMap */record[/* groupCountMap */14],
-	    /* disposedIndexArray */record[/* disposedIndexArray */15],
-	    /* nameMap */setName$1(material, name, record[/* nameMap */16]),
-	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */17]
-	  ];
-	  return newrecord;
-	}
-
-
-	/* NameService-Wonderjs Not a pure module */
-
 	function createLightMaterial$1(state) {
-	  return create$30(state);
+	  return create$31(state);
 	}
 
 	function unsafeGetLightMaterialGameObject$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$4(material, getRecord$4(state));
+	  return unsafeGetGameObject$4(material, getRecord$5(state));
 	}
 
 	function getLightMaterialDiffuseColor$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return getDiffuseColor$2(material, state);
 	}
 
 	function setLightMaterialDiffuseColor$1(material, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return setDiffuseColor$1(material, color, state);
 	}
 
 	function getLightMaterialSpecularColor$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return getSpecularColor$2(material, state);
 	}
 
 	function setLightMaterialSpecularColor$1(material, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return setSpecularColor$1(material, color, state);
 	}
 
 	function getLightMaterialShininess$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return getShininess$2(material, state);
 	}
 
 	function setLightMaterialShininess$1(material, shininess, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return setShininess$1(material, shininess, state);
 	}
 
 	function unsafeGetLightMaterialDiffuseMap$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return unsafeGetDiffuseMap(material, state);
 	}
 
 	function setLightMaterialDiffuseMap$1(material, texture, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return setDiffuseMap(material, texture, state);
 	}
 
 	function hasLightMaterialDiffuseMap$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return hasDiffuseMap(material, state);
 	}
 
 	function unsafeGetLightMaterialSpecularMap$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return unsafeGetSpecularMap(material, state);
 	}
 
 	function setLightMaterialSpecularMap$1(material, texture, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return setSpecularMap(material, texture, state);
 	}
 
 	function hasLightMaterialSpecularMap$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
 	  return hasSpecularMap(material, state);
 	}
 
 	function unsafeGetLightMaterialName$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetName$2(material, state);
+	  return unsafeGetName$3(material, state);
 	}
 
 	function setLightMaterialName$1(material, name, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$4(state));
+	          return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
 	        }), getIsDebug(stateData));
-	  return setName$2(material, name, state);
+	  return setName$3(material, name, state);
+	}
+
+	function reInitMaterials$1(materials, state) {
+	  requireCheck((function () {
+	          return forEach((function (material) {
+	                        return checkComponentShouldAlive$1(material, isAlive$11, getRecord$5(state));
+	                      }), materials);
+	        }), getIsDebug(stateData));
+	  return reInitComponents(materials, state);
 	}
 
 
 	/* Contract-WonderLog Not a pure module */
 
 	function getRenderWorkerCustomData$1(state) {
-	  return state[/* workerDataRecord */38][/* renderWorkerData */1][/* customDataFromRenderWorkerToMainWorker */0];
+	  return state[/* workerDataRecord */39][/* renderWorkerData */1][/* customDataFromRenderWorkerToMainWorker */0];
 	}
 
 	function setRenderWorkerCustomData(customData, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* workerDataRecord */38];
-	  newrecord[/* workerDataRecord */38] = /* record */[
+	  var init = state[/* workerDataRecord */39];
+	  newrecord[/* workerDataRecord */39] = /* record */[
 	    /* mainWorkerData */init[/* mainWorkerData */0],
 	    /* renderWorkerData : record */[/* customDataFromRenderWorkerToMainWorker */customData]
 	  ];
@@ -21638,13 +22602,13 @@
 	}
 
 	function getMainWorkerCustomData$1(state) {
-	  return state[/* workerDataRecord */38][/* mainWorkerData */0][/* customDataFromMainWorkerToRenderWorker */0];
+	  return state[/* workerDataRecord */39][/* mainWorkerData */0][/* customDataFromMainWorkerToRenderWorker */0];
 	}
 
 	function setMainWorkerCustomData$1(customData, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* workerDataRecord */38];
-	  newrecord[/* workerDataRecord */38] = /* record */[
+	  var init = state[/* workerDataRecord */39];
+	  newrecord[/* workerDataRecord */39] = /* record */[
 	    /* mainWorkerData : record */[/* customDataFromMainWorkerToRenderWorker */customData],
 	    /* renderWorkerData */init[/* renderWorkerData */1]
 	  ];
@@ -22077,6 +23041,16 @@
 	  return fontDefDictionary;
 	}
 
+	function buildKerningHashMapKey(first, second) {
+	  return imul(first, 1000) + second | 0;
+	}
+
+	function _changeKerningArrayToHashMap(kerningArray) {
+	  return reduceOneParam((function (map, param) {
+	                return set$1(buildKerningHashMapKey(param[/* first */0], param[/* second */1]), param[/* amount */2], map);
+	              }), createEmpty$2(/* () */0), kerningArray);
+	}
+
 	function _parseKerning(fntStr) {
 	  var kerningArray = /* array */[];
 	  var kerning_exp = (/kerning [^\n]*(\n|$)/gi);
@@ -22097,7 +23071,7 @@
 	      $$break = true;
 	    }
 	  }
-	  return kerningArray;
+	  return _changeKerningArrayToHashMap(kerningArray);
 	}
 
 	function parse(fntStr, _) {
@@ -22117,7 +23091,7 @@
 	          /* scaleW */unsafeGet("scaleW", commonObj),
 	          /* scaleH */unsafeGet("scaleH", commonObj),
 	          /* fontDefDictionary */_parseChar(fntStr),
-	          /* kerningArray */_parseKerning(fntStr)
+	          /* kerningMap */_parseKerning(fntStr)
 	        ];
 	}
 
@@ -22478,32 +23452,16 @@
 	// Generated by BUCKLESCRIPT VERSION 4.0.0, PLEASE EDIT WITH CARE
 
 	function getKerning(fntData, left, right) {
-	  var match = fntData[/* kerningArray */5].length === 0;
-	  if (match) {
-	    return 0;
+	  var match = get$3(buildKerningHashMapKey(left, right), fntData[/* kerningMap */5]);
+	  if (match !== undefined) {
+	    return match;
 	  } else {
-	    var match$1 = reduceOneParam((function (amount, kern) {
-	            if (amount !== undefined) {
-	              return amount;
-	            } else {
-	              var match = kern[/* first */0] === left && kern[/* second */1] === right;
-	              if (match) {
-	                return kern[/* amount */2];
-	              } else {
-	                return undefined;
-	              }
-	            }
-	          }), undefined, fntData[/* kerningArray */5]);
-	    if (match$1 !== undefined) {
-	      return match$1;
-	    } else {
-	      return 0;
-	    }
+	    return 0;
 	  }
 	}
 
 
-	/* ArrayService-WonderCommonlib Not a pure module */
+	/* ParseFntIMGUIService-WonderImgui Not a pure module */
 
 	// Generated by BUCKLESCRIPT VERSION 4.0.0, PLEASE EDIT WITH CARE
 
@@ -23684,11 +24642,11 @@
 
 	// Generated by BUCKLESCRIPT VERSION 4.0.0, PLEASE EDIT WITH CARE
 
-	function label$1(rect, str, align, record) {
+	function label$2(rect, str, align, record) {
 	  return draw$1(convertIntRectToFloatRect(computeRectBasedOnTopLeftOfView(rect, record)), str, align, record);
 	}
 
-	function image$1(rect, uv, id, record) {
+	function image$2(rect, uv, id, record) {
 	  return draw$2(convertIntRectToFloatRect(computeRectBasedOnTopLeftOfView(rect, record)), uv, id, record);
 	}
 
@@ -23769,11 +24727,27 @@
 	  return ortho(0, param[0], param[1], 0, -1, 1, createIdentityMatrix4$1(/* () */0));
 	}
 
+	function _sendUniformProjectionMatData(gl, program, canvasSize) {
+	  gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_projectionMat"), false, _buildOrthoProjectionMat4TypeArr(canvasSize));
+	  return /* () */0;
+	}
+
+	function _getProgram(record) {
+	  return unsafeGet$3(record[/* webglData */3])[/* program */0];
+	}
+
 	function _sendUniformData(gl, program, canvasSize) {
 	  gl.useProgram(program);
-	  gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_projectionMat"), false, _buildOrthoProjectionMat4TypeArr(canvasSize));
+	  _sendUniformProjectionMatData(gl, program, canvasSize);
 	  gl.uniform1i(gl.getUniformLocation(program, "u_sampler2D"), 0);
 	  return /* () */0;
+	}
+
+	function sendUniformProjectionMatData$3(gl, canvasSize, record) {
+	  var program = _getProgram(record);
+	  gl.useProgram(program);
+	  gl.uniformMatrix4fv(gl.getUniformLocation(program, "u_projectionMat"), false, _buildOrthoProjectionMat4TypeArr(canvasSize));
+	  return record;
 	}
 
 	function init$7(gl, canvasSize, record) {
@@ -24053,8 +25027,8 @@
 
 	function _buildAPIJsObj() {
 	  return {
-	          label: label$1,
-	          image: image$1,
+	          label: label$2,
+	          image: image$2,
 	          button: button$1,
 	          box: box$1,
 	          radioButton: radioButton$1,
@@ -24353,6 +25327,8 @@
 	            ], record);
 	}
 
+	var sendUniformProjectionMatData$2 = sendUniformProjectionMatData$3;
+
 	var init$6 = init$7;
 
 	var getCustomData$1 = getCustomData$2;
@@ -24365,14 +25341,14 @@
 	/* ManageIMGUIService-WonderImgui Not a pure module */
 
 	function getWonderIMGUIRecord(state) {
-	  return state[/* imguiRecord */42][/* wonderImguiIMGUIRecord */1];
+	  return state[/* imguiRecord */43][/* wonderImguiIMGUIRecord */1];
 	}
 
 	function getIOData$1(state) {
-	  return state[/* imguiRecord */42][/* ioData */0];
+	  return state[/* imguiRecord */43][/* ioData */0];
 	}
 
-	function create$33() {
+	function create$34() {
 	  return /* record */[
 	          /* ioData : record */[
 	            /* pointUp */false,
@@ -24392,10 +25368,10 @@
 
 	function setControlDataFromRenderWorker(imguiData, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* imguiRecord */42];
-	  newrecord[/* imguiRecord */42] = /* record */[
+	  var init = state[/* imguiRecord */43];
+	  newrecord[/* imguiRecord */43] = /* record */[
 	    /* ioData */init[/* ioData */0],
-	    /* wonderImguiIMGUIRecord */setControlData(imguiData.controlData, state[/* imguiRecord */42][/* wonderImguiIMGUIRecord */1])
+	    /* wonderImguiIMGUIRecord */setControlData(imguiData.controlData, state[/* imguiRecord */43][/* wonderImguiIMGUIRecord */1])
 	  ];
 	  return newrecord;
 	}
@@ -24409,8 +25385,8 @@
 
 	function setIMGUIFunc$1(customData, func, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* imguiRecord */42];
-	  newrecord[/* imguiRecord */42] = /* record */[
+	  var init = state[/* imguiRecord */43];
+	  newrecord[/* imguiRecord */43] = /* record */[
 	    /* ioData */init[/* ioData */0],
 	    /* wonderImguiIMGUIRecord */setIMGUIFunc$2(customData, func, getWonderIMGUIRecord(state))
 	  ];
@@ -24422,7 +25398,7 @@
 	}
 
 	function getCanvasSize(param) {
-	  var viewRecord = param[/* viewRecord */8];
+	  var viewRecord = param[/* viewRecord */9];
 	  var match = getCanvas(viewRecord);
 	  if (match !== undefined) {
 	    var canvas = valFromOption(match);
@@ -24438,14 +25414,25 @@
 	  }
 	}
 
-	var getRecord$11 = getWonderIMGUIRecord;
+	var getRecord$12 = getWonderIMGUIRecord;
 
 	function setRecord(record, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* imguiRecord */42];
-	  newrecord[/* imguiRecord */42] = /* record */[
+	  var init = state[/* imguiRecord */43];
+	  newrecord[/* imguiRecord */43] = /* record */[
 	    /* ioData */init[/* ioData */0],
 	    /* wonderImguiIMGUIRecord */record
+	  ];
+	  return newrecord;
+	}
+
+	function sendUniformProjectionMatData$1(gl, canvasSize, state) {
+	  var newrecord = caml_array_dup(state);
+	  newrecord[/* programRecord */29] = clearLastSendProgram(state[/* programRecord */29]);
+	  var init = state[/* imguiRecord */43];
+	  newrecord[/* imguiRecord */43] = /* record */[
+	    /* ioData */init[/* ioData */0],
+	    /* wonderImguiIMGUIRecord */sendUniformProjectionMatData$2(gl, canvasSize, getWonderIMGUIRecord(state))
 	  ];
 	  return newrecord;
 	}
@@ -24453,18 +25440,18 @@
 
 	/* ViewService-Wonderjs Not a pure module */
 
-	function label(rect, str, align, state) {
-	  var __x = label$1(rect, str, align, getRecord$11(state));
+	function label$1(rect, str, align, state) {
+	  var __x = label$2(rect, str, align, getRecord$12(state));
 	  return setRecord(__x, state);
 	}
 
-	function image(rect, uv, id, state) {
-	  var __x = image$1(rect, uv, id, getRecord$11(state));
+	function image$1(rect, uv, id, state) {
+	  var __x = image$2(rect, uv, id, getRecord$12(state));
 	  return setRecord(__x, state);
 	}
 
 	function button(rect, str, state) {
-	  var match = button$1(rect, str, getRecord$11(state));
+	  var match = button$1(rect, str, getRecord$12(state));
 	  return /* tuple */[
 	          setRecord(match[0], state),
 	          match[1]
@@ -24472,12 +25459,12 @@
 	}
 
 	function box(rect, color, state) {
-	  var __x = box$1(rect, color, getRecord$11(state));
+	  var __x = box$1(rect, color, getRecord$12(state));
 	  return setRecord(__x, state);
 	}
 
 	function radioButton(groupDataArr, defaultSelectIndex, group, state) {
-	  var match = radioButton$1(groupDataArr, defaultSelectIndex, group, getRecord$11(state));
+	  var match = radioButton$1(groupDataArr, defaultSelectIndex, group, getRecord$12(state));
 	  return /* tuple */[
 	          setRecord(match[0], state),
 	          match[1]
@@ -24485,7 +25472,7 @@
 	}
 
 	function checkbox(rect, defaultIsSelected, str, state) {
-	  var match = checkbox$1(rect, defaultIsSelected, str, getRecord$11(state));
+	  var match = checkbox$1(rect, defaultIsSelected, str, getRecord$12(state));
 	  return /* tuple */[
 	          setRecord(match[0], state),
 	          match[1]
@@ -24502,7 +25489,7 @@
 	      ], /* tuple */[
 	        param$2[0],
 	        param$2[1]
-	      ], getRecord$11(state));
+	      ], getRecord$12(state));
 	  return /* tuple */[
 	          setRecord(match[0], state),
 	          match[1],
@@ -24521,7 +25508,7 @@
 	      ], /* tuple */[
 	        param$2[0],
 	        param$2[1]
-	      ], getRecord$11(state));
+	      ], getRecord$12(state));
 	  return /* tuple */[
 	          setRecord(match[0], state),
 	          match[1],
@@ -24530,12 +25517,12 @@
 	}
 
 	function beginGroup(position, state) {
-	  var __x = beginGroup$1(position, getRecord$11(state));
+	  var __x = beginGroup$1(position, getRecord$12(state));
 	  return setRecord(__x, state);
 	}
 
 	function endGroup(state) {
-	  var __x = endGroup$1(getRecord$11(state));
+	  var __x = endGroup$1(getRecord$12(state));
 	  return setRecord(__x, state);
 	}
 
@@ -24543,13 +25530,13 @@
 	/* GroupLayoutIMGUIAPI-WonderImgui Not a pure module */
 
 	function getAPIJsObj$1(state) {
-	  return state[/* apiRecord */43][/* apiJsObj */0];
+	  return state[/* apiRecord */44][/* apiJsObj */0];
 	}
 
-	function create$18() {
+	function create$19() {
 	  return /* record */[/* apiJsObj */{
-	            label: label,
-	            image: image,
+	            label: label$1,
+	            image: image$1,
 	            button: button,
 	            box: box,
 	            radioButton: radioButton,
@@ -24560,6 +25547,8 @@
 	            endGroup: endGroup,
 	            unsafeGetGameObjectTransformComponent: unsafeGetGameObjectTransformComponent$1,
 	            unsafeGetGameObjectLightMaterialComponent: unsafeGetGameObjectLightMaterialComponent$1,
+	            unsafeGetGameObjectPerspectiveCameraProjectionComponent: unsafeGetGameObjectPerspectiveCameraProjectionComponent$1,
+	            unsafeGetGameObjectBasicCameraViewComponent: unsafeGetGameObjectBasicCameraViewComponent$1,
 	            setLightMaterialDiffuseColor: setLightMaterialDiffuseColor$1,
 	            getLightMaterialSpecularColor: getLightMaterialSpecularColor$1,
 	            setLightMaterialSpecularColor: setLightMaterialSpecularColor$1,
@@ -24567,6 +25556,10 @@
 	            setLightMaterialShininess: setLightMaterialShininess$1,
 	            getTransformLocalPosition: getTransformLocalPosition$1,
 	            setTransformLocalPosition: setTransformLocalPosition$1,
+	            getTransformPosition: getTransformPosition$1,
+	            unsafeGetTransformChildren: unsafeGetTransformChildren$1,
+	            unsafeGetTransformGameObject: unsafeGetTransformGameObject$1,
+	            convertWorldToScreen: convertWorldToScreen$1,
 	            getRenderWorkerCustomData: getRenderWorkerCustomData$1
 	          }];
 	}
@@ -24574,7 +25567,7 @@
 
 	/* TransformAPI-Wonderjs Not a pure module */
 
-	function create$34() {
+	function create$35() {
 	  return /* record */[
 	          /* programMap */createEmpty$2(/* () */0),
 	          /* lastUsedProgram */undefined
@@ -24584,7 +25577,7 @@
 
 	/* No side effect */
 
-	function create$35() {
+	function create$36() {
 	  return /* record */[
 	          /* canvasId */undefined,
 	          /* memory */undefined,
@@ -24791,7 +25784,7 @@
 	        }
 	  };
 
-	function create$36() {
+	function create$37() {
 	  return /* record */[
 	          /* domEventStreamSubscription */undefined,
 	          /* mouseDomEventDataArrMap */createEmpty$2(/* () */0),
@@ -24835,10 +25828,10 @@
 	              }), customGameObjectEventArrMap);
 	}
 
-	function deepCopyForRestore$14(state) {
-	  var eventRecord = state[/* eventRecord */41];
+	function deepCopyForRestore$15(state) {
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */_deepCopyDomEventArrMap(eventRecord[/* mouseDomEventDataArrMap */1]),
 	    /* keyboardDomEventDataArrMap */_deepCopyDomEventArrMap(eventRecord[/* keyboardDomEventDataArrMap */2]),
@@ -24863,7 +25856,7 @@
 
 	/* Js_dict Not a pure module */
 
-	function create$37() {
+	function create$38() {
 	  return /* record */[
 	          /* extensionInstancedArrays */undefined,
 	          /* precision */undefined,
@@ -24874,7 +25867,7 @@
 
 	/* No side effect */
 
-	function create$38() {
+	function create$39() {
 	  return /* record */[
 	          /* boxGeometryVertexBufferMap */createEmpty$2(/* () */0),
 	          /* boxGeometryTexCoordBufferMap */createEmpty$2(/* () */0),
@@ -24891,7 +25884,7 @@
 	        ];
 	}
 
-	function deepCopyForRestore$15() {
+	function deepCopyForRestore$16() {
 	  return /* record */[
 	          /* boxGeometryVertexBufferMap : array */[],
 	          /* boxGeometryTexCoordBufferMap : array */[],
@@ -24911,7 +25904,7 @@
 
 	/* ArrayService-WonderCommonlib Not a pure module */
 
-	function create$39() {
+	function create$40() {
 	  return /* record */[
 	          /* uid */0,
 	          /* nameMap */createEmpty$2(/* () */0),
@@ -24949,7 +25942,7 @@
 	        ];
 	}
 
-	function deepCopyForRestore$16(record) {
+	function deepCopyForRestore$17(record) {
 	  var uid = record[/* uid */0];
 	  var nameMap = record[/* nameMap */1];
 	  var disposeCount = record[/* disposeCount */2];
@@ -25022,7 +26015,7 @@
 
 	/* SparseMapService-Wonderjs Not a pure module */
 
-	function create$40() {
+	function create$41() {
 	  return /* record */[
 	          /* float16Array1 */new Float32Array(/* array */[
 	                1,
@@ -25059,7 +26052,7 @@
 
 	/* No side effect */
 
-	function create$41() {
+	function create$42() {
 	  return /* record */[
 	          /* mainWorkerData : record */[/* customDataFromMainWorkerToRenderWorker */-1],
 	          /* renderWorkerData : record */[/* customDataFromRenderWorkerToMainWorker */-1]
@@ -25069,7 +26062,7 @@
 
 	/* No side effect */
 
-	function create$42() {
+	function create$43() {
 	  return /* record */[
 	          /* attributeLocationMap */createEmpty$2(/* () */0),
 	          /* uniformLocationMap */createEmpty$2(/* () */0)
@@ -25078,29 +26071,6 @@
 
 
 	/* No side effect */
-
-	function create$43() {
-	  return /* record */[
-	          /* index */0,
-	          /* basicMaterialRenderGameObjectMap */createEmpty$2(/* () */0),
-	          /* lightMaterialRenderGameObjectMap */createEmpty$2(/* () */0),
-	          /* gameObjectMap */createEmpty$2(/* () */0),
-	          /* disposedIndexArray */createEmpty$1(/* () */0)
-	        ];
-	}
-
-	function deepCopyForRestore$17(param) {
-	  return /* record */[
-	          /* index */param[/* index */0],
-	          /* basicMaterialRenderGameObjectMap */copy$3(param[/* basicMaterialRenderGameObjectMap */1]),
-	          /* lightMaterialRenderGameObjectMap */copy$3(param[/* lightMaterialRenderGameObjectMap */2]),
-	          /* gameObjectMap */copy$3(param[/* gameObjectMap */3]),
-	          /* disposedIndexArray */param[/* disposedIndexArray */4].slice()
-	        ];
-	}
-
-
-	/* SparseMapService-Wonderjs Not a pure module */
 
 	function create$44() {
 	  return /* record */[
@@ -25249,6 +26219,8 @@
 	function create$53() {
 	  return /* record */[
 	          /* index */0,
+	          /* pointDownEventHandleFuncMap */createEmpty$2(/* () */0),
+	          /* pointUpEventHandleFuncMap */createEmpty$2(/* () */0),
 	          /* pointDragEventHandleFuncMap */createEmpty$2(/* () */0),
 	          /* pointScaleEventHandleFuncMap */createEmpty$2(/* () */0),
 	          /* keydownEventHandleFuncMap */createEmpty$2(/* () */0),
@@ -25271,22 +26243,24 @@
 	function deepCopyForRestore$22(param) {
 	  return /* record */[
 	          /* index */param[/* index */0],
-	          /* pointDragEventHandleFuncMap */copy$3(param[/* pointDragEventHandleFuncMap */1]),
-	          /* pointScaleEventHandleFuncMap */copy$3(param[/* pointScaleEventHandleFuncMap */2]),
-	          /* keydownEventHandleFuncMap */copy$3(param[/* keydownEventHandleFuncMap */3]),
-	          /* dirtyArray */copy$3(param[/* dirtyArray */4]),
-	          /* distanceMap */copy$3(param[/* distanceMap */5]),
-	          /* minDistanceMap */copy$3(param[/* minDistanceMap */6]),
-	          /* phiMap */copy$3(param[/* phiMap */7]),
-	          /* thetaMap */copy$3(param[/* thetaMap */8]),
-	          /* thetaMarginMap */copy$3(param[/* thetaMarginMap */9]),
-	          /* targetMap */copy$3(param[/* targetMap */10]),
-	          /* moveSpeedXMap */copy$3(param[/* moveSpeedXMap */11]),
-	          /* moveSpeedYMap */copy$3(param[/* moveSpeedYMap */12]),
-	          /* rotateSpeedMap */copy$3(param[/* rotateSpeedMap */13]),
-	          /* wheelSpeedMap */copy$3(param[/* wheelSpeedMap */14]),
-	          /* gameObjectMap */copy$3(param[/* gameObjectMap */15]),
-	          /* disposedIndexArray */param[/* disposedIndexArray */16].slice()
+	          /* pointDownEventHandleFuncMap */copy$3(param[/* pointDownEventHandleFuncMap */1]),
+	          /* pointUpEventHandleFuncMap */copy$3(param[/* pointUpEventHandleFuncMap */2]),
+	          /* pointDragEventHandleFuncMap */copy$3(param[/* pointDragEventHandleFuncMap */3]),
+	          /* pointScaleEventHandleFuncMap */copy$3(param[/* pointScaleEventHandleFuncMap */4]),
+	          /* keydownEventHandleFuncMap */copy$3(param[/* keydownEventHandleFuncMap */5]),
+	          /* dirtyArray */copy$3(param[/* dirtyArray */6]),
+	          /* distanceMap */copy$3(param[/* distanceMap */7]),
+	          /* minDistanceMap */copy$3(param[/* minDistanceMap */8]),
+	          /* phiMap */copy$3(param[/* phiMap */9]),
+	          /* thetaMap */copy$3(param[/* thetaMap */10]),
+	          /* thetaMarginMap */copy$3(param[/* thetaMarginMap */11]),
+	          /* targetMap */copy$3(param[/* targetMap */12]),
+	          /* moveSpeedXMap */copy$3(param[/* moveSpeedXMap */13]),
+	          /* moveSpeedYMap */copy$3(param[/* moveSpeedYMap */14]),
+	          /* rotateSpeedMap */copy$3(param[/* rotateSpeedMap */15]),
+	          /* wheelSpeedMap */copy$3(param[/* wheelSpeedMap */16]),
+	          /* gameObjectMap */copy$3(param[/* gameObjectMap */17]),
+	          /* disposedIndexArray */param[/* disposedIndexArray */18].slice()
 	        ];
 	}
 
@@ -25326,17 +26300,25 @@
 
 	function createState$2() {
 	  return /* record */[
-	          /* settingRecord */create$35(/* () */0),
-	          /* jobRecord */create$13(/* () */0),
+	          /* stateRecord : record */[
+	            /* unsafeGetStateFunc */(function () {
+	                return unsafeGetState$2(stateData);
+	              }),
+	            /* setStateFunc */(function (state) {
+	                return setState$2(stateData, state);
+	              })
+	          ],
+	          /* settingRecord */create$36(/* () */0),
+	          /* jobRecord */create$14(/* () */0),
 	          /* noWorkerJobRecord */undefined,
 	          /* workerJobRecord */undefined,
 	          /* renderConfigRecord */undefined,
-	          /* gpuDetectRecord */create$37(/* () */0),
+	          /* gpuDetectRecord */create$38(/* () */0),
 	          /* sourceInstanceRecord */undefined,
 	          /* objectInstanceRecord */create$48(/* () */0),
-	          /* viewRecord */create$15(/* () */0),
+	          /* viewRecord */create$16(/* () */0),
 	          /* deviceManagerRecord */create$45(/* () */0),
-	          /* gameObjectRecord */create$39(/* () */0),
+	          /* gameObjectRecord */create$40(/* () */0),
 	          /* transformRecord */undefined,
 	          /* sceneRecord */undefined,
 	          /* basicCameraViewRecord */create$51(/* () */0),
@@ -25346,35 +26328,35 @@
 	          /* sourceTextureRecord */undefined,
 	          /* basicSourceTextureRecord */undefined,
 	          /* arrayBufferViewSourceTextureRecord */undefined,
-	          /* directionLightRecord */create$20(/* () */0),
-	          /* pointLightRecord */create$19(/* () */0),
-	          /* boxGeometryRecord */create$7(/* () */0),
+	          /* directionLightRecord */create$21(/* () */0),
+	          /* pointLightRecord */create$20(/* () */0),
+	          /* boxGeometryRecord */create$8(/* () */0),
 	          /* customGeometryRecord */undefined,
-	          /* meshRendererRecord */create$43(/* () */0),
+	          /* meshRendererRecord */undefined,
 	          /* arcballCameraControllerRecord */create$53(/* () */0),
-	          /* shaderRecord */create$17(/* () */0),
-	          /* glslRecord */create$14(/* () */0),
-	          /* programRecord */create$34(/* () */0),
-	          /* glslLocationRecord */create$42(/* () */0),
+	          /* shaderRecord */create$18(/* () */0),
+	          /* glslRecord */create$15(/* () */0),
+	          /* programRecord */create$35(/* () */0),
+	          /* glslLocationRecord */create$43(/* () */0),
 	          /* glslSenderRecord */create$46(/* () */0),
-	          /* glslChunkRecord */create$16(/* () */0),
+	          /* glslChunkRecord */create$17(/* () */0),
 	          /* renderRecord */undefined,
 	          /* timeControllerRecord */create$49(/* () */0),
-	          /* vboBufferRecord */create$38(/* () */0),
-	          /* globalTempRecord */create$40(/* () */0),
+	          /* vboBufferRecord */create$39(/* () */0),
+	          /* globalTempRecord */create$41(/* () */0),
 	          /* typeArrayPoolRecord */create$47(/* () */0),
 	          /* workerInstanceRecord */create$50(/* () */0),
-	          /* workerDataRecord */create$41(/* () */0),
+	          /* workerDataRecord */create$42(/* () */0),
 	          /* workerDetectRecord */create$44(/* () */0),
 	          /* browserDetectRecord */create$52(/* () */0),
-	          /* eventRecord */create$36(/* () */0),
-	          /* imguiRecord */create$33(/* () */0),
-	          /* apiRecord */create$18(/* () */0)
+	          /* eventRecord */create$37(/* () */0),
+	          /* imguiRecord */create$34(/* () */0),
+	          /* apiRecord */create$19(/* () */0)
 	        ];
 	}
 
 
-	/* RecordJobService-Wonderjs Not a pure module */
+	/* StateDataMain-Wonderjs Not a pure module */
 
 	function getComponentSize() {
 	  return 1;
@@ -25397,7 +26379,15 @@
 	}
 
 	function getMaterialIndicesOffset(count) {
-	  return imul((count << 0), Uint32Array.BYTES_PER_ELEMENT);
+	  return 0 + imul((count << 0), Uint32Array.BYTES_PER_ELEMENT) | 0;
+	}
+
+	function getMeshRendererIndicesLength(count) {
+	  return (count << 0);
+	}
+
+	function getMeshRendererIndicesOffset(count) {
+	  return getMaterialIndicesOffset(count) + imul((count << 0), Uint32Array.BYTES_PER_ELEMENT) | 0;
 	}
 
 	function getGeometryIndicesLength(count) {
@@ -25405,7 +26395,7 @@
 	}
 
 	function getGeometryIndicesOffset(count) {
-	  return imul((count << 0), Uint32Array.BYTES_PER_ELEMENT) + imul((count << 0), Uint32Array.BYTES_PER_ELEMENT) | 0;
+	  return getMeshRendererIndicesOffset(count) + imul((count << 0), Uint32Array.BYTES_PER_ELEMENT) | 0;
 	}
 
 	function getSourceInstanceIndicesLength(count) {
@@ -25437,25 +26427,27 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function createTypeArrays$9(buffer, count) {
+	function createTypeArrays$10(buffer, count) {
 	  return /* tuple */[
 	          new Uint32Array(buffer, getTransformIndicesOffset(count), getTransformIndicesLength(count)),
 	          new Uint32Array(buffer, getMaterialIndicesOffset(count), getMaterialIndicesLength(count)),
+	          new Uint32Array(buffer, getMeshRendererIndicesOffset(count), getMeshRendererIndicesLength(count)),
 	          new Uint32Array(buffer, getGeometryIndicesOffset(count), getGeometryIndicesLength(count)),
 	          new Uint32Array(buffer, getSourceInstanceIndicesOffset(count), getSourceInstanceIndicesLength(count)),
 	          new Uint8Array(buffer, getGeometryTypesOffset(count), getGeometryTypesLength(count))
 	        ];
 	}
 
-	function setAllTypeArrDataToDefault$9(count, typeArrTuple) {
+	function setAllTypeArrDataToDefault$10(count, typeArrTuple) {
 	  var defaultSourceInstance = getDefaultSourceInstance(/* () */0);
 	  return reduceOneParam((function (param, index) {
 	                return /* tuple */[
 	                        param[0],
 	                        param[1],
 	                        param[2],
-	                        setComponent(index, defaultSourceInstance, param[3]),
-	                        param[4]
+	                        param[3],
+	                        setComponent(index, defaultSourceInstance, param[4]),
+	                        param[5]
 	                      ];
 	              }), typeArrTuple, range(0, count - 1 | 0));
 	}
@@ -25463,72 +26455,74 @@
 
 	/* ArrayService-WonderCommonlib Not a pure module */
 
-	function getRecord$13(param) {
-	  return unsafeGet$1(param[/* basicRenderObjectRecord */0]);
-	}
-
-	function _initBufferData$9(count) {
-	  var buffer = newSharedArrayBuffer(imul(count, imul(Uint32Array.BYTES_PER_ELEMENT, (getComponentSize(/* () */0) << 2)) + imul(Uint8Array.BYTES_PER_ELEMENT, getGeometryTypeSize(/* () */0)) | 0));
-	  return /* tuple */[
-	          buffer,
-	          setAllTypeArrDataToDefault$9(count, createTypeArrays$9(buffer, count))
-	        ];
-	}
-
-	function create$56(state) {
-	  var basicMaterialCount = getBasicMaterialCount(state[/* settingRecord */0]);
-	  var match = _initBufferData$9(basicMaterialCount);
-	  var match$1 = match[1];
-	  return /* record */[
-	          /* buffer */match[0],
-	          /* count */basicMaterialCount,
-	          /* transformIndices */match$1[0],
-	          /* materialIndices */match$1[1],
-	          /* geometryIndices */match$1[2],
-	          /* geometryTypes */match$1[4],
-	          /* sourceInstanceIndices */match$1[3]
-	        ];
-	}
-
-
-	/* Worker-Wonderjs Not a pure module */
-
 	function getRecord$14(param) {
-	  return unsafeGet$1(param[/* lightRenderObjectRecord */1]);
+	  return unsafeGet$1(param[/* basicRenderObjectRecord */0]);
 	}
 
 	function _initBufferData$10(count) {
 	  var buffer = newSharedArrayBuffer(imul(count, imul(Uint32Array.BYTES_PER_ELEMENT, imul(getComponentSize(/* () */0), 5)) + imul(Uint8Array.BYTES_PER_ELEMENT, getGeometryTypeSize(/* () */0)) | 0));
 	  return /* tuple */[
 	          buffer,
-	          setAllTypeArrDataToDefault$9(count, createTypeArrays$9(buffer, count))
+	          setAllTypeArrDataToDefault$10(count, createTypeArrays$10(buffer, count))
 	        ];
 	}
 
-	function create$57(state) {
-	  var lightMaterialCount = getLightMaterialCount(state[/* settingRecord */0]);
-	  var match = _initBufferData$10(lightMaterialCount);
+	function create$56(state) {
+	  var basicMaterialCount = getBasicMaterialCount(state[/* settingRecord */1]);
+	  var match = _initBufferData$10(basicMaterialCount);
 	  var match$1 = match[1];
 	  return /* record */[
 	          /* buffer */match[0],
-	          /* count */lightMaterialCount,
+	          /* count */basicMaterialCount,
 	          /* transformIndices */match$1[0],
 	          /* materialIndices */match$1[1],
-	          /* geometryIndices */match$1[2],
-	          /* geometryTypes */match$1[4],
-	          /* sourceInstanceIndices */match$1[3]
+	          /* meshRendererIndices */match$1[2],
+	          /* geometryIndices */match$1[3],
+	          /* geometryTypes */match$1[5],
+	          /* sourceInstanceIndices */match$1[4]
 	        ];
 	}
 
 
 	/* Worker-Wonderjs Not a pure module */
 
-	function getRecord$12(state) {
-	  return unsafeGet$1(state[/* renderRecord */32]);
+	function getRecord$15(param) {
+	  return unsafeGet$1(param[/* lightRenderObjectRecord */1]);
+	}
+
+	function _initBufferData$11(count) {
+	  var buffer = newSharedArrayBuffer(imul(count, imul(Uint32Array.BYTES_PER_ELEMENT, imul(getComponentSize(/* () */0), 5)) + imul(Uint8Array.BYTES_PER_ELEMENT, getGeometryTypeSize(/* () */0)) | 0));
+	  return /* tuple */[
+	          buffer,
+	          setAllTypeArrDataToDefault$10(count, createTypeArrays$10(buffer, count))
+	        ];
+	}
+
+	function create$57(state) {
+	  var lightMaterialCount = getLightMaterialCount(state[/* settingRecord */1]);
+	  var match = _initBufferData$11(lightMaterialCount);
+	  var match$1 = match[1];
+	  return /* record */[
+	          /* buffer */match[0],
+	          /* count */lightMaterialCount,
+	          /* transformIndices */match$1[0],
+	          /* materialIndices */match$1[1],
+	          /* meshRendererIndices */match$1[2],
+	          /* geometryIndices */match$1[3],
+	          /* geometryTypes */match$1[5],
+	          /* sourceInstanceIndices */match$1[4]
+	        ];
+	}
+
+
+	/* Worker-Wonderjs Not a pure module */
+
+	function getRecord$13(state) {
+	  return unsafeGet$1(state[/* renderRecord */33]);
 	}
 
 	function create$55(state) {
-	  state[/* renderRecord */32] = /* record */[
+	  state[/* renderRecord */33] = /* record */[
 	    /* basicRenderObjectRecord */create$56(state),
 	    /* lightRenderObjectRecord */create$57(state),
 	    /* cameraRecord */undefined
@@ -25540,11 +26534,11 @@
 	/* OptionService-Wonderjs Not a pure module */
 
 	function restore$1(_, targetState) {
-	  var match = getRecord$12(targetState);
+	  var match = getRecord$13(targetState);
 	  var basicRenderObjectRecord = match[/* basicRenderObjectRecord */0];
 	  var lightRenderObjectRecord = match[/* lightRenderObjectRecord */1];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* renderRecord */32] = /* record */[
+	  newrecord[/* renderRecord */33] = /* record */[
 	    /* basicRenderObjectRecord */basicRenderObjectRecord,
 	    /* lightRenderObjectRecord */lightRenderObjectRecord,
 	    /* cameraRecord */undefined
@@ -25555,28 +26549,11 @@
 
 	/* RecordRenderMainService-Wonderjs Not a pure module */
 
-	var entries$1 = entries;
-
-
-	/* Js_dict Not a pure module */
-
-	function _getIntersectShaderIndexMap(currentShaderIndexMap, targetShaderIndexMap) {
-	  var intersectShaderIndexDataArr = entries$1(targetShaderIndexMap).filter((function (param) {
-	          return has(param[0], currentShaderIndexMap);
-	        }));
-	  return /* tuple */[
-	          intersectShaderIndexDataArr.length,
-	          reduceOneParam((function (shaderMap, param) {
-	                  return set(param[0], param[1], shaderMap);
-	                }), createEmpty(/* () */0), intersectShaderIndexDataArr)
-	        ];
-	}
-
 	function restore$2(currentState, targetState) {
 	  requireCheck((function () {
-	          var currentPrecision = currentState[/* glslRecord */27][/* precision */0];
-	          var targetPrecision = targetState[/* glslRecord */27][/* precision */0];
-	          return test(buildAssertMessage("currentState->shaderRecord->glslRecord->precision and targetState ->shaderRecord->glslRecord->precision be the same", "not"), (function () {
+	          var currentPrecision = currentState[/* glslRecord */28][/* precision */0];
+	          var targetPrecision = targetState[/* glslRecord */28][/* precision */0];
+	          return test(buildAssertMessage("currentState->glslRecord->precision and targetState->glslRecord->precision be the same", "not"), (function () {
 	                        if (currentPrecision !== undefined) {
 	                          if (targetPrecision !== undefined) {
 	                            return Operators[/* ==^ */2](currentPrecision, targetPrecision);
@@ -25590,15 +26567,15 @@
 	                        }
 	                      }));
 	        }), getIsDebug(stateData));
-	  var match = currentState[/* shaderRecord */26];
-	  var currentShaderIndexMap = match[/* shaderIndexMap */1];
-	  var targetShaderData = targetState[/* shaderRecord */26];
-	  var targetShaderIndexMap = targetShaderData[/* shaderIndexMap */1];
-	  var match$1 = _getIntersectShaderIndexMap(currentShaderIndexMap, targetShaderIndexMap);
+	  var match = currentState[/* shaderRecord */27];
+	  var currentIndex = match[/* index */0];
+	  var targetShaderData = targetState[/* shaderRecord */27];
+	  var targetIndex = targetShaderData[/* index */0];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* shaderRecord */26] = /* record */[
-	    /* index */match$1[0],
-	    /* shaderIndexMap */match$1[1]
+	  newrecord[/* shaderRecord */27] = /* record */[
+	    /* index */Math.max(currentIndex, targetIndex),
+	    /* shaderIndexMap */targetShaderData[/* shaderIndexMap */1],
+	    /* usedShaderIndexArray */targetShaderData[/* usedShaderIndexArray */2]
 	  ];
 	  return newrecord;
 	}
@@ -25606,28 +26583,18 @@
 
 	/* Log-WonderLog Not a pure module */
 
-	function getIntersectShaderRelatedMap(intersectShaderIndexDataArray, currentMap) {
-	  return reduceOneParam((function (intersectMap, param) {
-	                set$1(param[1], unsafeGet$2(param[0], currentMap), intersectMap);
-	                return intersectMap;
-	              }), createEmpty$2(/* () */0), intersectShaderIndexDataArray);
-	}
-
-
-	/* ArrayService-WonderCommonlib Not a pure module */
-
-	function restore$3(intersectShaderIndexDataArray, currentState, targetState) {
-	  var match = currentState[/* programRecord */28];
+	function restore$3(_, targetState) {
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* programRecord */28] = /* record */[
-	    /* programMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* programMap */0]),
+	  var init = targetState[/* programRecord */29];
+	  newrecord[/* programRecord */29] = /* record */[
+	    /* programMap */init[/* programMap */0],
 	    /* lastUsedProgram */undefined
 	  ];
 	  return newrecord;
 	}
 
 
-	/* RestoreShaderFromStateService-Wonderjs Not a pure module */
+	/* No side effect */
 
 	function _restoreTypeArrays(currentTransformRecord, targetTransformRecord) {
 	  var match = currentTransformRecord[/* localPositions */3] === targetTransformRecord[/* localPositions */3] && currentTransformRecord[/* localRotations */4] === targetTransformRecord[/* localRotations */4] && currentTransformRecord[/* localScales */5] === targetTransformRecord[/* localScales */5] && currentTransformRecord[/* localToWorldMatrices */2] === targetTransformRecord[/* localToWorldMatrices */2];
@@ -25690,7 +26657,7 @@
 	  var currentTransformRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
 	  var newrecord$1 = caml_array_dup(match[1]);
-	  newrecord[/* transformRecord */11] = (newrecord$1[/* buffer */1] = currentTransformRecord$1[/* buffer */1], newrecord$1[/* localToWorldMatrices */2] = currentTransformRecord$1[/* localToWorldMatrices */2], newrecord$1[/* localPositions */3] = currentTransformRecord$1[/* localPositions */3], newrecord$1[/* localRotations */4] = currentTransformRecord$1[/* localRotations */4], newrecord$1[/* localScales */5] = currentTransformRecord$1[/* localScales */5], newrecord$1);
+	  newrecord[/* transformRecord */12] = (newrecord$1[/* buffer */1] = currentTransformRecord$1[/* buffer */1], newrecord$1[/* localToWorldMatrices */2] = currentTransformRecord$1[/* localToWorldMatrices */2], newrecord$1[/* localPositions */3] = currentTransformRecord$1[/* localPositions */3], newrecord$1[/* localRotations */4] = currentTransformRecord$1[/* localRotations */4], newrecord$1[/* localScales */5] = currentTransformRecord$1[/* localScales */5], newrecord$1);
 	  return newrecord;
 	}
 
@@ -25834,9 +26801,9 @@
 	/* Log-WonderLog Not a pure module */
 
 	function restore$5(currentState, targetState) {
-	  var match = addAllBufferToPool(currentState[/* vboBufferRecord */34]);
+	  var match = addAllBufferToPool(currentState[/* vboBufferRecord */35]);
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* vboBufferRecord */34] = /* record */[
+	  newrecord[/* vboBufferRecord */35] = /* record */[
 	    /* boxGeometryVertexBufferMap : array */[],
 	    /* boxGeometryTexCoordBufferMap : array */[],
 	    /* boxGeometryNormalBufferMap : array */[],
@@ -25856,19 +26823,19 @@
 
 	/* PoolVboBufferService-Wonderjs Not a pure module */
 
-	function restore$6(intersectShaderIndexDataArray, currentState, targetState) {
-	  var match = currentState[/* glslSenderRecord */30];
+	function restore$6(_, targetState) {
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* glslSenderRecord */30] = /* record */[
-	    /* attributeSendDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* attributeSendDataMap */0]),
-	    /* instanceAttributeSendDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* instanceAttributeSendDataMap */1]),
-	    /* uniformCacheMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformCacheMap */2]),
-	    /* uniformRenderObjectSendModelDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformRenderObjectSendModelDataMap */3]),
-	    /* uniformRenderObjectSendMaterialDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformRenderObjectSendMaterialDataMap */4]),
-	    /* uniformShaderSendNoCachableDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformShaderSendNoCachableDataMap */5]),
-	    /* uniformShaderSendCachableDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformShaderSendCachableDataMap */6]),
-	    /* uniformShaderSendCachableFunctionDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformShaderSendCachableFunctionDataMap */7]),
-	    /* uniformInstanceSendNoCachableDataMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformInstanceSendNoCachableDataMap */8]),
+	  var init = targetState[/* glslSenderRecord */31];
+	  newrecord[/* glslSenderRecord */31] = /* record */[
+	    /* attributeSendDataMap */init[/* attributeSendDataMap */0],
+	    /* instanceAttributeSendDataMap */init[/* instanceAttributeSendDataMap */1],
+	    /* uniformCacheMap */init[/* uniformCacheMap */2],
+	    /* uniformRenderObjectSendModelDataMap */init[/* uniformRenderObjectSendModelDataMap */3],
+	    /* uniformRenderObjectSendMaterialDataMap */init[/* uniformRenderObjectSendMaterialDataMap */4],
+	    /* uniformShaderSendNoCachableDataMap */init[/* uniformShaderSendNoCachableDataMap */5],
+	    /* uniformShaderSendCachableDataMap */init[/* uniformShaderSendCachableDataMap */6],
+	    /* uniformShaderSendCachableFunctionDataMap */init[/* uniformShaderSendCachableFunctionDataMap */7],
+	    /* uniformInstanceSendNoCachableDataMap */init[/* uniformInstanceSendNoCachableDataMap */8],
 	    /* vertexAttribHistoryArray */createEmpty$1(/* () */0),
 	    /* lastSendMaterialData */undefined,
 	    /* lastSendGeometryData */undefined
@@ -25881,7 +26848,7 @@
 
 	function restore$7(currentState, targetState) {
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* globalTempRecord */35] = currentState[/* globalTempRecord */35];
+	  newrecord[/* globalTempRecord */36] = currentState[/* globalTempRecord */36];
 	  return newrecord;
 	}
 
@@ -25896,7 +26863,7 @@
 	            targetPointLightRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$5(currentPointLightRecord[/* index */0], /* tuple */[
+	    setAllTypeArrDataToDefault$6(currentPointLightRecord[/* index */0], /* tuple */[
 	          currentPointLightRecord[/* colors */2],
 	          currentPointLightRecord[/* intensities */3],
 	          currentPointLightRecord[/* constants */4],
@@ -25954,13 +26921,13 @@
 	}
 
 	function restore$8(currentState, targetState) {
-	  var currentPointLightRecord = currentState[/* pointLightRecord */21];
-	  var targetPointLightRecord = targetState[/* pointLightRecord */21];
+	  var currentPointLightRecord = currentState[/* pointLightRecord */22];
+	  var targetPointLightRecord = targetState[/* pointLightRecord */22];
 	  var match = _restoreTypeArrays$1(currentPointLightRecord, targetPointLightRecord);
 	  var targetPointLightRecord$1 = match[1];
 	  var currentPointLightRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* pointLightRecord */21] = /* record */[
+	  newrecord[/* pointLightRecord */22] = /* record */[
 	    /* index */targetPointLightRecord$1[/* index */0],
 	    /* buffer */currentPointLightRecord$1[/* buffer */1],
 	    /* colors */currentPointLightRecord$1[/* colors */2],
@@ -25978,37 +26945,12 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function restore$9(intersectShaderIndexDataArray, currentState, targetState) {
-	  var match = currentState[/* glslLocationRecord */29];
-	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* glslLocationRecord */29] = /* record */[
-	    /* attributeLocationMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* attributeLocationMap */0]),
-	    /* uniformLocationMap */getIntersectShaderRelatedMap(intersectShaderIndexDataArray, match[/* uniformLocationMap */1])
-	  ];
-	  return newrecord;
+	function restore$9(_, targetState) {
+	  return targetState;
 	}
 
 
-	/* RestoreShaderFromStateService-Wonderjs Not a pure module */
-
-	function getIntersectShaderIndexDataArray(currentState, targetState) {
-	  var match = currentState[/* shaderRecord */26];
-	  var currentShaderIndexMap = match[/* shaderIndexMap */1];
-	  var match$1 = targetState[/* shaderRecord */26];
-	  var targetShaderIndexMap = match$1[/* shaderIndexMap */1];
-	  return reduceOneParam((function (dataArr, param) {
-	                dataArr.push(/* tuple */[
-	                      unsafeGet(param[0], currentShaderIndexMap),
-	                      param[1]
-	                    ]);
-	                return dataArr;
-	              }), /* array */[], entries$1(targetShaderIndexMap).filter((function (param) {
-	                    return has(param[0], currentShaderIndexMap);
-	                  })));
-	}
-
-
-	/* HashMapService-Wonderjs Not a pure module */
+	/* No side effect */
 
 	var getAllAliveMaterials = getValidKeys;
 
@@ -26025,9 +26967,9 @@
 	/* ArrayService-Wonderjs Not a pure module */
 
 	function _resetShaderIndices(state) {
-	  var record = getRecord$3(state);
+	  var record = getRecord$4(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */resetShaderIndices(record[/* index */0], getDefaultShaderIndex(/* () */0), record[/* shaderIndices */2]),
@@ -26039,7 +26981,8 @@
 	    /* gameObjectMap */record[/* gameObjectMap */8],
 	    /* groupCountMap */record[/* groupCountMap */9],
 	    /* disposedIndexArray */record[/* disposedIndexArray */10],
-	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */11]
+	    /* nameMap */record[/* nameMap */11],
+	    /* materialArrayForWorkerInit */record[/* materialArrayForWorkerInit */12]
 	  ];
 	  return newrecord;
 	}
@@ -26052,7 +26995,7 @@
 	            targetBasicMaterialRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$1(currentBasicMaterialRecord[/* index */0], getDefaultShaderIndex(/* () */0), currentBasicMaterialRecord[/* defaultColor */7], /* tuple */[
+	    setAllTypeArrDataToDefault$2(currentBasicMaterialRecord[/* index */0], getDefaultShaderIndex(/* () */0), currentBasicMaterialRecord[/* defaultColor */7], /* tuple */[
 	          currentBasicMaterialRecord[/* shaderIndices */2],
 	          currentBasicMaterialRecord[/* colors */3],
 	          currentBasicMaterialRecord[/* textureIndices */4],
@@ -26095,14 +27038,14 @@
 
 	function restore$10(gl, currentState, targetState) {
 	  var targetState$1 = _resetShaderIndices(targetState);
-	  var targetState$2 = initMaterials(getAllAliveMaterials(getRecord$3(targetState$1)[/* gameObjectMap */8]), gl, targetState$1);
-	  var currentBasicMaterialRecord = getRecord$3(currentState);
-	  var targetBasicMaterialRecord = getRecord$3(targetState$2);
+	  var targetState$2 = initMaterials(getAllAliveMaterials(getRecord$4(targetState$1)[/* gameObjectMap */8]), gl, targetState$1);
+	  var currentBasicMaterialRecord = getRecord$4(currentState);
+	  var targetBasicMaterialRecord = getRecord$4(targetState$2);
 	  var match = _restoreTypeArrays$2(currentBasicMaterialRecord, targetBasicMaterialRecord);
 	  var targetBasicMaterialRecord$1 = match[1];
 	  var currentBasicMaterialRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState$2);
-	  newrecord[/* basicMaterialRecord */15] = /* record */[
+	  newrecord[/* basicMaterialRecord */16] = /* record */[
 	    /* index */targetBasicMaterialRecord$1[/* index */0],
 	    /* buffer */currentBasicMaterialRecord$1[/* buffer */1],
 	    /* shaderIndices */currentBasicMaterialRecord$1[/* shaderIndices */2],
@@ -26114,7 +27057,8 @@
 	    /* gameObjectMap */targetBasicMaterialRecord$1[/* gameObjectMap */8],
 	    /* groupCountMap */targetBasicMaterialRecord$1[/* groupCountMap */9],
 	    /* disposedIndexArray */targetBasicMaterialRecord$1[/* disposedIndexArray */10],
-	    /* materialArrayForWorkerInit */targetBasicMaterialRecord$1[/* materialArrayForWorkerInit */11]
+	    /* nameMap */targetBasicMaterialRecord$1[/* nameMap */11],
+	    /* materialArrayForWorkerInit */targetBasicMaterialRecord$1[/* materialArrayForWorkerInit */12]
 	  ];
 	  return newrecord;
 	}
@@ -26124,8 +27068,8 @@
 
 	function restore$11(_, param, targetState) {
 	  var newrecord = caml_array_dup(targetState);
-	  var init = targetState[/* deviceManagerRecord */9];
-	  newrecord[/* deviceManagerRecord */9] = /* record */[
+	  var init = targetState[/* deviceManagerRecord */10];
+	  newrecord[/* deviceManagerRecord */10] = /* record */[
 	    /* gl */some$1(param[/* gl */0]),
 	    /* colorWrite */init[/* colorWrite */1],
 	    /* clearColor */init[/* clearColor */2],
@@ -26140,9 +27084,9 @@
 	/* No side effect */
 
 	function _resetShaderIndices$1(state) {
-	  var record = getRecord$4(state);
+	  var record = getRecord$5(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */record[/* index */0],
 	    /* buffer */record[/* buffer */1],
 	    /* shaderIndices */resetShaderIndices(record[/* index */0], getDefaultShaderIndex(/* () */0), record[/* shaderIndices */2]),
@@ -26173,7 +27117,7 @@
 	            targetLightMaterialRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$2(currentLightMaterialRecord[/* index */0], /* tuple */[
+	    setAllTypeArrDataToDefault$3(currentLightMaterialRecord[/* index */0], /* tuple */[
 	          getDefaultShaderIndex(/* () */0),
 	          currentLightMaterialRecord[/* defaultDiffuseColor */10],
 	          currentLightMaterialRecord[/* defaultSpecularColor */11],
@@ -26245,14 +27189,14 @@
 
 	function restore$12(gl, currentState, targetState) {
 	  var targetState$1 = _resetShaderIndices$1(targetState);
-	  var targetState$2 = initMaterials$1(getAllAliveMaterials(getRecord$4(targetState$1)[/* gameObjectMap */13]), gl, targetState$1);
-	  var currentLightMaterialRecord = getRecord$4(currentState);
-	  var targetLightMaterialRecord = getRecord$4(targetState$2);
+	  var targetState$2 = initMaterials$1(getAllAliveMaterials(getRecord$5(targetState$1)[/* gameObjectMap */13]), gl, targetState$1);
+	  var currentLightMaterialRecord = getRecord$5(currentState);
+	  var targetLightMaterialRecord = getRecord$5(targetState$2);
 	  var match = _restoreTypeArrays$3(currentLightMaterialRecord, targetLightMaterialRecord);
 	  var targetLightMaterialRecord$1 = match[1];
 	  var currentLightMaterialRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState$2);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */targetLightMaterialRecord$1[/* index */0],
 	    /* buffer */currentLightMaterialRecord$1[/* buffer */1],
 	    /* shaderIndices */currentLightMaterialRecord$1[/* shaderIndices */2],
@@ -26279,10 +27223,10 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function restore$13(currentState, targetState) {
-	  var currentTextureRecord = getRecord$9(currentState);
-	  getRecord$9(targetState);
+	  var currentTextureRecord = getRecord$10(currentState);
+	  getRecord$10(targetState);
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* sourceTextureRecord */17] = /* record */[/* buffer */currentTextureRecord[/* buffer */0]];
+	  newrecord[/* sourceTextureRecord */18] = /* record */[/* buffer */currentTextureRecord[/* buffer */0]];
 	  return newrecord;
 	}
 
@@ -26291,7 +27235,7 @@
 
 	function restore$14(_, param, targetState) {
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* typeArrayPoolRecord */36] = /* record */[
+	  newrecord[/* typeArrayPoolRecord */37] = /* record */[
 	    /* float32ArrayPoolMap */param[/* float32ArrayPoolMap */1],
 	    /* uint16ArrayPoolMap */param[/* uint16ArrayPoolMap */2]
 	  ];
@@ -26302,14 +27246,14 @@
 	/* No side effect */
 
 	function _restoreTypeArrays$4(customGeometryPointCount, currentCustomGeometryRecord, targetCustomGeometryRecord) {
-	  var match = currentCustomGeometryRecord[/* vertices */2] === targetCustomGeometryRecord[/* vertices */2] && currentCustomGeometryRecord[/* normals */4] === targetCustomGeometryRecord[/* normals */4] && currentCustomGeometryRecord[/* indices */5] === targetCustomGeometryRecord[/* indices */5];
+	  var match = currentCustomGeometryRecord[/* vertices */2] === targetCustomGeometryRecord[/* vertices */2] && currentCustomGeometryRecord[/* normals */4] === targetCustomGeometryRecord[/* normals */4] && currentCustomGeometryRecord[/* texCoords */3] === targetCustomGeometryRecord[/* texCoords */3] && currentCustomGeometryRecord[/* indices */5] === targetCustomGeometryRecord[/* indices */5];
 	  if (match) {
 	    return /* tuple */[
 	            currentCustomGeometryRecord,
 	            targetCustomGeometryRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$3(currentCustomGeometryRecord[/* index */0], customGeometryPointCount, /* tuple */[
+	    setAllTypeArrDataToDefault$4(currentCustomGeometryRecord[/* index */0], customGeometryPointCount, /* tuple */[
 	          currentCustomGeometryRecord[/* vertices */2],
 	          currentCustomGeometryRecord[/* texCoords */3],
 	          currentCustomGeometryRecord[/* normals */4],
@@ -26351,13 +27295,13 @@
 	}
 
 	function restore$15(currentState, targetState) {
-	  var currentCustomGeometryRecord = getRecord$5(currentState);
-	  var targetCustomGeometryRecord = getRecord$5(targetState);
-	  var match = _restoreTypeArrays$4(getCustomGeometryPointCount(currentState[/* settingRecord */0]), currentCustomGeometryRecord, targetCustomGeometryRecord);
+	  var currentCustomGeometryRecord = getRecord$6(currentState);
+	  var targetCustomGeometryRecord = getRecord$6(targetState);
+	  var match = _restoreTypeArrays$4(getCustomGeometryPointCount(currentState[/* settingRecord */1]), currentCustomGeometryRecord, targetCustomGeometryRecord);
 	  var targetCustomGeometryRecord$1 = match[1];
 	  var currentCustomGeometryRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* customGeometryRecord */23] = /* record */[
+	  newrecord[/* customGeometryRecord */24] = /* record */[
 	    /* index */targetCustomGeometryRecord$1[/* index */0],
 	    /* buffer */currentCustomGeometryRecord$1[/* buffer */1],
 	    /* vertices */currentCustomGeometryRecord$1[/* vertices */2],
@@ -26393,7 +27337,7 @@
 	            targetDirectionLightRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$6(currentDirectionLightRecord[/* index */0], /* tuple */[
+	    setAllTypeArrDataToDefault$7(currentDirectionLightRecord[/* index */0], /* tuple */[
 	          currentDirectionLightRecord[/* colors */2],
 	          currentDirectionLightRecord[/* intensities */3]
 	        ]);
@@ -26419,13 +27363,13 @@
 	}
 
 	function restore$16(currentState, targetState) {
-	  var currentDirectionLightRecord = currentState[/* directionLightRecord */20];
-	  var targetDirectionLightRecord = targetState[/* directionLightRecord */20];
+	  var currentDirectionLightRecord = currentState[/* directionLightRecord */21];
+	  var targetDirectionLightRecord = targetState[/* directionLightRecord */21];
 	  var match = _restoreTypeArrays$5(currentDirectionLightRecord, targetDirectionLightRecord);
 	  var targetDirectionLightRecord$1 = match[1];
 	  var currentDirectionLightRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* directionLightRecord */20] = /* record */[
+	  newrecord[/* directionLightRecord */21] = /* record */[
 	    /* index */targetDirectionLightRecord$1[/* index */0],
 	    /* buffer */currentDirectionLightRecord$1[/* buffer */1],
 	    /* colors */currentDirectionLightRecord$1[/* colors */2],
@@ -26453,7 +27397,7 @@
 	            targetSourceInstanceRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$4(currentSourceInstanceRecord[/* index */0], getDefault(/* () */0), /* tuple */[
+	    setAllTypeArrDataToDefault$5(currentSourceInstanceRecord[/* index */0], getDefault(/* () */0), /* tuple */[
 	          currentSourceInstanceRecord[/* objectInstanceTransformCollections */4],
 	          currentSourceInstanceRecord[/* isTransformStatics */3]
 	        ]);
@@ -26479,15 +27423,15 @@
 	}
 
 	function restore$17(currentState, sharedData, targetState) {
-	  var currentSourceInstanceRecord = getRecord$6(currentState);
-	  var targetSourceInstanceRecord = getRecord$6(targetState);
-	  var float32ArrayPoolMap = addAllFloat32TypeArrayToPool(currentSourceInstanceRecord[/* matrixFloat32ArrayMap */6], getMaxBigTypeArrayPoolSize(targetState[/* settingRecord */0]), sharedData[/* float32ArrayPoolMap */1]);
+	  var currentSourceInstanceRecord = getRecord$7(currentState);
+	  var targetSourceInstanceRecord = getRecord$7(targetState);
+	  var float32ArrayPoolMap = addAllFloat32TypeArrayToPool(currentSourceInstanceRecord[/* matrixFloat32ArrayMap */6], getMaxBigTypeArrayPoolSize(targetState[/* settingRecord */1]), sharedData[/* float32ArrayPoolMap */1]);
 	  var match = _restoreTypeArrays$6(currentSourceInstanceRecord, targetSourceInstanceRecord);
 	  var targetSourceInstanceRecord$1 = match[1];
 	  var currentSourceInstanceRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
 	  return /* tuple */[
-	          (newrecord[/* sourceInstanceRecord */6] = /* record */[
+	          (newrecord[/* sourceInstanceRecord */7] = /* record */[
 	              /* index */targetSourceInstanceRecord$1[/* index */0],
 	              /* objectInstanceTransformIndexMap */targetSourceInstanceRecord$1[/* objectInstanceTransformIndexMap */1],
 	              /* buffer */currentSourceInstanceRecord$1[/* buffer */2],
@@ -26518,7 +27462,7 @@
 	            targetTextureRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$7(currentTextureRecord[/* index */0], /* tuple */[
+	    setAllTypeArrDataToDefault$8(currentTextureRecord[/* index */0], /* tuple */[
 	          currentTextureRecord[/* wrapSs */1],
 	          currentTextureRecord[/* wrapTs */2],
 	          currentTextureRecord[/* magFilters */3],
@@ -26592,13 +27536,13 @@
 	}
 
 	function restore$18(currentState, targetState) {
-	  var currentTextureRecord = getRecord$8(currentState);
-	  var targetTextureRecord = getRecord$8(targetState);
+	  var currentTextureRecord = getRecord$9(currentState);
+	  var targetTextureRecord = getRecord$9(targetState);
 	  var match = _restoreTypeArrays$7(currentTextureRecord, targetTextureRecord);
 	  var targetTextureRecord$1 = match[1];
 	  var currentTextureRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* basicSourceTextureRecord */18] = /* record */[
+	  newrecord[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */targetTextureRecord$1[/* index */0],
 	    /* wrapSs */currentTextureRecord$1[/* wrapSs */1],
 	    /* wrapTs */currentTextureRecord$1[/* wrapTs */2],
@@ -26630,7 +27574,7 @@
 	            targetTextureRecord
 	          ];
 	  } else {
-	    setAllTypeArrDataToDefault$8(currentTextureRecord[/* index */0], arrayBufferViewSourceTextureIndexOffset, /* tuple */[
+	    setAllTypeArrDataToDefault$9(currentTextureRecord[/* index */0], arrayBufferViewSourceTextureIndexOffset, /* tuple */[
 	          currentTextureRecord[/* wrapSs */1],
 	          currentTextureRecord[/* wrapTs */2],
 	          currentTextureRecord[/* magFilters */3],
@@ -26720,13 +27664,13 @@
 	}
 
 	function restore$19(currentState, targetState) {
-	  var currentTextureRecord = getRecord$10(currentState);
-	  var targetTextureRecord = getRecord$10(targetState);
+	  var currentTextureRecord = getRecord$11(currentState);
+	  var targetTextureRecord = getRecord$11(targetState);
 	  var match = _restoreTypeArrays$8(currentTextureRecord, targetTextureRecord, getArrayBufferViewSourceTextureIndexOffset$1(currentState));
 	  var targetTextureRecord$1 = match[1];
 	  var currentTextureRecord$1 = match[0];
 	  var newrecord = caml_array_dup(targetState);
-	  newrecord[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  newrecord[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */targetTextureRecord$1[/* index */0],
 	    /* wrapSs */currentTextureRecord$1[/* wrapSs */1],
 	    /* wrapTs */currentTextureRecord$1[/* wrapTs */2],
@@ -26753,41 +27697,39 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function _getSharedData(currentState) {
-	  var typeArrayPoolRecord = currentState[/* typeArrayPoolRecord */36];
+	  var typeArrayPoolRecord = currentState[/* typeArrayPoolRecord */37];
 	  return /* record */[
-	          /* gl */unsafeGetGl$1(currentState[/* deviceManagerRecord */9]),
+	          /* gl */unsafeGetGl$1(currentState[/* deviceManagerRecord */10]),
 	          /* float32ArrayPoolMap */getFloat32ArrayPoolMap(typeArrayPoolRecord),
 	          /* uint16ArrayPoolMap */getUint16ArrayPoolMap(typeArrayPoolRecord)
 	        ];
 	}
 
 	function restore(stateData, currentState, targetState) {
-	  var intersectShaderIndexDataArray = getIntersectShaderIndexDataArray(currentState, targetState);
 	  var sharedData = _getSharedData(currentState);
 	  var match = restore$17(currentState, sharedData, targetState);
 	  var sharedData$1 = match[1];
 	  var targetState$1 = restore$11(currentState, sharedData$1, match[0]);
-	  var gl = unsafeGetGl$1(targetState$1[/* deviceManagerRecord */9]);
-	  return setState$2(stateData, restore$19(currentState, restore$18(currentState, restore$13(currentState, restore$8(currentState, restore$16(currentState, restore$15(currentState, restore$4(currentState, restore$1(currentState, restore$12(gl, currentState, restore$10(gl, currentState, restore$6(intersectShaderIndexDataArray, currentState, restore$9(intersectShaderIndexDataArray, currentState, restore$3(intersectShaderIndexDataArray, currentState, restore$2(currentState, restore$5(currentState, restore$7(currentState, restore$14(currentState, sharedData$1, targetState$1))))))))))))))))));
+	  var gl = unsafeGetGl$1(targetState$1[/* deviceManagerRecord */10]);
+	  return setState$2(stateData, restore$19(currentState, restore$18(currentState, restore$13(currentState, restore$8(currentState, restore$16(currentState, restore$15(currentState, restore$4(currentState, restore$1(currentState, restore$12(gl, currentState, restore$10(gl, currentState, restore$6(currentState, restore$9(currentState, restore$3(currentState, restore$2(currentState, restore$5(currentState, restore$7(currentState, restore$14(currentState, sharedData$1, targetState$1))))))))))))))))));
 	}
 
 
 	/* DeviceManagerService-Wonderjs Not a pure module */
 
 	function deepCopyForRestore$24(state) {
-	  var state$1 = deepCopyForRestore$13(deepCopyForRestore$12(deepCopyForRestore$10(deepCopyForRestore$11(deepCopyForRestore$6(deepCopyForRestore$5(deepCopyForRestore$2(deepCopyForRestore$4(deepCopyForRestore$3(deepCopyForRestore$1(deepCopyForRestore$14(state)))))))))));
+	  var state$1 = deepCopyForRestore$14(deepCopyForRestore$13(deepCopyForRestore$11(deepCopyForRestore$12(deepCopyForRestore$7(deepCopyForRestore$6(deepCopyForRestore$3(deepCopyForRestore$2(deepCopyForRestore$5(deepCopyForRestore$4(deepCopyForRestore$1(deepCopyForRestore$15(state))))))))))));
 	  var newrecord = caml_array_dup(state$1);
-	  newrecord[/* objectInstanceRecord */7] = deepCopyForRestore$20(state$1[/* objectInstanceRecord */7]);
-	  newrecord[/* deviceManagerRecord */9] = deepCopyForRestore$18(state$1[/* deviceManagerRecord */9]);
-	  newrecord[/* gameObjectRecord */10] = deepCopyForRestore$16(state$1[/* gameObjectRecord */10]);
-	  newrecord[/* basicCameraViewRecord */13] = deepCopyForRestore$21(state$1[/* basicCameraViewRecord */13]);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = deepCopyForRestore$23(state$1[/* perspectiveCameraProjectionRecord */14]);
-	  newrecord[/* meshRendererRecord */24] = deepCopyForRestore$17(state$1[/* meshRendererRecord */24]);
-	  newrecord[/* arcballCameraControllerRecord */25] = deepCopyForRestore$22(state$1[/* arcballCameraControllerRecord */25]);
-	  newrecord[/* shaderRecord */26] = deepCopyForRestore$9(state$1[/* shaderRecord */26]);
-	  newrecord[/* glslRecord */27] = deepCopyForRestore$8(state$1[/* glslRecord */27]);
-	  newrecord[/* vboBufferRecord */34] = deepCopyForRestore$15(state$1[/* vboBufferRecord */34]);
-	  newrecord[/* typeArrayPoolRecord */36] = deepCopyForRestore$19(state$1[/* typeArrayPoolRecord */36]);
+	  newrecord[/* objectInstanceRecord */8] = deepCopyForRestore$20(state$1[/* objectInstanceRecord */8]);
+	  newrecord[/* deviceManagerRecord */10] = deepCopyForRestore$18(state$1[/* deviceManagerRecord */10]);
+	  newrecord[/* gameObjectRecord */11] = deepCopyForRestore$17(state$1[/* gameObjectRecord */11]);
+	  newrecord[/* basicCameraViewRecord */14] = deepCopyForRestore$21(state$1[/* basicCameraViewRecord */14]);
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = deepCopyForRestore$23(state$1[/* perspectiveCameraProjectionRecord */15]);
+	  newrecord[/* arcballCameraControllerRecord */26] = deepCopyForRestore$22(state$1[/* arcballCameraControllerRecord */26]);
+	  newrecord[/* shaderRecord */27] = deepCopyForRestore$10(state$1[/* shaderRecord */27]);
+	  newrecord[/* glslRecord */28] = deepCopyForRestore$9(state$1[/* glslRecord */28]);
+	  newrecord[/* vboBufferRecord */35] = deepCopyForRestore$16(state$1[/* vboBufferRecord */35]);
+	  newrecord[/* typeArrayPoolRecord */37] = deepCopyForRestore$19(state$1[/* typeArrayPoolRecord */37]);
 	  return newrecord;
 	}
 
@@ -26826,10 +27768,88 @@
 	  return setIsDebug$1(stateData, isDebug);
 	}
 
-	var deepCopyForRestore$7 = deepCopyForRestore$24;
+	var setUnsafeGetStateFunc$1 = setUnsafeGetStateFunc$2;
+
+	var setSetStateFunc$1 = setSetStateFunc$2;
+
+	var deepCopyForRestore$8 = deepCopyForRestore$24;
 
 
 	/* StateDataMain-Wonderjs Not a pure module */
+
+	function queryFullScreenData() {
+	  var root = window;
+	  return /* tuple */[
+	          0,
+	          0,
+	          root.innerWidth,
+	          root.innerHeight,
+	          "100%",
+	          "100%"
+	        ];
+	}
+
+	function _setAbsolutePosition(canvas) {
+	  canvas.style.position = "absolute";
+	  return canvas;
+	}
+
+	function setX(x, canvas) {
+	  canvas.style.left = "" + (String(x) + "px");
+	  return canvas;
+	}
+
+	function setY(y, canvas) {
+	  canvas.style.top = "" + (String(y) + "px");
+	  return canvas;
+	}
+
+	function setWidth$1(width, canvas) {
+	  canvas.width = width;
+	  return canvas;
+	}
+
+	function setHeight$1(height, canvas) {
+	  canvas.height = height;
+	  return canvas;
+	}
+
+	function setStyleWidth(width, canvas) {
+	  canvas.style.width = width;
+	  return canvas;
+	}
+
+	function setStyleHeight(height, canvas) {
+	  canvas.style.height = height;
+	  return canvas;
+	}
+
+	function _setBodyMargin($$document) {
+	  var bodies = $$document.querySelectorAll("body");
+	  if (bodies.length === 0) {
+	    return /* () */0;
+	  } else {
+	    setBatchStyle(caml_array_get(bodies, 0), "margin:0");
+	    return /* () */0;
+	  }
+	}
+
+	function setToFullScreen(param, canvas) {
+	  _setBodyMargin(document);
+	  return setStyleHeight(param[5], setStyleWidth(param[4], setHeight$1(param[3], setWidth$1(param[2], setY(param[1], setX(param[0], _setAbsolutePosition(canvas)))))));
+	}
+
+	function setScreenSize$2(param, canvas) {
+	  return setStyleHeight(param[3], setStyleWidth(param[2], setHeight$1(param[1], setWidth$1(param[0], canvas))));
+	}
+
+
+	/* No side effect */
+
+	var setScreenSize$1 = setScreenSize$2;
+
+
+	/* No side effect */
 
 	var classCallCheck$1 = function (instance, Constructor) {
 	  if (!(instance instanceof Constructor)) {
@@ -27091,7 +28111,7 @@
 	function execJob(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                state[/* timeControllerRecord */33] = execJob$1(state[/* timeControllerRecord */33]);
+	                state[/* timeControllerRecord */34] = execJob$1(state[/* timeControllerRecord */34]);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -27136,7 +28156,7 @@
 	/* No side effect */
 
 	function _getLocation$1(mouseDomEvent, param) {
-	  var browser = param[/* browserDetectRecord */40][/* browser */0];
+	  var browser = param[/* browserDetectRecord */41][/* browser */0];
 	  if (browser >= 2) {
 	    return fatalUnknownBrowser("_getLocation", browser);
 	  } else {
@@ -27152,7 +28172,7 @@
 	}
 
 	function _getButton(mouseDomEvent, state) {
-	  var browser = state[/* browserDetectRecord */40][/* browser */0];
+	  var browser = state[/* browserDetectRecord */41][/* browser */0];
 	  if (browser >= 2) {
 	    return fatalUnknownBrowser("_getButton", browser);
 	  } else {
@@ -27229,7 +28249,7 @@
 	  if (match) {
 	    return _getMovementDeltaWhenPointerLocked(mouseDomEvent, state);
 	  } else {
-	    return getMovementDelta(_getLocation$1(mouseDomEvent, state), getLastXY(state[/* eventRecord */41]), state);
+	    return getMovementDelta(_getLocation$1(mouseDomEvent, state), getLastXY(state[/* eventRecord */42]), state);
 	  }
 	}
 
@@ -27246,7 +28266,7 @@
 	}
 
 	function execEventHandle(eventName, mouseDomEvent, state) {
-	  var match = get$3(eventName, state[/* eventRecord */41][/* mouseDomEventDataArrMap */1]);
+	  var match = get$3(eventName, state[/* eventRecord */42][/* mouseDomEventDataArrMap */1]);
 	  if (match !== undefined) {
 	    return reduceOneParam((function (state, param) {
 	                  return param[/* handleFunc */1](_convertMouseDomEventToMouseEvent(eventName, mouseDomEvent, state), state);
@@ -27258,7 +28278,7 @@
 
 	function setLastXY(lastX, lastY, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = setLastXY$1(lastX, lastY, state[/* eventRecord */41]);
+	  newrecord[/* eventRecord */42] = setLastXY$1(lastX, lastY, state[/* eventRecord */42]);
 	  return newrecord;
 	}
 
@@ -27269,14 +28289,14 @@
 	}
 
 	function getIsDrag(state) {
-	  return state[/* eventRecord */41][/* mouseEventData */6][/* isDrag */2];
+	  return state[/* eventRecord */42][/* mouseEventData */6][/* isDrag */2];
 	}
 
 	function setIsDrag(isDrag, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
 	  var init = eventRecord[/* mouseEventData */6];
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -27362,7 +28382,7 @@
 	}
 
 	function _getMovementDelta$1(touchDomEvent, state) {
-	  return getMovementDelta(_getLocation$2(touchDomEvent, state), getLastXY$1(state[/* eventRecord */41]), state);
+	  return getMovementDelta(_getLocation$2(touchDomEvent, state), getLastXY$1(state[/* eventRecord */42]), state);
 	}
 
 	function _convertTouchDomEventToTouchEvent(eventName, touchDomEvent, state) {
@@ -27378,7 +28398,7 @@
 
 	function execEventHandle$1(eventName, touchDomEvent, state) {
 	  preventDefault(touchDomEvent);
-	  var match = get$3(eventName, state[/* eventRecord */41][/* touchDomEventDataArrMap */3]);
+	  var match = get$3(eventName, state[/* eventRecord */42][/* touchDomEventDataArrMap */3]);
 	  if (match !== undefined) {
 	    return reduceOneParam((function (state, param) {
 	                  return param[/* handleFunc */1](_convertTouchDomEventToTouchEvent(eventName, touchDomEvent, state), state);
@@ -27390,7 +28410,7 @@
 
 	function setLastXY$2(lastX, lastY, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* eventRecord */41] = setLastXY$3(lastX, lastY, state[/* eventRecord */41]);
+	  newrecord[/* eventRecord */42] = setLastXY$3(lastX, lastY, state[/* eventRecord */42]);
 	  return newrecord;
 	}
 
@@ -27401,14 +28421,14 @@
 	}
 
 	function getIsDrag$1(state) {
-	  return state[/* eventRecord */41][/* touchEventData */8][/* isDrag */2];
+	  return state[/* eventRecord */42][/* touchEventData */8][/* isDrag */2];
 	}
 
 	function setIsDrag$1(isDrag, state) {
-	  var eventRecord = state[/* eventRecord */41];
+	  var eventRecord = state[/* eventRecord */42];
 	  var newrecord = caml_array_dup(state);
 	  var init = eventRecord[/* touchEventData */8];
-	  newrecord[/* eventRecord */41] = /* record */[
+	  newrecord[/* eventRecord */42] = /* record */[
 	    /* domEventStreamSubscription */eventRecord[/* domEventStreamSubscription */0],
 	    /* mouseDomEventDataArrMap */eventRecord[/* mouseDomEventDataArrMap */1],
 	    /* keyboardDomEventDataArrMap */eventRecord[/* keyboardDomEventDataArrMap */2],
@@ -27475,7 +28495,7 @@
 	}
 
 	function _getKey(keyboardDomEvent, param) {
-	  var keyboardEventData = param[/* eventRecord */41][/* keyboardEventData */7];
+	  var keyboardEventData = param[/* eventRecord */42][/* keyboardEventData */7];
 	  var specialKeyMap = keyboardEventData[/* specialKeyMap */0];
 	  var keyCode = keyboardDomEvent.keyCode;
 	  var $$char = String.fromCharCode(keyCode).toLowerCase();
@@ -27505,7 +28525,7 @@
 	}
 
 	function execEventHandle$2(eventName, keyboardDomEvent, state) {
-	  var match = get$3(eventName, state[/* eventRecord */41][/* keyboardDomEventDataArrMap */2]);
+	  var match = get$3(eventName, state[/* eventRecord */42][/* keyboardDomEventDataArrMap */2]);
 	  if (match !== undefined) {
 	    return reduceOneParam((function (state, param) {
 	                  return param[/* handleFunc */1](_convertKeyboardDomEventToKeyboardEvent(eventName, keyboardDomEvent, state), state);
@@ -27518,7 +28538,11 @@
 
 	/* ArrayService-WonderCommonlib Not a pure module */
 
-	function _fromDomEvent(eventName) {
+	function _fromPointDomEvent(eventName, state) {
+	  return fromEvent(eventName, unsafeGetCanvas(state[/* viewRecord */9]), false);
+	}
+
+	function _fromKeyboardDomEvent(eventName, _) {
 	  return fromEvent(eventName, document.body, false);
 	}
 
@@ -27598,142 +28622,146 @@
 	}
 
 	function bindDomEventToTriggerPointEvent(state) {
-	  var browser = state[/* browserDetectRecord */40][/* browser */0];
+	  var browser = state[/* browserDetectRecord */41][/* browser */0];
 	  if (browser >= 2) {
 	    if (browser >= 4) {
 	      return fatal(buildFatalMessage("bindDomEventToTriggerPointEvent", "unknown browser", "", "", "browser:" + (String(browser) + "")));
 	    } else {
-	      return _bindTouchEventToTriggerPointEvent(/* TouchDrag */13, getPointDragEventName$1(/* () */0), /* PointDrag */5, _bindTouchEventToTriggerPointEvent(/* TouchMove */11, getPointMoveEventName$1(/* () */0), /* PointMove */3, _bindTouchEventToTriggerPointEvent(/* TouchStart */12, getPointDownEventName$1(/* () */0), /* PointDown */1, _bindTouchEventToTriggerPointEvent(/* TouchEnd */10, getPointUpEventName$1(/* () */0), /* PointUp */2, _bindTouchEventToTriggerPointEvent(/* TouchTap */9, getPointTapEventName$1(/* () */0), /* PointTap */0, state)))));
+	      return _bindTouchEventToTriggerPointEvent(/* TouchDrag */14, getPointDragEventName$1(/* () */0), /* PointDrag */5, _bindTouchEventToTriggerPointEvent(/* TouchMove */12, getPointMoveEventName$1(/* () */0), /* PointMove */3, _bindTouchEventToTriggerPointEvent(/* TouchStart */13, getPointDownEventName$1(/* () */0), /* PointDown */1, _bindTouchEventToTriggerPointEvent(/* TouchEnd */11, getPointUpEventName$1(/* () */0), /* PointUp */2, _bindTouchEventToTriggerPointEvent(/* TouchTap */10, getPointTapEventName$1(/* () */0), /* PointTap */0, state)))));
 	    }
 	  } else {
-	    return _bindMouseEventToTriggerPointEvent(/* MouseDrag */5, getPointDragEventName$1(/* () */0), /* PointDrag */5, _bindMouseEventToTriggerPointEvent(/* MouseMove */3, getPointMoveEventName$1(/* () */0), /* PointMove */3, _bindMouseEventToTriggerPointEvent(/* MouseWheel */4, getPointScaleEventName$1(/* () */0), /* PointScale */4, _bindMouseEventToTriggerPointEvent(/* MouseDown */1, getPointDownEventName$1(/* () */0), /* PointDown */1, _bindMouseEventToTriggerPointEvent(/* MouseUp */2, getPointUpEventName$1(/* () */0), /* PointUp */2, _bindMouseEventToTriggerPointEvent(/* Click */0, getPointTapEventName$1(/* () */0), /* PointTap */0, state))))));
+	    return _bindMouseEventToTriggerPointEvent(/* MouseDrag */6, getPointDragEventName$1(/* () */0), /* PointDrag */5, _bindMouseEventToTriggerPointEvent(/* MouseMove */4, getPointMoveEventName$1(/* () */0), /* PointMove */3, _bindMouseEventToTriggerPointEvent(/* MouseWheel */5, getPointScaleEventName$1(/* () */0), /* PointScale */4, _bindMouseEventToTriggerPointEvent(/* MouseDown */2, getPointDownEventName$1(/* () */0), /* PointDown */1, _bindMouseEventToTriggerPointEvent(/* MouseUp */3, getPointUpEventName$1(/* () */0), /* PointUp */2, _bindMouseEventToTriggerPointEvent(/* Click */1, getPointTapEventName$1(/* () */0), /* PointTap */0, state))))));
 	  }
 	}
 
-	function _execMouseEventHandle(mouseEventName, $$event) {
-	  setState$2(stateData, execEventHandle(mouseEventName, $$event, unsafeGetState$2(stateData)));
+	function _execMouseEventHandle(mouseEventName, $$event, state) {
+	  setStateByFunc(execEventHandle(mouseEventName, $$event, unsafeGetStateByFunc(state)));
 	  return /* () */0;
 	}
 
-	function _execMouseMoveEventHandle(mouseEventName, $$event) {
-	  setState$2(stateData, setLastXYWhenMouseMove(mouseEventName, $$event, execEventHandle(mouseEventName, $$event, unsafeGetState$2(stateData))));
+	function _execMouseMoveEventHandle(mouseEventName, $$event, state) {
+	  setStateByFunc(setLastXYWhenMouseMove(mouseEventName, $$event, execEventHandle(mouseEventName, $$event, unsafeGetStateByFunc(state))));
 	  return /* () */0;
 	}
 
-	function _execMouseDragingEventHandle(mouseEventName, $$event) {
-	  setState$2(stateData, setLastXYByLocation(mouseEventName, $$event, execEventHandle(mouseEventName, $$event, unsafeGetState$2(stateData))));
+	function _execMouseDragingEventHandle(mouseEventName, $$event, state) {
+	  setStateByFunc(setLastXYByLocation(mouseEventName, $$event, execEventHandle(mouseEventName, $$event, unsafeGetStateByFunc(state))));
 	  return /* () */0;
 	}
 
-	function _execMouseDragStartEventHandle() {
-	  setState$2(stateData, setLastXY(undefined, undefined, setIsDrag(true, unsafeGetState$2(stateData))));
+	function _execMouseDragStartEventHandle(state) {
+	  setStateByFunc(setLastXY(undefined, undefined, setIsDrag(true, unsafeGetStateByFunc(state))));
 	  return /* () */0;
 	}
 
-	function _execMouseDragEndEventHandle() {
-	  setState$2(stateData, setIsDrag(false, unsafeGetState$2(stateData)));
+	function _execMouseDragEndEventHandle(state) {
+	  setStateByFunc(setIsDrag(false, unsafeGetStateByFunc(state)));
 	  return /* () */0;
 	}
 
-	function _execTouchEventHandle(touchEventName, $$event) {
-	  setState$2(stateData, execEventHandle$1(touchEventName, $$event, unsafeGetState$2(stateData)));
+	function _execTouchEventHandle(touchEventName, $$event, state) {
+	  setStateByFunc(execEventHandle$1(touchEventName, $$event, unsafeGetStateByFunc(state)));
 	  return /* () */0;
 	}
 
-	function _execTouchMoveEventHandle(touchEventName, $$event) {
-	  setState$2(stateData, setLastXYWhenTouchMove(touchEventName, $$event, execEventHandle$1(touchEventName, $$event, unsafeGetState$2(stateData))));
+	function _execTouchMoveEventHandle(touchEventName, $$event, state) {
+	  setStateByFunc(setLastXYWhenTouchMove(touchEventName, $$event, execEventHandle$1(touchEventName, $$event, unsafeGetStateByFunc(state))));
 	  return /* () */0;
 	}
 
-	function _execTouchDragingEventHandle(touchEventName, $$event) {
-	  setState$2(stateData, setLastXYByLocation$1(touchEventName, $$event, execEventHandle$1(touchEventName, $$event, unsafeGetState$2(stateData))));
+	function _execTouchDragingEventHandle(touchEventName, $$event, state) {
+	  setStateByFunc(setLastXYByLocation$1(touchEventName, $$event, execEventHandle$1(touchEventName, $$event, unsafeGetStateByFunc(state))));
 	  return /* () */0;
 	}
 
-	function _execTouchDragStartEventHandle() {
-	  setState$2(stateData, setLastXY$2(undefined, undefined, setIsDrag$1(true, unsafeGetState$2(stateData))));
+	function _execTouchDragStartEventHandle(state) {
+	  setStateByFunc(setLastXY$2(undefined, undefined, setIsDrag$1(true, unsafeGetStateByFunc(state))));
 	  return /* () */0;
 	}
 
-	function _execTouchDragEndEventHandle() {
-	  setState$2(stateData, setIsDrag$1(false, unsafeGetState$2(stateData)));
+	function _execTouchDragEndEventHandle(state) {
+	  setStateByFunc(setIsDrag$1(false, unsafeGetStateByFunc(state)));
 	  return /* () */0;
 	}
 
-	function _execKeyboardEventHandle(keyboardEventName, $$event) {
-	  setState$2(stateData, execEventHandle$2(keyboardEventName, $$event, unsafeGetState$2(stateData)));
+	function _execKeyboardEventHandle(keyboardEventName, $$event, state) {
+	  setStateByFunc(execEventHandle$2(keyboardEventName, $$event, unsafeGetStateByFunc(state)));
 	  return /* () */0;
 	}
 
-	function _fromPCDomEventArr() {
+	function _fromPCDomEventArr(state) {
 	  return /* array */[
 	          tap((function ($$event) {
-	                  return _execMouseEventHandle(/* Click */0, $$event);
-	                }), _fromDomEvent("click")),
+	                  preventDefault$1($$event);
+	                  return /* () */0;
+	                }), fromEvent("contextmenu", document.body, false)),
 	          tap((function ($$event) {
-	                  return _execMouseEventHandle(/* MouseDown */1, $$event);
-	                }), _fromDomEvent("mousedown")),
+	                  return _execMouseEventHandle(/* Click */1, $$event, state);
+	                }), _fromPointDomEvent("click", state)),
 	          tap((function ($$event) {
-	                  return _execMouseEventHandle(/* MouseUp */2, $$event);
-	                }), _fromDomEvent("mouseup")),
+	                  return _execMouseEventHandle(/* MouseDown */2, $$event, state);
+	                }), _fromPointDomEvent("mousedown", state)),
 	          tap((function ($$event) {
-	                  return _execMouseMoveEventHandle(/* MouseMove */3, $$event);
-	                }), _fromDomEvent("mousemove")),
+	                  return _execMouseEventHandle(/* MouseUp */3, $$event, state);
+	                }), _fromPointDomEvent("mouseup", state)),
 	          tap((function ($$event) {
-	                  return _execMouseEventHandle(/* MouseWheel */4, $$event);
-	                }), _fromDomEvent("mousewheel")),
+	                  return _execMouseMoveEventHandle(/* MouseMove */4, $$event, state);
+	                }), _fromPointDomEvent("mousemove", state)),
 	          tap((function ($$event) {
-	                  return _execMouseDragingEventHandle(/* MouseDrag */5, $$event);
+	                  return _execMouseEventHandle(/* MouseWheel */5, $$event, state);
+	                }), _fromPointDomEvent("mousewheel", state)),
+	          tap((function ($$event) {
+	                  return _execMouseDragingEventHandle(/* MouseDrag */6, $$event, state);
 	                }), flatMap((function () {
 	                      return takeUntil(tap((function () {
-	                                        return _execMouseDragEndEventHandle(/* () */0);
-	                                      }), _fromDomEvent("mouseup")), _fromDomEvent("mousemove"));
+	                                        return _execMouseDragEndEventHandle(state);
+	                                      }), _fromPointDomEvent("mouseup", state)), _fromPointDomEvent("mousemove", state));
 	                    }), tap((function () {
-	                          return _execMouseDragStartEventHandle(/* () */0);
-	                        }), _fromDomEvent("mousedown")))),
+	                          return _execMouseDragStartEventHandle(state);
+	                        }), _fromPointDomEvent("mousedown", state)))),
 	          tap((function ($$event) {
-	                  return _execKeyboardEventHandle(/* KeyUp */6, $$event);
-	                }), _fromDomEvent("keyup")),
+	                  return _execKeyboardEventHandle(/* KeyUp */7, $$event, state);
+	                }), _fromKeyboardDomEvent("keyup", state)),
 	          tap((function ($$event) {
-	                  return _execKeyboardEventHandle(/* KeyDown */7, $$event);
-	                }), _fromDomEvent("keydown")),
+	                  return _execKeyboardEventHandle(/* KeyDown */8, $$event, state);
+	                }), _fromKeyboardDomEvent("keydown", state)),
 	          tap((function ($$event) {
-	                  return _execKeyboardEventHandle(/* KeyPress */8, $$event);
-	                }), _fromDomEvent("keypress"))
+	                  return _execKeyboardEventHandle(/* KeyPress */9, $$event, state);
+	                }), _fromKeyboardDomEvent("keypress", state))
 	        ];
 	}
 
-	function _fromMobileDomEventArr() {
+	function _fromMobileDomEventArr(state) {
 	  return /* array */[
 	          tap((function ($$event) {
-	                  return _execTouchEventHandle(/* TouchTap */9, $$event);
-	                }), skipUntil(_fromDomEvent("touchstart"), _fromDomEvent("touchend"))),
+	                  return _execTouchEventHandle(/* TouchTap */10, $$event, state);
+	                }), skipUntil(_fromPointDomEvent("touchstart", state), _fromPointDomEvent("touchend", state))),
 	          tap((function ($$event) {
-	                  return _execTouchEventHandle(/* TouchEnd */10, $$event);
-	                }), _fromDomEvent("touchend")),
+	                  return _execTouchEventHandle(/* TouchEnd */11, $$event, state);
+	                }), _fromPointDomEvent("touchend", state)),
 	          tap((function ($$event) {
-	                  return _execTouchEventHandle(/* TouchStart */12, $$event);
-	                }), _fromDomEvent("touchstart")),
+	                  return _execTouchEventHandle(/* TouchStart */13, $$event, state);
+	                }), _fromPointDomEvent("touchstart", state)),
 	          tap((function ($$event) {
-	                  return _execTouchMoveEventHandle(/* TouchMove */11, $$event);
-	                }), _fromDomEvent("touchmove")),
+	                  return _execTouchMoveEventHandle(/* TouchMove */12, $$event, state);
+	                }), _fromPointDomEvent("touchmove", state)),
 	          tap((function ($$event) {
-	                  return _execTouchDragingEventHandle(/* TouchDrag */13, $$event);
+	                  return _execTouchDragingEventHandle(/* TouchDrag */14, $$event, state);
 	                }), flatMap((function () {
 	                      return takeUntil(tap((function () {
-	                                        return _execTouchDragEndEventHandle(/* () */0);
-	                                      }), _fromDomEvent("touchend")), _fromDomEvent("touchmove"));
+	                                        return _execTouchDragEndEventHandle(state);
+	                                      }), _fromPointDomEvent("touchend", state)), _fromPointDomEvent("touchmove", state));
 	                    }), tap((function () {
-	                          return _execTouchDragStartEventHandle(/* () */0);
-	                        }), _fromDomEvent("touchstart"))))
+	                          return _execTouchDragStartEventHandle(state);
+	                        }), _fromPointDomEvent("touchstart", state))))
 	        ];
 	}
 
-	function fromDomEvent(param) {
-	  var browser = param[/* browserDetectRecord */40][/* browser */0];
+	function fromDomEvent(state) {
+	  var browser = state[/* browserDetectRecord */41][/* browser */0];
 	  return mergeArray(browser >= 2 ? (
-	                browser >= 4 ? fatal(buildFatalMessage("fromDomEvent", "unknown browser", "", "", "browser:" + (String(browser) + ""))) : _fromMobileDomEventArr(/* () */0)
-	              ) : _fromPCDomEventArr(/* () */0));
+	                browser >= 4 ? fatal(buildFatalMessage("fromDomEvent", "unknown browser", "", "", "browser:" + (String(browser) + ""))) : _fromMobileDomEventArr(state)
+	              ) : _fromPCDomEventArr(state));
 	}
 
 	function handleDomEventStreamError(e) {
@@ -27773,12 +28801,12 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	function bindEvent(state) {
+	function bindEvent$1(state) {
 	  var state$1 = onCustomGlobalEvent$1(getPointDownEventName$1(/* () */0), (function ($$event, state) {
-	          var imguiRecord = state[/* imguiRecord */42];
+	          var imguiRecord = state[/* imguiRecord */43];
 	          var newrecord = caml_array_dup(state);
 	          var init = imguiRecord[/* ioData */0];
-	          newrecord[/* imguiRecord */42] = /* record */[
+	          newrecord[/* imguiRecord */43] = /* record */[
 	            /* ioData : record */[
 	              /* pointUp */init[/* pointUp */0],
 	              /* pointDown */true,
@@ -27793,10 +28821,10 @@
 	                ];
 	        }), state, undefined, /* () */0);
 	  var state$2 = onCustomGlobalEvent$1(getPointUpEventName$1(/* () */0), (function ($$event, state) {
-	          var imguiRecord = state[/* imguiRecord */42];
+	          var imguiRecord = state[/* imguiRecord */43];
 	          var newrecord = caml_array_dup(state);
 	          var init = imguiRecord[/* ioData */0];
-	          newrecord[/* imguiRecord */42] = /* record */[
+	          newrecord[/* imguiRecord */43] = /* record */[
 	            /* ioData : record */[
 	              /* pointUp */true,
 	              /* pointDown */init[/* pointDown */1],
@@ -27811,11 +28839,11 @@
 	                ];
 	        }), state$1, undefined, /* () */0);
 	  return onCustomGlobalEvent$1(getPointMoveEventName$1(/* () */0), (function ($$event, state) {
-	                var imguiRecord = state[/* imguiRecord */42];
+	                var imguiRecord = state[/* imguiRecord */43];
 	                var pointEvent = unsafeGet$1($$event[/* userData */4]);
 	                var newrecord = caml_array_dup(state);
 	                var init = imguiRecord[/* ioData */0];
-	                newrecord[/* imguiRecord */42] = /* record */[
+	                newrecord[/* imguiRecord */43] = /* record */[
 	                  /* ioData : record */[
 	                    /* pointUp */init[/* pointUp */0],
 	                    /* pointDown */init[/* pointDown */1],
@@ -27832,12 +28860,12 @@
 	}
 
 	function resetPointEventStateWhenPointUp(state) {
-	  var imguiRecord = state[/* imguiRecord */42];
+	  var imguiRecord = state[/* imguiRecord */43];
 	  var match = getIOData$1(state);
 	  if (match[/* pointUp */0]) {
 	    var newrecord = caml_array_dup(state);
 	    var init = imguiRecord[/* ioData */0];
-	    newrecord[/* imguiRecord */42] = /* record */[
+	    newrecord[/* imguiRecord */43] = /* record */[
 	      /* ioData : record */[
 	        /* pointUp */false,
 	        /* pointDown */false,
@@ -27858,7 +28886,7 @@
 	function execJob$4(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                setState$2(stateData, bindEvent(state));
+	                setState$2(stateData, bindEvent$1(state));
 	                return undefined;
 	              }));
 	}
@@ -27918,8 +28946,8 @@
 
 	/* RecordBrowserDetectAllService-Wonderjs Not a pure module */
 
-	function getRecord$17(state) {
-	  return state[/* imguiRecord */27];
+	function getRecord$18(state) {
+	  return state[/* imguiRecord */28];
 	}
 
 
@@ -27998,9 +29026,9 @@
 	                var operateType = getOperateType(flags);
 	                postMessage({
 	                      operateType: operateType,
-	                      pipelineJobs: JSON.stringify(getRenderWorkerPipelineJobs(state[/* workerJobRecord */3])),
-	                      jobs: JSON.stringify(getWorkerJobs(state[/* workerJobRecord */3]))
-	                    }, unsafeGetRenderWorker(state[/* workerInstanceRecord */37]));
+	                      pipelineJobs: JSON.stringify(getRenderWorkerPipelineJobs(state[/* workerJobRecord */4])),
+	                      jobs: JSON.stringify(getWorkerJobs(state[/* workerJobRecord */4]))
+	                    }, unsafeGetRenderWorker(state[/* workerInstanceRecord */38]));
 	                return some$1(operateType);
 	              }));
 	}
@@ -28156,7 +29184,7 @@
 	function execJob$14(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                state[/* viewRecord */8] = setCanvas(createCanvas(getCanvasId(state[/* settingRecord */0])), state[/* viewRecord */8]);
+	                state[/* viewRecord */9] = setCanvas(createCanvas(getCanvasId(state[/* settingRecord */1])), state[/* viewRecord */9]);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -28251,8 +29279,8 @@
 	/* MostUtils-Wonderjs Not a pure module */
 
 	function _updateTransform(cameraController, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  var transformRecord = getRecord$1(state);
 	  var transform = unsafeGetTransformComponent(unsafeGetGameObject$7(cameraController, arcballCameraControllerRecord), gameObjectRecord);
 	  var distance = unsafeGetDistance(cameraController, arcballCameraControllerRecord);
@@ -28260,7 +29288,7 @@
 	  var theta = unsafeGetTheta(cameraController, arcballCameraControllerRecord);
 	  var target = unsafeGetTarget(cameraController, arcballCameraControllerRecord);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* transformRecord */11] = setLocalPositionByTuple$1(transform, /* tuple */[
+	  newrecord[/* transformRecord */12] = setLocalPositionByTuple$1(transform, /* tuple */[
 	        distance * Math.cos(phi) * Math.sin(theta) + target[0],
 	        distance * Math.cos(theta) + target[1],
 	        distance * Math.sin(phi) * Math.sin(theta) + target[2]
@@ -28269,26 +29297,28 @@
 	}
 
 	function _clearDirtyArray$1(state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = /* record */[
+	  newrecord[/* arcballCameraControllerRecord */26] = /* record */[
 	    /* index */arcballCameraControllerRecord[/* index */0],
-	    /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */1],
-	    /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */2],
-	    /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */3],
-	    /* dirtyArray */create$24(/* () */0),
-	    /* distanceMap */arcballCameraControllerRecord[/* distanceMap */5],
-	    /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */6],
-	    /* phiMap */arcballCameraControllerRecord[/* phiMap */7],
-	    /* thetaMap */arcballCameraControllerRecord[/* thetaMap */8],
-	    /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */9],
-	    /* targetMap */arcballCameraControllerRecord[/* targetMap */10],
-	    /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */11],
-	    /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */12],
-	    /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */13],
-	    /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */14],
-	    /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */15],
-	    /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */16]
+	    /* pointDownEventHandleFuncMap */arcballCameraControllerRecord[/* pointDownEventHandleFuncMap */1],
+	    /* pointUpEventHandleFuncMap */arcballCameraControllerRecord[/* pointUpEventHandleFuncMap */2],
+	    /* pointDragEventHandleFuncMap */arcballCameraControllerRecord[/* pointDragEventHandleFuncMap */3],
+	    /* pointScaleEventHandleFuncMap */arcballCameraControllerRecord[/* pointScaleEventHandleFuncMap */4],
+	    /* keydownEventHandleFuncMap */arcballCameraControllerRecord[/* keydownEventHandleFuncMap */5],
+	    /* dirtyArray */create$25(/* () */0),
+	    /* distanceMap */arcballCameraControllerRecord[/* distanceMap */7],
+	    /* minDistanceMap */arcballCameraControllerRecord[/* minDistanceMap */8],
+	    /* phiMap */arcballCameraControllerRecord[/* phiMap */9],
+	    /* thetaMap */arcballCameraControllerRecord[/* thetaMap */10],
+	    /* thetaMarginMap */arcballCameraControllerRecord[/* thetaMarginMap */11],
+	    /* targetMap */arcballCameraControllerRecord[/* targetMap */12],
+	    /* moveSpeedXMap */arcballCameraControllerRecord[/* moveSpeedXMap */13],
+	    /* moveSpeedYMap */arcballCameraControllerRecord[/* moveSpeedYMap */14],
+	    /* rotateSpeedMap */arcballCameraControllerRecord[/* rotateSpeedMap */15],
+	    /* wheelSpeedMap */arcballCameraControllerRecord[/* wheelSpeedMap */16],
+	    /* gameObjectMap */arcballCameraControllerRecord[/* gameObjectMap */17],
+	    /* disposedIndexArray */arcballCameraControllerRecord[/* disposedIndexArray */18]
 	  ];
 	  return newrecord;
 	}
@@ -28296,7 +29326,7 @@
 	function update$2(state) {
 	  return _clearDirtyArray$1(reduceOneParam((function (state, dirtyIndex) {
 	                    return _updateTransform(dirtyIndex, state);
-	                  }), state, removeDuplicateItems(state[/* arcballCameraControllerRecord */25][/* dirtyArray */4])));
+	                  }), state, removeDuplicateItems(state[/* arcballCameraControllerRecord */26][/* dirtyArray */6])));
 	}
 
 
@@ -28382,7 +29412,7 @@
 	                var transformRecord = getRecord$1(state);
 	                var index = transformRecord[/* index */0];
 	                var newrecord = caml_array_dup(transformRecord);
-	                state[/* transformRecord */11] = (newrecord[/* copiedBuffer */6] = some$1(copyArrayBufferSpecificData(transformRecord[/* buffer */1], unsafeGetCopiedBuffer(transformRecord), getTotalByteLength(index))), newrecord);
+	                state[/* transformRecord */12] = (newrecord[/* copiedBuffer */6] = some$1(copyArrayBufferSpecificData(transformRecord[/* buffer */1], unsafeGetCopiedBuffer(transformRecord), getTotalByteLength(index))), newrecord);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -28390,70 +29420,6 @@
 
 
 	/* MostUtils-Wonderjs Not a pure module */
-
-	var _isFirefox = (
-	    function(){
-	      var userAgent = navigator.userAgent.toLowerCase();
-
-	        return userAgent.indexOf("firefox") > -1 && userAgent.indexOf("mobile") === -1;
-	    }
-	    );
-
-	var _isChrome = (
-	    function(){
-	      var userAgent = navigator.userAgent.toLowerCase();
-
-	        return userAgent.indexOf("chrome") > -1 && userAgent.indexOf("mobile") === -1;
-	    }
-	    );
-
-	var _isAndroid = (
-	    function(){
-	        return /Android/i.test(navigator.userAgent)
-	    }
-	    );
-
-	var _isIOS = (
-	    function(){
-	        return /iPhone|iPad|iPod/i.test(navigator.userAgent)
-	    }
-	    );
-
-	function detect$2(state) {
-	  var newrecord = caml_array_dup(state);
-	  var match = _1(_isFirefox, /* () */0) === true;
-	  var tmp;
-	  if (match) {
-	    tmp = /* Firefox */1;
-	  } else {
-	    var match$1 = _1(_isChrome, /* () */0) === true;
-	    if (match$1) {
-	      tmp = /* Chrome */0;
-	    } else {
-	      var match$2 = _1(_isAndroid, /* () */0);
-	      if (match$2) {
-	        tmp = /* Android */2;
-	      } else {
-	        var match$3 = _1(_isIOS, /* () */0);
-	        tmp = match$3 ? /* IOS */3 : /* Unknown */4;
-	      }
-	    }
-	  }
-	  newrecord[/* browserDetectRecord */40] = /* record */[/* browser */tmp];
-	  return newrecord;
-	}
-
-	function detectMobileNotSupportWorker(state) {
-	  var match = state[/* browserDetectRecord */40][/* browser */0];
-	  if (match === 3 || match === 2) {
-	    return fatal(buildFatalMessage("DetectEnvironmentWorkerJob->execJob", "mobile not support worker", "", "", ""));
-	  } else {
-	    return /* () */0;
-	  }
-	}
-
-
-	/* _isFirefox Not a pure module */
 
 	function execJob$19(_, stateData) {
 	  return callFunc((function () {
@@ -28466,18 +29432,11 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	function getWorldToCameraMatrix(cameraToWorldMatrix) {
-	  return invert(cameraToWorldMatrix, createIdentityMatrix4(/* () */0));
-	}
-
-
-	/* Matrix4Service-Wonderjs Not a pure module */
-
 	function getCameraData(state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var basicCameraViewRecord = state[/* basicCameraViewRecord */13];
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
-	  var globalTempRecord = state[/* globalTempRecord */35];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var basicCameraViewRecord = state[/* basicCameraViewRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
+	  var globalTempRecord = state[/* globalTempRecord */36];
 	  var match = getCurrentCameraGameObject$2(basicCameraViewRecord, getRecord(state));
 	  if (match !== undefined) {
 	    var currentCameraGameObject = match;
@@ -28496,28 +29455,28 @@
 	/* PMatrixService-Wonderjs Not a pure module */
 
 	function getCameraRecord(state) {
-	  return getRecord$12(state)[/* cameraRecord */2];
+	  return getRecord$13(state)[/* cameraRecord */2];
 	}
 
 	function setCameraRecord(cameraRecord, state) {
-	  getRecord$12(state)[/* cameraRecord */2] = cameraRecord;
+	  getRecord$13(state)[/* cameraRecord */2] = cameraRecord;
 	  return state;
 	}
 
 	function getBasicRenderObjectRecord(state) {
-	  return getRecord$12(state)[/* basicRenderObjectRecord */0];
+	  return getRecord$13(state)[/* basicRenderObjectRecord */0];
 	}
 
 	function unsafeGetBasicRenderObjectRecord(state) {
-	  return unsafeGet$1(getRecord$12(state)[/* basicRenderObjectRecord */0]);
+	  return unsafeGet$1(getRecord$13(state)[/* basicRenderObjectRecord */0]);
 	}
 
 	function getLightRenderObjectRecord(state) {
-	  return getRecord$12(state)[/* lightRenderObjectRecord */1];
+	  return getRecord$13(state)[/* lightRenderObjectRecord */1];
 	}
 
 	function unsafeGetLightRenderObjectRecord(state) {
-	  return unsafeGet$1(getRecord$12(state)[/* lightRenderObjectRecord */1]);
+	  return unsafeGet$1(getRecord$13(state)[/* lightRenderObjectRecord */1]);
 	}
 
 
@@ -28571,10 +29530,6 @@
 
 	/* No side effect */
 
-	function getDrawMode(gl) {
-	  return gl.TRIANGLES;
-	}
-
 	function getIndexType(gl) {
 	  return gl.UNSIGNED_SHORT;
 	}
@@ -28622,7 +29577,7 @@
 
 	/* No side effect */
 
-	function createBuffer$8(gl, record, state) {
+	function createBuffer$9(gl, record, state) {
 	  var buffer = getArrayBuffer(gl, state[/* vboBufferRecord */1]);
 	  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 	  gl.bufferData(gl.ARRAY_BUFFER, record, gl.STATIC_DRAW);
@@ -28635,7 +29590,7 @@
 	              param[0],
 	              param[1]
 	            ], /* tuple */[
-	              createBuffer$8,
+	              createBuffer$9,
 	              getDataFunc
 	            ], state);
 	}
@@ -28643,7 +29598,31 @@
 
 	/* PoolVboBufferService-Wonderjs Not a pure module */
 
-	function createBuffer$9(gl, record, state) {
+	function getGlDrawMode(gl, meshRenderer, state) {
+	  var match = getDrawMode(meshRenderer, state[/* meshRendererRecord */10][/* drawModes */0]);
+	  switch (match) {
+	    case 0 : 
+	        return gl.POINTS;
+	    case 1 : 
+	        return gl.LINES;
+	    case 2 : 
+	        return gl.LINE_LOOP;
+	    case 3 : 
+	        return gl.LINE_STRIP;
+	    case 4 : 
+	        return gl.TRIANGLES;
+	    case 5 : 
+	        return gl.TRIANGLE_STRIP;
+	    case 6 : 
+	        return gl.TRIANGLE_FAN;
+	    
+	  }
+	}
+
+
+	/* OperateTypeArrayMeshRendererService-Wonderjs Not a pure module */
+
+	function createBuffer$10(gl, record, state) {
 	  var buffer = getElementArrayBuffer(gl, state[/* vboBufferRecord */1]);
 	  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffer);
 	  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, record, gl.STATIC_DRAW);
@@ -28656,7 +29635,7 @@
 	              param[0],
 	              param[1]
 	            ], /* tuple */[
-	              createBuffer$9,
+	              createBuffer$10,
 	              getDataFunc
 	            ], state);
 	}
@@ -28791,8 +29770,8 @@
 	  var program = unsafeGetProgram(shaderIndex, state[/* programRecord */4]);
 	  var state$1 = _sendUniformRenderObjectModelData(gl, shaderIndex, param[0], _sendAttributeData(gl, /* tuple */[
 	            shaderIndex,
-	            param[3],
-	            param[4]
+	            param[4],
+	            param[5]
 	          ], use(gl, program, state)));
 	  var record = state$1[/* glslSenderRecord */3];
 	  var lastSendMaterialData = record[/* lastSendMaterialData */10];
@@ -28818,10 +29797,10 @@
 	  
 	}
 
-	function draw$4(gl, geometryIndex, geometryType, state) {
+	function draw$4(gl, meshRendererIndex, geometryIndex, geometryType, state) {
 	  var getIndicesCountFunc = getGetIndicesCountFunc(geometryType);
 	  return drawElement(/* tuple */[
-	              getDrawMode(gl),
+	              getGlDrawMode(gl, meshRendererIndex, state),
 	              getIndexType(gl),
 	              getIndexTypeSize(gl),
 	              getIndicesCountFunc(geometryIndex, state)
@@ -28882,7 +29861,7 @@
 
 	function _bindBasicSourceTexture(basicSourceTextureInTypeArray, param) {
 	  var state = param[2];
-	  var basicSourceTextureRecord = state[/* basicSourceTextureRecord */10];
+	  var basicSourceTextureRecord = state[/* basicSourceTextureRecord */11];
 	  _bind(param[0], param[1], basicSourceTextureInTypeArray, /* tuple */[
 	        basicSourceTextureRecord[/* bindTextureUnitCacheMap */10],
 	        basicSourceTextureRecord[/* glTextureMap */9]
@@ -28892,7 +29871,7 @@
 
 	function _bindArrayBufferViewSourceTexture(arrayBufferViewTextureInTypeArray, param) {
 	  var state = param[2];
-	  var arrayBufferViewSourceTextureRecord = state[/* arrayBufferViewSourceTextureRecord */11];
+	  var arrayBufferViewSourceTextureRecord = state[/* arrayBufferViewSourceTextureRecord */12];
 	  _bind(param[0], param[1], arrayBufferViewTextureInTypeArray, /* tuple */[
 	        arrayBufferViewSourceTextureRecord[/* bindTextureUnitCacheMap */12],
 	        arrayBufferViewSourceTextureRecord[/* glTextureMap */11]
@@ -28906,7 +29885,7 @@
 	                        return Operators[/* >= */7](unit, 0);
 	                      }));
 	        }), getIsDebug(stateData));
-	  return handleByJudgeSourceTextureIndex(texture, state[/* arrayBufferViewSourceTextureRecord */11][/* textureIndexOffset */14], /* tuple */[
+	  return handleByJudgeSourceTextureIndex(texture, state[/* arrayBufferViewSourceTextureRecord */12][/* textureIndexOffset */14], /* tuple */[
 	              gl,
 	              unit,
 	              state
@@ -29253,8 +30232,8 @@
 
 	function _handleUpdateBasicSourceTexture(basicSourceTextureInTypeArray, param) {
 	  var state = param[1];
-	  var browserDetectRecord = state[/* browserDetectRecord */22];
-	  var basicSourceTextureRecord = state[/* basicSourceTextureRecord */10];
+	  var browserDetectRecord = state[/* browserDetectRecord */23];
+	  var basicSourceTextureRecord = state[/* basicSourceTextureRecord */11];
 	  var match = isNeedUpdate(basicSourceTextureInTypeArray, basicSourceTextureRecord);
 	  if (match) {
 	    update$3(param[0], basicSourceTextureInTypeArray, /* tuple */[
@@ -29269,8 +30248,8 @@
 
 	function _handleUpdateArrayBufferViewSourceTexture(arrayBufferViewTextureInTypeArray, param) {
 	  var state = param[1];
-	  var browserDetectRecord = state[/* browserDetectRecord */22];
-	  var arrayBufferViewSourceTextureRecord = state[/* arrayBufferViewSourceTextureRecord */11];
+	  var browserDetectRecord = state[/* browserDetectRecord */23];
+	  var arrayBufferViewSourceTextureRecord = state[/* arrayBufferViewSourceTextureRecord */12];
 	  var match = isNeedUpdate$2(arrayBufferViewTextureInTypeArray, arrayBufferViewSourceTextureRecord);
 	  if (match) {
 	    update$5(param[0], arrayBufferViewTextureInTypeArray, /* tuple */[
@@ -29284,7 +30263,7 @@
 	}
 
 	function handleUpdate(gl, texture, state) {
-	  return handleByJudgeSourceTextureIndex(texture, state[/* arrayBufferViewSourceTextureRecord */11][/* textureIndexOffset */14], /* tuple */[
+	  return handleByJudgeSourceTextureIndex(texture, state[/* arrayBufferViewSourceTextureRecord */12][/* textureIndexOffset */14], /* tuple */[
 	              gl,
 	              state
 	            ], /* tuple */[
@@ -29353,7 +30332,7 @@
 	                mapUnit
 	              ], getTextureIndex, /* tuple */[
 	                basicMaterialRecord[/* textureIndices */2],
-	                state[/* settingRecord */20],
+	                state[/* settingRecord */21],
 	                state
 	              ])[2];
 	}
@@ -29368,7 +30347,7 @@
 
 	/* RenderJobUtils-Wonderjs Not a pure module */
 
-	function getShaderIndex$1(materialIndex, getShaderIndexFunc, renderState) {
+	function getShaderIndex$2(materialIndex, getShaderIndexFunc, renderState) {
 	  return ensureCheck((function (shaderIndex) {
 	                return test(buildAssertMessage("shaderIndex should exist", "not"), (function () {
 	                              return Operators[/* <>= */3](shaderIndex, getDefaultShaderIndex(/* () */0));
@@ -29380,20 +30359,20 @@
 	/* Log-WonderLog Not a pure module */
 
 	function isSupportInstance$2(state) {
-	  return isSupportInstance$1(unsafeGetGPU$1(state[/* settingRecord */20])[/* useHardwareInstance */0], state[/* gpuDetectRecord */16]);
+	  return isSupportInstance$1(unsafeGetGPU$1(state[/* settingRecord */21])[/* useHardwareInstance */0], state[/* gpuDetectRecord */17]);
 	}
 
 
 	/* JudgeInstanceService-Wonderjs Not a pure module */
 
 	function build(sourceInstance, state) {
-	  var match = state[/* sourceInstanceRecord */15];
+	  var match = state[/* sourceInstanceRecord */16];
 	  var objectInstanceTransformIndex = getObjectInstanceTransformIndex$1(sourceInstance, match[/* objectInstanceTransformIndexMap */0]);
 	  return /* tuple */[
 	          objectInstanceTransformIndex,
 	          /* tuple */[
 	            sourceInstance,
-	            unsafeGetObjectInstanceCountPerSourceInstance(state[/* settingRecord */20]),
+	            unsafeGetObjectInstanceCountPerSourceInstance(state[/* settingRecord */21]),
 	            objectInstanceTransformIndex,
 	            match[/* objectInstanceTransformCollections */1]
 	          ]
@@ -29404,24 +30383,26 @@
 	/* OperateRenderSettingService-Wonderjs Not a pure module */
 
 	function render$7(gl, indexTuple, renderFunc, state) {
-	  var geometryType = indexTuple[4];
-	  var geometryIndex = indexTuple[3];
+	  var geometryType = indexTuple[5];
+	  var geometryIndex = indexTuple[4];
+	  var meshRendererIndex = indexTuple[3];
 	  var shaderIndex = indexTuple[2];
 	  var state$1 = renderFunc(gl, /* tuple */[
 	        indexTuple[0],
 	        indexTuple[1],
 	        shaderIndex,
+	        meshRendererIndex,
 	        geometryIndex,
 	        geometryType
 	      ], state);
-	  draw$4(gl, geometryIndex, geometryType, state$1);
+	  draw$4(gl, meshRendererIndex, geometryIndex, geometryType, state$1);
 	  var uniformRenderObjectSendModelData = unsafeGetUniformSendData(shaderIndex, state$1[/* glslSenderRecord */3]);
-	  var drawMode = getDrawMode(gl);
+	  var drawMode = getGlDrawMode(gl, meshRendererIndex, state$1);
 	  var indexType = getIndexType(gl);
 	  var indexTypeSize = getIndexTypeSize(gl);
 	  var getIndicesCountFunc = getGetIndicesCountFunc(geometryType);
 	  var indicesCount = getIndicesCountFunc(geometryIndex, state$1);
-	  var match = build(indexTuple[5], state$1);
+	  var match = build(indexTuple[6], state$1);
 	  return reduceObjectInstanceTransformCollection(match[1], state$1, (function (state, objectInstanceTransform) {
 	                var state$1 = reduceOneParam((function (state, param) {
 	                        var pos = param[/* pos */0];
@@ -29451,7 +30432,7 @@
 
 	/* RenderBasicJobCommon-Wonderjs Not a pure module */
 
-	function createBuffer$10(gl, capacity, state) {
+	function createBuffer$11(gl, capacity, state) {
 	  var buffer = getInstanceBuffer(gl, state[/* vboBufferRecord */1]);
 	  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
 	  gl.bufferData(gl.ARRAY_BUFFER, capacity, gl.DYNAMIC_DRAW);
@@ -29488,7 +30469,7 @@
 	  if (match !== undefined) {
 	    return valFromOption(match);
 	  } else {
-	    var buffer = createBuffer$10(param[0], _getCapacity(sourceInstance, param[2], param$1[0]), state);
+	    var buffer = createBuffer$11(param[0], _getCapacity(sourceInstance, param[2], param$1[0]), state);
 	    set$1(sourceInstance, buffer, bufferMap);
 	    return buffer;
 	  }
@@ -29527,7 +30508,7 @@
 	  if (needIncreaseCapacity) {
 	    _setCapacity(sourceInstance, currentCapacity, capacityMap);
 	    gl.deleteBuffer(buffer);
-	    var buffer$1 = createBuffer$10(gl, currentCapacity, state);
+	    var buffer$1 = createBuffer$11(gl, currentCapacity, state);
 	    set$1(sourceInstance, buffer$1, param$2[0]);
 	    var matrixFloat32Array = new Float32Array(_getFloat32InstanceArraySize(currentCapacity));
 	    set$1(sourceInstance, matrixFloat32Array, param$2[1]);
@@ -29675,7 +30656,7 @@
 	  var match$2 = dataTuple[0];
 	  var gl = match$2[0];
 	  var sourceInstance = componentTuple[1];
-	  var match$3 = isSendTransformMatrixData(sourceInstance, state[/* sourceInstanceRecord */15][/* isSendTransformMatrixDataMap */5]);
+	  var match$3 = isSendTransformMatrixData(sourceInstance, state[/* sourceInstanceRecord */16][/* isSendTransformMatrixDataMap */5]);
 	  if (match$3) {
 	    bind$5(gl, getOrCreateBuffer$3(/* tuple */[
 	              gl,
@@ -29692,19 +30673,19 @@
 	  } else {
 	    var state$1 = _sendTransformMatrixData(componentTuple, dataTuple, fillMatrixTypeArrFunc, state);
 	    var newrecord = caml_array_dup(state$1);
-	    newrecord[/* sourceInstanceRecord */15] = markIsSendTransformMatrixData(sourceInstance, true, state$1[/* sourceInstanceRecord */15]);
+	    newrecord[/* sourceInstanceRecord */16] = markIsSendTransformMatrixData(sourceInstance, true, state$1[/* sourceInstanceRecord */16]);
 	    return newrecord;
 	  }
 	}
 
 	function _sendDynamicTransformMatrixData(componentTuple, dataTuple, fillMatrixTypeArrFunc, state) {
 	  var newrecord = caml_array_dup(state);
-	  return _sendTransformMatrixData(componentTuple, dataTuple, fillMatrixTypeArrFunc, (newrecord[/* sourceInstanceRecord */15] = markIsSendTransformMatrixData(componentTuple[1], false, state[/* sourceInstanceRecord */15]), newrecord));
+	  return _sendTransformMatrixData(componentTuple, dataTuple, fillMatrixTypeArrFunc, (newrecord[/* sourceInstanceRecord */16] = markIsSendTransformMatrixData(componentTuple[1], false, state[/* sourceInstanceRecord */16]), newrecord));
 	}
 
 	function _geMatrixMapTuple(state) {
 	  var match = state[/* vboBufferRecord */1];
-	  var match$1 = state[/* sourceInstanceRecord */15];
+	  var match$1 = state[/* sourceInstanceRecord */16];
 	  return /* tuple */[
 	          match$1[/* matrixInstanceBufferCapacityMap */3],
 	          match[/* matrixInstanceBufferMap */8],
@@ -29717,7 +30698,7 @@
 	}
 
 	function _prepareData(gl, shaderIndex, param, state) {
-	  var extension = unsafeGetInstanceExtension(state[/* gpuDetectRecord */16]);
+	  var extension = unsafeGetInstanceExtension(state[/* gpuDetectRecord */17]);
 	  var match = build(param[0], state);
 	  var instanceRenderListCount = getObjectInstanceTransformCount(match[0]) + 1 | 0;
 	  return /* tuple */[
@@ -29748,15 +30729,17 @@
 	function render$9(gl, param, param$1, state) {
 	  var fillMatrixTypeArrFunc = param$1[1];
 	  var indexTuple = param[0];
-	  var sourceInstance = indexTuple[5];
-	  var geometryType = indexTuple[4];
-	  var geometryIndex = indexTuple[3];
+	  var sourceInstance = indexTuple[6];
+	  var geometryType = indexTuple[5];
+	  var geometryIndex = indexTuple[4];
+	  var meshRendererIndex = indexTuple[3];
 	  var shaderIndex = indexTuple[2];
 	  var transformIndex = indexTuple[0];
 	  var state$1 = _renderSourceInstanceGameObject(gl, /* tuple */[
 	        transformIndex,
 	        indexTuple[1],
 	        shaderIndex,
+	        meshRendererIndex,
 	        geometryIndex,
 	        geometryType
 	      ], param$1[0], state);
@@ -29769,7 +30752,7 @@
 	  var match = dataTuple[0];
 	  var extension = match[1];
 	  var gl$1 = match[0];
-	  var match$1 = isTransformStatic$1(sourceInstance, state$1[/* sourceInstanceRecord */15]);
+	  var match$1 = isTransformStatic$1(sourceInstance, state$1[/* sourceInstanceRecord */16]);
 	  var state$2 = match$1 ? _sendStaticTransformMatrixData(/* tuple */[
 	          transformIndex,
 	          sourceInstance
@@ -29779,7 +30762,7 @@
 	        ], dataTuple, fillMatrixTypeArrFunc, state$1);
 	  var getIndicesCountFunc = getGetIndicesCountFunc(geometryType);
 	  drawElementsInstancedANGLE(/* tuple */[
-	        getDrawMode(gl$1),
+	        getGlDrawMode(gl$1, meshRendererIndex, state$2),
 	        getIndexType(gl$1),
 	        getIndexTypeSize(gl$1),
 	        getIndicesCountFunc(geometryIndex, state$2),
@@ -29835,7 +30818,7 @@
 
 	/* JudgeInstanceRenderService-Wonderjs Not a pure module */
 
-	function getShaderIndex$2(materialIndex, param) {
+	function getShaderIndex$3(materialIndex, param) {
 	  return getShaderIndex(materialIndex, param[/* basicMaterialRecord */8][/* shaderIndices */0]);
 	}
 
@@ -29843,15 +30826,17 @@
 	/* ShaderIndicesService-Wonderjs Not a pure module */
 
 	function render$2(gl, param, state) {
-	  var sourceInstanceIndices = param[5];
-	  var geometryTypes = param[4];
-	  var geometryIndices = param[3];
+	  var sourceInstanceIndices = param[6];
+	  var geometryTypes = param[5];
+	  var geometryIndices = param[4];
+	  var meshRendererIndices = param[3];
 	  var materialIndices = param[2];
 	  var transformIndices = param[1];
 	  return reduceOneParam((function (state, index) {
 	                var transformIndex = getComponent$1(index, transformIndices);
 	                var materialIndex = getComponent$1(index, materialIndices);
-	                var shaderIndex = getShaderIndex$1(materialIndex, getShaderIndex$2, state);
+	                var shaderIndex = getShaderIndex$2(materialIndex, getShaderIndex$3, state);
+	                var meshRendererIndex = getComponent$1(index, meshRendererIndices);
 	                var geometryIndex = getComponent$1(index, geometryIndices);
 	                var geometryType = getGeometryType(index, geometryTypes);
 	                var sourceInstance = getComponent$1(index, sourceInstanceIndices);
@@ -29860,6 +30845,7 @@
 	                              transformIndex,
 	                              materialIndex,
 	                              shaderIndex,
+	                              meshRendererIndex,
 	                              geometryIndex,
 	                              geometryType,
 	                              sourceInstance
@@ -29869,10 +30855,11 @@
 	                        transformIndex,
 	                        materialIndex,
 	                        shaderIndex,
+	                        meshRendererIndex,
 	                        geometryIndex,
 	                        geometryType
 	                      ], state);
-	                  draw$4(gl, geometryIndex, geometryType, state$1);
+	                  draw$4(gl, meshRendererIndex, geometryIndex, geometryType, state$1);
 	                  return state$1;
 	                }
 	              }), state, range$1(0, param[0] - 1 | 0));
@@ -29894,6 +30881,8 @@
 	/* ComputePointsBoxGeometryService-Wonderjs Not a pure module */
 
 	/* IndexSourceTextureService-Wonderjs Not a pure module */
+
+	/* OptionService-Wonderjs Not a pure module */
 
 	/* OptionService-Wonderjs Not a pure module */
 
@@ -29927,12 +30916,12 @@
 	/* No side effect */
 
 	function getCustomDataFromRenderWorkerToMainWorker(state) {
-	  return state[/* customRecord */29][/* customDataFromRenderWorkerToMainWorker */0];
+	  return state[/* customRecord */30][/* customDataFromRenderWorkerToMainWorker */0];
 	}
 
 	function setCustomDataFromRenderWorkerToMainWorker(customData, state) {
-	  var init = state[/* customRecord */29];
-	  state[/* customRecord */29] = /* record */[
+	  var init = state[/* customRecord */30];
+	  state[/* customRecord */30] = /* record */[
 	    /* customDataFromRenderWorkerToMainWorker */customData,
 	    /* customDataFromMainWorkerToRenderWorker */init[/* customDataFromMainWorkerToRenderWorker */1]
 	  ];
@@ -29940,34 +30929,34 @@
 	}
 
 	function getCustomDataFromMainWorkerToRenderWorker(state) {
-	  return state[/* customRecord */29][/* customDataFromMainWorkerToRenderWorker */1];
+	  return state[/* customRecord */30][/* customDataFromMainWorkerToRenderWorker */1];
 	}
 
 
 	/* No side effect */
 
-	var getRecord$28 = getRecord$17;
+	var getRecord$30 = getRecord$18;
 
 	function setRecord$1(record, state) {
-	  state[/* imguiRecord */27] = record;
+	  state[/* imguiRecord */28] = record;
 	  return state;
 	}
 
 
 	/* No side effect */
 
-	function label$2(rect, str, align, state) {
-	  var __x = label$1(rect, str, align, getRecord$28(state));
+	function label$3(rect, str, align, state) {
+	  var __x = label$2(rect, str, align, getRecord$30(state));
 	  return setRecord$1(__x, state);
 	}
 
-	function image$2(rect, uv, id, state) {
-	  var __x = image$1(rect, uv, id, getRecord$28(state));
+	function image$3(rect, uv, id, state) {
+	  var __x = image$2(rect, uv, id, getRecord$30(state));
 	  return setRecord$1(__x, state);
 	}
 
 	function button$3(rect, str, state) {
-	  var match = button$1(rect, str, getRecord$28(state));
+	  var match = button$1(rect, str, getRecord$30(state));
 	  return /* tuple */[
 	          setRecord$1(match[0], state),
 	          match[1]
@@ -29975,12 +30964,12 @@
 	}
 
 	function box$2(rect, color, state) {
-	  var __x = box$1(rect, color, getRecord$28(state));
+	  var __x = box$1(rect, color, getRecord$30(state));
 	  return setRecord$1(__x, state);
 	}
 
 	function radioButton$3(groupDataArr, defaultSelectIndex, group, state) {
-	  var match = radioButton$1(groupDataArr, defaultSelectIndex, group, getRecord$28(state));
+	  var match = radioButton$1(groupDataArr, defaultSelectIndex, group, getRecord$30(state));
 	  return /* tuple */[
 	          setRecord$1(match[0], state),
 	          match[1]
@@ -29988,7 +30977,7 @@
 	}
 
 	function checkbox$3(rect, defaultIsSelected, str, state) {
-	  var match = checkbox$1(rect, defaultIsSelected, str, getRecord$28(state));
+	  var match = checkbox$1(rect, defaultIsSelected, str, getRecord$30(state));
 	  return /* tuple */[
 	          setRecord$1(match[0], state),
 	          match[1]
@@ -30005,7 +30994,7 @@
 	      ], /* tuple */[
 	        param$2[0],
 	        param$2[1]
-	      ], getRecord$28(state));
+	      ], getRecord$30(state));
 	  return /* tuple */[
 	          setRecord$1(match[0], state),
 	          match[1],
@@ -30024,7 +31013,7 @@
 	      ], /* tuple */[
 	        param$2[0],
 	        param$2[1]
-	      ], getRecord$28(state));
+	      ], getRecord$30(state));
 	  return /* tuple */[
 	          setRecord$1(match[0], state),
 	          match[1],
@@ -30033,12 +31022,12 @@
 	}
 
 	function beginGroup$3(position, state) {
-	  var __x = beginGroup$1(position, getRecord$28(state));
+	  var __x = beginGroup$1(position, getRecord$30(state));
 	  return setRecord$1(__x, state);
 	}
 
 	function endGroup$3(state) {
-	  var __x = endGroup$1(getRecord$28(state));
+	  var __x = endGroup$1(getRecord$30(state));
 	  return setRecord$1(__x, state);
 	}
 
@@ -30046,19 +31035,19 @@
 	/* GroupLayoutIMGUIAPI-WonderImgui Not a pure module */
 
 	function getAPIJsObj$3(state) {
-	  return state[/* apiRecord */28][/* apiJsObj */0];
+	  return state[/* apiRecord */29][/* apiJsObj */0];
 	}
 
 	function setAPIJsObj$2(apiJsObj, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* apiRecord */28] = apiJsObj;
+	  newrecord[/* apiRecord */29] = apiJsObj;
 	  return newrecord;
 	}
 
 	function create$61() {
 	  return /* record */[/* apiJsObj */{
-	            label: label$2,
-	            image: image$2,
+	            label: label$3,
+	            image: image$3,
 	            button: button$3,
 	            box: box$2,
 	            radioButton: radioButton$3,
@@ -30078,76 +31067,11 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	function queryFullScreenData() {
-	  var root = window;
-	  return /* tuple */[
-	          0,
-	          0,
-	          root.innerWidth,
-	          root.innerHeight,
-	          "100%",
-	          "100%"
-	        ];
-	}
-
-	function _setAbsolutePosition(canvas) {
-	  canvas.style.position = "absolute";
-	  return canvas;
-	}
-
-	function setX(x, canvas) {
-	  canvas.style.left = "" + (String(x) + "px");
-	  return canvas;
-	}
-
-	function setY(y, canvas) {
-	  canvas.style.top = "" + (String(y) + "px");
-	  return canvas;
-	}
-
-	function setWidth$1(width, canvas) {
-	  canvas.width = width;
-	  return canvas;
-	}
-
-	function setHeight$1(height, canvas) {
-	  canvas.height = height;
-	  return canvas;
-	}
-
-	function setStyleWidth(width, canvas) {
-	  canvas.style.width = width;
-	  return canvas;
-	}
-
-	function setStyleHeight(height, canvas) {
-	  canvas.style.height = height;
-	  return canvas;
-	}
-
-	function _setBodyMargin($$document) {
-	  var bodies = $$document.querySelectorAll("body");
-	  if (bodies.length === 0) {
-	    return /* () */0;
-	  } else {
-	    setBatchStyle(caml_array_get(bodies, 0), "margin:0");
-	    return /* () */0;
-	  }
-	}
-
-	function setToFullScreen(param, canvas) {
-	  _setBodyMargin(document);
-	  return setStyleHeight(param[5], setStyleWidth(param[4], setHeight$1(param[3], setWidth$1(param[2], setY(param[1], setX(param[0], _setAbsolutePosition(canvas)))))));
-	}
-
-
-	/* No side effect */
-
 	function execJob$24(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                var viewRecord = state[/* viewRecord */8];
-	                state[/* viewRecord */8] = setCanvas(setToFullScreen(queryFullScreenData(/* () */0), unsafeGetCanvas(viewRecord)), state[/* viewRecord */8]);
+	                var viewRecord = state[/* viewRecord */9];
+	                state[/* viewRecord */9] = setCanvas(setToFullScreen(queryFullScreenData(/* () */0), unsafeGetCanvas(viewRecord)), state[/* viewRecord */9]);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -30161,7 +31085,7 @@
 	/* MostUtils-Wonderjs Not a pure module */
 
 	function clearDataForWorkerInit(record) {
-	  record[/* materialArrayForWorkerInit */11] = /* array */[];
+	  record[/* materialArrayForWorkerInit */12] = /* array */[];
 	  return record;
 	}
 
@@ -30177,8 +31101,8 @@
 	/* No side effect */
 
 	function getPosition$1(gameObject, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  return updateAndGetPositionTuple(unsafeGetTransformComponent(gameObject, gameObjectRecord), state[/* globalTempRecord */35], getRecord$1(state));
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  return updateAndGetPositionTuple(unsafeGetTransformComponent(gameObject, gameObjectRecord), state[/* globalTempRecord */36], getRecord$1(state));
 	}
 
 	function buildPositionMap(index, getPositionFunc, state) {
@@ -30198,7 +31122,7 @@
 	/* GameObjectMapService-Wonderjs Not a pure module */
 
 	function getPosition$2(index, state) {
-	  return getPosition$1(unsafeGetGameObject$9(index, state[/* pointLightRecord */21]), state);
+	  return getPosition$1(unsafeGetGameObject$9(index, state[/* pointLightRecord */22]), state);
 	}
 
 
@@ -30211,8 +31135,8 @@
 
 	function clearNeedAddedSourceArr(state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = getRecord$8(state);
-	  newrecord[/* basicSourceTextureRecord */18] = /* record */[
+	  var init = getRecord$9(state);
+	  newrecord[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */init[/* index */0],
 	    /* wrapSs */init[/* wrapSs */1],
 	    /* wrapTs */init[/* wrapTs */2],
@@ -30230,8 +31154,8 @@
 	    /* needInitedTextureIndexArray */init[/* needInitedTextureIndexArray */14],
 	    /* nameMap */init[/* nameMap */15]
 	  ];
-	  var init$1 = getRecord$10(state);
-	  newrecord[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  var init$1 = getRecord$11(state);
+	  newrecord[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */init$1[/* index */0],
 	    /* wrapSs */init$1[/* wrapSs */1],
 	    /* wrapTs */init$1[/* wrapTs */2],
@@ -30264,12 +31188,24 @@
 
 	/* GameObjectMapService-Wonderjs Not a pure module */
 
-	function getPosition$3(index, state) {
-	  return getPosition$1(unsafeGetGameObject$10(index, state[/* directionLightRecord */20]), state);
+	function getDirection$1(index, state) {
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  return transformQuat(/* tuple */[
+	              0,
+	              0,
+	              1
+	            ], updateAndGetRotationTuple(unsafeGetTransformComponent(unsafeGetGameObject$10(index, directionLightRecord), gameObjectRecord), state[/* globalTempRecord */36], getRecord$1(state)));
+	}
+
+	function buildDirectionMap(index, getDirectionFunc, state) {
+	  return reduceOneParam((function (map, i) {
+	                return set$1(i, _2(getDirectionFunc, i, state), map);
+	              }), createEmpty$2(/* () */0), range$1(0, index - 1 | 0));
 	}
 
 
-	/* PositionLightMainService-Wonderjs Not a pure module */
+	/* ArrayService-Wonderjs Not a pure module */
 
 	var drawImage = (
 	    function(source, x, y, context){
@@ -30310,14 +31246,14 @@
 	/* Canvas-Wonderjs Not a pure module */
 
 	function unsafeGetSource$1(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return unsafeGetSource(texture, match[/* sourceMap */9]);
 	}
 
 	function setSource$1(texture, source, state) {
 	  var match = isUseWorker(state);
 	  if (match) {
-	    var match$1 = getRecord$8(state);
+	    var match$1 = getRecord$9(state);
 	    setSource(texture, source, match$1[/* sourceMap */9]);
 	    push(/* tuple */[
 	          texture,
@@ -30325,7 +31261,7 @@
 	        ], match$1[/* needAddedSourceArray */13]);
 	    return state;
 	  } else {
-	    var match$2 = getRecord$8(state);
+	    var match$2 = getRecord$9(state);
 	    setSource(texture, source, match$2[/* sourceMap */9]);
 	    return state;
 	  }
@@ -30344,84 +31280,84 @@
 	}
 
 	function getWrapS$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getWrapS(texture, match[/* wrapSs */1]);
 	}
 
 	function setWrapS$2(texture, wrapS, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setWrapS(texture, wrapS, match[/* wrapSs */1]);
 	  return state;
 	}
 
 	function getWrapT$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getWrapT(texture, match[/* wrapTs */2]);
 	}
 
 	function setWrapT$2(texture, wrapT, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setWrapT(texture, wrapT, match[/* wrapTs */2]);
 	  return state;
 	}
 
 	function getMagFilter$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getMagFilter(texture, match[/* magFilters */3]);
 	}
 
 	function setMagFilter$2(texture, filter, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setMagFilter(texture, filter, match[/* magFilters */3]);
 	  return state;
 	}
 
 	function getMinFilter$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getMinFilter(texture, match[/* minFilters */4]);
 	}
 
 	function setMinFilter$2(texture, filter, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setMinFilter(texture, filter, match[/* minFilters */4]);
 	  return state;
 	}
 
 	function getFormat$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getFormat(texture, match[/* formats */5]);
 	}
 
 	function setFormat$2(texture, format, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setFormat(texture, format, match[/* formats */5]);
 	  return state;
 	}
 
 	function getType$3(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getType(texture, match[/* types */6]);
 	}
 
 	function setType$2(texture, filter, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setType(texture, filter, match[/* types */6]);
 	  return state;
 	}
 
 	function getFlipY$3(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  return getFlipYFromTypeArrayValue(getFlipY$1(texture, match[/* flipYs */8]));
 	}
 
 	function setFlipY$4(texture, flipY, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  setFlipY(texture, getFlipYTypeArrayValue(flipY), match[/* flipYs */8]);
 	  return state;
 	}
 
 	function getWidth$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  var match$1 = getSource$3(texture, match[/* sourceMap */9]);
 	  if (match$1 !== undefined) {
 	    return getWidth$1(valFromOption(match$1));
@@ -30431,7 +31367,7 @@
 	}
 
 	function getHeight$2(texture, state) {
-	  var match = getRecord$8(state);
+	  var match = getRecord$9(state);
 	  var match$1 = getSource$3(texture, match[/* sourceMap */9]);
 	  if (match$1 !== undefined) {
 	    return getHeight$1(valFromOption(match$1));
@@ -30473,17 +31409,17 @@
 
 	function _buildData(operateType, stateData) {
 	  var state = unsafeGetState$2(stateData);
-	  var settingRecord = state[/* settingRecord */0];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  var pointLightRecord = state[/* pointLightRecord */21];
-	  var basicMaterialRecord = getRecord$3(state);
-	  var lightMaterialRecord = getRecord$4(state);
+	  var settingRecord = state[/* settingRecord */1];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
+	  var basicMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var basicRenderObjectRecord = unsafeGetBasicRenderObjectRecord(state);
 	  var lightRenderObjectRecord = unsafeGetLightRenderObjectRecord(state);
-	  var sourceInstanceRecord = getRecord$6(state);
-	  var basicSourceTextureRecord = getRecord$8(state);
-	  var arrayBufferViewSourceTextureRecord = getRecord$10(state);
+	  var sourceInstanceRecord = getRecord$7(state);
+	  var basicSourceTextureRecord = getRecord$9(state);
+	  var arrayBufferViewSourceTextureRecord = getRecord$11(state);
 	  var cameraData = getCameraRecord(state);
 	  var match = getCameraRecord(state);
 	  var match$1;
@@ -30510,7 +31446,7 @@
 	          },
 	          directionLightData: {
 	            index: directionLightRecord[/* index */0],
-	            positionMap: buildPositionMap(directionLightRecord[/* index */0], getPosition$3, state)
+	            directionMap: buildDirectionMap(directionLightRecord[/* index */0], getDirection$1, state)
 	          },
 	          pointLightData: {
 	            index: pointLightRecord[/* index */0],
@@ -30519,7 +31455,7 @@
 	          initData: {
 	            materialData: {
 	              basicMaterialData: {
-	                materialDataForWorkerInit: _buildMaterialData(basicMaterialRecord[/* materialArrayForWorkerInit */11], basicMaterialRecord[/* gameObjectMap */8], gameObjectRecord)
+	                materialDataForWorkerInit: _buildMaterialData(basicMaterialRecord[/* materialArrayForWorkerInit */12], basicMaterialRecord[/* gameObjectMap */8], gameObjectRecord)
 	              },
 	              lightMaterialData: {
 	                materialDataForWorkerInit: _buildMaterialData(lightMaterialRecord[/* materialArrayForWorkerInit */17], lightMaterialRecord[/* gameObjectMap */13], gameObjectRecord)
@@ -30559,15 +31495,15 @@
 	}
 
 	function _clearData$1(state) {
-	  clearDataForWorkerInit(getRecord$3(state));
-	  clearDataForWorkerInit$1(getRecord$4(state));
+	  clearDataForWorkerInit(getRecord$4(state));
+	  clearDataForWorkerInit$1(getRecord$5(state));
 	  return resetPointEventStateWhenPointUp(clearNeedInitedTextureIndexArray(clearNeedAddedSourceArr(state)));
 	}
 
 	function execJob$27(flags, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                var workerInstanceRecord = state[/* workerInstanceRecord */37];
+	                var workerInstanceRecord = state[/* workerInstanceRecord */38];
 	                var operateType = getOperateType(flags);
 	                postMessage(_buildData(operateType, stateData), unsafeGetRenderWorker(workerInstanceRecord));
 	                var state$1 = _clearData$1(state);
@@ -30621,7 +31557,7 @@
 	                var state = unsafeGetState$2(stateData);
 	                var transformRecord = getRecord$1(state);
 	                var index = transformRecord[/* index */0];
-	                state[/* transformRecord */11] = execJob$33(index, state[/* globalTempRecord */35], transformRecord);
+	                state[/* transformRecord */12] = execJob$33(index, state[/* globalTempRecord */36], transformRecord);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -30679,7 +31615,7 @@
 	                    diffuseMapUnit
 	                  ], getTextureIndex$2, /* tuple */[
 	                    lightMaterialRecord[/* textureIndices */4],
-	                    state[/* settingRecord */20],
+	                    state[/* settingRecord */21],
 	                    state
 	                  ]))[2];
 	}
@@ -30745,7 +31681,7 @@
 
 	/* JudgeInstanceRenderService-Wonderjs Not a pure module */
 
-	function getShaderIndex$3(materialIndex, param) {
+	function getShaderIndex$4(materialIndex, param) {
 	  return getShaderIndex(materialIndex, param[/* lightMaterialRecord */9][/* shaderIndices */0]);
 	}
 
@@ -30753,15 +31689,17 @@
 	/* ShaderIndicesService-Wonderjs Not a pure module */
 
 	function render$10(gl, param, state) {
-	  var sourceInstanceIndices = param[5];
-	  var geometryTypes = param[4];
-	  var geometryIndices = param[3];
+	  var sourceInstanceIndices = param[6];
+	  var geometryTypes = param[5];
+	  var geometryIndices = param[4];
+	  var meshRendererIndices = param[3];
 	  var materialIndices = param[2];
 	  var transformIndices = param[1];
 	  return reduceOneParam((function (state, index) {
 	                var transformIndex = getComponent$1(index, transformIndices);
 	                var materialIndex = getComponent$1(index, materialIndices);
-	                var shaderIndex = getShaderIndex$1(materialIndex, getShaderIndex$3, state);
+	                var shaderIndex = getShaderIndex$2(materialIndex, getShaderIndex$4, state);
+	                var meshRendererIndex = getComponent$1(index, meshRendererIndices);
 	                var geometryIndex = getComponent$1(index, geometryIndices);
 	                var geometryType = getGeometryType(index, geometryTypes);
 	                var sourceInstance = getComponent$1(index, sourceInstanceIndices);
@@ -30770,6 +31708,7 @@
 	                              transformIndex,
 	                              materialIndex,
 	                              shaderIndex,
+	                              meshRendererIndex,
 	                              geometryIndex,
 	                              geometryType,
 	                              sourceInstance
@@ -30779,10 +31718,11 @@
 	                        transformIndex,
 	                        materialIndex,
 	                        shaderIndex,
+	                        meshRendererIndex,
 	                        geometryIndex,
 	                        geometryType
 	                      ], state);
-	                  draw$4(gl, geometryIndex, geometryType, state$1);
+	                  draw$4(gl, meshRendererIndex, geometryIndex, geometryType, state$1);
 	                  return state$1;
 	                }
 	              }), state, range$1(0, param[0] - 1 | 0));
@@ -30790,6 +31730,8 @@
 
 
 	/* ArrayService-Wonderjs Not a pure module */
+
+	/* MostUtils-Wonderjs Not a pure module */
 
 	/* MostUtils-Wonderjs Not a pure module */
 
@@ -30825,20 +31767,20 @@
 
 	function _buildTextureData(state) {
 	  requireCheck((function () {
-	          var basicSourceTextureRecord = getRecord$8(state);
+	          var basicSourceTextureRecord = getRecord$9(state);
 	          var needInitedTextureIndexArray = basicSourceTextureRecord[/* needInitedTextureIndexArray */14];
 	          test(buildAssertMessage("basicSourceTextureRecord->needInitedTextureIndexArray should be empty", "is " + (String(needInitedTextureIndexArray) + "")), (function () {
 	                  return Operators[/* = */0](needInitedTextureIndexArray.length, 0);
 	                }));
-	          var arrayBufferViewSourceTextureRecord = getRecord$10(state);
+	          var arrayBufferViewSourceTextureRecord = getRecord$11(state);
 	          var needInitedTextureIndexArray$1 = arrayBufferViewSourceTextureRecord[/* needInitedTextureIndexArray */16];
 	          return test(buildAssertMessage("arrayBufferViewSourceTextureRecord->needInitedTextureIndexArray should be empty", "is " + (String(needInitedTextureIndexArray$1) + "")), (function () {
 	                        return Operators[/* = */0](needInitedTextureIndexArray$1.length, 0);
 	                      }));
 	        }), getIsDebug(stateData));
-	  var sourceTextureRecord = getRecord$9(state);
-	  var basicSourceTextureRecord = getRecord$8(state);
-	  var arrayBufferViewSourceTextureRecord = getRecord$10(state);
+	  var sourceTextureRecord = getRecord$10(state);
+	  var basicSourceTextureRecord = getRecord$9(state);
+	  var arrayBufferViewSourceTextureRecord = getRecord$11(state);
 	  return {
 	          buffer: sourceTextureRecord[/* buffer */0],
 	          basicSourceTextureData: {
@@ -30875,20 +31817,21 @@
 
 	function _buildData$1(operateType, canvas, stateData$$1) {
 	  var state = unsafeGetState$2(stateData$$1);
-	  var settingRecord = state[/* settingRecord */0];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var settingRecord = state[/* settingRecord */1];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var match = unsafeGetGPU(settingRecord);
 	  var match$1 = unsafeGetMemory(settingRecord);
 	  var buffer = unsafeGetBuffer(settingRecord);
-	  var renderConfigRecord = getRecord$7(state);
+	  var renderConfigRecord = getRecord$8(state);
 	  var transformRecord = getRecord$1(state);
-	  var basicMaterialRecord = getRecord$3(state);
-	  var lightMaterialRecord = getRecord$4(state);
-	  getRecord$2(state);
-	  var customGeometryRecord = getRecord$5(state);
-	  var sourceInstanceRecord = getRecord$6(state);
+	  var basicMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
+	  getRecord$3(state);
+	  var customGeometryRecord = getRecord$6(state);
+	  var meshRendererRecord = getRecord$2(state);
+	  var sourceInstanceRecord = getRecord$7(state);
 	  var match$2 = queryFullScreenData(/* () */0);
 	  return {
 	          operateType: operateType,
@@ -30907,6 +31850,7 @@
 	            transformCount: buffer[/* transformCount */2],
 	            basicMaterialCount: buffer[/* basicMaterialCount */3],
 	            lightMaterialCount: buffer[/* lightMaterialCount */4],
+	            meshRendererCount: buffer[/* meshRendererCount */8],
 	            textureCountPerMaterial: buffer[/* textureCountPerMaterial */5],
 	            basicSourceTextureCount: buffer[/* basicSourceTextureCount */6],
 	            arrayBufferViewSourceTextureCount: buffer[/* arrayBufferViewSourceTextureCount */7]
@@ -30925,7 +31869,7 @@
 	            isUseWorker: isUseWorker(state)
 	          },
 	          browserDetectData: {
-	            browser: state[/* browserDetectRecord */40][/* browser */0]
+	            browser: state[/* browserDetectRecord */41][/* browser */0]
 	          },
 	          renderConfigData: {
 	            shaders: JSON.stringify(getShaders(renderConfigRecord)),
@@ -30934,10 +31878,13 @@
 	          transformData: {
 	            buffer: unsafeGetCopiedBuffer(transformRecord)
 	          },
-	          basicMaterialData: _buildMaterialData$1(basicMaterialRecord[/* buffer */1], basicMaterialRecord[/* index */0], basicMaterialRecord[/* disposedIndexArray */10], buildMap(basicMaterialRecord[/* index */0], getRecord$3(state)[/* gameObjectMap */8], gameObjectRecord)),
-	          lightMaterialData: _buildMaterialData$1(lightMaterialRecord[/* buffer */1], lightMaterialRecord[/* index */0], lightMaterialRecord[/* disposedIndexArray */15], buildMap(lightMaterialRecord[/* index */0], getRecord$4(state)[/* gameObjectMap */13], gameObjectRecord)),
+	          basicMaterialData: _buildMaterialData$1(basicMaterialRecord[/* buffer */1], basicMaterialRecord[/* index */0], basicMaterialRecord[/* disposedIndexArray */10], buildMap(basicMaterialRecord[/* index */0], getRecord$4(state)[/* gameObjectMap */8], gameObjectRecord)),
+	          lightMaterialData: _buildMaterialData$1(lightMaterialRecord[/* buffer */1], lightMaterialRecord[/* index */0], lightMaterialRecord[/* disposedIndexArray */15], buildMap(lightMaterialRecord[/* index */0], getRecord$5(state)[/* gameObjectMap */13], gameObjectRecord)),
 	          customGeometryData: {
 	            buffer: customGeometryRecord[/* buffer */1]
+	          },
+	          meshRendererData: {
+	            buffer: meshRendererRecord[/* buffer */1]
 	          },
 	          directionLightData: {
 	            buffer: directionLightRecord[/* buffer */1],
@@ -30956,11 +31903,11 @@
 	        };
 	}
 
-	function execJob$42(flags, stateData$$1) {
+	function execJob$43(flags, stateData$$1) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData$$1);
-	                var viewRecord = state[/* viewRecord */8];
-	                var workerInstanceRecord = state[/* workerInstanceRecord */37];
+	                var viewRecord = state[/* viewRecord */9];
+	                var workerInstanceRecord = state[/* workerInstanceRecord */38];
 	                var operateType = getOperateType(flags);
 	                var offscreen = unsafeGetCanvas(viewRecord).transferControlToOffscreen();
 	                postMessageWithTransferData(_buildData$1(operateType, offscreen, stateData$$1), /* array */[offscreen], unsafeGetRenderWorker(workerInstanceRecord));
@@ -30974,11 +31921,11 @@
 	/* Log-WonderLog Not a pure module */
 
 	function execNoDataJob(flags, stateData) {
-	  return createGetOtherWorkerNoDataStream(flags, unsafeGetRenderWorker(unsafeGetState$2(stateData)[/* workerInstanceRecord */37]));
+	  return createGetOtherWorkerNoDataStream(flags, unsafeGetRenderWorker(unsafeGetState$2(stateData)[/* workerInstanceRecord */38]));
 	}
 
 	function createGetOtherWorkerDataStream$1(flags, stateData) {
-	  return createGetOtherWorkerDataStream(flags, unsafeGetRenderWorker(unsafeGetState$2(stateData)[/* workerInstanceRecord */37]));
+	  return createGetOtherWorkerDataStream(flags, unsafeGetRenderWorker(unsafeGetState$2(stateData)[/* workerInstanceRecord */38]));
 	}
 
 
@@ -30988,7 +31935,7 @@
 	  return setControlDataFromRenderWorker(data.imguiData, setRenderWorkerCustomData(data.customData, state));
 	}
 
-	function execJob$43(flags, stateData) {
+	function execJob$44(flags, stateData) {
 	  return map$4((function () {
 	                return undefined;
 	              }), tap((function (e) {
@@ -31258,11 +32205,11 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function _reallocateGameObjectByDisposeCount(state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  if (isDisposeTooMany(gameObjectRecord[/* disposeCount */2], state[/* settingRecord */0])) {
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  if (isDisposeTooMany(gameObjectRecord[/* disposeCount */2], state[/* settingRecord */1])) {
 	    gameObjectRecord[/* disposeCount */2] = 0;
 	    var newrecord = caml_array_dup(state);
-	    newrecord[/* gameObjectRecord */10] = reAllocate(state[/* gameObjectRecord */10]);
+	    newrecord[/* gameObjectRecord */11] = reAllocate(state[/* gameObjectRecord */11]);
 	    return newrecord;
 	  } else {
 	    return state;
@@ -31271,22 +32218,22 @@
 
 	function _reallocateCustomGeometryByDisposeCount(state) {
 	  var newrecord = caml_array_dup(state);
-	  var customGeometryRecord = getRecord$5(state);
-	  newrecord[/* customGeometryRecord */23] = isDisposeTooMany(customGeometryRecord[/* disposeCount */14], state[/* settingRecord */0]) ? (customGeometryRecord[/* disposeCount */14] = 0, reAllocate$1(customGeometryRecord)) : customGeometryRecord;
+	  var customGeometryRecord = getRecord$6(state);
+	  newrecord[/* customGeometryRecord */24] = isDisposeTooMany(customGeometryRecord[/* disposeCount */14], state[/* settingRecord */1]) ? (customGeometryRecord[/* disposeCount */14] = 0, reAllocate$1(customGeometryRecord)) : customGeometryRecord;
 	  return newrecord;
 	}
 
-	function execJob$49(state) {
+	function execJob$50(state) {
 	  return _reallocateCustomGeometryByDisposeCount(_reallocateGameObjectByDisposeCount(state));
 	}
 
 
 	/* QueryCPUMemoryService-Wonderjs Not a pure module */
 
-	function execJob$48(_, stateData) {
+	function execJob$49(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                var state$1 = execJob$49(state);
+	                var state$1 = execJob$50(state);
 	                setState$2(stateData, state$1);
 	                return undefined;
 	              }));
@@ -31295,9 +32242,9 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	function execJob$50(_, stateData) {
+	function execJob$51(_, stateData) {
 	  var state = unsafeGetState$2(stateData);
-	  state[/* workerInstanceRecord */37] = initWorkInstances(getSetting$1(state[/* workerJobRecord */3])[/* workerFileDir */0], state[/* workerInstanceRecord */37]);
+	  state[/* workerInstanceRecord */38] = initWorkInstances(getSetting$1(state[/* workerJobRecord */4])[/* workerFileDir */0], state[/* workerInstanceRecord */38]);
 	  setState$2(stateData, state);
 	  return of(undefined);
 	}
@@ -31305,12 +32252,12 @@
 
 	/* most Not a pure module */
 
-	var execJob$51 = execNoDataJob;
+	var execJob$52 = execNoDataJob;
 
 
 	/* GetWorkerDataJobUtils-Wonderjs Not a pure module */
 
-	var execJob$52 = execNoDataJob;
+	var execJob$53 = execNoDataJob;
 
 
 	/* GetWorkerDataJobUtils-Wonderjs Not a pure module */
@@ -31347,7 +32294,7 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	var execJob$63 = execNoDataJob;
+	var execJob$64 = execNoDataJob;
 
 
 	/* GetWorkerDataJobUtils-Wonderjs Not a pure module */
@@ -31361,15 +32308,14 @@
 	/* SendWorkerDataJobUtils-Wonderjs Not a pure module */
 
 	function getAllShaderIndexArray(param) {
-	  var index = param[/* index */0];
-	  return range$1(0, index - 1 | 0);
+	  return param[/* usedShaderIndexArray */0];
 	}
 
 
-	/* ArrayService-Wonderjs Not a pure module */
+	/* No side effect */
 
-	function execJob$69(renderState) {
-	  var gl = unsafeGetGl$1(renderState[/* deviceManagerRecord */18]);
+	function execJob$70(renderState) {
+	  var gl = unsafeGetGl$1(renderState[/* deviceManagerRecord */19]);
 	  return reduceOneParam((function (renderState, shaderIndex) {
 	                var program = unsafeGetProgram(shaderIndex, renderState[/* programRecord */4]);
 	                var renderState$1 = use(gl, program, renderState);
@@ -31396,7 +32342,7 @@
 	                                  ], renderState);
 	                              return renderState;
 	                            }), renderState$3, unsafeGetUniformSendData$6(shaderIndex, renderState$3[/* glslSenderRecord */3]));
-	              }), renderState, getAllShaderIndexArray(renderState[/* shaderRecord */19]));
+	              }), renderState, getAllShaderIndexArray(renderState[/* shaderRecord */20]));
 	}
 
 
@@ -31404,7 +32350,7 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	function execJob$71(glslSenderRecord) {
+	function execJob$72(glslSenderRecord) {
 	  return /* record */[
 	          /* attributeSendDataMap */glslSenderRecord[/* attributeSendDataMap */0],
 	          /* instanceAttributeSendDataMap */glslSenderRecord[/* instanceAttributeSendDataMap */1],
@@ -31427,7 +32373,7 @@
 	/* MostUtils-Wonderjs Not a pure module */
 
 	function _disposeComponents(batchDisposeBasicMaterialComponentFunc, batchDisposeLightMaterialComponentFunc, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var disposedBasicCameraViewArray = gameObjectRecord[/* disposedBasicCameraViewArray */6];
 	  var disposedTransformArray = gameObjectRecord[/* disposedTransformArray */7];
 	  var disposedTransformArrayForKeepOrder = gameObjectRecord[/* disposedTransformArrayForKeepOrder */8];
@@ -31471,7 +32417,7 @@
 	}
 
 	function _disposeGameObjects(batchDisposeBasicMaterialComponentFunc, batchDisposeLightMaterialComponentFunc, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var disposedUidArray = gameObjectRecord[/* disposedUidArray */4];
 	  var disposedUidArrayForKeepOrder = gameObjectRecord[/* disposedUidArrayForKeepOrder */5];
 	  var match = batchDispose(/* tuple */[
@@ -31491,7 +32437,7 @@
 	        ];
 	}
 
-	function execJob$73(batchDisposeBasicMaterialComponentFunc, batchDisposeLightMaterialComponentFunc, state) {
+	function execJob$74(batchDisposeBasicMaterialComponentFunc, batchDisposeLightMaterialComponentFunc, state) {
 	  var match = _disposeComponents(batchDisposeBasicMaterialComponentFunc, batchDisposeLightMaterialComponentFunc, state);
 	  var match$1 = _disposeGameObjects(batchDisposeBasicMaterialComponentFunc, batchDisposeLightMaterialComponentFunc, match[0]);
 	  return /* tuple */[
@@ -31515,14 +32461,14 @@
 	}
 
 	function _sendDisposeData(operateType, needDisposeVboBufferArrTuple, state) {
-	  return postMessage(_buildData$2(operateType, needDisposeVboBufferArrTuple), unsafeGetRenderWorker(state[/* workerInstanceRecord */37]));
+	  return postMessage(_buildData$2(operateType, needDisposeVboBufferArrTuple), unsafeGetRenderWorker(state[/* workerInstanceRecord */38]));
 	}
 
-	function execJob$72(flags, stateData) {
+	function execJob$73(flags, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
 	                var operateType = getOperateType(flags);
-	                var match = execJob$73(batchDisposeBasicMaterialComponentForWorker, batchDisposeLightMaterialComponentForWorker, state);
+	                var match = execJob$74(batchDisposeBasicMaterialComponentForWorker, batchDisposeLightMaterialComponentForWorker, state);
 	                var state$1 = match[0];
 	                _sendDisposeData(operateType, /* tuple */[
 	                      match[1],
@@ -31540,64 +32486,66 @@
 	/* SendWorkerDataJobUtils-Wonderjs Not a pure module */
 
 	function getBasicMaterialRenderArray(param) {
-	  return getValidValues(param[/* basicMaterialRenderGameObjectMap */1]);
+	  return getValidValues(param[/* basicMaterialRenderGameObjectMap */3]);
 	}
 
 	function getLightMaterialRenderArray(param) {
-	  return getValidValues(param[/* lightMaterialRenderGameObjectMap */2]);
+	  return getValidValues(param[/* lightMaterialRenderGameObjectMap */4]);
 	}
 
 
 	/* SparseMapService-Wonderjs Not a pure module */
 
 	function setData(renderArray, unsafeGetMaterialComponentFunc, renderObjectRecord, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var count = renderArray.length;
 	  var match = reduceOneParami((function (param, uid, index) {
-	          var sourceInstanceIndices = param[3];
+	          var sourceInstanceIndices = param[4];
 	          var materialIndex = unsafeGetMaterialComponentFunc(uid, gameObjectRecord);
 	          var match = unsafeGetGeometryComponentData(uid, gameObjectRecord);
 	          var match$1 = getSourceInstanceComponent(uid, gameObjectRecord);
 	          return /* tuple */[
 	                  setComponent(index, unsafeGetTransformComponent(uid, gameObjectRecord), param[0]),
 	                  setComponent(index, materialIndex, param[1]),
-	                  setComponent(index, match[0], param[2]),
+	                  setComponent(index, unsafeGetMeshRendererComponent(uid, gameObjectRecord), param[2]),
+	                  setComponent(index, match[0], param[3]),
 	                  match$1 !== undefined ? setComponent(index, match$1, sourceInstanceIndices) : sourceInstanceIndices,
-	                  setUint8_1(index, match[1], param[4])
+	                  setUint8_1(index, match[1], param[5])
 	                ];
 	        }), /* tuple */[
 	        renderObjectRecord[/* transformIndices */2],
 	        renderObjectRecord[/* materialIndices */3],
-	        renderObjectRecord[/* geometryIndices */4],
-	        renderObjectRecord[/* sourceInstanceIndices */6],
-	        renderObjectRecord[/* geometryTypes */5]
+	        renderObjectRecord[/* meshRendererIndices */4],
+	        renderObjectRecord[/* geometryIndices */5],
+	        renderObjectRecord[/* sourceInstanceIndices */7],
+	        renderObjectRecord[/* geometryTypes */6]
 	      ], renderArray);
 	  return /* record */[
 	          /* buffer */renderObjectRecord[/* buffer */0],
 	          /* count */count,
 	          /* transformIndices */match[0],
 	          /* materialIndices */match[1],
-	          /* geometryIndices */match[2],
-	          /* geometryTypes */match[4],
-	          /* sourceInstanceIndices */match[3]
+	          /* meshRendererIndices */match[2],
+	          /* geometryIndices */match[3],
+	          /* geometryTypes */match[5],
+	          /* sourceInstanceIndices */match[4]
 	        ];
 	}
 
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function execJob$76(state) {
-	  var meshRendererRecord = state[/* meshRendererRecord */24];
-	  return setData(getBasicMaterialRenderArray(meshRendererRecord), unsafeGetBasicMaterialComponent, getRecord$13(getRecord$12(state)), state);
+	function execJob$77(state) {
+	  return setData(getBasicMaterialRenderArray(getRecord$2(state)), unsafeGetBasicMaterialComponent, getRecord$14(getRecord$13(state)), state);
 	}
 
 
 	/* RecordRenderMainService-Wonderjs Not a pure module */
 
-	function execJob$75(_, stateData) {
+	function execJob$76(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                getRecord$12(state)[/* basicRenderObjectRecord */0] = execJob$76(state);
+	                getRecord$13(state)[/* basicRenderObjectRecord */0] = execJob$77(state);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -31606,18 +32554,17 @@
 
 	/* MostUtils-Wonderjs Not a pure module */
 
-	function execJob$78(state) {
-	  var meshRendererRecord = state[/* meshRendererRecord */24];
-	  return setData(getLightMaterialRenderArray(meshRendererRecord), unsafeGetLightMaterialComponent, getRecord$14(getRecord$12(state)), state);
+	function execJob$79(state) {
+	  return setData(getLightMaterialRenderArray(getRecord$2(state)), unsafeGetLightMaterialComponent, getRecord$15(getRecord$13(state)), state);
 	}
 
 
 	/* RecordRenderMainService-Wonderjs Not a pure module */
 
-	function execJob$77(_, stateData) {
+	function execJob$78(_, stateData) {
 	  return callFunc((function () {
 	                var state = unsafeGetState$2(stateData);
-	                getRecord$12(state)[/* lightRenderObjectRecord */1] = execJob$78(state);
+	                getRecord$13(state)[/* lightRenderObjectRecord */1] = execJob$79(state);
 	                setState$2(stateData, state);
 	                return undefined;
 	              }));
@@ -31654,7 +32601,7 @@
 	                /* :: */[
 	                  /* tuple */[
 	                    "create_worker_instance",
-	                    execJob$50
+	                    execJob$51
 	                  ],
 	                  /* :: */[
 	                    /* tuple */[
@@ -31674,17 +32621,17 @@
 	                        /* :: */[
 	                          /* tuple */[
 	                            "get_finish_send_job_data",
-	                            execJob$52
+	                            execJob$53
 	                          ],
 	                          /* :: */[
 	                            /* tuple */[
 	                              "send_init_render_data",
-	                              execJob$42
+	                              execJob$43
 	                            ],
 	                            /* :: */[
 	                              /* tuple */[
 	                                "get_finish_init_render_data",
-	                                execJob$63
+	                                execJob$64
 	                              ],
 	                              /* [] */0
 	                            ]
@@ -31724,22 +32671,22 @@
 	                /* :: */[
 	                  /* tuple */[
 	                    "dispose_and_send_dispose_data",
-	                    execJob$72
+	                    execJob$73
 	                  ],
 	                  /* :: */[
 	                    /* tuple */[
 	                      "reallocate_cpu_memory",
-	                      execJob$48
+	                      execJob$49
 	                    ],
 	                    /* :: */[
 	                      /* tuple */[
 	                        "create_basic_render_object_buffer",
-	                        execJob$75
+	                        execJob$76
 	                      ],
 	                      /* :: */[
 	                        /* tuple */[
 	                          "create_light_render_object_buffer",
-	                          execJob$77
+	                          execJob$78
 	                        ],
 	                        /* :: */[
 	                          /* tuple */[
@@ -31754,12 +32701,12 @@
 	                            /* :: */[
 	                              /* tuple */[
 	                                "get_finish_render_data",
-	                                execJob$43
+	                                execJob$44
 	                              ],
 	                              /* :: */[
 	                                /* tuple */[
 	                                  "get_finish_dispose_data",
-	                                  execJob$51
+	                                  execJob$52
 	                                ],
 	                                /* [] */0
 	                              ]
@@ -31810,7 +32757,7 @@
 	var _noWorkerInit = execNoWorkerInitJobs;
 
 	function _computeElapseTime(time, state) {
-	  state[/* timeControllerRecord */33] = computeElapseTime(time, state[/* timeControllerRecord */33]);
+	  state[/* timeControllerRecord */34] = computeElapseTime(time, state[/* timeControllerRecord */34]);
 	  return state;
 	}
 
@@ -31860,13 +32807,12 @@
 	function replaceMaterial$2(param, gameObject, param$1, state) {
 	  var state$1 = _3(param$1[0], gameObject, param[0], state);
 	  var state$2 = _3(param$1[1], gameObject, param[1], state$1);
-	  var match = getMeshRendererComponent(gameObject, state$2[/* gameObjectRecord */10]);
+	  var match = getMeshRendererComponent(gameObject, state$2[/* gameObjectRecord */11]);
 	  var state$3;
 	  if (match !== undefined) {
 	    var state$4 = deferDisposeMeshRendererComponent(gameObject, match, state$2);
-	    var match$1 = create$26(state$4[/* meshRendererRecord */24]);
-	    var newrecord = caml_array_dup(state$4);
-	    state$3 = addMeshRendererComponent(gameObject, match$1[1], (newrecord[/* meshRendererRecord */24] = match$1[0], newrecord));
+	    var match$1 = create$29(state$4);
+	    state$3 = addMeshRendererComponent(gameObject, match$1[1], match$1[0]);
 	  } else {
 	    state$3 = state$2;
 	  }
@@ -32584,7 +33530,7 @@
 	          var componentIndices = param[1];
 	          var gameObjectIndices = param[0];
 	          if (extras !== undefined) {
-	            var cameraController = extras[/* cameraController */1];
+	            var cameraController = extras[/* cameraController */3];
 	            if (cameraController !== undefined) {
 	              return /* tuple */[
 	                      push(index, gameObjectIndices),
@@ -32612,20 +33558,45 @@
 	            ]);
 	}
 
-	function _convertToLightMaterialGameObjectIndexDataFromExtras(material, param, index) {
-	  var componentIndices = param[1];
-	  var gameObjectIndices = param[0];
-	  if (material !== undefined) {
-	    return /* tuple */[
-	            push(index, gameObjectIndices),
-	            push(valFromOption(material), componentIndices)
-	          ];
-	  } else {
-	    return /* tuple */[
-	            gameObjectIndices,
-	            componentIndices
-	          ];
-	  }
+	function _convertToGameObjectIndexDataFromExtras(component, param, index) {
+	  return /* tuple */[
+	          push(index, param[0]),
+	          push(component, param[1])
+	        ];
+	}
+
+	function convertToBasicMaterialGameObjectIndexData(nodes, _, _$1) {
+	  var match = reduceOneParami((function (param, param$1, index) {
+	          var extras = param$1[/* extras */8];
+	          var componentIndices = param[1];
+	          var gameObjectIndices = param[0];
+	          if (extras !== undefined) {
+	            var basicMaterial = extras[/* basicMaterial */1];
+	            if (isSome(basicMaterial)) {
+	              return _convertToGameObjectIndexDataFromExtras(unsafeGet$1(basicMaterial), /* tuple */[
+	                          gameObjectIndices,
+	                          componentIndices
+	                        ], index);
+	            } else {
+	              return /* tuple */[
+	                      gameObjectIndices,
+	                      componentIndices
+	                    ];
+	            }
+	          } else {
+	            return /* tuple */[
+	                    gameObjectIndices,
+	                    componentIndices
+	                  ];
+	          }
+	        }), /* tuple */[
+	        /* array */[],
+	        /* array */[]
+	      ], nodes);
+	  return _checkGameObjectAndComponentIndicesCountShouldEqual(/* record */[
+	              /* gameObjectIndices */match[0],
+	              /* componentIndices */match[1]
+	            ]);
 	}
 
 	function _convertToLightMaterialGameObjectIndexDataFromMesh(mesh, meshes, param, index) {
@@ -32659,17 +33630,27 @@
 	          var extras = param$1[/* extras */8];
 	          var componentIndices = param[1];
 	          var gameObjectIndices = param[0];
+	          var exit = 0;
 	          if (extras !== undefined) {
-	            return _convertToLightMaterialGameObjectIndexDataFromExtras(extras[/* material */0], /* tuple */[
-	                        gameObjectIndices,
-	                        componentIndices
-	                      ], index);
+	            var lightMaterial = extras[/* lightMaterial */2];
+	            if (isSome(lightMaterial)) {
+	              return _convertToGameObjectIndexDataFromExtras(unsafeGet$1(lightMaterial), /* tuple */[
+	                          gameObjectIndices,
+	                          componentIndices
+	                        ], index);
+	            } else {
+	              exit = 1;
+	            }
 	          } else {
+	            exit = 1;
+	          }
+	          if (exit === 1) {
 	            return _convertToLightMaterialGameObjectIndexDataFromMesh(param$1[/* mesh */2], meshes, /* tuple */[
 	                        gameObjectIndices,
 	                        componentIndices
 	                      ], index);
 	          }
+	          
 	        }), /* tuple */[
 	        /* array */[],
 	        /* array */[]
@@ -32696,6 +33677,49 @@
 	                    componentIndices
 	                  ];
 	          }
+	        }), /* tuple */[
+	        /* array */[],
+	        /* array */[]
+	      ], nodes);
+	  return _checkGameObjectAndComponentIndicesCountShouldEqual(/* record */[
+	              /* gameObjectIndices */match[0],
+	              /* componentIndices */match[1]
+	            ]);
+	}
+
+	function convertToMeshRendererGameObjectIndexData(nodes) {
+	  var match = reduceOneParami((function (param, param$1, index) {
+	          var extras = param$1[/* extras */8];
+	          var componentIndices = param[1];
+	          var gameObjectIndices = param[0];
+	          var exit = 0;
+	          if (extras !== undefined) {
+	            var meshRenderer = extras[/* meshRenderer */0];
+	            if (isSome(meshRenderer)) {
+	              return _convertToGameObjectIndexDataFromExtras(unsafeGet$1(meshRenderer), /* tuple */[
+	                          gameObjectIndices,
+	                          componentIndices
+	                        ], index);
+	            } else {
+	              exit = 1;
+	            }
+	          } else {
+	            exit = 1;
+	          }
+	          if (exit === 1) {
+	            if (param$1[/* mesh */2] !== undefined) {
+	              return /* tuple */[
+	                      push(index, gameObjectIndices),
+	                      push(gameObjectIndices.length - 1 | 0, componentIndices)
+	                    ];
+	            } else {
+	              return /* tuple */[
+	                      gameObjectIndices,
+	                      componentIndices
+	                    ];
+	            }
+	          }
+	          
 	        }), /* tuple */[
 	        /* array */[],
 	        /* array */[]
@@ -32796,6 +33820,8 @@
 
 	function convertToGameObjectIndexData(param) {
 	  var extensions = param[/* extensions */14];
+	  var materials = param[/* materials */12];
+	  var meshes = param[/* meshes */11];
 	  var nodes = param[/* nodes */10];
 	  var transformGameObjectIndexData = convertToTransformGameObjectIndexData(nodes);
 	  return /* record */[
@@ -32804,10 +33830,12 @@
 	          /* basicCameraViewGameObjectIndexData */convertToBasicCameraViewGameObjectIndexData(nodes),
 	          /* perspectiveCameraProjectionGameObjectIndexData */convertToPerspectiveCameraProjectionGameObjectIndexData(nodes, param[/* cameras */9]),
 	          /* arcballCameraControllerGameObjectIndexData */convertToArcballCameraControllerGameObjectIndexData(nodes),
-	          /* lightMaterialGameObjectIndexData */convertToLightMaterialGameObjectIndexData(nodes, param[/* meshes */11], param[/* materials */12]),
+	          /* basicMaterialGameObjectIndexData */convertToBasicMaterialGameObjectIndexData(nodes, meshes, materials),
+	          /* lightMaterialGameObjectIndexData */convertToLightMaterialGameObjectIndexData(nodes, meshes, materials),
 	          /* directionLightGameObjectIndexData */convertToLightGameObjectIndexData("directional", nodes, extensions),
 	          /* pointLightGameObjectIndexData */convertToLightGameObjectIndexData("point", nodes, extensions),
-	          /* customGeometryGameObjectIndexData */convertToGeometryGameObjectIndexData(nodes)
+	          /* customGeometryGameObjectIndexData */convertToGeometryGameObjectIndexData(nodes),
+	          /* meshRendererGameObjectIndexData */convertToMeshRendererGameObjectIndexData(nodes)
 	        ];
 	}
 
@@ -33007,6 +34035,42 @@
 
 	/* Log-WonderLog Not a pure module */
 
+	function convertToBasicMaterials(param) {
+	  var extras = param[/* extras */15];
+	  if (extras !== undefined) {
+	    var basicMaterials = extras[/* basicMaterials */1];
+	    if (basicMaterials !== undefined) {
+	      return reduceOneParami((function (arr, param, index) {
+	                    var name = param[/* name */1];
+	                    var colorFactor = param[/* colorFactor */0];
+	                    var tmp;
+	                    if (colorFactor !== undefined) {
+	                      var colorFactor$1 = colorFactor;
+	                      tmp = /* array */[
+	                        caml_array_get(colorFactor$1, 0),
+	                        caml_array_get(colorFactor$1, 1),
+	                        caml_array_get(colorFactor$1, 2)
+	                      ];
+	                    } else {
+	                      tmp = /* array */[
+	                        1,
+	                        1,
+	                        1
+	                      ];
+	                    }
+	                    return push(/* record */[
+	                                /* color */tmp,
+	                                /* name */name !== undefined ? name : buildDefaultName("basicMaterial", index)
+	                              ], arr);
+	                  }), /* array */[], basicMaterials);
+	    } else {
+	      return /* array */[];
+	    }
+	  } else {
+	    return /* array */[];
+	  }
+	}
+
 	function convertToLightMaterials(param) {
 	  var materials = param[/* materials */12];
 	  if (materials !== undefined) {
@@ -33032,7 +34096,7 @@
 	                    }
 	                    return push(/* record */[
 	                                /* diffuseColor */tmp,
-	                                /* name */name !== undefined ? name : buildDefaultName("material", index)
+	                                /* name */name !== undefined ? name : buildDefaultName("lightMaterial", index)
 	                              ], arr);
 	                  } else {
 	                    return arr;
@@ -33167,6 +34231,61 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
+	function _convertByMesh(meshes, customGeometryGameObjectIndices, customGeometryIndices) {
+	  return customGeometryGameObjectIndices.map((function (_, index) {
+	                var customGeometryIndex = customGeometryIndices[index];
+	                var match = meshes[customGeometryIndex];
+	                var match$1 = getPrimitiveData(match[/* primitives */0]);
+	                var mode = match$1[/* mode */3];
+	                var tmp;
+	                if (mode !== undefined) {
+	                  var match$2 = mode;
+	                  if (match$2 > 6 || match$2 < 0) {
+	                    throw [
+	                          match_failure,
+	                          /* tuple */[
+	                            "ConvertMeshRenderersSystem.re",
+	                            17,
+	                            13
+	                          ]
+	                        ];
+	                  } else {
+	                    tmp = match$2;
+	                  }
+	                } else {
+	                  tmp = /* Triangles */4;
+	                }
+	                return /* record */[/* drawMode */tmp];
+	              }));
+	}
+
+	function convertToMeshRenderers(param, param$1) {
+	  var extras = param$1[/* extras */15];
+	  var meshes = param$1[/* meshes */11];
+	  var customGeometryIndices = param[/* componentIndices */1];
+	  var customGeometryGameObjectIndices = param[/* gameObjectIndices */0];
+	  if (extras !== undefined) {
+	    var meshRenderers = extras[/* meshRenderers */2];
+	    if (meshRenderers !== undefined) {
+	      var meshRenderers$1 = meshRenderers;
+	      if (meshRenderers$1.length > 0) {
+	        return reduceOneParami((function (arr, param, _) {
+	                      return push(/* record */[/* drawMode */param[/* drawMode */0]], arr);
+	                    }), /* array */[], meshRenderers$1);
+	      } else {
+	        return _convertByMesh(meshes, customGeometryGameObjectIndices, customGeometryIndices);
+	      }
+	    } else {
+	      return _convertByMesh(meshes, customGeometryGameObjectIndices, customGeometryIndices);
+	    }
+	  } else {
+	    return _convertByMesh(meshes, customGeometryGameObjectIndices, customGeometryIndices);
+	  }
+	}
+
+
+	/* ArrayService-Wonderjs Not a pure module */
+
 	function _createDefaultMaterial() {
 	  return /* record */[
 	          /* pbrMetallicRoughness *//* record */[
@@ -33180,7 +34299,7 @@
 	            /* roughnessFactor */1,
 	            /* metallicRoughnessTexture */undefined
 	          ],
-	          /* name */"defaultMaterial"
+	          /* name */"defaultLightMaterial"
 	        ];
 	}
 
@@ -33233,8 +34352,13 @@
 	  if (mesh !== undefined) {
 	    var mesh$1 = mesh;
 	    var extras = param[/* extras */8];
-	    if (extras !== undefined && extras[/* material */0] !== undefined) {
-	      return false;
+	    if (extras !== undefined) {
+	      var match = extras;
+	      if (match[/* basicMaterial */1] !== undefined || match[/* lightMaterial */2] !== undefined) {
+	        return false;
+	      } else {
+	        return _isNeedAddDefaultMaterialByJudgeMesh(mesh$1, meshes);
+	      }
 	    } else {
 	      return _isNeedAddDefaultMaterialByJudgeMesh(mesh$1, meshes);
 	    }
@@ -33262,6 +34386,23 @@
 	                  var extras = node[/* extras */8];
 	                  var match = _isNeedAddDefaultMaterial(node, meshes);
 	                  if (match) {
+	                    var tmp;
+	                    if (extras !== undefined) {
+	                      var extras$1 = extras;
+	                      tmp = /* record */[
+	                        /* meshRenderer */extras$1[/* meshRenderer */0],
+	                        /* basicMaterial */undefined,
+	                        /* lightMaterial */defaultMaterialIndex,
+	                        /* cameraController */extras$1[/* cameraController */3]
+	                      ];
+	                    } else {
+	                      tmp = /* record */[
+	                        /* meshRenderer */undefined,
+	                        /* basicMaterial */undefined,
+	                        /* lightMaterial */defaultMaterialIndex,
+	                        /* cameraController */undefined
+	                      ];
+	                    }
 	                    return push(/* record */[
 	                                /* name */node[/* name */0],
 	                                /* camera */node[/* camera */1],
@@ -33271,13 +34412,7 @@
 	                                /* translation */node[/* translation */5],
 	                                /* rotation */node[/* rotation */6],
 	                                /* scale */node[/* scale */7],
-	                                /* extras */extras !== undefined ? /* record */[
-	                                    /* material */defaultMaterialIndex,
-	                                    /* cameraController */extras[/* cameraController */1]
-	                                  ] : /* record */[
-	                                    /* material */defaultMaterialIndex,
-	                                    /* cameraController */undefined
-	                                  ],
+	                                /* extras */tmp,
 	                                /* extensions */node[/* extensions */9]
 	                              ], newNodes);
 	                  } else {
@@ -33872,7 +35007,8 @@
 	function _convertExtras(json) {
 	  return optional((function (param) {
 	                return field("extras", (function (json) {
-	                              return /* record */[/* arcballCameraControllers */optional((function (param) {
+	                              return /* record */[
+	                                      /* arcballCameraControllers */optional((function (param) {
 	                                              return field("arcballCameraControllers", (function (param) {
 	                                                            return array((function (json) {
 	                                                                          return /* record */[
@@ -33891,7 +35027,31 @@
 	                                                                                ];
 	                                                                        }), param);
 	                                                          }), param);
-	                                            }), json)];
+	                                            }), json),
+	                                      /* basicMaterials */optional((function (param) {
+	                                              return field("basicMaterials", (function (param) {
+	                                                            return array((function (json) {
+	                                                                          return /* record */[
+	                                                                                  /* colorFactor */optional((function (param) {
+	                                                                                          return field("colorFactor", (function (param) {
+	                                                                                                        return array($$float, param);
+	                                                                                                      }), param);
+	                                                                                        }), json),
+	                                                                                  /* name */optional((function (param) {
+	                                                                                          return field("name", string, param);
+	                                                                                        }), json)
+	                                                                                ];
+	                                                                        }), param);
+	                                                          }), param);
+	                                            }), json),
+	                                      /* meshRenderers */optional((function (param) {
+	                                              return field("meshRenderers", (function (param) {
+	                                                            return array((function (json) {
+	                                                                          return /* record */[/* drawMode */field("drawMode", $$int, json)];
+	                                                                        }), param);
+	                                                          }), param);
+	                                            }), json)
+	                                    ];
 	                            }), param);
 	              }), json);
 	}
@@ -33958,6 +35118,9 @@
 	                                                                          }), json),
 	                                                                    /* material */optional((function (param) {
 	                                                                            return field("material", $$int, param);
+	                                                                          }), json),
+	                                                                    /* mode */optional((function (param) {
+	                                                                            return field("mode", $$int, param);
 	                                                                          }), json)
 	                                                                  ];
 	                                                          }), param);
@@ -34062,8 +35225,14 @@
 	                                      /* extras */optimizedOptional((function (param) {
 	                                              return optimizedField("extras", (function (json) {
 	                                                            return /* record */[
-	                                                                    /* material */optimizedOptional((function (param) {
-	                                                                            return optimizedField("material", $$int, param);
+	                                                                    /* meshRenderer */optimizedOptional((function (param) {
+	                                                                            return optimizedField("meshRenderer", $$int, param);
+	                                                                          }), json),
+	                                                                    /* basicMaterial */optimizedOptional((function (param) {
+	                                                                            return optimizedField("basicMaterial", $$int, param);
+	                                                                          }), json),
+	                                                                    /* lightMaterial */optimizedOptional((function (param) {
+	                                                                            return optimizedField("lightMaterial", $$int, param);
 	                                                                          }), json),
 	                                                                    /* cameraController */optimizedOptional((function (param) {
 	                                                                            return optimizedField("cameraController", $$int, param);
@@ -34115,6 +35284,22 @@
 
 	/* No side effect */
 
+	function _convertIMGUI(extras) {
+	  if (extras !== undefined) {
+	    var imgui = extras[/* imgui */0];
+	    if (imgui !== undefined) {
+	      var match = imgui;
+	      return /* record */[
+	              /* imguiFunc */match[/* imguiFunc */0],
+	              /* customData */match[/* customData */1]
+	            ];
+	    } else {
+	      return undefined;
+	    }
+	  }
+	  
+	}
+
 	function _convertToScene(ambientLightArr, param) {
 	  var scene = param[/* scene */2];
 	  var scenes = param[/* scenes */1];
@@ -34128,27 +35313,11 @@
 	        }), getIsDebug(stateData));
 	  var scene$1 = scene !== undefined ? scene : 0;
 	  var match = getScene(scenes, scene$1);
-	  var extras = match[/* extras */2];
 	  var match$1 = ambientLightArr.length === 1;
-	  var tmp;
-	  if (extras !== undefined) {
-	    var imgui = extras[/* imgui */0];
-	    if (imgui !== undefined) {
-	      var match$2 = imgui;
-	      tmp = /* record */[
-	        /* imguiFunc */match$2[/* imguiFunc */0],
-	        /* customData */match$2[/* customData */1]
-	      ];
-	    } else {
-	      tmp = undefined;
-	    }
-	  } else {
-	    tmp = undefined;
-	  }
 	  return /* record */[
 	          /* gameObjects */unsafeGet$1(match[/* nodes */0]),
 	          /* ambientLight */match$1 ? /* record */[/* color */caml_array_get(ambientLightArr, 0)[/* color */0]] : undefined,
-	          /* imgui */tmp
+	          /* imgui */_convertIMGUI(match[/* extras */2])
 	        ];
 	}
 
@@ -34181,6 +35350,7 @@
 	function _buildWDBJsonUint8Array(gltf) {
 	  var gltf$1 = convert$1(convertMultiPrimitivesToNodes(gltf));
 	  var match = convertToLights(gltf$1);
+	  var indices = convertToIndices(gltf$1);
 	  var encoder = new TextEncoder();
 	  return encoder.encode(JSON.stringify(/* record */[
 	                  /* asset : record */[
@@ -34188,7 +35358,7 @@
 	                    /* generator */getGenerator(/* () */0)
 	                  ],
 	                  /* scene */_convertToScene(match[0], gltf$1),
-	                  /* indices */convertToIndices(gltf$1),
+	                  /* indices */indices,
 	                  /* gameObjects */convert(gltf$1),
 	                  /* images */convertToImages(gltf$1),
 	                  /* basicSourceTextures */convertToBasicSourceTextures(gltf$1),
@@ -34203,6 +35373,8 @@
 	                  /* arcballCameraControllers */convertToArcballCameraControllers(gltf$1),
 	                  /* transforms */convertToTransforms(gltf$1),
 	                  /* customGeometrys */convertToGeometrys(gltf$1),
+	                  /* meshRenderers */convertToMeshRenderers(indices[/* gameObjectIndices */0][/* customGeometryGameObjectIndexData */9], gltf$1),
+	                  /* basicMaterials */convertToBasicMaterials(gltf$1),
 	                  /* lightMaterials */convertToLightMaterials(gltf$1)
 	                ]));
 	}
@@ -34336,9 +35508,16 @@
 
 	/* No side effect */
 
+	function isExceedMaxCount$2(lightIndexFromRecord, _) {
+	  return lightIndexFromRecord >= getBufferMaxCount(/* () */0);
+	}
+
+
+	/* BufferDirectionLightService-Wonderjs Not a pure module */
+
 	function createPointLight$1(state) {
-	  var match = create$25(state[/* pointLightRecord */21]);
-	  state[/* pointLightRecord */21] = match[0];
+	  var match = create$26(state[/* pointLightRecord */22]);
+	  state[/* pointLightRecord */22] = match[0];
 	  return /* tuple */[
 	          state,
 	          match[1]
@@ -34347,114 +35526,119 @@
 
 	function unsafeGetPointLightGameObject$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$9(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return unsafeGetGameObject$9(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function getPointLightColor$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return getColor$8(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return getColor$8(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function setPointLightColor$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setColor$4(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), color, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setColor$4(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), color, state[/* pointLightRecord */22]);
 	  return newrecord;
 	}
 
 	function getPointLightIntensity$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return getIntensity$4(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return getIntensity$4(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function setPointLightIntensity$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setIntensity$2(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), color, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setIntensity$2(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), color, state[/* pointLightRecord */22]);
 	  return newrecord;
 	}
 
 	function getPointLightConstant$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return getConstant$2(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return getConstant$2(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function setPointLightConstant$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setConstant$1(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), color, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setConstant$1(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), color, state[/* pointLightRecord */22]);
 	  return newrecord;
 	}
 
 	function getPointLightLinear$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return getLinear$1(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return getLinear$1(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function setPointLightLinear$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setLinear$1(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), color, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setLinear$1(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), color, state[/* pointLightRecord */22]);
 	  return newrecord;
 	}
 
 	function getPointLightQuadratic$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return getQuadratic$2(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return getQuadratic$2(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function setPointLightQuadratic$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setQuadratic$1(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), color, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setQuadratic$1(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), color, state[/* pointLightRecord */22]);
 	  return newrecord;
 	}
 
 	function getPointLightRange$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
-	  return getRange$2(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), state[/* pointLightRecord */21]);
+	  return getRange$2(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), state[/* pointLightRecord */22]);
 	}
 
 	function setPointLightRange$1(light, range, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setRange$1(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), range, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setRange$1(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), range, state[/* pointLightRecord */22]);
 	  return newrecord;
 	}
 
 	function setPointLightRangeLevel$1(light, level, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */21]);
+	          return checkComponentShouldAlive$1(light, isAlive$5, state[/* pointLightRecord */22]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* pointLightRecord */21] = setRangeLevel(getMappedIndex(light, getMappedIndexMap(state[/* pointLightRecord */21])), level, state[/* pointLightRecord */21]);
+	  newrecord[/* pointLightRecord */22] = setRangeLevel(getMappedIndex(light, getMappedIndexMap$1(state[/* pointLightRecord */22])), level, state[/* pointLightRecord */22]);
 	  return newrecord;
+	}
+
+	function isExceedMaxCount$1(param) {
+	  var pointLightRecord = param[/* pointLightRecord */22];
+	  return isExceedMaxCount$2(pointLightRecord[/* index */0], getBufferMaxCount$1(/* () */0));
 	}
 
 
@@ -34540,7 +35724,7 @@
 	}
 
 	function _batchCreateGameObject(param, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var count = param[/* gameObjects */3][/* count */0];
 	  var uid = gameObjectRecord[/* uid */0];
 	  var aliveUidArray = gameObjectRecord[/* aliveUidArray */20];
@@ -34549,7 +35733,7 @@
 	  var newrecord$1 = caml_array_dup(gameObjectRecord);
 	  newrecord$1[/* uid */0] = uid + count | 0;
 	  newrecord$1[/* aliveUidArray */20] = aliveUidArray.concat(uidArr);
-	  newrecord[/* gameObjectRecord */10] = newrecord$1;
+	  newrecord[/* gameObjectRecord */11] = newrecord$1;
 	  return /* tuple */[
 	          newrecord,
 	          uidArr
@@ -34574,10 +35758,10 @@
 	  var transformRecord = getRecord$1(state);
 	  var index = transformRecord[/* index */0];
 	  var newIndex = index + param[/* transforms */15].length | 0;
-	  var indexArr = _checkNotExceedMaxCountByIndex(getTransformCount(state[/* settingRecord */0]), range$1(index, newIndex - 1 | 0));
+	  var indexArr = _checkNotExceedMaxCountByIndex(getTransformCount(state[/* settingRecord */1]), range$1(index, newIndex - 1 | 0));
 	  transformRecord[/* index */0] = newIndex;
 	  var transformRecord$1 = _initTransformDataWhenCreate(indexArr, transformRecord);
-	  state[/* transformRecord */11] = reduceOneParam((function (transformRecord, index) {
+	  state[/* transformRecord */12] = reduceOneParam((function (transformRecord, index) {
 	          return mark(index, true, transformRecord);
 	        }), transformRecord$1, indexArr);
 	  return /* tuple */[
@@ -34587,12 +35771,12 @@
 	}
 
 	function _batchCreateCustomGeometry(param, state) {
-	  checkNotDisposedBefore(getRecord$5(state)[/* disposedIndexArray */17]);
-	  var customGeometryRecord = getRecord$5(state);
+	  checkNotDisposedBefore(getRecord$6(state)[/* disposedIndexArray */17]);
+	  var customGeometryRecord = getRecord$6(state);
 	  var index = customGeometryRecord[/* index */0];
 	  var newIndex = index + param[/* customGeometrys */16].length | 0;
-	  var indexArr = _checkNotExceedMaxCountByIndex(getCustomGeometryCount(state[/* settingRecord */0]), range$1(index, newIndex - 1 | 0));
-	  state[/* customGeometryRecord */23] = /* record */[
+	  var indexArr = _checkNotExceedMaxCountByIndex(getCustomGeometryCount(state[/* settingRecord */1]), range$1(index, newIndex - 1 | 0));
+	  state[/* customGeometryRecord */24] = /* record */[
 	    /* index */newIndex,
 	    /* buffer */customGeometryRecord[/* buffer */1],
 	    /* vertices */customGeometryRecord[/* vertices */2],
@@ -34620,13 +35804,34 @@
 	        ];
 	}
 
+	function _batchCreateMeshRenderer(param, state) {
+	  checkNotDisposedBefore(getRecord$2(state)[/* disposedIndexArray */6]);
+	  var meshRendererRecord = getRecord$2(state);
+	  var index = meshRendererRecord[/* index */0];
+	  var newIndex = index + param[/* meshRenderers */17].length | 0;
+	  var indexArr = _checkNotExceedMaxCountByIndex(getMeshRendererCount(state[/* settingRecord */1]), range$1(index, newIndex - 1 | 0));
+	  state[/* meshRendererRecord */25] = /* record */[
+	    /* index */newIndex,
+	    /* buffer */meshRendererRecord[/* buffer */1],
+	    /* drawModes */meshRendererRecord[/* drawModes */2],
+	    /* basicMaterialRenderGameObjectMap */meshRendererRecord[/* basicMaterialRenderGameObjectMap */3],
+	    /* lightMaterialRenderGameObjectMap */meshRendererRecord[/* lightMaterialRenderGameObjectMap */4],
+	    /* gameObjectMap */meshRendererRecord[/* gameObjectMap */5],
+	    /* disposedIndexArray */meshRendererRecord[/* disposedIndexArray */6]
+	  ];
+	  return /* tuple */[
+	          state,
+	          indexArr
+	        ];
+	}
+
 	function _batchCreateBasicCameraView(param, state) {
-	  var basicCameraViewRecord = state[/* basicCameraViewRecord */13];
+	  var basicCameraViewRecord = state[/* basicCameraViewRecord */14];
 	  checkNotDisposedBefore(basicCameraViewRecord[/* disposedIndexArray */2]);
 	  var index = basicCameraViewRecord[/* index */0];
 	  var newIndex = index + param[/* basicCameraViews */12][/* count */0] | 0;
 	  var indexArr = range$1(index, newIndex - 1 | 0);
-	  state[/* basicCameraViewRecord */13] = /* record */[
+	  state[/* basicCameraViewRecord */14] = /* record */[
 	    /* index */newIndex,
 	    /* gameObjectMap */basicCameraViewRecord[/* gameObjectMap */1],
 	    /* disposedIndexArray */basicCameraViewRecord[/* disposedIndexArray */2]
@@ -34638,12 +35843,12 @@
 	}
 
 	function _batchCreatePerspectiveCameraProjection(param, state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  checkNotDisposedBefore(perspectiveCameraProjectionRecord[/* disposedIndexArray */8]);
 	  var index = perspectiveCameraProjectionRecord[/* index */0];
 	  var newIndex = index + param[/* perspectiveCameraProjections */13].length | 0;
 	  var indexArr = range$1(index, newIndex - 1 | 0);
-	  state[/* perspectiveCameraProjectionRecord */14] = /* record */[
+	  state[/* perspectiveCameraProjectionRecord */15] = /* record */[
 	    /* index */newIndex,
 	    /* dirtyArray */indexArr,
 	    /* pMatrixMap */reduceOneParam((function (pMatrixMap, index) {
@@ -34663,10 +35868,10 @@
 	}
 
 	function _createArcballCameraControllerOneByOne(param, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
-	  checkNotDisposedBefore(arcballCameraControllerRecord[/* disposedIndexArray */16]);
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
+	  checkNotDisposedBefore(arcballCameraControllerRecord[/* disposedIndexArray */18]);
 	  var match = reduceOneParam((function (param, _) {
-	          var match = create$31(param[0]);
+	          var match = create$32(param[0]);
 	          return /* tuple */[
 	                  match[0],
 	                  push(match[1], param[1])
@@ -34677,18 +35882,47 @@
 	      ], param[/* arcballCameraControllers */14]);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* arcballCameraControllerRecord */25] = match[0], newrecord),
+	          (newrecord[/* arcballCameraControllerRecord */26] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
+	function _batchCreateBasicMaterial(param, state) {
+	  var basicMaterialRecord = getRecord$4(state);
+	  var index = basicMaterialRecord[/* index */0];
+	  checkNotDisposedBefore(basicMaterialRecord[/* disposedIndexArray */10]);
+	  var newIndex = index + param[/* basicMaterials */18].length | 0;
+	  var indexArr = _checkNotExceedMaxCountByIndex(getBasicMaterialCount(state[/* settingRecord */1]), range$1(index, newIndex - 1 | 0));
+	  state[/* basicMaterialRecord */16] = /* record */[
+	    /* index */newIndex,
+	    /* buffer */basicMaterialRecord[/* buffer */1],
+	    /* shaderIndices */basicMaterialRecord[/* shaderIndices */2],
+	    /* colors */basicMaterialRecord[/* colors */3],
+	    /* textureIndices */basicMaterialRecord[/* textureIndices */4],
+	    /* mapUnits */basicMaterialRecord[/* mapUnits */5],
+	    /* textureCountMap */reduceOneParam((function (textureCountMap, index) {
+	            return set$1(index, getDefaultCount(/* () */0), textureCountMap);
+	          }), basicMaterialRecord[/* textureCountMap */6], indexArr),
+	    /* defaultColor */basicMaterialRecord[/* defaultColor */7],
+	    /* gameObjectMap */basicMaterialRecord[/* gameObjectMap */8],
+	    /* groupCountMap */basicMaterialRecord[/* groupCountMap */9],
+	    /* disposedIndexArray */basicMaterialRecord[/* disposedIndexArray */10],
+	    /* nameMap */basicMaterialRecord[/* nameMap */11],
+	    /* materialArrayForWorkerInit */basicMaterialRecord[/* materialArrayForWorkerInit */12]
+	  ];
+	  return /* tuple */[
+	          state,
+	          indexArr
+	        ];
+	}
+
 	function _batchCreateLightMaterial(param, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var index = lightMaterialRecord[/* index */0];
 	  checkNotDisposedBefore(lightMaterialRecord[/* disposedIndexArray */15]);
-	  var newIndex = index + param[/* lightMaterials */17].length | 0;
-	  var indexArr = _checkNotExceedMaxCountByIndex(getLightMaterialCount(state[/* settingRecord */0]), range$1(index, newIndex - 1 | 0));
-	  state[/* lightMaterialRecord */16] = /* record */[
+	  var newIndex = index + param[/* lightMaterials */19].length | 0;
+	  var indexArr = _checkNotExceedMaxCountByIndex(getLightMaterialCount(state[/* settingRecord */1]), range$1(index, newIndex - 1 | 0));
+	  state[/* lightMaterialRecord */17] = /* record */[
 	    /* index */newIndex,
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -34717,12 +35951,12 @@
 	}
 
 	function _batchCreateBasicSourceTextureArr(param, state) {
-	  var basicSourceTextureRecord = getRecord$8(state);
+	  var basicSourceTextureRecord = getRecord$9(state);
 	  var index = basicSourceTextureRecord[/* index */0];
 	  checkNotDisposedBefore(basicSourceTextureRecord[/* disposedIndexArray */12]);
 	  var newIndex = index + param[/* basicSourceTextures */5].length | 0;
-	  var indexArr = _checkNotExceedMaxCountByIndex(getBasicSourceTextureCount(state[/* settingRecord */0]), range$1(index, newIndex - 1 | 0).map(generateBasicSourceTextureIndex$1));
-	  state[/* basicSourceTextureRecord */18] = /* record */[
+	  var indexArr = _checkNotExceedMaxCountByIndex(getBasicSourceTextureCount(state[/* settingRecord */1]), range$1(index, newIndex - 1 | 0).map(generateBasicSourceTextureIndex$1));
+	  state[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */newIndex,
 	    /* wrapSs */basicSourceTextureRecord[/* wrapSs */1],
 	    /* wrapTs */basicSourceTextureRecord[/* wrapTs */2],
@@ -34750,11 +35984,11 @@
 	}
 
 	function _batchCreateDirectionLightArr(param, state) {
-	  var directionLightRecord = state[/* directionLightRecord */20];
+	  var directionLightRecord = state[/* directionLightRecord */21];
 	  var index = directionLightRecord[/* index */0];
 	  var newIndex = index + param[/* directionLights */10].length | 0;
 	  var indexArr = _checkNotExceedMaxCountByIndex(getBufferMaxCount(/* () */0), range$1(index, newIndex - 1 | 0));
-	  state[/* directionLightRecord */20] = /* record */[
+	  state[/* directionLightRecord */21] = /* record */[
 	    /* index */newIndex,
 	    /* buffer */directionLightRecord[/* buffer */1],
 	    /* colors */directionLightRecord[/* colors */2],
@@ -34771,11 +36005,11 @@
 	}
 
 	function _batchCreatePointLightArr(param, state) {
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var index = pointLightRecord[/* index */0];
 	  var newIndex = index + param[/* pointLights */11].length | 0;
 	  var indexArr = _checkNotExceedMaxCountByIndex(getBufferMaxCount$1(/* () */0), range$1(index, newIndex - 1 | 0));
-	  state[/* pointLightRecord */21] = /* record */[
+	  state[/* pointLightRecord */22] = /* record */[
 	    /* index */newIndex,
 	    /* buffer */pointLightRecord[/* buffer */1],
 	    /* colors */pointLightRecord[/* colors */2],
@@ -34799,15 +36033,17 @@
 	  var match = _batchCreateGameObject(wd, state);
 	  var match$1 = _batchCreateTransform(wd, match[0]);
 	  var match$2 = _batchCreateCustomGeometry(wd, match$1[0]);
-	  var match$3 = _batchCreateBasicCameraView(wd, match$2[0]);
-	  var match$4 = _batchCreatePerspectiveCameraProjection(wd, match$3[0]);
-	  var match$5 = _createArcballCameraControllerOneByOne(wd, match$4[0]);
-	  var match$6 = _batchCreateLightMaterial(wd, match$5[0]);
-	  var match$7 = _batchCreateBasicSourceTextureArr(wd, match$6[0]);
-	  var match$8 = _batchCreateDirectionLightArr(wd, match$7[0]);
-	  var match$9 = _batchCreatePointLightArr(wd, match$8[0]);
+	  var match$3 = _batchCreateMeshRenderer(wd, match$2[0]);
+	  var match$4 = _batchCreateBasicCameraView(wd, match$3[0]);
+	  var match$5 = _batchCreatePerspectiveCameraProjection(wd, match$4[0]);
+	  var match$6 = _createArcballCameraControllerOneByOne(wd, match$5[0]);
+	  var match$7 = _batchCreateBasicMaterial(wd, match$6[0]);
+	  var match$8 = _batchCreateLightMaterial(wd, match$7[0]);
+	  var match$9 = _batchCreateBasicSourceTextureArr(wd, match$8[0]);
+	  var match$10 = _batchCreateDirectionLightArr(wd, match$9[0]);
+	  var match$11 = _batchCreatePointLightArr(wd, match$10[0]);
 	  return /* tuple */[
-	          match$9[0],
+	          match$11[0],
 	          match[1],
 	          /* tuple */[
 	            match$1[1],
@@ -34816,10 +36052,12 @@
 	            match$4[1],
 	            match$5[1],
 	            match$6[1],
+	            match$7[1],
 	            match$8[1],
-	            match$9[1]
+	            match$10[1],
+	            match$11[1]
 	          ],
-	          match$7[1]
+	          match$9[1]
 	        ];
 	}
 
@@ -34828,20 +36066,20 @@
 
 	function batchSetDirectionLightData(param, directionLightArr, state) {
 	  return reduceOneParami((function (state, param, index) {
-	                var directionLightRecord = state[/* directionLightRecord */20];
-	                var mappedIndex = getMappedIndex(caml_array_get(directionLightArr, index), getMappedIndexMap$1(directionLightRecord));
+	                var directionLightRecord = state[/* directionLightRecord */21];
+	                var mappedIndex = getMappedIndex(caml_array_get(directionLightArr, index), getMappedIndexMap(directionLightRecord));
 	                var newrecord = caml_array_dup(state);
-	                newrecord[/* directionLightRecord */20] = setIntensity$3(mappedIndex, param[/* intensity */1], setColor$5(mappedIndex, param[/* color */0], directionLightRecord));
+	                newrecord[/* directionLightRecord */21] = setIntensity$3(mappedIndex, param[/* intensity */1], setColor$5(mappedIndex, param[/* color */0], directionLightRecord));
 	                return newrecord;
 	              }), state, param[/* directionLights */10]);
 	}
 
 	function batchSetPointLightData(param, pointLightArr, state) {
 	  return reduceOneParami((function (state, param, index) {
-	                var pointLightRecord = state[/* pointLightRecord */21];
-	                var mappedIndex = getMappedIndex(caml_array_get(pointLightArr, index), getMappedIndexMap(pointLightRecord));
+	                var pointLightRecord = state[/* pointLightRecord */22];
+	                var mappedIndex = getMappedIndex(caml_array_get(pointLightArr, index), getMappedIndexMap$1(pointLightRecord));
 	                var newrecord = caml_array_dup(state);
-	                newrecord[/* pointLightRecord */21] = setRange$1(mappedIndex, param[/* range */5], setQuadratic$1(mappedIndex, param[/* quadraticAttenuation */4], setLinear$1(mappedIndex, param[/* linearAttenuation */3], setConstant$1(mappedIndex, param[/* constantAttenuation */2], setIntensity$2(mappedIndex, param[/* intensity */1], setColor$4(mappedIndex, param[/* color */0], pointLightRecord))))));
+	                newrecord[/* pointLightRecord */22] = setRange$1(mappedIndex, param[/* range */5], setQuadratic$1(mappedIndex, param[/* quadraticAttenuation */4], setLinear$1(mappedIndex, param[/* linearAttenuation */3], setConstant$1(mappedIndex, param[/* constantAttenuation */2], setIntensity$2(mappedIndex, param[/* intensity */1], setColor$4(mappedIndex, param[/* color */0], pointLightRecord))))));
 	                return newrecord;
 	              }), state, param[/* pointLights */11]);
 	}
@@ -34886,7 +36124,7 @@
 	}
 
 	function _batchSetNewDiffueMaps(diffuseMapLightMaterials, lightMaterialDiffuseMaps, state) {
-	  var lightMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
 	  var match = _batchSetNewMap(/* tuple */[
 	        diffuseMapLightMaterials,
 	        lightMaterialDiffuseMaps,
@@ -34895,13 +36133,13 @@
 	        setDiffuseMapUnit,
 	        setTextureIndex$2
 	      ], /* tuple */[
-	        getTextureCountPerMaterial(state[/* settingRecord */0]),
+	        getTextureCountPerMaterial(state[/* settingRecord */1]),
 	        lightMaterialRecord[/* textureIndices */6],
 	        lightMaterialRecord[/* diffuseMapUnits */7],
 	        lightMaterialRecord[/* textureCountMap */9]
 	      ]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* lightMaterialRecord */16] = /* record */[
+	  newrecord[/* lightMaterialRecord */17] = /* record */[
 	    /* index */lightMaterialRecord[/* index */0],
 	    /* buffer */lightMaterialRecord[/* buffer */1],
 	    /* shaderIndices */lightMaterialRecord[/* shaderIndices */2],
@@ -34955,12 +36193,12 @@
 	/* ArrayService-WonderCommonlib Not a pure module */
 
 	function getIndices$2(index, state) {
-	  var match = getRecord$5(state);
+	  var match = getRecord$6(state);
 	  return getUint16PointData(getInfoIndex(index), match[/* indices */5], match[/* indicesInfos */9]);
 	}
 
 	function setIndicesByTypeArray(index, data, state) {
-	  var record = getRecord$5(state);
+	  var record = getRecord$6(state);
 	  var indices = record[/* indices */5];
 	  var indicesOffset = record[/* indicesOffset */13];
 	  record[/* indicesOffset */13] = setUint16PointData(/* tuple */[
@@ -34978,12 +36216,12 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function getNormals$2(index, state) {
-	  var match = getRecord$5(state);
+	  var match = getRecord$6(state);
 	  return getFloat32PointData(getInfoIndex(index), match[/* normals */4], match[/* normalsInfos */8]);
 	}
 
 	function setNormalsByTypeArray(index, data, state) {
-	  var record = getRecord$5(state);
+	  var record = getRecord$6(state);
 	  var normals = record[/* normals */4];
 	  var normalsOffset = record[/* normalsOffset */12];
 	  record[/* normalsOffset */12] = setFloat32PointData(/* tuple */[
@@ -35000,18 +36238,18 @@
 
 	/* TypeArrayService-Wonderjs Not a pure module */
 
-	function getName$3(texture, state) {
-	  return getName$1(texture, getRecord$8(state)[/* nameMap */15]);
+	function getName$4(texture, state) {
+	  return getName$1(texture, getRecord$9(state)[/* nameMap */15]);
 	}
 
-	function unsafeGetName$3(texture, state) {
-	  return unsafeGetName$1(texture, getRecord$8(state)[/* nameMap */15]);
+	function unsafeGetName$4(texture, state) {
+	  return unsafeGetName$1(texture, getRecord$9(state)[/* nameMap */15]);
 	}
 
-	function setName$3(texture, name, state) {
-	  var record = getRecord$8(state);
+	function setName$4(texture, name, state) {
+	  var record = getRecord$9(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicSourceTextureRecord */18] = /* record */[
+	  newrecord[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */record[/* index */0],
 	    /* wrapSs */record[/* wrapSs */1],
 	    /* wrapTs */record[/* wrapTs */2],
@@ -35036,12 +36274,12 @@
 	/* NameService-Wonderjs Not a pure module */
 
 	function getVertices$2(index, state) {
-	  var match = getRecord$5(state);
+	  var match = getRecord$6(state);
 	  return getFloat32PointData(getInfoIndex(index), match[/* vertices */2], match[/* verticesInfos */6]);
 	}
 
 	function setVerticesByTypeArray(index, data, state) {
-	  var record = getRecord$5(state);
+	  var record = getRecord$6(state);
 	  var vertices = record[/* vertices */2];
 	  var verticesOffset = record[/* verticesOffset */10];
 	  record[/* verticesOffset */10] = setFloat32PointData(/* tuple */[
@@ -35059,12 +36297,12 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function getTexCoords$2(index, state) {
-	  var match = getRecord$5(state);
+	  var match = getRecord$6(state);
 	  return getFloat32PointData(getInfoIndex(index), match[/* texCoords */3], match[/* texCoordsInfos */7]);
 	}
 
 	function setTexCoordsByTypeArray(index, data, state) {
-	  var record = getRecord$5(state);
+	  var record = getRecord$6(state);
 	  var texCoords = record[/* texCoords */3];
 	  var texCoordsOffset = record[/* texCoordsOffset */11];
 	  record[/* texCoordsOffset */11] = setFloat32PointData(/* tuple */[
@@ -35087,26 +36325,7 @@
 	              }));
 	}
 
-	function _batchCreateMeshRendererArr(lightMaterialGameObjects, _, state) {
-	  var meshRendererRecord = state[/* meshRendererRecord */24];
-	  checkNotDisposedBefore(meshRendererRecord[/* disposedIndexArray */4]);
-	  var index = meshRendererRecord[/* index */0];
-	  var newIndex = index + lightMaterialGameObjects.length | 0;
-	  var indexArr = range$1(index, newIndex - 1 | 0);
-	  state[/* meshRendererRecord */24] = /* record */[
-	    /* index */newIndex,
-	    /* basicMaterialRenderGameObjectMap */meshRendererRecord[/* basicMaterialRenderGameObjectMap */1],
-	    /* lightMaterialRenderGameObjectMap */meshRendererRecord[/* lightMaterialRenderGameObjectMap */2],
-	    /* gameObjectMap */meshRendererRecord[/* gameObjectMap */3],
-	    /* disposedIndexArray */meshRendererRecord[/* disposedIndexArray */4]
-	  ];
-	  return /* tuple */[
-	          state,
-	          indexArr
-	        ];
-	}
-
-	function _getBatchComponentGameObjectData(param, indices, wd, state) {
+	function _getBatchComponentGameObjectData(param, indices, _, state) {
 	  var transformArr = param[1];
 	  var gameObjectArr = param[0];
 	  var parentTransforms = _getBatchArrByIndices(transformArr, indices[/* gameObjectIndices */0][/* childrenTransformIndexData */0][/* parentTransformIndices */0]);
@@ -35117,11 +36336,14 @@
 	        }));
 	  var transformGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* transformGameObjectIndexData */1][/* gameObjectIndices */0]);
 	  var gameObjectTransforms = _getBatchArrByIndices(transformArr, indices[/* gameObjectIndices */0][/* transformGameObjectIndexData */1][/* componentIndices */1]);
-	  var customGeometryGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* customGeometryGameObjectIndexData */8][/* gameObjectIndices */0]);
-	  var gameObjectCustomGeometrys = _getBatchArrByIndices(param[2], indices[/* gameObjectIndices */0][/* customGeometryGameObjectIndexData */8][/* componentIndices */1]);
-	  var lightMaterialGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* lightMaterialGameObjectIndexData */5][/* gameObjectIndices */0]);
-	  var gameObjectLightMaterials = _getBatchArrByIndices(param[6], indices[/* gameObjectIndices */0][/* lightMaterialGameObjectIndexData */5][/* componentIndices */1]);
-	  var match = _batchCreateMeshRendererArr(lightMaterialGameObjects, wd, state);
+	  var customGeometryGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* customGeometryGameObjectIndexData */9][/* gameObjectIndices */0]);
+	  var gameObjectCustomGeometrys = _getBatchArrByIndices(param[2], indices[/* gameObjectIndices */0][/* customGeometryGameObjectIndexData */9][/* componentIndices */1]);
+	  var meshRendererGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* meshRendererGameObjectIndexData */10][/* gameObjectIndices */0]);
+	  var gameObjectMeshRenderers = _getBatchArrByIndices(param[3], indices[/* gameObjectIndices */0][/* meshRendererGameObjectIndexData */10][/* componentIndices */1]);
+	  var basicMaterialGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* basicMaterialGameObjectIndexData */5][/* gameObjectIndices */0]);
+	  var gameObjectBasicMaterials = _getBatchArrByIndices(param[7], indices[/* gameObjectIndices */0][/* basicMaterialGameObjectIndexData */5][/* componentIndices */1]);
+	  var lightMaterialGameObjects = _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* lightMaterialGameObjectIndexData */6][/* gameObjectIndices */0]);
+	  var gameObjectLightMaterials = _getBatchArrByIndices(param[8], indices[/* gameObjectIndices */0][/* lightMaterialGameObjectIndexData */6][/* componentIndices */1]);
 	  return /* tuple */[
 	          /* tuple */[
 	            parentTransforms,
@@ -35131,21 +36353,23 @@
 	            customGeometryGameObjects,
 	            gameObjectCustomGeometrys,
 	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* basicCameraViewGameObjectIndexData */2][/* gameObjectIndices */0]),
-	            _getBatchArrByIndices(param[3], indices[/* gameObjectIndices */0][/* basicCameraViewGameObjectIndexData */2][/* componentIndices */1]),
+	            _getBatchArrByIndices(param[4], indices[/* gameObjectIndices */0][/* basicCameraViewGameObjectIndexData */2][/* componentIndices */1]),
 	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* perspectiveCameraProjectionGameObjectIndexData */3][/* gameObjectIndices */0]),
-	            _getBatchArrByIndices(param[4], indices[/* gameObjectIndices */0][/* perspectiveCameraProjectionGameObjectIndexData */3][/* componentIndices */1]),
+	            _getBatchArrByIndices(param[5], indices[/* gameObjectIndices */0][/* perspectiveCameraProjectionGameObjectIndexData */3][/* componentIndices */1]),
 	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* arcballCameraControllerGameObjectIndexData */4][/* gameObjectIndices */0]),
-	            _getBatchArrByIndices(param[5], indices[/* gameObjectIndices */0][/* arcballCameraControllerGameObjectIndexData */4][/* componentIndices */1]),
+	            _getBatchArrByIndices(param[6], indices[/* gameObjectIndices */0][/* arcballCameraControllerGameObjectIndexData */4][/* componentIndices */1]),
+	            basicMaterialGameObjects,
+	            gameObjectBasicMaterials,
 	            lightMaterialGameObjects,
 	            gameObjectLightMaterials,
-	            lightMaterialGameObjects,
-	            match[1],
-	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* directionLightGameObjectIndexData */6][/* gameObjectIndices */0]),
-	            _getBatchArrByIndices(param[7], indices[/* gameObjectIndices */0][/* directionLightGameObjectIndexData */6][/* componentIndices */1]),
-	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* pointLightGameObjectIndexData */7][/* gameObjectIndices */0]),
-	            _getBatchArrByIndices(param[8], indices[/* gameObjectIndices */0][/* pointLightGameObjectIndexData */7][/* componentIndices */1])
+	            meshRendererGameObjects,
+	            gameObjectMeshRenderers,
+	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* directionLightGameObjectIndexData */7][/* gameObjectIndices */0]),
+	            _getBatchArrByIndices(param[9], indices[/* gameObjectIndices */0][/* directionLightGameObjectIndexData */7][/* componentIndices */1]),
+	            _getBatchArrByIndices(gameObjectArr, indices[/* gameObjectIndices */0][/* pointLightGameObjectIndexData */8][/* gameObjectIndices */0]),
+	            _getBatchArrByIndices(param[10], indices[/* gameObjectIndices */0][/* pointLightGameObjectIndexData */8][/* componentIndices */1])
 	          ],
-	          match[0]
+	          state
 	        ];
 	}
 
@@ -35281,7 +36505,7 @@
 	      ], parentTransforms);
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(transformRecord);
-	  newrecord[/* transformRecord */11] = (newrecord$1[/* parentMap */15] = match[0], newrecord$1[/* childMap */16] = match[1], newrecord$1);
+	  newrecord[/* transformRecord */12] = (newrecord$1[/* parentMap */15] = match[0], newrecord$1[/* childMap */16] = match[1], newrecord$1);
 	  return newrecord;
 	}
 
@@ -35293,7 +36517,7 @@
 	  var localScales = transformRecord[/* localScales */5];
 	  var newrecord = caml_array_dup(state);
 	  var newrecord$1 = caml_array_dup(transformRecord);
-	  newrecord[/* transformRecord */11] = (newrecord$1[/* localPositions */3] = reduceOneParami((function (localPositions, param, index) {
+	  newrecord[/* transformRecord */12] = (newrecord$1[/* localPositions */3] = reduceOneParami((function (localPositions, param, index) {
 	            var translation = param[/* translation */0];
 	            var match = isJsonSerializedValueNone(translation);
 	            if (match) {
@@ -35325,7 +36549,7 @@
 	}
 
 	function _batchSetPerspectiveCameraProjectionData(param, perspectiveCameraProjectionArr, state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  reduceOneParami((function (perspectiveCameraProjectionRecord, param, index) {
 	          var aspect = param[/* aspect */3];
 	          var far = param[/* far */1];
@@ -35342,26 +36566,46 @@
 	          }
 	        }), perspectiveCameraProjectionRecord, param[/* perspectiveCameraProjections */13]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = perspectiveCameraProjectionRecord;
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = perspectiveCameraProjectionRecord;
 	  return newrecord;
 	}
 
 	function _batchSetArcballCameraControllerData(param, arcballCameraControllerArr, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  reduceOneParami((function (arcballCameraControllerRecord, param, index) {
 	          var cameraController = caml_array_get(arcballCameraControllerArr, index);
 	          return setWheelSpeed(cameraController, param[/* wheelSpeed */9], setRotateSpeed(cameraController, param[/* rotateSpeed */8], setMoveSpeedY(cameraController, param[/* moveSpeedY */7], setMoveSpeedX(cameraController, param[/* moveSpeedX */6], setTarget(cameraController, param[/* target */5], setThetaMargin(cameraController, param[/* thetaMargin */4], setTheta(cameraController, param[/* theta */3], setPhi(cameraController, param[/* phi */2], setDistance(cameraController, param[/* distance */0], setMinDistance(cameraController, param[/* minDistance */1], arcballCameraControllerRecord))))))))));
 	        }), arcballCameraControllerRecord, param[/* arcballCameraControllers */14]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = arcballCameraControllerRecord;
+	  newrecord[/* arcballCameraControllerRecord */26] = arcballCameraControllerRecord;
 	  return newrecord;
+	}
+
+	function _batchSetMeshRendererData(param, meshRendererArr, state) {
+	  return reduceOneParami((function (state, meshRendererData, index) {
+	                var match = isJsonSerializedValueNone(meshRendererData);
+	                if (match) {
+	                  return state;
+	                } else {
+	                  var match$1 = unsafeGetJsonSerializedValue(meshRendererData);
+	                  var meshRenderer = caml_array_get(meshRendererArr, index);
+	                  return setDrawMode$1(meshRenderer, match$1[/* drawMode */0], state);
+	                }
+	              }), state, param[/* meshRenderers */17]);
+	}
+
+	function _batchSetBasicMaterialData(param, basicMaterialArr, state) {
+	  return reduceOneParami((function (state, param, index) {
+	                var material = caml_array_get(basicMaterialArr, index);
+	                return setName$2(material, param[/* name */1], setColor$3(material, param[/* color */0], state));
+	              }), state, param[/* basicMaterials */18]);
 	}
 
 	function _batchSetLightMaterialData(param, lightMaterialArr, state) {
 	  return reduceOneParami((function (state, param, index) {
 	                var material = caml_array_get(lightMaterialArr, index);
-	                return setName$2(material, param[/* name */1], setDiffuseColor$1(material, param[/* diffuseColor */0], state));
-	              }), state, param[/* lightMaterials */17]);
+	                return setName$3(material, param[/* name */1], setDiffuseColor$1(material, param[/* diffuseColor */0], state));
+	              }), state, param[/* lightMaterials */19]);
 	}
 
 	function _batchSetGameObjectName(targets, names, setNameFunc, state) {
@@ -35372,7 +36616,7 @@
 
 	function _batchSetTextureName(basicSourceTextureArr, basicSourceTextures, state) {
 	  return reduceOneParami((function (state, basicSourceTexture, index) {
-	                return setName$3(basicSourceTexture, basicSourceTextures[index][/* name */0], state);
+	                return setName$4(basicSourceTexture, basicSourceTextures[index][/* name */0], state);
 	              }), state, basicSourceTextureArr);
 	}
 
@@ -35383,11 +36627,13 @@
 	function batchOperate(wd, blobObjectUrlImageArr, bufferArr, param) {
 	  var basicSourceTextureArr = param[3];
 	  var match = param[2];
-	  var pointLightArr = match[7];
-	  var directionLightArr = match[6];
-	  var lightMaterialArr = match[5];
-	  var arcballCameraControllerArr = match[4];
-	  var perspectiveCameraProjectionArr = match[3];
+	  var pointLightArr = match[9];
+	  var directionLightArr = match[8];
+	  var lightMaterialArr = match[7];
+	  var basicMaterialArr = match[6];
+	  var arcballCameraControllerArr = match[5];
+	  var perspectiveCameraProjectionArr = match[4];
+	  var meshRendererArr = match[2];
 	  var customGeometryArr = match[1];
 	  var gameObjectArr = param[1];
 	  var basicSourceTextures = wd[/* basicSourceTextures */5];
@@ -35402,9 +36648,11 @@
 	        gameObjectArr,
 	        match[0],
 	        customGeometryArr,
-	        match[2],
+	        meshRendererArr,
+	        match[3],
 	        perspectiveCameraProjectionArr,
 	        arcballCameraControllerArr,
+	        basicMaterialArr,
 	        lightMaterialArr,
 	        directionLightArr,
 	        pointLightArr
@@ -35414,7 +36662,7 @@
 	  var state$1 = batchSetFormat(basicSourceTextureArr, basicSourceTextures, match$1[1]);
 	  var basicSourceTextureData = _getBatchAllTypeTextureData(lightMaterialArr, basicSourceTextureArr, blobObjectUrlImageArr, wd);
 	  return /* tuple */[
-	          batchSet(basicSourceTextureData, batchAddPointLightComponentForCreate(match$2[18], match$2[19], batchAddDirectionLightComponentForCreate(match$2[16], match$2[17], batchAddMeshRendererComponentForCreate(match$2[14], match$2[15], batchAddLightMaterialComponentForCreate(match$2[12], match$2[13], batchAddArcballCameraControllerComponentForCreate(match$2[10], match$2[11], batchAddPerspectiveCameraProjectionComponentForCreate(match$2[8], match$2[9], batchAddBasicCameraViewComponentForCreate(match$2[6], match$2[7], batchAddCustomGeometryComponentForCreate(match$2[4], match$2[5], batchAddTransformComponentForCreate(match$2[2], gameObjectTransforms, setAmbientLightData(wd, batchSetPointLightData(wd, pointLightArr, batchSetDirectionLightData(wd, directionLightArr, _batchSetLightMaterialData(wd, lightMaterialArr, _batchSetArcballCameraControllerData(wd, arcballCameraControllerArr, _batchSetPerspectiveCameraProjectionData(wd, perspectiveCameraProjectionArr, _batchSetCustomGeometryData(wd, customGeometryArr, bufferArr, _batchSetTransformParent(match$2[0], match$2[1], _batchSetTransformData(wd, gameObjectTransforms, state$1))))))))))))))))))),
+	          batchSet(basicSourceTextureData, batchAddPointLightComponentForCreate(match$2[20], match$2[21], batchAddDirectionLightComponentForCreate(match$2[18], match$2[19], batchAddMeshRendererComponentForCreate(match$2[16], match$2[17], batchAddLightMaterialComponentForCreate(match$2[14], match$2[15], batchAddBasicMaterialComponentForCreate(match$2[12], match$2[13], batchAddArcballCameraControllerComponentForCreate(match$2[10], match$2[11], batchAddPerspectiveCameraProjectionComponentForCreate(match$2[8], match$2[9], batchAddBasicCameraViewComponentForCreate(match$2[6], match$2[7], batchAddCustomGeometryComponentForCreate(match$2[4], match$2[5], batchAddTransformComponentForCreate(match$2[2], gameObjectTransforms, setAmbientLightData(wd, batchSetPointLightData(wd, pointLightArr, batchSetDirectionLightData(wd, directionLightArr, _batchSetLightMaterialData(wd, lightMaterialArr, _batchSetBasicMaterialData(wd, basicMaterialArr, _batchSetMeshRendererData(wd, meshRendererArr, _batchSetArcballCameraControllerData(wd, arcballCameraControllerArr, _batchSetPerspectiveCameraProjectionData(wd, perspectiveCameraProjectionArr, _batchSetCustomGeometryData(wd, customGeometryArr, bufferArr, _batchSetTransformParent(match$2[0], match$2[1], _batchSetTransformData(wd, gameObjectTransforms, state$1)))))))))))))))))))))),
 	          gameObjectArr
 	        ];
 	}
@@ -35439,7 +36687,7 @@
 	function build$1(param, param$1) {
 	  var state = param$1[0];
 	  var scene = param[/* scene */1];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var gameObjectArr = param$1[1];
 	  var gameObjects = scene[/* gameObjects */0];
 	  var match = gameObjects.length;
@@ -35458,7 +36706,7 @@
 	        ]);
 	    var newrecord = caml_array_dup(state$1);
 	    var newrecord$1 = caml_array_dup(transformRecord);
-	    newrecord[/* transformRecord */11] = (newrecord$1[/* parentMap */15] = match$2[0], newrecord$1[/* childMap */16] = match$2[1], newrecord$1);
+	    newrecord[/* transformRecord */12] = (newrecord$1[/* parentMap */15] = match$2[0], newrecord$1[/* childMap */16] = match$2[1], newrecord$1);
 	    return /* tuple */[
 	            newrecord,
 	            gameObject
@@ -35569,44 +36817,40 @@
 	/* No side effect */
 
 	function getIndices$3(param) {
-	  return param[/* boxGeometryRecord */22][/* indices */4];
+	  return param[/* boxGeometryRecord */23][/* indices */4];
 	}
 
 
 	/* ComputePointsBoxGeometryService-Wonderjs Not a pure module */
 
 	function getNormals$3(param) {
-	  return param[/* boxGeometryRecord */22][/* normals */3];
+	  return param[/* boxGeometryRecord */23][/* normals */3];
 	}
 
 
 	/* No side effect */
 
 	function getVertices$3(param) {
-	  return param[/* boxGeometryRecord */22][/* vertices */1];
+	  return param[/* boxGeometryRecord */23][/* vertices */1];
 	}
 
 
 	/* No side effect */
 
 	function getTexCoords$3(param) {
-	  return param[/* boxGeometryRecord */22][/* texCoords */2];
+	  return param[/* boxGeometryRecord */23][/* texCoords */2];
 	}
 
 
 	/* No side effect */
 
 	function createBoxGeometry$1(state) {
-	  var match = create$64(getRecord$2(state));
-	  state[/* boxGeometryRecord */22] = match[0];
+	  var match = create$64(getRecord$3(state));
+	  state[/* boxGeometryRecord */23] = match[0];
 	  return /* tuple */[
 	          state,
 	          match[1]
 	        ];
-	}
-
-	function getBoxGeometryDrawMode$1(state) {
-	  return getDrawMode(unsafeGetGl$1(state[/* deviceManagerRecord */9]));
 	}
 
 	function getBoxGeometryVertices$1(state) {
@@ -35627,9 +36871,9 @@
 
 	function unsafeGetBoxGeometryGameObject$1(geometry, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$9, getRecord$2(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$9, getRecord$3(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$2(geometry, getRecord$2(state));
+	  return unsafeGetGameObject$2(geometry, getRecord$3(state));
 	}
 
 
@@ -35720,13 +36964,15 @@
 
 	function setSetting$4(setting, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = state[/* imguiRecord */42];
-	  newrecord[/* imguiRecord */42] = /* record */[
+	  var init = state[/* imguiRecord */43];
+	  newrecord[/* imguiRecord */43] = /* record */[
 	    /* ioData */init[/* ioData */0],
 	    /* wonderImguiIMGUIRecord */setSetting$2(setting, getWonderIMGUIRecord(state))
 	  ];
 	  return newrecord;
 	}
+
+	var sendUniformProjectionMatData$4 = sendUniformProjectionMatData$1;
 
 	var setIMGUIFunc$5 = setIMGUIFunc$1;
 
@@ -35734,26 +36980,35 @@
 	/* ManageIMGUIAPI-WonderImgui Not a pure module */
 
 	function unsafeGetGameObject$11(meshRenderer, param) {
-	  return unsafeGetGameObject$1(meshRenderer, param[/* gameObjectMap */3]);
+	  return unsafeGetGameObject$1(meshRenderer, param[/* gameObjectMap */5]);
 	}
 
 
 	/* GameObjectMapService-Wonderjs Not a pure module */
 
 	function createMeshRenderer$1(state) {
-	  var match = create$26(state[/* meshRendererRecord */24]);
-	  state[/* meshRendererRecord */24] = match[0];
-	  return /* tuple */[
-	          state,
-	          match[1]
-	        ];
+	  return create$29(state);
 	}
 
 	function unsafeGetMeshRendererGameObject$1(meshRenderer, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(meshRenderer, isAlive$7, state[/* meshRendererRecord */24]);
+	          return checkComponentShouldAlive$1(meshRenderer, isAlive$7, getRecord$2(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$11(meshRenderer, state[/* meshRendererRecord */24]);
+	  return unsafeGetGameObject$11(meshRenderer, getRecord$2(state));
+	}
+
+	function getMeshRendererDrawMode$1(meshRenderer, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(meshRenderer, isAlive$7, getRecord$2(state));
+	        }), getIsDebug(stateData));
+	  return getDrawMode$1(meshRenderer, state);
+	}
+
+	function setMeshRendererDrawMode$1(meshRenderer, drawMode, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(meshRenderer, isAlive$7, getRecord$2(state));
+	        }), getIsDebug(stateData));
+	  return setDrawMode$1(meshRenderer, drawMode, state);
 	}
 
 
@@ -35773,56 +37028,76 @@
 	/* Worker-Wonderjs Not a pure module */
 
 	function createBasicMaterial$1(state) {
-	  return create$29(state);
+	  return create$30(state);
 	}
 
 	function unsafeGetBasicMaterialGameObject$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$3(material, getRecord$3(state));
+	  return unsafeGetGameObject$3(material, getRecord$4(state));
 	}
 
 	function getBasicMaterialColor$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
 	  return getColor$7(material, state);
 	}
 
 	function setBasicMaterialColor$1(material, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
 	  return setColor$3(material, color, state);
 	}
 
 	function unsafeGetBasicMaterialMap$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
 	  return unsafeGetMap(material, state);
 	}
 
 	function setBasicMaterialMap$1(material, texture, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
 	  return setMap(material, texture, state);
 	}
 
 	function hasBasicMaterialMap$1(material, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$3(state));
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
 	        }), getIsDebug(stateData));
 	  return hasMap$1(material, state);
+	}
+
+	function unsafeGetBasicMaterialName$1(material, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
+	        }), getIsDebug(stateData));
+	  return unsafeGetName$2(material, state);
+	}
+
+	function setBasicMaterialName$1(material, name, state) {
+	  requireCheck((function () {
+	          return checkComponentShouldAlive$1(material, isAlive$10, getRecord$4(state));
+	        }), getIsDebug(stateData));
+	  return setName$2(material, name, state);
 	}
 
 
 	/* Contract-WonderLog Not a pure module */
 
 	function unsafeGetGl$2(state) {
-	  return unsafeGetGl$1(state[/* deviceManagerRecord */9]);
+	  return unsafeGetGl$1(state[/* deviceManagerRecord */10]);
+	}
+
+	function setViewport$1(viewportData, state) {
+	  var newrecord = caml_array_dup(state);
+	  newrecord[/* deviceManagerRecord */10] = setViewportData(viewportData, setViewportOfGl(unsafeGetGl$1(state[/* deviceManagerRecord */10]), viewportData, state[/* deviceManagerRecord */10]));
+	  return newrecord;
 	}
 
 
@@ -35900,6 +37175,7 @@
 	                                        /* textureCountPerMaterial */field("texture_count_per_material", $$int, json),
 	                                        /* basicSourceTextureCount */field("basic_source_texture_count", $$int, json),
 	                                        /* arrayBufferViewSourceTextureCount */field("arrayBuffer_view_source_texture_count", $$int, json),
+	                                        /* meshRendererCount */field("meshRenderer_count", $$int, json),
 	                                        /* instanceBuffer */field("instance_buffer", (function (json) {
 	                                                return /* record */[
 	                                                        /* sourceInstanceCount */field("sourceInstance_count", $$int, json),
@@ -36045,57 +37321,57 @@
 
 	/* No side effect */
 
-	function execJob$81(_, state) {
+	function execJob$82(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* timeControllerRecord */33] = execJob$1(state[/* timeControllerRecord */33]);
+	  newrecord[/* timeControllerRecord */34] = execJob$1(state[/* timeControllerRecord */34]);
 	  return newrecord;
 	}
 
 
 	/* TickJobUtils-Wonderjs Not a pure module */
 
-	function execJob$82(_, state) {
-	  var match = execJob$73(batchDisposeBasicMaterialComponent, batchDisposeLightMaterialComponentForWorker, state);
+	function execJob$83(_, state) {
+	  var match = execJob$74(batchDisposeBasicMaterialComponent, batchDisposeLightMaterialComponentForWorker, state);
 	  var state$1 = match[0];
 	  var newrecord = caml_array_dup(state$1);
-	  newrecord[/* vboBufferRecord */34] = disposeSourceInstanceVboBuffer(match[3], disposeCustomGeometryVboBuffer(match[2], disposeBoxGeometryVboBuffer(match[1], state$1[/* vboBufferRecord */34])));
+	  newrecord[/* vboBufferRecord */35] = disposeSourceInstanceVboBuffer(match[3], disposeCustomGeometryVboBuffer(match[2], disposeBoxGeometryVboBuffer(match[1], state$1[/* vboBufferRecord */35])));
 	  return newrecord;
 	}
 
 
 	/* DisposeJobUtils-Wonderjs Not a pure module */
 
-	function execJob$83(_, state) {
+	function execJob$84(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* deviceManagerRecord */9] = setGl(createGl(convertContextConfigDataToJsObj(unsafeGetContext(state[/* settingRecord */0])), unsafeGetCanvas(state[/* viewRecord */8])), state[/* deviceManagerRecord */9]);
+	  newrecord[/* deviceManagerRecord */10] = setGl(createGl(convertContextConfigDataToJsObj(unsafeGetContext(state[/* settingRecord */1])), unsafeGetCanvas(state[/* viewRecord */9])), state[/* deviceManagerRecord */10]);
 	  return newrecord;
 	}
 
 
 	/* ViewService-Wonderjs Not a pure module */
 
-	function execJob$84(_, state) {
+	function execJob$85(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* gpuDetectRecord */5] = detect$1(unsafeGetGl$1(state[/* deviceManagerRecord */9]), getTextureCountPerMaterial(state[/* settingRecord */0]), state[/* gpuDetectRecord */5]);
+	  newrecord[/* gpuDetectRecord */6] = detect$1(unsafeGetGl$1(state[/* deviceManagerRecord */10]), getTextureCountPerMaterial(state[/* settingRecord */1]), state[/* gpuDetectRecord */6]);
 	  return newrecord;
 	}
 
 
 	/* GPUDetectService-Wonderjs Not a pure module */
 
-	function execJob$85(_, state) {
+	function execJob$86(_, state) {
 	  return initEvent(state);
 	}
 
 
 	/* InitEventJobUtils-Wonderjs Not a pure module */
 
-	function execJob$86(_, state) {
-	  var gl = unsafeGetGl$1(state[/* deviceManagerRecord */9]);
-	  var state$1 = bindEvent(state);
+	function execJob$87(_, state) {
+	  var gl = unsafeGetGl$1(state[/* deviceManagerRecord */10]);
+	  var state$1 = bindEvent$1(state);
 	  var newrecord = caml_array_dup(state$1);
-	  newrecord[/* imguiRecord */42] = /* record */[
-	    /* ioData */state[/* imguiRecord */42][/* ioData */0],
+	  newrecord[/* imguiRecord */43] = /* record */[
+	    /* ioData */state[/* imguiRecord */43][/* ioData */0],
 	    /* wonderImguiIMGUIRecord */init$6(gl, getCanvasSize(state$1), getWonderIMGUIRecord(state$1))
 	  ];
 	  return newrecord;
@@ -36104,55 +37380,55 @@
 
 	/* ManageIMGUIAPI-WonderImgui Not a pure module */
 
-	function execJob$87(_, state) {
+	function execJob$88(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* deviceManagerRecord */9] = execJob$10(state[/* deviceManagerRecord */9]);
+	  newrecord[/* deviceManagerRecord */10] = execJob$10(state[/* deviceManagerRecord */10]);
 	  return newrecord;
 	}
 
 
 	/* InitStateJobUtils-Wonderjs Not a pure module */
 
-	function execJob$88(_, state) {
+	function execJob$89(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* timeControllerRecord */33] = start(state[/* timeControllerRecord */33]);
+	  newrecord[/* timeControllerRecord */34] = start(state[/* timeControllerRecord */34]);
 	  return newrecord;
 	}
 
 
 	/* TimeControllerService-Wonderjs Not a pure module */
 
-	function execJob$89(flags, state) {
+	function execJob$90(flags, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* deviceManagerRecord */9] = execJob$13(flags, state[/* deviceManagerRecord */9]);
+	  newrecord[/* deviceManagerRecord */10] = execJob$13(flags, state[/* deviceManagerRecord */10]);
 	  return newrecord;
 	}
 
 
 	/* ClearColorJobUtils-Wonderjs Not a pure module */
 
-	function execJob$90(_, state) {
+	function execJob$91(_, state) {
 	  return init$4(init$5(state));
 	}
 
 
 	/* InitArcballCameraControllerMainService-Wonderjs Not a pure module */
 
-	function execJob$91(flags, state) {
-	  var gl = unsafeGetGl$1(state[/* deviceManagerRecord */9]);
+	function execJob$92(flags, state) {
+	  var gl = unsafeGetGl$1(state[/* deviceManagerRecord */10]);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* deviceManagerRecord */9] = clearBuffer(gl, getBit(gl, unsafeGetFlags(flags)), state[/* deviceManagerRecord */9]);
+	  newrecord[/* deviceManagerRecord */10] = clearBuffer(gl, getBit(gl, unsafeGetFlags(flags)), state[/* deviceManagerRecord */10]);
 	  return newrecord;
 	}
 
 
 	/* JobConfigService-Wonderjs Not a pure module */
 
-	function execJob$92(_, state) {
-	  var basicSourceTextureRecord = getRecord$8(state);
-	  var arrayBufferViewSourceTextureRecord = getRecord$10(state);
+	function execJob$93(_, state) {
+	  var basicSourceTextureRecord = getRecord$9(state);
+	  var arrayBufferViewSourceTextureRecord = getRecord$11(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* basicSourceTextureRecord */18] = /* record */[
+	  newrecord[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */basicSourceTextureRecord[/* index */0],
 	    /* wrapSs */basicSourceTextureRecord[/* wrapSs */1],
 	    /* wrapTs */basicSourceTextureRecord[/* wrapTs */2],
@@ -36163,14 +37439,14 @@
 	    /* isNeedUpdates */basicSourceTextureRecord[/* isNeedUpdates */7],
 	    /* flipYs */basicSourceTextureRecord[/* flipYs */8],
 	    /* sourceMap */basicSourceTextureRecord[/* sourceMap */9],
-	    /* glTextureMap */initTextures(unsafeGetGl$1(state[/* deviceManagerRecord */9]), range$1(0, basicSourceTextureRecord[/* index */0] - 1 | 0), basicSourceTextureRecord[/* glTextureMap */10]),
+	    /* glTextureMap */initTextures(unsafeGetGl$1(state[/* deviceManagerRecord */10]), range$1(0, basicSourceTextureRecord[/* index */0] - 1 | 0), basicSourceTextureRecord[/* glTextureMap */10]),
 	    /* bindTextureUnitCacheMap */basicSourceTextureRecord[/* bindTextureUnitCacheMap */11],
 	    /* disposedIndexArray */basicSourceTextureRecord[/* disposedIndexArray */12],
 	    /* needAddedSourceArray */basicSourceTextureRecord[/* needAddedSourceArray */13],
 	    /* needInitedTextureIndexArray */basicSourceTextureRecord[/* needInitedTextureIndexArray */14],
 	    /* nameMap */basicSourceTextureRecord[/* nameMap */15]
 	  ];
-	  newrecord[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  newrecord[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */arrayBufferViewSourceTextureRecord[/* index */0],
 	    /* wrapSs */arrayBufferViewSourceTextureRecord[/* wrapSs */1],
 	    /* wrapTs */arrayBufferViewSourceTextureRecord[/* wrapTs */2],
@@ -36183,7 +37459,7 @@
 	    /* widths */arrayBufferViewSourceTextureRecord[/* widths */9],
 	    /* heights */arrayBufferViewSourceTextureRecord[/* heights */10],
 	    /* sourceMap */arrayBufferViewSourceTextureRecord[/* sourceMap */11],
-	    /* glTextureMap */initTextures(unsafeGetGl$1(state[/* deviceManagerRecord */9]), range$1(0, arrayBufferViewSourceTextureRecord[/* index */0] - 1 | 0), arrayBufferViewSourceTextureRecord[/* glTextureMap */12]),
+	    /* glTextureMap */initTextures(unsafeGetGl$1(state[/* deviceManagerRecord */10]), range$1(0, arrayBufferViewSourceTextureRecord[/* index */0] - 1 | 0), arrayBufferViewSourceTextureRecord[/* glTextureMap */12]),
 	    /* bindTextureUnitCacheMap */arrayBufferViewSourceTextureRecord[/* bindTextureUnitCacheMap */13],
 	    /* disposedIndexArray */arrayBufferViewSourceTextureRecord[/* disposedIndexArray */14],
 	    /* needAddedSourceArray */arrayBufferViewSourceTextureRecord[/* needAddedSourceArray */15],
@@ -36197,20 +37473,21 @@
 	/* ArrayService-Wonderjs Not a pure module */
 
 	function createRenderState$1(state) {
-	  var settingRecord = state[/* settingRecord */0];
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var settingRecord = state[/* settingRecord */1];
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  var transformRecord = getRecord$1(state);
 	  var localToWorldMatrices = transformRecord[/* localToWorldMatrices */2];
 	  var localToWorldMatrixCacheMap = transformRecord[/* localToWorldMatrixCacheMap */19];
 	  var normalMatrixCacheMap = transformRecord[/* normalMatrixCacheMap */20];
-	  var boxGeometryRecord = getRecord$2(state);
-	  var customGeometryRecord = getRecord$5(state);
-	  var basicMaterialRecord = getRecord$3(state);
-	  var lightMaterialRecord = getRecord$4(state);
-	  var basicSourceTextureRecord = getRecord$8(state);
-	  var arrayBufferViewSourceTextureRecord = getRecord$10(state);
-	  var sourceInstanceRecord = getRecord$6(state);
+	  var boxGeometryRecord = getRecord$3(state);
+	  var customGeometryRecord = getRecord$6(state);
+	  var basicMaterialRecord = getRecord$4(state);
+	  var lightMaterialRecord = getRecord$5(state);
+	  var meshRendererRecord = getRecord$2(state);
+	  var basicSourceTextureRecord = getRecord$9(state);
+	  var arrayBufferViewSourceTextureRecord = getRecord$11(state);
+	  var sourceInstanceRecord = getRecord$7(state);
 	  var isUseWorker$$1 = isUseWorker(state);
 	  var renderStateTransformRecord = isUseWorker$$1 ? /* record */[
 	      /* localToWorldMatrices */unsafeGetCopiedLocalToWorldMatrices(transformRecord),
@@ -36223,10 +37500,10 @@
 	    ];
 	  return /* record */[
 	          /* sceneRecord : record */[/* ambientLight : record */[/* color */getAmbientLightColor$2(state)]],
-	          /* vboBufferRecord */state[/* vboBufferRecord */34],
-	          /* typeArrayPoolRecord */state[/* typeArrayPoolRecord */36],
-	          /* glslSenderRecord */state[/* glslSenderRecord */30],
-	          /* programRecord */state[/* programRecord */28],
+	          /* vboBufferRecord */state[/* vboBufferRecord */35],
+	          /* typeArrayPoolRecord */state[/* typeArrayPoolRecord */37],
+	          /* glslSenderRecord */state[/* glslSenderRecord */31],
+	          /* programRecord */state[/* programRecord */29],
 	          /* boxGeometryRecord : record */[
 	            /* vertices */boxGeometryRecord[/* vertices */1],
 	            /* texCoords */boxGeometryRecord[/* texCoords */2],
@@ -36259,6 +37536,7 @@
 	            /* diffuseMapUnits */lightMaterialRecord[/* diffuseMapUnits */7],
 	            /* specularMapUnits */lightMaterialRecord[/* specularMapUnits */8]
 	          ],
+	          /* meshRendererRecord : record */[/* drawModes */meshRendererRecord[/* drawModes */2]],
 	          /* basicSourceTextureRecord : record */[
 	            /* wrapSs */basicSourceTextureRecord[/* wrapSs */1],
 	            /* wrapTs */basicSourceTextureRecord[/* wrapTs */2],
@@ -36294,7 +37572,7 @@
 	            /* index */directionLightRecord[/* index */0],
 	            /* colors */directionLightRecord[/* colors */2],
 	            /* intensities */directionLightRecord[/* intensities */3],
-	            /* positionMap */buildPositionMap(directionLightRecord[/* index */0], getPosition$3, state)
+	            /* directionMap */buildDirectionMap(directionLightRecord[/* index */0], getDirection$1, state)
 	          ],
 	          /* pointLightRecord : record */[
 	            /* index */pointLightRecord[/* index */0],
@@ -36315,17 +37593,17 @@
 	            /* matrixFloat32ArrayMap */sourceInstanceRecord[/* matrixFloat32ArrayMap */6],
 	            /* isSendTransformMatrixDataMap */sourceInstanceRecord[/* isSendTransformMatrixDataMap */7]
 	          ],
-	          /* gpuDetectRecord */state[/* gpuDetectRecord */5],
-	          /* globalTempRecord */state[/* globalTempRecord */35],
-	          /* deviceManagerRecord */state[/* deviceManagerRecord */9],
-	          /* shaderRecord : record */[/* index */state[/* shaderRecord */26][/* index */0]],
+	          /* gpuDetectRecord */state[/* gpuDetectRecord */6],
+	          /* globalTempRecord */state[/* globalTempRecord */36],
+	          /* deviceManagerRecord */state[/* deviceManagerRecord */10],
+	          /* shaderRecord : record */[/* usedShaderIndexArray */state[/* shaderRecord */27][/* usedShaderIndexArray */2]],
 	          /* settingRecord : record */[
 	            /* gpu */unsafeGetGPU(settingRecord),
 	            /* instanceBuffer *//* record */[/* objectInstanceCountPerSourceInstance */getObjectInstanceCountPerSourceInstance(settingRecord)],
 	            /* textureCountPerMaterial */getTextureCountPerMaterial(settingRecord)
 	          ],
 	          /* workerDetectRecord : record */[/* isUseWorker */isUseWorker$$1],
-	          /* browserDetectRecord : record */[/* browser */state[/* browserDetectRecord */40][/* browser */0]]
+	          /* browserDetectRecord : record */[/* browser */state[/* browserDetectRecord */41][/* browser */0]]
 	        ];
 	}
 
@@ -36340,9 +37618,10 @@
 	          match$1[/* count */1],
 	          match$1[/* transformIndices */2],
 	          match$1[/* materialIndices */3],
-	          match$1[/* geometryIndices */4],
-	          match$1[/* geometryTypes */5],
-	          match$1[/* sourceInstanceIndices */6]
+	          match$1[/* meshRendererIndices */4],
+	          match$1[/* geometryIndices */5],
+	          match$1[/* geometryTypes */6],
+	          match$1[/* sourceInstanceIndices */7]
 	        ], createRenderState$1(state));
 	    return state;
 	  } else {
@@ -36350,16 +37629,16 @@
 	  }
 	}
 
-	function execJob$93(_, state) {
-	  return _render$2(unsafeGetGl$1(state[/* deviceManagerRecord */9]), state);
+	function execJob$94(_, state) {
+	  return _render$2(unsafeGetGl$1(state[/* deviceManagerRecord */10]), state);
 	}
 
 
 	/* RenderBasicJobUtils-Wonderjs Not a pure module */
 
-	function execJob$94(_, state) {
-	  return resetPointEventStateWhenPointUp(render$1(unsafeGetGl$1(state[/* deviceManagerRecord */9]), getIOData$1(state), getAPIJsObj$1(state), /* tuple */[
-	                  getRecord$11,
+	function execJob$95(_, state) {
+	  return resetPointEventStateWhenPointUp(render$1(unsafeGetGl$1(state[/* deviceManagerRecord */10]), getIOData$1(state), getAPIJsObj$1(state), /* tuple */[
+	                  getRecord$12,
 	                  setRecord
 	                ], state));
 	}
@@ -36367,7 +37646,7 @@
 
 	/* IOIMGUIMainService-Wonderjs Not a pure module */
 
-	function execJob$95(_, state) {
+	function execJob$96(_, state) {
 	  var screenData = queryFullScreenData(/* () */0);
 	  var viewportData_000 = screenData[0];
 	  var viewportData_001 = screenData[1];
@@ -36380,59 +37659,59 @@
 	    viewportData_003
 	  ];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* deviceManagerRecord */9] = setViewportData(viewportData, setViewportOfGl(unsafeGetGl$1(state[/* deviceManagerRecord */9]), viewportData, state[/* deviceManagerRecord */9]));
+	  newrecord[/* deviceManagerRecord */10] = setViewportData(viewportData, setViewportOfGl(unsafeGetGl$1(state[/* deviceManagerRecord */10]), viewportData, state[/* deviceManagerRecord */10]));
 	  return newrecord;
 	}
 
 
 	/* DeviceManagerService-Wonderjs Not a pure module */
 
-	function execJob$96(_, state) {
+	function execJob$97(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* viewRecord */8] = setCanvas(createCanvas(getCanvasId(state[/* settingRecord */0])), state[/* viewRecord */8]);
+	  newrecord[/* viewRecord */9] = setCanvas(createCanvas(getCanvasId(state[/* settingRecord */1])), state[/* viewRecord */9]);
 	  return newrecord;
 	}
 
 
 	/* ViewService-Wonderjs Not a pure module */
 
-	function execJob$97(_, state) {
+	function execJob$98(_, state) {
 	  return update$2(update$1(state));
 	}
 
 
 	/* UpdateArcballCameraControllerMainService-Wonderjs Not a pure module */
 
-	function execJob$98(_, state) {
+	function execJob$99(_, state) {
 	  return setCameraRecord(getCameraData(state), state);
 	}
 
 
 	/* GetCameraDataJobUtils-Wonderjs Not a pure module */
 
-	function execJob$99(_, state) {
+	function execJob$100(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* viewRecord */8] = setCanvas(setToFullScreen(queryFullScreenData(/* () */0), unsafeGetCanvas(state[/* viewRecord */8])), state[/* viewRecord */8]);
+	  newrecord[/* viewRecord */9] = setCanvas(setToFullScreen(queryFullScreenData(/* () */0), unsafeGetCanvas(state[/* viewRecord */9])), state[/* viewRecord */9]);
 	  return newrecord;
 	}
 
 
 	/* ViewService-Wonderjs Not a pure module */
 
-	function execJob$100(_, state) {
-	  var glslRecord = state[/* glslRecord */27];
-	  glslRecord[/* precision */0] = getPrecisionSource(state[/* gpuDetectRecord */5], state[/* glslChunkRecord */31]);
+	function execJob$101(_, state) {
+	  var glslRecord = state[/* glslRecord */28];
+	  glslRecord[/* precision */0] = getPrecisionSource(state[/* gpuDetectRecord */6], state[/* glslChunkRecord */32]);
 	  return state;
 	}
 
 
 	/* PrecisionAllService-Wonderjs Not a pure module */
 
-	function execJob$101(_, state) {
+	function execJob$102(_, state) {
 	  var transformRecord = getRecord$1(state);
 	  var index = transformRecord[/* index */0];
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* transformRecord */11] = execJob$33(index, state[/* globalTempRecord */35], transformRecord);
+	  newrecord[/* transformRecord */12] = execJob$33(index, state[/* globalTempRecord */36], transformRecord);
 	  return newrecord;
 	}
 
@@ -36447,9 +37726,10 @@
 	          match$1[/* count */1],
 	          match$1[/* transformIndices */2],
 	          match$1[/* materialIndices */3],
-	          match$1[/* geometryIndices */4],
-	          match$1[/* geometryTypes */5],
-	          match$1[/* sourceInstanceIndices */6]
+	          match$1[/* meshRendererIndices */4],
+	          match$1[/* geometryIndices */5],
+	          match$1[/* geometryTypes */6],
+	          match$1[/* sourceInstanceIndices */7]
 	        ], createRenderState$1(state));
 	    return state;
 	  } else {
@@ -36457,19 +37737,19 @@
 	  }
 	}
 
-	function execJob$102(_, state) {
-	  return _render$3(unsafeGetGl$1(state[/* deviceManagerRecord */9]), state);
+	function execJob$103(_, state) {
+	  return _render$3(unsafeGetGl$1(state[/* deviceManagerRecord */10]), state);
 	}
 
 
 	/* DeviceManagerService-Wonderjs Not a pure module */
 
-	function execJob$103(_, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var match = getRecord$3(state);
+	function execJob$104(_, state) {
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = getRecord$4(state);
 	  var index = match[/* index */0];
-	  init$1(unsafeGetGl$1(state[/* deviceManagerRecord */9]), /* tuple */[
-	        buildMap(index, getRecord$3(state)[/* gameObjectMap */8], gameObjectRecord),
+	  init$1(unsafeGetGl$1(state[/* deviceManagerRecord */10]), /* tuple */[
+	        buildMap(index, getRecord$4(state)[/* gameObjectMap */8], gameObjectRecord),
 	        isSupportInstance(state)
 	      ], createInitMaterialState(/* tuple */[
 	            index,
@@ -36481,12 +37761,12 @@
 
 	/* DeviceManagerService-Wonderjs Not a pure module */
 
-	function execJob$104(_, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var match = getRecord$4(state);
+	function execJob$105(_, state) {
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = getRecord$5(state);
 	  var index = match[/* index */0];
-	  init$3(unsafeGetGl$1(state[/* deviceManagerRecord */9]), /* tuple */[
-	        buildMap(index, getRecord$4(state)[/* gameObjectMap */13], gameObjectRecord),
+	  init$3(unsafeGetGl$1(state[/* deviceManagerRecord */10]), /* tuple */[
+	        buildMap(index, getRecord$5(state)[/* gameObjectMap */13], gameObjectRecord),
 	        isSupportInstance(state)
 	      ], createInitMaterialState$1(/* tuple */[
 	            index,
@@ -36498,35 +37778,35 @@
 
 	/* DeviceManagerService-Wonderjs Not a pure module */
 
-	function execJob$105(_, state) {
-	  return execJob$49(state);
+	function execJob$106(_, state) {
+	  return execJob$50(state);
 	}
 
 
 	/* ReallocateCPUMemoryJobUtils-Wonderjs Not a pure module */
 
-	function execJob$106(_, state) {
-	  execJob$69(createRenderState$1(state));
+	function execJob$107(_, state) {
+	  execJob$70(createRenderState$1(state));
 	  return state;
 	}
 
 
 	/* CreateRenderStateMainService-Wonderjs Not a pure module */
 
-	function execJob$107(_, state) {
+	function execJob$108(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* glslSenderRecord */30] = execJob$71(state[/* glslSenderRecord */30]);
+	  newrecord[/* glslSenderRecord */31] = execJob$72(state[/* glslSenderRecord */31]);
 	  return newrecord;
 	}
 
 
 	/* No side effect */
 
-	function execJob$108(_, state) {
+	function execJob$109(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = getRecord$12(state);
-	  newrecord[/* renderRecord */32] = /* record */[
-	    /* basicRenderObjectRecord */execJob$76(state),
+	  var init = getRecord$13(state);
+	  newrecord[/* renderRecord */33] = /* record */[
+	    /* basicRenderObjectRecord */execJob$77(state),
 	    /* lightRenderObjectRecord */init[/* lightRenderObjectRecord */1],
 	    /* cameraRecord */init[/* cameraRecord */2]
 	  ];
@@ -36536,12 +37816,12 @@
 
 	/* RecordRenderMainService-Wonderjs Not a pure module */
 
-	function execJob$109(_, state) {
+	function execJob$110(_, state) {
 	  var newrecord = caml_array_dup(state);
-	  var init = getRecord$12(state);
-	  newrecord[/* renderRecord */32] = /* record */[
+	  var init = getRecord$13(state);
+	  newrecord[/* renderRecord */33] = /* record */[
 	    /* basicRenderObjectRecord */init[/* basicRenderObjectRecord */0],
-	    /* lightRenderObjectRecord */execJob$78(state),
+	    /* lightRenderObjectRecord */execJob$79(state),
 	    /* cameraRecord */init[/* cameraRecord */2]
 	  ];
 	  return newrecord;
@@ -36554,72 +37834,72 @@
 	  return /* :: */[
 	          /* tuple */[
 	            "create_canvas",
-	            execJob$96
+	            execJob$97
 	          ],
 	          /* :: */[
 	            /* tuple */[
 	              "create_gl",
-	              execJob$83
+	              execJob$84
 	            ],
 	            /* :: */[
 	              /* tuple */[
 	                "set_full_screen",
-	                execJob$99
+	                execJob$100
 	              ],
 	              /* :: */[
 	                /* tuple */[
 	                  "set_viewport",
-	                  execJob$95
+	                  execJob$96
 	                ],
 	                /* :: */[
 	                  /* tuple */[
 	                    "detect_gl",
-	                    execJob$84
+	                    execJob$85
 	                  ],
 	                  /* :: */[
 	                    /* tuple */[
 	                      "init_event",
-	                      execJob$85
+	                      execJob$86
 	                    ],
 	                    /* :: */[
 	                      /* tuple */[
 	                        "init_camera",
-	                        execJob$90
+	                        execJob$91
 	                      ],
 	                      /* :: */[
 	                        /* tuple */[
 	                          "start_time",
-	                          execJob$88
+	                          execJob$89
 	                        ],
 	                        /* :: */[
 	                          /* tuple */[
 	                            "preget_glslData",
-	                            execJob$100
+	                            execJob$101
 	                          ],
 	                          /* :: */[
 	                            /* tuple */[
 	                              "init_imgui",
-	                              execJob$86
+	                              execJob$87
 	                            ],
 	                            /* :: */[
 	                              /* tuple */[
 	                                "init_texture",
-	                                execJob$92
+	                                execJob$93
 	                              ],
 	                              /* :: */[
 	                                /* tuple */[
 	                                  "init_state",
-	                                  execJob$87
+	                                  execJob$88
 	                                ],
 	                                /* :: */[
 	                                  /* tuple */[
 	                                    "init_basic_material",
-	                                    execJob$103
+	                                    execJob$104
 	                                  ],
 	                                  /* :: */[
 	                                    /* tuple */[
 	                                      "init_light_material",
-	                                      execJob$104
+	                                      execJob$105
 	                                    ],
 	                                    /* [] */0
 	                                  ]
@@ -36642,77 +37922,77 @@
 	  return /* :: */[
 	          /* tuple */[
 	            "tick",
-	            execJob$81
+	            execJob$82
 	          ],
 	          /* :: */[
 	            /* tuple */[
 	              "update_transform",
-	              execJob$101
+	              execJob$102
 	            ],
 	            /* :: */[
 	              /* tuple */[
 	                "update_camera",
-	                execJob$97
+	                execJob$98
 	              ],
 	              /* :: */[
 	                /* tuple */[
 	                  "clear_color",
-	                  execJob$89
+	                  execJob$90
 	                ],
 	                /* :: */[
 	                  /* tuple */[
 	                    "clear_buffer",
-	                    execJob$91
+	                    execJob$92
 	                  ],
 	                  /* :: */[
 	                    /* tuple */[
 	                      "clear_last_send_component",
-	                      execJob$107
+	                      execJob$108
 	                    ],
 	                    /* :: */[
 	                      /* tuple */[
 	                        "get_camera_data",
-	                        execJob$98
+	                        execJob$99
 	                      ],
 	                      /* :: */[
 	                        /* tuple */[
 	                          "send_uniform_shader_data",
-	                          execJob$106
+	                          execJob$107
 	                        ],
 	                        /* :: */[
 	                          /* tuple */[
 	                            "create_basic_render_object_buffer",
-	                            execJob$108
+	                            execJob$109
 	                          ],
 	                          /* :: */[
 	                            /* tuple */[
 	                              "create_light_render_object_buffer",
-	                              execJob$109
+	                              execJob$110
 	                            ],
 	                            /* :: */[
 	                              /* tuple */[
 	                                "dispose",
-	                                execJob$82
+	                                execJob$83
 	                              ],
 	                              /* :: */[
 	                                /* tuple */[
 	                                  "reallocate_cpu_memory",
-	                                  execJob$105
+	                                  execJob$106
 	                                ],
 	                                /* :: */[
 	                                  /* tuple */[
 	                                    "render_basic",
-	                                    execJob$93
+	                                    execJob$94
 	                                  ],
 	                                  /* :: */[
 	                                    /* tuple */[
 	                                      "front_render_light",
-	                                      execJob$102
+	                                      execJob$103
 	                                    ],
 	                                    /* :: */[
 	                                      /* tuple */[
 	                                        "render_imgui",
-	                                        execJob$94
+	                                        execJob$95
 	                                      ],
 	                                      /* [] */0
 	                                    ]
@@ -36960,7 +38240,7 @@
 	function _setSetting(stateData, state, setting) {
 	  setIsDebug$1(stateData, unsafeGetIsDebug(setting));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* settingRecord */0] = setSetting$1(setting);
+	  newrecord[/* settingRecord */1] = setSetting$1(setting);
 	  return newrecord;
 	}
 
@@ -36970,14 +38250,14 @@
 	                    return Promise.resolve(init(/* tuple */[
 	                                    createInitJobHandleMap,
 	                                    createLoopJobHandleMap
-	                                  ], (newrecord[/* noWorkerJobRecord */2] = create$66(recordArr), newrecord)));
+	                                  ], (newrecord[/* noWorkerJobRecord */3] = create$66(recordArr), newrecord)));
 	                  })));
 	}
 
 	function _createHandleRenderConfigStreamArr(dataDir, fetchFunc, state) {
 	  return fromPromise(_collectAllRecords(concatArray(_createFetchRenderConfigStreamArr(dataDir, fetchFunc))).then((function (recordArr) {
 	                    var newrecord = caml_array_dup(state);
-	                    return Promise.resolve((newrecord[/* renderConfigRecord */4] = create$62(recordArr), newrecord));
+	                    return Promise.resolve((newrecord[/* renderConfigRecord */5] = create$62(recordArr), newrecord));
 	                  })));
 	}
 
@@ -37017,7 +38297,7 @@
 	function _createHandleWorkerJobConfigStreamArr(dataDir, fetchFunc, state) {
 	  return fromPromise(_collectAllRecords(concatArray(_createFetchWorkerJobStreamArr(dataDir, fetchFunc))).then((function (recordArr) {
 	                    var newrecord = caml_array_dup(state);
-	                    return Promise.resolve((newrecord[/* workerJobRecord */3] = create$65(recordArr), newrecord));
+	                    return Promise.resolve((newrecord[/* workerJobRecord */4] = create$65(recordArr), newrecord));
 	                  })));
 	}
 
@@ -37031,7 +38311,7 @@
 	}
 
 	function _createRecordWithState(state) {
-	  return create$3(create$55(create$10(create$11(create$23(create$21(create$22(create$9(create$8(create$6(state))))))))));
+	  return create$3(create$55(create$11(create$12(create$24(create$22(create$23(create$7(create$10(create$9(create$6(state)))))))))));
 	}
 
 	function _createAndSetState(stateData) {
@@ -37063,8 +38343,8 @@
 	function loadIMGUIAsset$2(param, customTextureSourceDataArr, _, state) {
 	  return load$2(customTextureSourceDataArr, addFont$1(param[0], param[1], getWonderIMGUIRecord(state))).then((function (imguiRecord) {
 	                var newrecord = caml_array_dup(state);
-	                var init = state[/* imguiRecord */42];
-	                newrecord[/* imguiRecord */42] = /* record */[
+	                var init = state[/* imguiRecord */43];
+	                newrecord[/* imguiRecord */43] = /* record */[
 	                  /* ioData */init[/* ioData */0],
 	                  /* wonderImguiIMGUIRecord */imguiRecord
 	                ];
@@ -37098,11 +38378,11 @@
 	/* StateDataMain-Wonderjs Not a pure module */
 
 	function create$67(state) {
-	  var customGeometryRecord = getRecord$5(state);
+	  var customGeometryRecord = getRecord$6(state);
 	  var disposedIndexArray = customGeometryRecord[/* disposedIndexArray */17];
 	  var match = generateIndex(customGeometryRecord[/* index */0], disposedIndexArray);
 	  var index = match[0];
-	  state[/* customGeometryRecord */23] = /* record */[
+	  state[/* customGeometryRecord */24] = /* record */[
 	    /* index */match[1],
 	    /* buffer */customGeometryRecord[/* buffer */1],
 	    /* vertices */customGeometryRecord[/* vertices */2],
@@ -37124,7 +38404,7 @@
 	    /* disposedIndexMap */customGeometryRecord[/* disposedIndexMap */18],
 	    /* aliveIndexArray */push(index, customGeometryRecord[/* aliveIndexArray */19])
 	  ];
-	  return checkNotExceedMaxCount(getCustomGeometryCount(state[/* settingRecord */0]), /* tuple */[
+	  return checkNotExceedMaxCount(getCustomGeometryCount(state[/* settingRecord */1]), /* tuple */[
 	              state,
 	              index
 	            ]);
@@ -37135,79 +38415,75 @@
 
 	var createCustomGeometry$1 = create$67;
 
-	function getCustomGeometryDrawMode$1(state) {
-	  return getDrawMode(unsafeGetGl$1(state[/* deviceManagerRecord */9]));
-	}
-
 	function getCustomGeometryVertices$1(geometry, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return getVertices$2(geometry, state);
 	}
 
 	function setCustomGeometryVertices$1(geometry, data, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return setVerticesByTypeArray(geometry, data, state);
 	}
 
 	function getCustomGeometryTexCoords$1(geometry, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return getTexCoords$2(geometry, state);
 	}
 
 	function setCustomGeometryTexCoords$1(geometry, data, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return setTexCoordsByTypeArray(geometry, data, state);
 	}
 
 	function getCustomGeometryNormals$1(geometry, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return getNormals$2(geometry, state);
 	}
 
 	function setCustomGeometryNormals$1(geometry, data, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return setNormalsByTypeArray(geometry, data, state);
 	}
 
 	function getCustomGeometryIndices$1(geometry, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return getIndices$2(geometry, state);
 	}
 
 	function setCustomGeometryIndices$1(geometry, data, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
 	  return setIndicesByTypeArray(geometry, data, state);
 	}
 
 	function unsafeGetCustomGeometryGameObject$1(geometry, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$5(state));
+	          return checkComponentShouldAlive$1(geometry, isAlive$12, getRecord$6(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$5(geometry, getRecord$5(state));
+	  return unsafeGetGameObject$5(geometry, getRecord$6(state));
 	}
 
 
 	/* Contract-WonderLog Not a pure module */
 
 	function createDirectionLight$1(state) {
-	  var match = create$27(state[/* directionLightRecord */20]);
-	  state[/* directionLightRecord */20] = match[0];
+	  var match = create$27(state[/* directionLightRecord */21]);
+	  state[/* directionLightRecord */21] = match[0];
 	  return /* tuple */[
 	          state,
 	          match[1]
@@ -37216,40 +38492,40 @@
 
 	function unsafeGetDirectionLightGameObject$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */20]);
+	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */21]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$10(getMappedIndex(light, getMappedIndexMap$1(state[/* directionLightRecord */20])), state[/* directionLightRecord */20]);
+	  return unsafeGetGameObject$10(getMappedIndex(light, getMappedIndexMap(state[/* directionLightRecord */21])), state[/* directionLightRecord */21]);
 	}
 
 	function getDirectionLightColor$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */20]);
+	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */21]);
 	        }), getIsDebug(stateData));
-	  return getColor$9(getMappedIndex(light, getMappedIndexMap$1(state[/* directionLightRecord */20])), state[/* directionLightRecord */20]);
+	  return getColor$9(getMappedIndex(light, getMappedIndexMap(state[/* directionLightRecord */21])), state[/* directionLightRecord */21]);
 	}
 
 	function setDirectionLightColor$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */20]);
+	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */21]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* directionLightRecord */20] = setColor$5(getMappedIndex(light, getMappedIndexMap$1(state[/* directionLightRecord */20])), color, state[/* directionLightRecord */20]);
+	  newrecord[/* directionLightRecord */21] = setColor$5(getMappedIndex(light, getMappedIndexMap(state[/* directionLightRecord */21])), color, state[/* directionLightRecord */21]);
 	  return newrecord;
 	}
 
 	function getDirectionLightIntensity$1(light, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */20]);
+	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */21]);
 	        }), getIsDebug(stateData));
-	  return getIntensity$5(getMappedIndex(light, getMappedIndexMap$1(state[/* directionLightRecord */20])), state[/* directionLightRecord */20]);
+	  return getIntensity$5(getMappedIndex(light, getMappedIndexMap(state[/* directionLightRecord */21])), state[/* directionLightRecord */21]);
 	}
 
 	function setDirectionLightIntensity$1(light, color, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */20]);
+	          return checkComponentShouldAlive$1(light, isAlive$8, state[/* directionLightRecord */21]);
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* directionLightRecord */20] = setIntensity$3(getMappedIndex(light, getMappedIndexMap$1(state[/* directionLightRecord */20])), color, state[/* directionLightRecord */20]);
+	  newrecord[/* directionLightRecord */21] = setIntensity$3(getMappedIndex(light, getMappedIndexMap(state[/* directionLightRecord */21])), color, state[/* directionLightRecord */21]);
 	  return newrecord;
 	}
 
@@ -37257,10 +38533,10 @@
 	/* Contract-WonderLog Not a pure module */
 
 	function create$68(state) {
-	  var record = getRecord$6(state);
+	  var record = getRecord$7(state);
 	  var match = generateIndex(record[/* index */0], record[/* disposedIndexArray */8]);
 	  var index = match[0];
-	  state[/* sourceInstanceRecord */6] = /* record */[
+	  state[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */match[1],
 	    /* objectInstanceTransformIndexMap */setDefaultObjectInstanceTransformIndex(index, record[/* objectInstanceTransformIndexMap */1]),
 	    /* buffer */record[/* buffer */2],
@@ -37306,19 +38582,19 @@
 	/* No side effect */
 
 	function createInstance(sourceInstance, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
-	  var match = create$12(gameObjectRecord);
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = create$13(gameObjectRecord);
 	  var uid = match[1];
 	  var match$1 = create$5(state);
 	  var transform = match$1[1];
 	  var state$1 = match$1[0];
-	  var sourceInstanceRecord = getRecord$6(state$1);
-	  state$1[/* gameObjectRecord */10] = match[0];
-	  var match$2 = addObjectInstanceTransform(sourceInstance, transform, getObjectInstanceCountPerSourceInstance(state[/* settingRecord */0]), /* tuple */[
+	  var sourceInstanceRecord = getRecord$7(state$1);
+	  state$1[/* gameObjectRecord */11] = match[0];
+	  var match$2 = addObjectInstanceTransform(sourceInstance, transform, getObjectInstanceCountPerSourceInstance(state[/* settingRecord */1]), /* tuple */[
 	        sourceInstanceRecord[/* objectInstanceTransformIndexMap */1],
 	        sourceInstanceRecord[/* objectInstanceTransformCollections */4]
 	      ]);
-	  state$1[/* sourceInstanceRecord */6] = /* record */[
+	  state$1[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */sourceInstanceRecord[/* index */0],
 	    /* objectInstanceTransformIndexMap */match$2[0],
 	    /* buffer */sourceInstanceRecord[/* buffer */2],
@@ -37330,8 +38606,8 @@
 	    /* disposedIndexArray */sourceInstanceRecord[/* disposedIndexArray */8],
 	    /* gameObjectMap */sourceInstanceRecord[/* gameObjectMap */9]
 	  ];
-	  var match$3 = create$69(sourceInstance, uid, state$1[/* objectInstanceRecord */7]);
-	  state$1[/* objectInstanceRecord */7] = match$3[0];
+	  var match$3 = create$69(sourceInstance, uid, state$1[/* objectInstanceRecord */8]);
+	  state$1[/* objectInstanceRecord */8] = match$3[0];
 	  var state$2 = addObjectInstanceComponent(uid, match$3[1], addTransformComponent(uid, transform, state$1));
 	  return /* tuple */[
 	          state$2,
@@ -37344,36 +38620,36 @@
 
 	function unsafeGetSourceInstanceGameObject$1(sourceInstance, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$6(state));
+	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$7(state));
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$12(sourceInstance, getRecord$6(state));
+	  return unsafeGetGameObject$12(sourceInstance, getRecord$7(state));
 	}
 
 	function createObjectInstanceGameObject$1(sourceInstance, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$6(state));
+	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$7(state));
 	        }), getIsDebug(stateData));
 	  return createInstance(sourceInstance, state);
 	}
 
 	function getSourceInstanceObjectInstanceTransformArray$1(sourceInstance, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$6(state));
+	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$7(state));
 	        }), getIsDebug(stateData));
 	  return getObjectInstanceTransformArray$1(sourceInstance, state);
 	}
 
 	function markSourceInstanceModelMatrixIsStatic$1(sourceInstance, isStatic, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$6(state));
+	          return checkComponentShouldAlive$1(sourceInstance, isAlive$14, getRecord$7(state));
 	        }), getIsDebug(stateData));
 	  var newrecord = caml_array_dup(state);
-	  var init = getRecord$6(state);
-	  newrecord[/* sourceInstanceRecord */6] = /* record */[
+	  var init = getRecord$7(state);
+	  newrecord[/* sourceInstanceRecord */7] = /* record */[
 	    /* index */init[/* index */0],
 	    /* objectInstanceTransformIndexMap */init[/* objectInstanceTransformIndexMap */1],
 	    /* buffer */init[/* buffer */2],
-	    /* isTransformStatics */markModelMatrixIsStatic(sourceInstance, isStatic, getRecord$6(state)[/* isTransformStatics */3]),
+	    /* isTransformStatics */markModelMatrixIsStatic(sourceInstance, isStatic, getRecord$7(state)[/* isTransformStatics */3]),
 	    /* objectInstanceTransformCollections */init[/* objectInstanceTransformCollections */4],
 	    /* matrixInstanceBufferCapacityMap */init[/* matrixInstanceBufferCapacityMap */5],
 	    /* matrixFloat32ArrayMap */init[/* matrixFloat32ArrayMap */6],
@@ -37390,19 +38666,19 @@
 	/* Contract-WonderLog Not a pure module */
 
 	function getGameTime$2(state) {
-	  return getGameTime$1(state[/* timeControllerRecord */33]);
+	  return getGameTime$1(state[/* timeControllerRecord */34]);
 	}
 
 	function getFps$2(state) {
-	  return getFps$1(state[/* timeControllerRecord */33]);
+	  return getFps$1(state[/* timeControllerRecord */34]);
 	}
 
 
 	/* TimeControllerService-Wonderjs Not a pure module */
 
 	function createBasicCameraView$1(state) {
-	  var match = create$28(state[/* basicCameraViewRecord */13]);
-	  state[/* basicCameraViewRecord */13] = match[0];
+	  var match = create$28(state[/* basicCameraViewRecord */14]);
+	  state[/* basicCameraViewRecord */14] = match[0];
 	  return /* tuple */[
 	          state,
 	          match[1]
@@ -37411,29 +38687,26 @@
 
 	function unsafeGetGameObjectBasicCameraView$1(cameraView, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(cameraView, isAlive, state[/* basicCameraViewRecord */13]);
+	          return checkComponentShouldAlive$1(cameraView, isAlive, state[/* basicCameraViewRecord */14]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject(cameraView, state[/* basicCameraViewRecord */13]);
+	  return unsafeGetGameObject(cameraView, state[/* basicCameraViewRecord */14]);
 	}
 
-	function getBasicCameraViewWorldToCameraMatrix$1(cameraView, state) {
+	function getBasicCameraViewWorldToCameraMatrix$2(cameraView, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(cameraView, isAlive, state[/* basicCameraViewRecord */13]);
+	          return checkComponentShouldAlive$1(cameraView, isAlive, state[/* basicCameraViewRecord */14]);
 	        }), getIsDebug(stateData));
-	  var match = getRecord$1(state);
-	  var localToWorldMatrices = match[/* localToWorldMatrices */2];
-	  var localToWorldMatrixCacheMap = match[/* localToWorldMatrixCacheMap */19];
-	  return getWorldToCameraMatrix(getLocalToWorldMatrixTypeArray$1(unsafeGetTransformComponent(unsafeGetGameObject(cameraView, state[/* basicCameraViewRecord */13]), state[/* gameObjectRecord */10]), localToWorldMatrices, localToWorldMatrixCacheMap));
+	  return getBasicCameraViewWorldToCameraMatrix$1(cameraView, state);
 	}
 
 
 	/* Contract-WonderLog Not a pure module */
 
 	function create$70(state) {
-	  var basicSourceTextureRecord = getRecord$8(state);
+	  var basicSourceTextureRecord = getRecord$9(state);
 	  var match = generateIndex(basicSourceTextureRecord[/* index */0], basicSourceTextureRecord[/* disposedIndexArray */12]);
 	  var index = generateBasicSourceTextureIndex$1(match[0]);
-	  state[/* basicSourceTextureRecord */18] = /* record */[
+	  state[/* basicSourceTextureRecord */19] = /* record */[
 	    /* index */match[1],
 	    /* wrapSs */basicSourceTextureRecord[/* wrapSs */1],
 	    /* wrapTs */basicSourceTextureRecord[/* wrapTs */2],
@@ -37451,7 +38724,7 @@
 	    /* needInitedTextureIndexArray */basicSourceTextureRecord[/* needInitedTextureIndexArray */14],
 	    /* nameMap */basicSourceTextureRecord[/* nameMap */15]
 	  ];
-	  return checkNotExceedMaxCount(getBasicSourceTextureCount(state[/* settingRecord */0]), /* tuple */[
+	  return checkNotExceedMaxCount(getBasicSourceTextureCount(state[/* settingRecord */1]), /* tuple */[
 	              state,
 	              index
 	            ]);
@@ -37500,12 +38773,12 @@
 
 	var setBasicSourceTextureFlipY$1 = setFlipY$4;
 
-	var getBasicSourceTextureName$1 = getName$3;
+	var getBasicSourceTextureName$1 = getName$4;
 
-	var unsafeGetBasicSourceTextureName$1 = unsafeGetName$3;
+	var unsafeGetBasicSourceTextureName$1 = unsafeGetName$4;
 
 	function setBasicSourceTextureName$1(texture, name, state) {
-	  return setName$3(texture, name, state);
+	  return setName$4(texture, name, state);
 	}
 
 
@@ -37544,7 +38817,7 @@
 	/* TypeArrayService-Wonderjs Not a pure module */
 
 	function _hasMap(gameObject, state) {
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getLightMaterialComponent(gameObject, gameObjectRecord);
 	  if (match !== undefined) {
 	    var lightMaterial = match;
@@ -37641,7 +38914,7 @@
 	  var boxGeometryDataMap = param$1[0];
 	  var meshIndex = param[1];
 	  var gameObject = param[0];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getGeometryComponentData(gameObject, gameObjectRecord);
 	  if (match !== undefined) {
 	    var match$1 = match;
@@ -37679,9 +38952,49 @@
 	  }
 	}
 
+	function _getBasicMaterialData(param, basicMaterialDataMap, state) {
+	  var materialIndex = param[1];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = getBasicMaterialComponent(param[0], gameObjectRecord);
+	  if (match !== undefined) {
+	    var basicMaterial = match;
+	    var match$1 = get$3(basicMaterial, basicMaterialDataMap);
+	    if (match$1 !== undefined) {
+	      var match$2 = match$1;
+	      return /* tuple */[
+	              match$2[0],
+	              match$2[1],
+	              materialIndex,
+	              basicMaterialDataMap
+	            ];
+	    } else {
+	      var materialData = /* tuple */[
+	        basicMaterial,
+	        getName$2(basicMaterial, state)
+	      ];
+	      return /* tuple */[
+	              materialIndex,
+	              materialData,
+	              materialIndex + 1 | 0,
+	              set$1(basicMaterial, /* tuple */[
+	                    materialIndex,
+	                    materialData
+	                  ], basicMaterialDataMap)
+	            ];
+	    }
+	  } else {
+	    return /* tuple */[
+	            undefined,
+	            undefined,
+	            materialIndex,
+	            basicMaterialDataMap
+	          ];
+	  }
+	}
+
 	function _getLightMaterialData(param, lightMaterialDataMap, state) {
 	  var materialIndex = param[1];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getLightMaterialComponent(param[0], gameObjectRecord);
 	  if (match !== undefined) {
 	    var lightMaterial = match;
@@ -37697,7 +39010,7 @@
 	    } else {
 	      var materialData = /* tuple */[
 	        lightMaterial,
-	        getName$2(lightMaterial, state)
+	        getName$3(lightMaterial, state)
 	      ];
 	      return /* tuple */[
 	              materialIndex,
@@ -37719,9 +39032,29 @@
 	  }
 	}
 
+	function _getMeshRendererData(param, state) {
+	  var meshRendererIndex = param[1];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
+	  var match = getMeshRendererComponent(param[0], gameObjectRecord);
+	  if (match !== undefined) {
+	    var meshRendererData = match;
+	    return /* tuple */[
+	            meshRendererIndex,
+	            meshRendererData,
+	            meshRendererIndex + 1 | 0
+	          ];
+	  } else {
+	    return /* tuple */[
+	            undefined,
+	            undefined,
+	            meshRendererIndex
+	          ];
+	  }
+	}
+
 	function _getCameraData(param, state) {
 	  var cameraIndex = param[1];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getPerspectiveCameraProjectionComponent(param[0], gameObjectRecord);
 	  if (match !== undefined) {
 	    var cameraData = match;
@@ -37741,7 +39074,7 @@
 
 	function _getArcballCameraControllerData(param, state) {
 	  var arcballCameraControllerIndex = param[1];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getArcballCameraControllerComponent(param[0], gameObjectRecord);
 	  if (match !== undefined) {
 	    return /* tuple */[
@@ -37761,7 +39094,7 @@
 	function _getLightData(param, state) {
 	  var lightIndex = param[1];
 	  var gameObject = param[0];
-	  var gameObjectRecord = state[/* gameObjectRecord */10];
+	  var gameObjectRecord = state[/* gameObjectRecord */11];
 	  var match = getDirectionLightComponent(gameObject, gameObjectRecord);
 	  if (match !== undefined) {
 	    var lightData = /* tuple */[
@@ -37797,10 +39130,12 @@
 
 	function getComponentData$1(param) {
 	  var match = param[4];
-	  var lightDataMap = match[4];
-	  var arcballCameraControllerDataMap = match[3];
-	  var cameraDataMap = match[2];
-	  var materialDataMap = match[1];
+	  var lightDataMap = match[6];
+	  var arcballCameraControllerDataMap = match[5];
+	  var cameraDataMap = match[4];
+	  var resultLightMaterialDataMap = match[3];
+	  var resultBasicMaterialDataMap = match[2];
+	  var meshRendererDataMap = match[1];
 	  var meshPointDataMap = match[0];
 	  var match$1 = param[3];
 	  var match$2 = match$1[0];
@@ -37817,35 +39152,49 @@
 	  var match$5 = match$4[3];
 	  var meshIndex = match$4[0];
 	  var meshPointDataMap$1 = meshIndex !== undefined ? set$1(meshIndex, unsafeGet$1(match$4[1]), meshPointDataMap) : meshPointDataMap;
-	  var match$6 = _getLightMaterialData(/* tuple */[
+	  var match$6 = _getMeshRendererData(/* tuple */[
 	        gameObject,
 	        match$3[1]
-	      ], match$1[1], state);
-	  var materialIndex = match$6[0];
-	  var materialDataMap$1 = materialIndex !== undefined ? set$1(materialIndex, unsafeGet$1(match$6[1]), materialDataMap) : materialDataMap;
-	  var match$7 = _getCameraData(/* tuple */[
+	      ], state);
+	  var meshRendererIndex = match$6[0];
+	  var meshRendererDataMap$1 = meshRendererIndex !== undefined ? set$1(meshRendererIndex, unsafeGet$1(match$6[1]), meshRendererDataMap) : meshRendererDataMap;
+	  var match$7 = _getBasicMaterialData(/* tuple */[
 	        gameObject,
 	        match$3[2]
-	      ], state);
-	  var cameraIndex = match$7[0];
-	  var cameraDataMap$1 = cameraIndex !== undefined ? set$1(cameraIndex, unsafeGet$1(match$7[1]), cameraDataMap) : cameraDataMap;
-	  var match$8 = _getArcballCameraControllerData(/* tuple */[
+	      ], match$1[1], state);
+	  var basicMaterialIndex = match$7[0];
+	  var resultBasicMaterialDataMap$1 = basicMaterialIndex !== undefined ? set$1(basicMaterialIndex, unsafeGet$1(match$7[1]), resultBasicMaterialDataMap) : resultBasicMaterialDataMap;
+	  var match$8 = _getLightMaterialData(/* tuple */[
 	        gameObject,
 	        match$3[3]
-	      ], state);
-	  var arcballCameraControllerIndex = match$8[0];
-	  var arcballCameraControllerDataMap$1 = arcballCameraControllerIndex !== undefined ? set$1(arcballCameraControllerIndex, unsafeGet$1(match$8[1]), arcballCameraControllerDataMap) : arcballCameraControllerDataMap;
-	  var match$9 = _getLightData(/* tuple */[
+	      ], match$1[2], state);
+	  var lightMaterialIndex = match$8[0];
+	  var resultLightMaterialDataMap$1 = lightMaterialIndex !== undefined ? set$1(lightMaterialIndex, unsafeGet$1(match$8[1]), resultLightMaterialDataMap) : resultLightMaterialDataMap;
+	  var match$9 = _getCameraData(/* tuple */[
 	        gameObject,
 	        match$3[4]
 	      ], state);
-	  var lightIndex = match$9[0];
-	  var lightDataMap$1 = lightIndex !== undefined ? set$1(lightIndex, unsafeGet$1(match$9[1]), lightDataMap) : lightDataMap;
+	  var cameraIndex = match$9[0];
+	  var cameraDataMap$1 = cameraIndex !== undefined ? set$1(cameraIndex, unsafeGet$1(match$9[1]), cameraDataMap) : cameraDataMap;
+	  var match$10 = _getArcballCameraControllerData(/* tuple */[
+	        gameObject,
+	        match$3[5]
+	      ], state);
+	  var arcballCameraControllerIndex = match$10[0];
+	  var arcballCameraControllerDataMap$1 = arcballCameraControllerIndex !== undefined ? set$1(arcballCameraControllerIndex, unsafeGet$1(match$10[1]), arcballCameraControllerDataMap) : arcballCameraControllerDataMap;
+	  var match$11 = _getLightData(/* tuple */[
+	        gameObject,
+	        match$3[6]
+	      ], state);
+	  var lightIndex = match$11[0];
+	  var lightDataMap$1 = lightIndex !== undefined ? set$1(lightIndex, unsafeGet$1(match$11[1]), lightDataMap) : lightDataMap;
 	  return /* tuple */[
 	          state,
 	          /* tuple */[
 	            meshIndex,
-	            materialIndex,
+	            meshRendererIndex,
+	            basicMaterialIndex,
+	            lightMaterialIndex,
 	            cameraIndex,
 	            arcballCameraControllerIndex,
 	            lightIndex
@@ -37855,18 +39204,23 @@
 	            match$6[2],
 	            match$7[2],
 	            match$8[2],
-	            match$9[2]
+	            match$9[2],
+	            match$10[2],
+	            match$11[2]
 	          ],
 	          /* tuple */[
 	            /* tuple */[
 	              match$5[0],
 	              match$5[1]
 	            ],
-	            match$6[3]
+	            match$7[3],
+	            match$8[3]
 	          ],
 	          /* tuple */[
 	            meshPointDataMap$1,
-	            materialDataMap$1,
+	            meshRendererDataMap$1,
+	            resultBasicMaterialDataMap$1,
+	            resultLightMaterialDataMap$1,
 	            cameraDataMap$1,
 	            arcballCameraControllerDataMap$1,
 	            lightDataMap$1
@@ -37897,9 +39251,11 @@
 	}
 
 	function _addNodeData(gameObject, param, param$1, nodeDataArr) {
-	  var lightIndex = param$1[4];
-	  var materialIndex = param$1[3];
-	  var arcballCameraControllerIndex = param$1[2];
+	  var lightIndex = param$1[6];
+	  var lightMaterialIndex = param$1[5];
+	  var basicMaterialIndex = param$1[4];
+	  var arcballCameraControllerIndex = param$1[3];
+	  var meshRendererIndex = param$1[1];
 	  var defaultLocalScale = param[6];
 	  var defaultLocalRotation = param[5];
 	  var defaultLocalPosition = param[4];
@@ -37907,6 +39263,21 @@
 	  var localPosition = getLocalPositionTuple$1(transform, param[1]);
 	  var localRotation = getLocalRotationTuple$1(transform, param[2]);
 	  var localScale = getLocalScaleTuple$1(transform, param[3]);
+	  var tmp;
+	  var exit = 0;
+	  if (meshRendererIndex !== undefined || basicMaterialIndex !== undefined || lightMaterialIndex !== undefined || arcballCameraControllerIndex !== undefined) {
+	    exit = 1;
+	  } else {
+	    tmp = undefined;
+	  }
+	  if (exit === 1) {
+	    tmp = /* record */[
+	      /* meshRenderer */meshRendererIndex,
+	      /* basicMaterial */basicMaterialIndex,
+	      /* lightMaterial */lightMaterialIndex,
+	      /* cameraController */arcballCameraControllerIndex
+	    ];
+	  }
 	  return push(/* record */[
 	              /* gameObject */gameObject,
 	              /* children */undefined,
@@ -37914,11 +39285,8 @@
 	              /* rotation */localRotation[0] === caml_array_get(defaultLocalRotation, 0) && localRotation[1] === caml_array_get(defaultLocalRotation, 1) && localRotation[2] === caml_array_get(defaultLocalRotation, 2) && localRotation[3] === caml_array_get(defaultLocalRotation, 3) ? undefined : localRotation,
 	              /* scale */localScale[0] === caml_array_get(defaultLocalScale, 0) && localScale[1] === caml_array_get(defaultLocalScale, 1) && localScale[2] === caml_array_get(defaultLocalScale, 2) ? undefined : localScale,
 	              /* mesh */param$1[0],
-	              /* camera */param$1[1],
-	              /* extras */materialIndex !== undefined || arcballCameraControllerIndex !== undefined ? /* record */[
-	                  /* material */materialIndex,
-	                  /* cameraController */arcballCameraControllerIndex
-	                ] : undefined,
+	              /* camera */param$1[2],
+	              /* extras */tmp,
 	              /* extensions */lightIndex !== undefined ? /* record */[/* khr_lights *//* record */[/* light */lightIndex]] : undefined
 	            ], nodeDataArr);
 	}
@@ -37929,7 +39297,7 @@
 	                var state = param[0];
 	                var match = param[3];
 	                var match$1 = param[2];
-	                var gameObjectChildrenMap = match$1[2];
+	                var gameObjectChildrenMap = match$1[3];
 	                var match$2 = match$1[0];
 	                var match$3 = param[1];
 	                var nodeIndex = match$3[0];
@@ -37944,7 +39312,7 @@
 	                      }));
 	                var match$4 = childrenGameObjectArr.length;
 	                var gameObjectChildrenMap$1 = match$4 !== 0 ? set$1(gameObject, childrenGameObjectArr, gameObjectChildrenMap) : gameObjectChildrenMap;
-	                var gameObjectNodeIndexMap = set$1(gameObject, nodeIndex, match$1[3]);
+	                var gameObjectNodeIndexMap = set$1(gameObject, nodeIndex, match$1[4]);
 	                var match$5 = getComponentData$1(/* tuple */[
 	                      gameObject,
 	                      state,
@@ -37953,21 +39321,26 @@
 	                        match$3[2],
 	                        match$3[3],
 	                        match$3[4],
-	                        match$3[5]
+	                        match$3[5],
+	                        match$3[6],
+	                        match$3[7]
 	                      ],
 	                      /* tuple */[
 	                        /* tuple */[
 	                          match$2[0],
 	                          match$2[1]
 	                        ],
-	                        match$1[1]
+	                        match$1[1],
+	                        match$1[2]
 	                      ],
 	                      /* tuple */[
 	                        match[0],
 	                        match[1],
 	                        match[2],
 	                        match[3],
-	                        match[4]
+	                        match[4],
+	                        match[5],
+	                        match[6]
 	                      ]
 	                    ]);
 	                var match$6 = match$5[4];
@@ -37981,13 +39354,16 @@
 	                            match$9[1],
 	                            match$9[2],
 	                            match$9[3],
-	                            match$9[4]
+	                            match$9[4],
+	                            match$9[5],
+	                            match$9[6]
 	                          ], /* tuple */[
 	                            /* tuple */[
 	                              match$8[0],
 	                              match$8[1]
 	                            ],
 	                            match$7[1],
+	                            match$7[2],
 	                            gameObjectChildrenMap$1,
 	                            gameObjectNodeIndexMap
 	                          ], /* tuple */[
@@ -37995,7 +39371,9 @@
 	                            match$6[1],
 	                            match$6[2],
 	                            match$6[3],
-	                            match$6[4]
+	                            match$6[4],
+	                            match$6[5],
+	                            match$6[6]
 	                          ], /* tuple */[
 	                            childrenTransformArr,
 	                            _addNodeData(gameObject, /* tuple */[
@@ -38008,10 +39386,12 @@
 	                                  transformRecord[/* defaultLocalScale */14]
 	                                ], /* tuple */[
 	                                  match$10[0],
+	                                  match$10[1],
+	                                  match$10[4],
+	                                  match$10[5],
 	                                  match$10[2],
 	                                  match$10[3],
-	                                  match$10[1],
-	                                  match$10[4]
+	                                  match$10[6]
 	                                ], param[4])
 	                          ]);
 	              }), /* tuple */[
@@ -38022,7 +39402,9 @@
 	                param[2],
 	                param[3],
 	                param[4],
-	                param[5]
+	                param[5],
+	                param[6],
+	                param[7]
 	              ],
 	              /* tuple */[
 	                /* tuple */[
@@ -38031,14 +39413,17 @@
 	                ],
 	                param$1[1],
 	                param$1[2],
-	                param$1[3]
+	                param$1[3],
+	                param$1[4]
 	              ],
 	              /* tuple */[
 	                param$2[0],
 	                param$2[1],
 	                param$2[2],
 	                param$2[3],
-	                param$2[4]
+	                param$2[4],
+	                param$2[5],
+	                param$2[6]
 	              ],
 	              param$3[1]
 	            ], param$3[0]);
@@ -38046,6 +39431,8 @@
 
 	function getAllNodeData(rootGameObject, state) {
 	  var match = _getNodeData(state, /* tuple */[
+	        0,
+	        0,
 	        0,
 	        0,
 	        0,
@@ -38059,8 +39446,11 @@
 	        ],
 	        createEmpty$2(/* () */0),
 	        createEmpty$2(/* () */0),
+	        createEmpty$2(/* () */0),
 	        createEmpty$2(/* () */0)
 	      ], /* tuple */[
+	        createEmpty$2(/* () */0),
+	        createEmpty$2(/* () */0),
 	        createEmpty$2(/* () */0),
 	        createEmpty$2(/* () */0),
 	        createEmpty$2(/* () */0),
@@ -38072,7 +39462,7 @@
 	      ]);
 	  var match$1 = match[3];
 	  var match$2 = match[2];
-	  var nodeDataArr = _setChildren$1(match$2[2], match$2[3], match[4]);
+	  var nodeDataArr = _setChildren$1(match$2[3], match$2[4], match[4]);
 	  return /* tuple */[
 	          match[0],
 	          /* tuple */[
@@ -38080,7 +39470,9 @@
 	            match$1[1],
 	            match$1[2],
 	            match$1[3],
-	            match$1[4]
+	            match$1[4],
+	            match$1[5],
+	            match$1[6]
 	          ],
 	          nodeDataArr
 	        ];
@@ -38110,8 +39502,8 @@
 	}
 
 	function build$3(lightDataMap, state) {
-	  var directionLightRecord = state[/* directionLightRecord */20];
-	  var pointLightRecord = state[/* pointLightRecord */21];
+	  var directionLightRecord = state[/* directionLightRecord */21];
+	  var pointLightRecord = state[/* pointLightRecord */22];
 	  requireCheck((function () {
 	          return checkShouldHasNoSlot(lightDataMap);
 	        }), getIsDebug(stateData));
@@ -38222,25 +39614,46 @@
 	  }
 	}
 
-	function _encodeNodeMaterial(extras, list) {
+	function _encodeNodeMaterial(basicMaterial, lightMaterial, extraList) {
+	  var extraList$1 = basicMaterial !== undefined ? /* :: */[
+	      /* tuple */[
+	        "basicMaterial",
+	        basicMaterial
+	      ],
+	      extraList
+	    ] : extraList;
+	  if (lightMaterial !== undefined) {
+	    return /* :: */[
+	            /* tuple */[
+	              "lightMaterial",
+	              lightMaterial
+	            ],
+	            extraList$1
+	          ];
+	  } else {
+	    return extraList$1;
+	  }
+	}
+
+	function _encodeNodeCameraController(cameraController, extraList) {
+	  if (cameraController !== undefined) {
+	    return /* :: */[
+	            /* tuple */[
+	              "cameraController",
+	              cameraController
+	            ],
+	            extraList
+	          ];
+	  } else {
+	    return extraList;
+	  }
+	}
+
+	function _encodeNodeExtras(extras, list) {
 	  if (extras !== undefined) {
 	    var match = extras;
-	    var cameraController = match[/* cameraController */1];
-	    var material = match[/* material */0];
-	    var extraList = material !== undefined ? /* :: */[
-	        /* tuple */[
-	          "material",
-	          material
-	        ],
-	        /* [] */0
-	      ] : /* [] */0;
-	    var extraList$1 = cameraController !== undefined ? /* :: */[
-	        /* tuple */[
-	          "cameraController",
-	          cameraController
-	        ],
-	        extraList
-	      ] : extraList;
+	    var extraList = _encodeNodeMaterial(match[/* basicMaterial */1], match[/* lightMaterial */2], /* [] */0);
+	    var extraList$1 = _encodeNodeCameraController(match[/* cameraController */3], extraList);
 	    return /* :: */[
 	            /* tuple */[
 	              "extras",
@@ -38270,7 +39683,7 @@
 	      ],
 	      list$1$$1
 	    ] : list$1$$1;
-	  var list$3 = _encodeNodeMaterial(param[/* extras */7], list$2);
+	  var list$3 = _encodeNodeExtras(param[/* extras */7], list$2);
 	  return _encodeNodeExtensions(param[/* extensions */8], list$3);
 	}
 
@@ -38359,79 +39772,121 @@
 	        ];
 	}
 
-	function _encodeExtras(arcballCameraControllerDataArr) {
-	  var match = arcballCameraControllerDataArr.length;
-	  return /* tuple */[
-	          "extras",
-	          object_(match !== 0 ? /* :: */[
-	                  /* tuple */[
-	                    "arcballCameraControllers",
-	                    arcballCameraControllerDataArr.map((function (data) {
-	                            return object_(/* :: */[
+	function _encodeExtras(meshRendererDataArr, basicMaterialDataArr, arcballCameraControllerDataArr) {
+	  var match = meshRendererDataArr.length;
+	  var extrasList = match !== 0 ? /* :: */[
+	      /* tuple */[
+	        "meshRenderers",
+	        meshRendererDataArr.map((function (data) {
+	                return object_(/* :: */[
+	                            /* tuple */[
+	                              "drawMode",
+	                              data[/* drawMode */0]
+	                            ],
+	                            /* [] */0
+	                          ]);
+	              }))
+	      ],
+	      /* [] */0
+	    ] : /* [] */0;
+	  var match$1 = basicMaterialDataArr.length;
+	  var extrasList$1 = match$1 !== 0 ? /* :: */[
+	      /* tuple */[
+	        "basicMaterials",
+	        basicMaterialDataArr.map((function (data) {
+	                var name = data[/* name */1];
+	                var colorFactor = data[/* colorFactor */0];
+	                var list = colorFactor !== undefined ? /* :: */[
+	                    /* tuple */[
+	                      "colorFactor",
+	                      colorFactor
+	                    ],
+	                    /* [] */0
+	                  ] : /* [] */0;
+	                return object_(name !== undefined ? /* :: */[
+	                              /* tuple */[
+	                                "name",
+	                                name
+	                              ],
+	                              list
+	                            ] : list);
+	              }))
+	      ],
+	      extrasList
+	    ] : extrasList;
+	  var match$2 = arcballCameraControllerDataArr.length;
+	  var extrasList$2 = match$2 !== 0 ? /* :: */[
+	      /* tuple */[
+	        "arcballCameraControllers",
+	        arcballCameraControllerDataArr.map((function (data) {
+	                return object_(/* :: */[
+	                            /* tuple */[
+	                              "distance",
+	                              data[/* distance */0]
+	                            ],
+	                            /* :: */[
+	                              /* tuple */[
+	                                "minDistance",
+	                                data[/* minDistance */1]
+	                              ],
+	                              /* :: */[
+	                                /* tuple */[
+	                                  "phi",
+	                                  data[/* phi */2]
+	                                ],
+	                                /* :: */[
+	                                  /* tuple */[
+	                                    "theta",
+	                                    data[/* theta */3]
+	                                  ],
+	                                  /* :: */[
+	                                    /* tuple */[
+	                                      "thetaMargin",
+	                                      data[/* thetaMargin */4]
+	                                    ],
+	                                    /* :: */[
+	                                      /* tuple */[
+	                                        "target",
+	                                        data[/* target */5]
+	                                      ],
+	                                      /* :: */[
 	                                        /* tuple */[
-	                                          "distance",
-	                                          data[/* distance */0]
+	                                          "moveSpeedX",
+	                                          data[/* moveSpeedX */6]
 	                                        ],
 	                                        /* :: */[
 	                                          /* tuple */[
-	                                            "minDistance",
-	                                            data[/* minDistance */1]
+	                                            "moveSpeedY",
+	                                            data[/* moveSpeedY */7]
 	                                          ],
 	                                          /* :: */[
 	                                            /* tuple */[
-	                                              "phi",
-	                                              data[/* phi */2]
+	                                              "rotateSpeed",
+	                                              data[/* rotateSpeed */8]
 	                                            ],
 	                                            /* :: */[
 	                                              /* tuple */[
-	                                                "theta",
-	                                                data[/* theta */3]
+	                                                "wheelSpeed",
+	                                                data[/* wheelSpeed */9]
 	                                              ],
-	                                              /* :: */[
-	                                                /* tuple */[
-	                                                  "thetaMargin",
-	                                                  data[/* thetaMargin */4]
-	                                                ],
-	                                                /* :: */[
-	                                                  /* tuple */[
-	                                                    "target",
-	                                                    data[/* target */5]
-	                                                  ],
-	                                                  /* :: */[
-	                                                    /* tuple */[
-	                                                      "moveSpeedX",
-	                                                      data[/* moveSpeedX */6]
-	                                                    ],
-	                                                    /* :: */[
-	                                                      /* tuple */[
-	                                                        "moveSpeedY",
-	                                                        data[/* moveSpeedY */7]
-	                                                      ],
-	                                                      /* :: */[
-	                                                        /* tuple */[
-	                                                          "rotateSpeed",
-	                                                          data[/* rotateSpeed */8]
-	                                                        ],
-	                                                        /* :: */[
-	                                                          /* tuple */[
-	                                                            "wheelSpeed",
-	                                                            data[/* wheelSpeed */9]
-	                                                          ],
-	                                                          /* [] */0
-	                                                        ]
-	                                                      ]
-	                                                    ]
-	                                                  ]
-	                                                ]
-	                                              ]
+	                                              /* [] */0
 	                                            ]
 	                                          ]
 	                                        ]
-	                                      ]);
-	                          }))
-	                  ],
-	                  /* [] */0
-	                ] : /* [] */0)
+	                                      ]
+	                                    ]
+	                                  ]
+	                                ]
+	                              ]
+	                            ]
+	                          ]);
+	              }))
+	      ],
+	      extrasList$1
+	    ] : extrasList$1;
+	  return /* tuple */[
+	          "extras",
+	          object_(extrasList$2)
 	        ];
 	}
 
@@ -38506,7 +39961,7 @@
 	        ];
 	}
 
-	function _encodeMaterials(materialDataArr) {
+	function _encodeLightMaterials(materialDataArr) {
 	  return /* tuple */[
 	          "materials",
 	          materialDataArr.map((function (param) {
@@ -38893,8 +40348,8 @@
 	}
 
 	function encode(totalByteLength, param, state) {
-	  var extensionsUsedArr = param[12];
-	  var lightDataArr = param[10];
+	  var extensionsUsedArr = param[14];
+	  var lightDataArr = param[12];
 	  var list_000 = _encodeAsset(/* () */0);
 	  var list_001 = /* :: */[
 	    /* tuple */[
@@ -38902,21 +40357,21 @@
 	      0
 	    ],
 	    /* :: */[
-	      _encodeScenes(extensionsUsedArr, lightDataArr, param[11], state),
+	      _encodeScenes(extensionsUsedArr, lightDataArr, param[13], state),
 	      /* :: */[
-	        _encodeCameras(param[8]),
+	        _encodeCameras(param[10]),
 	        /* :: */[
-	          _encodeExtras(param[9]),
+	          _encodeExtras(param[4], param[5], param[11]),
 	          /* :: */[
 	            _encodeNodes(param[0], state),
 	            /* :: */[
-	              _encodeMaterials(param[4]),
+	              _encodeLightMaterials(param[6]),
 	              /* :: */[
-	                _encodeTextures(param[5]),
+	                _encodeTextures(param[7]),
 	                /* :: */[
-	                  _encodeSamplers(param[6]),
+	                  _encodeSamplers(param[8]),
 	                  /* :: */[
-	                    _encodeImages(param[7]),
+	                    _encodeImages(param[9]),
 	                    /* :: */[
 	                      _encodeBuffers(totalByteLength),
 	                      /* :: */[
@@ -38977,7 +40432,7 @@
 	}
 
 	function build$5(cameraDataMap, state) {
-	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */14];
+	  var perspectiveCameraProjectionRecord = state[/* perspectiveCameraProjectionRecord */15];
 	  requireCheck((function () {
 	          return checkShouldHasNoSlot(cameraDataMap);
 	        }), getIsDebug(stateData));
@@ -39277,6 +40732,22 @@
 
 	/* Log-WonderLog Not a pure module */
 
+	function build$8(param, materialDataArr, state) {
+	  var color = getColor$7(param[0], state);
+	  return push(/* record */[
+	              /* colorFactor *//* array */[
+	                caml_array_get(color, 0),
+	                caml_array_get(color, 1),
+	                caml_array_get(color, 2),
+	                1.0
+	              ],
+	              /* name */param[1]
+	            ], materialDataArr);
+	}
+
+
+	/* ArrayService-Wonderjs Not a pure module */
+
 	function isBasicSourceTexture(texture, state) {
 	  return texture < getArrayBufferViewSourceTextureIndexOffset$1(state);
 	}
@@ -39428,13 +40899,13 @@
 
 	function _addTextureData(texture, param, state, textureDataArr) {
 	  return push(/* record */[
-	              /* name */getName$3(texture, state),
+	              /* name */getName$4(texture, state),
 	              /* sampler */param[0],
 	              /* source */param[1]
 	            ], textureDataArr);
 	}
 
-	function build$8(param, param$1, param$2, state) {
+	function build$9(param, param$1, param$2, state) {
 	  var bufferViewDataArr = param$2[2];
 	  var byteOffset = param$2[1];
 	  var totalByteLength = param$2[0];
@@ -39523,7 +40994,7 @@
 
 	/* Log-WonderLog Not a pure module */
 
-	function build$9(param, param$1, param$2, state) {
+	function build$10(param, param$1, param$2, state) {
 	  var match = param$1[1];
 	  var match$1 = param$1[0];
 	  var diffuseColor = getDiffuseColor$2(param[0], state);
@@ -39559,92 +41030,108 @@
 
 	/* ArrayService-Wonderjs Not a pure module */
 
-	function build$7(materialDataMap, imageBase64Map, param, state) {
+	function _buildLightMaterialData(lightMaterialDataMap, imageBase64Map, param, state) {
+	  return reduceValid((function (param, param$1) {
+	                var name = param$1[1];
+	                var lightMaterial = param$1[0];
+	                var match = param[2];
+	                var bufferViewDataArr = match[2];
+	                var byteOffset = match[1];
+	                var totalByteLength = match[0];
+	                var match$1 = param[1];
+	                var imageMap = match$1[2];
+	                var samplerIndexMap = match$1[1];
+	                var textureIndexMap = match$1[0];
+	                var match$2 = param[0];
+	                var imageUint8DataArr = match$2[3];
+	                var samplerDataArr = match$2[2];
+	                var textureDataArr = match$2[1];
+	                var lightMaterialDataArr = match$2[0];
+	                var diffuseMap = getDiffuseMap(lightMaterial, state);
+	                if (diffuseMap !== undefined) {
+	                  return build$9(/* tuple */[
+	                              diffuseMap,
+	                              name
+	                            ], /* tuple */[
+	                              /* tuple */[
+	                                lightMaterialDataArr,
+	                                textureDataArr,
+	                                samplerDataArr,
+	                                imageUint8DataArr
+	                              ],
+	                              /* tuple */[
+	                                textureIndexMap,
+	                                samplerIndexMap,
+	                                imageMap,
+	                                imageBase64Map
+	                              ]
+	                            ], /* tuple */[
+	                              totalByteLength,
+	                              byteOffset,
+	                              bufferViewDataArr
+	                            ], state);
+	                } else {
+	                  return build$10(/* tuple */[
+	                              lightMaterial,
+	                              name
+	                            ], /* tuple */[
+	                              /* tuple */[
+	                                lightMaterialDataArr,
+	                                textureDataArr,
+	                                samplerDataArr,
+	                                imageUint8DataArr
+	                              ],
+	                              /* tuple */[
+	                                textureIndexMap,
+	                                samplerIndexMap,
+	                                imageMap
+	                              ]
+	                            ], /* tuple */[
+	                              totalByteLength,
+	                              byteOffset,
+	                              bufferViewDataArr
+	                            ], state);
+	                }
+	              }), /* tuple */[
+	              /* tuple */[
+	                /* array */[],
+	                /* array */[],
+	                /* array */[],
+	                /* array */[]
+	              ],
+	              /* tuple */[
+	                /* array */[],
+	                createEmpty(/* () */0),
+	                /* array */[]
+	              ],
+	              /* tuple */[
+	                param[0],
+	                param[1],
+	                param[2]
+	              ]
+	            ], lightMaterialDataMap);
+	}
+
+	function build$7(basicMaterialDataMap, lightMaterialDataMap, imageBase64Map, param, state) {
 	  requireCheck((function () {
-	          return checkShouldHasNoSlot(materialDataMap);
+	          checkShouldHasNoSlot(basicMaterialDataMap);
+	          return checkShouldHasNoSlot(lightMaterialDataMap);
 	        }), getIsDebug(stateData));
-	  var match = reduceValid((function (param, param$1) {
-	          var name = param$1[1];
-	          var lightMaterial = param$1[0];
-	          var match = param[2];
-	          var bufferViewDataArr = match[2];
-	          var byteOffset = match[1];
-	          var totalByteLength = match[0];
-	          var match$1 = param[1];
-	          var imageMap = match$1[2];
-	          var samplerIndexMap = match$1[1];
-	          var textureIndexMap = match$1[0];
-	          var match$2 = param[0];
-	          var imageUint8DataArr = match$2[3];
-	          var samplerDataArr = match$2[2];
-	          var textureDataArr = match$2[1];
-	          var materialDataArr = match$2[0];
-	          var diffuseMap = getDiffuseMap(lightMaterial, state);
-	          if (diffuseMap !== undefined) {
-	            return build$8(/* tuple */[
-	                        diffuseMap,
-	                        name
-	                      ], /* tuple */[
-	                        /* tuple */[
-	                          materialDataArr,
-	                          textureDataArr,
-	                          samplerDataArr,
-	                          imageUint8DataArr
-	                        ],
-	                        /* tuple */[
-	                          textureIndexMap,
-	                          samplerIndexMap,
-	                          imageMap,
-	                          imageBase64Map
-	                        ]
-	                      ], /* tuple */[
-	                        totalByteLength,
-	                        byteOffset,
-	                        bufferViewDataArr
-	                      ], state);
-	          } else {
-	            return build$9(/* tuple */[
-	                        lightMaterial,
-	                        name
-	                      ], /* tuple */[
-	                        /* tuple */[
-	                          materialDataArr,
-	                          textureDataArr,
-	                          samplerDataArr,
-	                          imageUint8DataArr
-	                        ],
-	                        /* tuple */[
-	                          textureIndexMap,
-	                          samplerIndexMap,
-	                          imageMap
-	                        ]
-	                      ], /* tuple */[
-	                        totalByteLength,
-	                        byteOffset,
-	                        bufferViewDataArr
-	                      ], state);
-	          }
-	        }), /* tuple */[
-	        /* tuple */[
-	          /* array */[],
-	          /* array */[],
-	          /* array */[],
-	          /* array */[]
-	        ],
-	        /* tuple */[
-	          /* array */[],
-	          createEmpty(/* () */0),
-	          /* array */[]
-	        ],
-	        /* tuple */[
-	          param[0],
-	          param[1],
-	          param[2]
-	        ]
-	      ], materialDataMap);
+	  var match = _buildLightMaterialData(lightMaterialDataMap, imageBase64Map, /* tuple */[
+	        param[0],
+	        param[1],
+	        param[2]
+	      ], state);
 	  var match$1 = match[2];
 	  var match$2 = match[0];
+	  var basicMaterialDataArr = reduceValid((function (basicMaterialDataArr, param) {
+	          return build$8(/* tuple */[
+	                      param[0],
+	                      param[1]
+	                    ], basicMaterialDataArr, state);
+	        }), /* array */[], basicMaterialDataMap);
 	  return /* tuple */[
+	          basicMaterialDataArr,
 	          match$2[0],
 	          match$2[1],
 	          match$2[2],
@@ -39671,8 +41158,20 @@
 
 	/* No side effect */
 
-	function build$10(arcballCameraControllerDataMap, state) {
-	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */25];
+	function build$11(meshRendererDataMap, state) {
+	  requireCheck((function () {
+	          return checkShouldHasNoSlot(meshRendererDataMap);
+	        }), getIsDebug(stateData));
+	  return reduceValid((function (meshRendererDataArr, meshRenderer) {
+	                return push(/* record */[/* drawMode */getDrawMode$1(meshRenderer, state)], meshRendererDataArr);
+	              }), /* array */[], meshRendererDataMap);
+	}
+
+
+	/* Contract-WonderLog Not a pure module */
+
+	function build$12(arcballCameraControllerDataMap, state) {
+	  var arcballCameraControllerRecord = state[/* arcballCameraControllerRecord */26];
 	  requireCheck((function () {
 	          return checkShouldHasNoSlot(arcballCameraControllerDataMap);
 	        }), getIsDebug(stateData));
@@ -39703,14 +41202,15 @@
 	  var totalByteLength = match$2[0];
 	  var match$3 = match$2[2];
 	  var match$4 = match$2[1];
-	  var match$5 = build$7(match$1[1], imageBase64Map, /* tuple */[
+	  var meshRendererDataArr = build$11(match$1[1], state$1);
+	  var match$5 = build$7(match$1[2], match$1[3], imageBase64Map, /* tuple */[
 	        totalByteLength,
 	        totalByteLength,
 	        match$4[0]
 	      ], state$1);
-	  var match$6 = match$5[4];
+	  var match$6 = match$5[5];
 	  var totalByteLength$1 = match$6[0];
-	  var imageUint8DataArr = match$5[3];
+	  var imageUint8DataArr = match$5[4];
 	  var buffer = build$2(totalByteLength$1, /* tuple */[
 	        totalByteLength,
 	        /* tuple */[
@@ -39718,9 +41218,9 @@
 	          match$3[1]
 	        ]
 	      ], imageUint8DataArr);
-	  var cameraDataArr = build$5(match$1[2], state$1);
-	  var arcballCameraControllerDataArr = build$10(match$1[3], state$1);
-	  var lightDataArr = build$3(match$1[4], state$1);
+	  var cameraDataArr = build$5(match$1[4], state$1);
+	  var arcballCameraControllerDataArr = build$12(match$1[5], state$1);
+	  var lightDataArr = build$3(match$1[6], state$1);
 	  var extensionsUsedArr = buildExtensionsUsed(lightDataArr);
 	  return /* tuple */[
 	          encode(totalByteLength$1, /* tuple */[
@@ -39728,9 +41228,11 @@
 	                match$6[1],
 	                match$4[1],
 	                match$4[2],
+	                meshRendererDataArr,
 	                match$5[0],
 	                match$5[1],
 	                match$5[2],
+	                match$5[3],
 	                imageUint8DataArr,
 	                cameraDataArr,
 	                arcballCameraControllerDataArr,
@@ -39770,126 +41272,150 @@
 	/* GenerateSceneGraphSystem-Wonderjs Not a pure module */
 
 	function createArcballCameraController$1(state) {
-	  var match = create$31(state[/* arcballCameraControllerRecord */25]);
+	  var match = create$32(state[/* arcballCameraControllerRecord */26]);
 	  var newrecord = caml_array_dup(state);
 	  return /* tuple */[
-	          (newrecord[/* arcballCameraControllerRecord */25] = match[0], newrecord),
+	          (newrecord[/* arcballCameraControllerRecord */26] = match[0], newrecord),
 	          match[1]
 	        ];
 	}
 
 	function unsafeGetArcballCameraControllerGameObject$1(cameraController, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(cameraController, isAlive$15, state[/* arcballCameraControllerRecord */25]);
+	          return checkComponentShouldAlive$1(cameraController, isAlive$15, state[/* arcballCameraControllerRecord */26]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$7(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetGameObject$7(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function unsafeGetArcballCameraControllerDistance$1(cameraController, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(cameraController, isAlive$15, state[/* arcballCameraControllerRecord */25]);
+	          return checkComponentShouldAlive$1(cameraController, isAlive$15, state[/* arcballCameraControllerRecord */26]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetDistance(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetDistance(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerDistance$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setDistance(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setDistance(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerMinDistance$1(cameraController, state) {
-	  return unsafeGetMinDistance(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetMinDistance(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerMinDistance$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setMinDistance(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setMinDistance(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerWheelSpeed$1(cameraController, state) {
-	  return unsafeGetWheelSpeed(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetWheelSpeed(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerWheelSpeed$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setWheelSpeed(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setWheelSpeed(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerPhi$1(cameraController, state) {
-	  return unsafeGetPhi(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetPhi(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerPhi$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setPhi(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setPhi(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerTheta$1(cameraController, state) {
-	  return unsafeGetTheta(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetTheta(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerTheta$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setTheta(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setTheta(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerThetaMargin$1(cameraController, state) {
-	  return unsafeGetThetaMargin(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetThetaMargin(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerThetaMargin$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setThetaMargin(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setThetaMargin(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerTarget$1(cameraController, state) {
-	  return unsafeGetTarget(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetTarget(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerTarget$1(cameraController, target, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setTarget(cameraController, target, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setTarget(cameraController, target, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerMoveSpeedX$1(cameraController, state) {
-	  return unsafeGetMoveSpeedX(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetMoveSpeedX(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerMoveSpeedX$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setMoveSpeedX(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setMoveSpeedX(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerMoveSpeedY$1(cameraController, state) {
-	  return unsafeGetMoveSpeedY(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetMoveSpeedY(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerMoveSpeedY$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setMoveSpeedY(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setMoveSpeedY(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
 	function unsafeGetArcballCameraControllerRotateSpeed$1(cameraController, state) {
-	  return unsafeGetRotateSpeed(cameraController, state[/* arcballCameraControllerRecord */25]);
+	  return unsafeGetRotateSpeed(cameraController, state[/* arcballCameraControllerRecord */26]);
 	}
 
 	function setArcballCameraControllerRotateSpeed$1(cameraController, value, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arcballCameraControllerRecord */25] = setRotateSpeed(cameraController, value, state[/* arcballCameraControllerRecord */25]);
+	  newrecord[/* arcballCameraControllerRecord */26] = setRotateSpeed(cameraController, value, state[/* arcballCameraControllerRecord */26]);
 	  return newrecord;
 	}
 
+	var bindArcballCameraControllerEvent$1 = bindEvent;
+
+	var unbindArcballCameraControllerEvent$1 = unbindEvent;
+
 
 	/* Contract-WonderLog Not a pure module */
+
+	// Generated by BUCKLESCRIPT VERSION 4.0.0, PLEASE EDIT WITH CARE
+
+	var label$5 = label$2;
+
+	var image$5 = image$2;
+
+
+	/* FixedLayoutControlIMGUIService-WonderImgui Not a pure module */
+
+	function label$4(rect, str, align, record) {
+	  return label$5(rect, str, align, record);
+	}
+
+	function image$4(rect, uv, id, record) {
+	  return image$5(rect, uv, id, record);
+	}
+
+
+	/* FixedLayoutControlIMGUIAPI-WonderImgui Not a pure module */
 
 	function unsafeGetGameObject$13(cameraProjection, param) {
 	  return unsafeGetGameObject$1(cameraProjection, param[/* gameObjectMap */7]);
@@ -39899,8 +41425,8 @@
 	/* GameObjectMapService-Wonderjs Not a pure module */
 
 	function createPerspectiveCameraProjection$1(state) {
-	  var match = create$32(state[/* perspectiveCameraProjectionRecord */14]);
-	  state[/* perspectiveCameraProjectionRecord */14] = match[0];
+	  var match = create$33(state[/* perspectiveCameraProjectionRecord */15]);
+	  state[/* perspectiveCameraProjectionRecord */15] = match[0];
 	  return /* tuple */[
 	          state,
 	          match[1]
@@ -39909,69 +41435,69 @@
 
 	function unsafeGetPerspectiveCameraProjectionPMatrix$1(cameraProjection, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(cameraProjection, isAlive$16, state[/* perspectiveCameraProjectionRecord */14]);
+	          return checkComponentShouldAlive$1(cameraProjection, isAlive$16, state[/* perspectiveCameraProjectionRecord */15]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetPMatrix(cameraProjection, state[/* perspectiveCameraProjectionRecord */14][/* pMatrixMap */2]);
+	  return unsafeGetPMatrix(cameraProjection, state[/* perspectiveCameraProjectionRecord */15][/* pMatrixMap */2]);
 	}
 
 	function unsafeGetPerspectiveCameraProjectionGameObject$1(cameraProjection, state) {
 	  requireCheck((function () {
-	          return checkComponentShouldAlive$1(cameraProjection, isAlive$16, state[/* perspectiveCameraProjectionRecord */14]);
+	          return checkComponentShouldAlive$1(cameraProjection, isAlive$16, state[/* perspectiveCameraProjectionRecord */15]);
 	        }), getIsDebug(stateData));
-	  return unsafeGetGameObject$13(cameraProjection, state[/* perspectiveCameraProjectionRecord */14]);
+	  return unsafeGetGameObject$13(cameraProjection, state[/* perspectiveCameraProjectionRecord */15]);
 	}
 
 	function unsafeGetPerspectiveCameraFovy$1(cameraProjection, state) {
-	  return unsafeGetFovy(cameraProjection, state[/* perspectiveCameraProjectionRecord */14]);
+	  return unsafeGetFovy(cameraProjection, state[/* perspectiveCameraProjectionRecord */15]);
 	}
 
 	function setPerspectiveCameraProjectionFovy$1(cameraProjection, fovy, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = setFovy(cameraProjection, fovy, state[/* perspectiveCameraProjectionRecord */14]);
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = setFovy(cameraProjection, fovy, state[/* perspectiveCameraProjectionRecord */15]);
 	  return newrecord;
 	}
 
 	function unsafeGetPerspectiveCameraAspect$1(cameraProjection, state) {
-	  return unsafeGetAspect(cameraProjection, state[/* perspectiveCameraProjectionRecord */14]);
+	  return unsafeGetAspect(cameraProjection, state[/* perspectiveCameraProjectionRecord */15]);
 	}
 
 	function setPerspectiveCameraProjectionAspect$1(cameraProjection, aspect, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = setAspect(cameraProjection, aspect, state[/* perspectiveCameraProjectionRecord */14]);
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = setAspect(cameraProjection, aspect, state[/* perspectiveCameraProjectionRecord */15]);
 	  return newrecord;
 	}
 
 	function unsafeGetPerspectiveCameraNear$1(cameraProjection, state) {
-	  return unsafeGetNear(cameraProjection, state[/* perspectiveCameraProjectionRecord */14]);
+	  return unsafeGetNear(cameraProjection, state[/* perspectiveCameraProjectionRecord */15]);
 	}
 
 	function setPerspectiveCameraProjectionNear$1(cameraProjection, near, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = setNear(cameraProjection, near, state[/* perspectiveCameraProjectionRecord */14]);
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = setNear(cameraProjection, near, state[/* perspectiveCameraProjectionRecord */15]);
 	  return newrecord;
 	}
 
 	function unsafeGetPerspectiveCameraFar$1(cameraProjection, state) {
-	  return unsafeGetFar(cameraProjection, state[/* perspectiveCameraProjectionRecord */14]);
+	  return unsafeGetFar(cameraProjection, state[/* perspectiveCameraProjectionRecord */15]);
 	}
 
 	function setPerspectiveCameraProjectionFar$1(cameraProjection, far, state) {
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* perspectiveCameraProjectionRecord */14] = setFar(cameraProjection, far, state[/* perspectiveCameraProjectionRecord */14]);
+	  newrecord[/* perspectiveCameraProjectionRecord */15] = setFar(cameraProjection, far, state[/* perspectiveCameraProjectionRecord */15]);
 	  return newrecord;
 	}
 
 
 	/* Contract-WonderLog Not a pure module */
 
-	function unsafeGetName$4(texture, state) {
-	  return unsafeGetName$1(texture, getRecord$10(state)[/* nameMap */17]);
+	function unsafeGetName$5(texture, state) {
+	  return unsafeGetName$1(texture, getRecord$11(state)[/* nameMap */17]);
 	}
 
-	function setName$4(texture, name, state) {
-	  var record = getRecord$10(state);
+	function setName$5(texture, name, state) {
+	  var record = getRecord$11(state);
 	  var newrecord = caml_array_dup(state);
-	  newrecord[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  newrecord[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */record[/* index */0],
 	    /* wrapSs */record[/* wrapSs */1],
 	    /* wrapTs */record[/* wrapTs */2],
@@ -39998,17 +41524,17 @@
 	/* NameService-Wonderjs Not a pure module */
 
 	function getMaxArrayBufferViewSourceTextureIndex(state) {
-	  return getArrayBufferViewSourceTextureIndexOffset$1(state) + getArrayBufferViewSourceTextureCount(state[/* settingRecord */0]) | 0;
+	  return getArrayBufferViewSourceTextureIndexOffset$1(state) + getArrayBufferViewSourceTextureCount(state[/* settingRecord */1]) | 0;
 	}
 
 
 	/* BufferSettingService-Wonderjs Not a pure module */
 
 	function create$71(state) {
-	  var arrayBufferViewSourceTextureRecord = getRecord$10(state);
+	  var arrayBufferViewSourceTextureRecord = getRecord$11(state);
 	  var match = generateIndex(arrayBufferViewSourceTextureRecord[/* index */0], arrayBufferViewSourceTextureRecord[/* disposedIndexArray */14]);
 	  var index = generateArrayBufferViewSourceTextureIndex$1(match[0], state);
-	  state[/* arrayBufferViewSourceTextureRecord */19] = /* record */[
+	  state[/* arrayBufferViewSourceTextureRecord */20] = /* record */[
 	    /* index */match[1],
 	    /* wrapSs */arrayBufferViewSourceTextureRecord[/* wrapSs */1],
 	    /* wrapTs */arrayBufferViewSourceTextureRecord[/* wrapTs */2],
@@ -40038,14 +41564,14 @@
 	/* BufferService-Wonderjs Not a pure module */
 
 	function unsafeGetSource$2(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return unsafeGetSource(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* sourceMap */11]);
 	}
 
 	function setSource$2(texture, source, state) {
 	  var match = isUseWorker(state);
 	  if (match) {
-	    var match$1 = getRecord$10(state);
+	    var match$1 = getRecord$11(state);
 	    setSource(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), source, match$1[/* sourceMap */11]);
 	    push(/* tuple */[
 	          texture,
@@ -40053,107 +41579,107 @@
 	        ], match$1[/* needAddedSourceArray */15]);
 	    return state;
 	  } else {
-	    var match$2 = getRecord$10(state);
+	    var match$2 = getRecord$11(state);
 	    setSource(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), source, match$2[/* sourceMap */11]);
 	    return state;
 	  }
 	}
 
 	function getWrapS$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getWrapS$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* wrapSs */1]);
 	}
 
 	function setWrapS$3(texture, wrapS, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setWrapS$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), wrapS, match[/* wrapSs */1]);
 	  return state;
 	}
 
 	function getWrapT$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getWrapT$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* wrapTs */2]);
 	}
 
 	function setWrapT$3(texture, wrapT, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setWrapT$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), wrapT, match[/* wrapTs */2]);
 	  return state;
 	}
 
 	function getMagFilter$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getMagFilter$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* magFilters */3]);
 	}
 
 	function setMagFilter$3(texture, filter, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setMagFilter$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), filter, match[/* magFilters */3]);
 	  return state;
 	}
 
 	function getMinFilter$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getMinFilter$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* minFilters */4]);
 	}
 
 	function setMinFilter$3(texture, filter, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setMinFilter$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), filter, match[/* minFilters */4]);
 	  return state;
 	}
 
 	function getFormat$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getFormat$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* formats */5]);
 	}
 
 	function setFormat$3(texture, format, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setFormat$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), format, match[/* formats */5]);
 	  return state;
 	}
 
 	function getType$4(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getType$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* types */6]);
 	}
 
 	function setType$3(texture, type_, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setType$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), type_, match[/* types */6]);
 	  return state;
 	}
 
 	function getFlipY$4(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getFlipYFromTypeArrayValue(getFlipY$2(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* flipYs */8]));
 	}
 
 	function setFlipY$5(texture, flipY, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setFlipY$1(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), getFlipYTypeArrayValue(flipY), match[/* flipYs */8]);
 	  return state;
 	}
 
 	function getWidth$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getWidth(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* widths */9]);
 	}
 
 	function setWidth$2(texture, width, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setWidth(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), width, match[/* widths */9]);
 	  return state;
 	}
 
 	function getHeight$3(texture, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  return getHeight(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), match[/* heights */10]);
 	}
 
 	function setHeight$2(texture, height, state) {
-	  var match = getRecord$10(state);
+	  var match = getRecord$11(state);
 	  setHeight(getArrayBufferViewSourceTextureIndexInTypeArray(texture, getArrayBufferViewSourceTextureIndexOffset$1(state)), height, match[/* heights */10]);
 	  return state;
 	}
@@ -40205,10 +41731,10 @@
 
 	var setArrayBufferViewSourceTextureHeight$1 = setHeight$2;
 
-	var unsafeGetArrayBufferViewSourceTextureName$1 = unsafeGetName$4;
+	var unsafeGetArrayBufferViewSourceTextureName$1 = unsafeGetName$5;
 
 	function setArrayBufferViewSourceTextureName$1(texture, name, state) {
-	  return setName$4(texture, name, state);
+	  return setName$5(texture, name, state);
 	}
 
 
@@ -40229,6 +41755,10 @@
 	var loadWDB = loadWDB$1;
 
 	var loadConfig = loadConfig$1;
+
+	var unbindArcballCameraControllerEvent = unbindArcballCameraControllerEvent$1;
+
+	var bindArcballCameraControllerEvent = bindArcballCameraControllerEvent$1;
 
 	var setArcballCameraControllerRotateSpeed = setArcballCameraControllerRotateSpeed$1;
 
@@ -40348,8 +41878,6 @@
 
 	var getBoxGeometryVertices = getBoxGeometryVertices$1;
 
-	var getBoxGeometryDrawMode = getBoxGeometryDrawMode$1;
-
 	var createBoxGeometry = createBoxGeometry$1;
 
 	var unsafeGetCustomGeometryGameObject = unsafeGetCustomGeometryGameObject$1;
@@ -40370,9 +41898,13 @@
 
 	var getCustomGeometryVertices = getCustomGeometryVertices$1;
 
-	var getCustomGeometryDrawMode = getCustomGeometryDrawMode$1;
-
 	var createCustomGeometry = createCustomGeometry$1;
+
+	var image = image$4;
+
+	var label = label$4;
+
+	var sendUniformProjectionMatData = sendUniformProjectionMatData$4;
 
 	var setSetting = setSetting$4;
 
@@ -40391,6 +41923,8 @@
 	var unsafeGetDirectionLightGameObject = unsafeGetDirectionLightGameObject$1;
 
 	var createDirectionLight = createDirectionLight$1;
+
+	var isExceedMaxCount = isExceedMaxCount$1;
 
 	var setPointLightRangeLevel = setPointLightRangeLevel$1;
 
@@ -40422,6 +41956,10 @@
 
 	var createPointLight = createPointLight$1;
 
+	var setBasicMaterialName = setBasicMaterialName$1;
+
+	var unsafeGetBasicMaterialName = unsafeGetBasicMaterialName$1;
+
 	var hasBasicMaterialMap = hasBasicMaterialMap$1;
 
 	var setBasicMaterialMap = setBasicMaterialMap$1;
@@ -40435,6 +41973,8 @@
 	var unsafeGetBasicMaterialGameObject = unsafeGetBasicMaterialGameObject$1;
 
 	var createBasicMaterial = createBasicMaterial$1;
+
+	var reInitMaterials = reInitMaterials$1;
 
 	var setLightMaterialName = setLightMaterialName$1;
 
@@ -40574,11 +42114,15 @@
 
 	var getRenderWorkerCustomData = getRenderWorkerCustomData$2;
 
-	var getBasicCameraViewWorldToCameraMatrix = getBasicCameraViewWorldToCameraMatrix$1;
+	var getBasicCameraViewWorldToCameraMatrix = getBasicCameraViewWorldToCameraMatrix$2;
 
 	var unsafeGetGameObjectBasicCameraView = unsafeGetGameObjectBasicCameraView$1;
 
 	var createBasicCameraView = createBasicCameraView$1;
+
+	var convertWorldToScreen = convertWorldToScreen$1;
+
+	var setViewport = setViewport$1;
 
 	var unsafeGetGl = unsafeGetGl$2;
 
@@ -40726,6 +42270,10 @@
 
 	var addNoWorkerInitJob = addNoWorkerInitJob$1;
 
+	var setMeshRendererDrawMode = setMeshRendererDrawMode$1;
+
+	var getMeshRendererDrawMode = getMeshRendererDrawMode$1;
+
 	var unsafeGetMeshRendererGameObject = unsafeGetMeshRendererGameObject$1;
 
 	var createMeshRenderer = createMeshRenderer$1;
@@ -40766,6 +42314,8 @@
 
 	var getCurrentCameraGameObject = getCurrentCameraGameObject$1;
 
+	var setScreenSize = setScreenSize$1;
+
 	var markSourceInstanceModelMatrixIsStatic = markSourceInstanceModelMatrixIsStatic$1;
 
 	var getSourceInstanceObjectInstanceTransformArray = getSourceInstanceObjectInstanceTransformArray$1;
@@ -40775,6 +42325,10 @@
 	var unsafeGetSourceInstanceGameObject = unsafeGetSourceInstanceGameObject$1;
 
 	var createSourceInstance = createSourceInstance$1;
+
+	var setSetStateFunc = setSetStateFunc$1;
+
+	var setUnsafeGetStateFunc = setUnsafeGetStateFunc$1;
 
 	var setIsDebug = setIsDebug$2;
 
@@ -40794,7 +42348,7 @@
 
 	var restoreState = restoreState$1;
 
-	var deepCopyForRestore = deepCopyForRestore$7;
+	var deepCopyForRestore = deepCopyForRestore$8;
 
 	var getFps = getFps$2;
 
@@ -40803,6 +42357,14 @@
 	var lookAtWithUp = lookAtWithUp$1;
 
 	var lookAt = lookAt$1;
+
+	var setTransformEulerAngles = setTransformEulerAngles$1;
+
+	var getTransformEulerAngles = getTransformEulerAngles$1;
+
+	var setTransformLocalEulerAngles = setTransformLocalEulerAngles$1;
+
+	var getTransformLocalEulerAngles = getTransformLocalEulerAngles$1;
 
 	var setTransformScale = setTransformScale$1;
 
@@ -40857,6 +42419,8 @@
 	exports.loadIMGUIAsset = loadIMGUIAsset;
 	exports.loadWDB = loadWDB;
 	exports.loadConfig = loadConfig;
+	exports.unbindArcballCameraControllerEvent = unbindArcballCameraControllerEvent;
+	exports.bindArcballCameraControllerEvent = bindArcballCameraControllerEvent;
 	exports.setArcballCameraControllerRotateSpeed = setArcballCameraControllerRotateSpeed;
 	exports.unsafeGetArcballCameraControllerRotateSpeed = unsafeGetArcballCameraControllerRotateSpeed;
 	exports.setArcballCameraControllerMoveSpeedY = setArcballCameraControllerMoveSpeedY;
@@ -40916,7 +42480,6 @@
 	exports.getBoxGeometryNormals = getBoxGeometryNormals;
 	exports.getBoxGeometryTexCoords = getBoxGeometryTexCoords;
 	exports.getBoxGeometryVertices = getBoxGeometryVertices;
-	exports.getBoxGeometryDrawMode = getBoxGeometryDrawMode;
 	exports.createBoxGeometry = createBoxGeometry;
 	exports.unsafeGetCustomGeometryGameObject = unsafeGetCustomGeometryGameObject;
 	exports.setCustomGeometryIndices = setCustomGeometryIndices;
@@ -40927,8 +42490,10 @@
 	exports.getCustomGeometryTexCoords = getCustomGeometryTexCoords;
 	exports.setCustomGeometryVertices = setCustomGeometryVertices;
 	exports.getCustomGeometryVertices = getCustomGeometryVertices;
-	exports.getCustomGeometryDrawMode = getCustomGeometryDrawMode;
 	exports.createCustomGeometry = createCustomGeometry;
+	exports.image = image;
+	exports.label = label;
+	exports.sendUniformProjectionMatData = sendUniformProjectionMatData;
 	exports.setSetting = setSetting;
 	exports.getSetting = getSetting;
 	exports.setIMGUIFunc = setIMGUIFunc;
@@ -40938,6 +42503,7 @@
 	exports.getDirectionLightColor = getDirectionLightColor;
 	exports.unsafeGetDirectionLightGameObject = unsafeGetDirectionLightGameObject;
 	exports.createDirectionLight = createDirectionLight;
+	exports.isExceedMaxCount = isExceedMaxCount;
 	exports.setPointLightRangeLevel = setPointLightRangeLevel;
 	exports.setPointLightRange = setPointLightRange;
 	exports.getPointLightRange = getPointLightRange;
@@ -40953,6 +42519,8 @@
 	exports.getPointLightColor = getPointLightColor;
 	exports.unsafeGetPointLightGameObject = unsafeGetPointLightGameObject;
 	exports.createPointLight = createPointLight;
+	exports.setBasicMaterialName = setBasicMaterialName;
+	exports.unsafeGetBasicMaterialName = unsafeGetBasicMaterialName;
 	exports.hasBasicMaterialMap = hasBasicMaterialMap;
 	exports.setBasicMaterialMap = setBasicMaterialMap;
 	exports.unsafeGetBasicMaterialMap = unsafeGetBasicMaterialMap;
@@ -40960,6 +42528,7 @@
 	exports.getBasicMaterialColor = getBasicMaterialColor;
 	exports.unsafeGetBasicMaterialGameObject = unsafeGetBasicMaterialGameObject;
 	exports.createBasicMaterial = createBasicMaterial;
+	exports.reInitMaterials = reInitMaterials;
 	exports.setLightMaterialName = setLightMaterialName;
 	exports.unsafeGetLightMaterialName = unsafeGetLightMaterialName;
 	exports.hasLightMaterialSpecularMap = hasLightMaterialSpecularMap;
@@ -41032,6 +42601,8 @@
 	exports.getBasicCameraViewWorldToCameraMatrix = getBasicCameraViewWorldToCameraMatrix;
 	exports.unsafeGetGameObjectBasicCameraView = unsafeGetGameObjectBasicCameraView;
 	exports.createBasicCameraView = createBasicCameraView;
+	exports.convertWorldToScreen = convertWorldToScreen;
+	exports.setViewport = setViewport;
 	exports.unsafeGetGl = unsafeGetGl;
 	exports.startDirector = startDirector;
 	exports.loopBody = loopBody;
@@ -41105,6 +42676,8 @@
 	exports.removeNoWorkerInitJob = removeNoWorkerInitJob;
 	exports.addNoWorkerLoopJob = addNoWorkerLoopJob;
 	exports.addNoWorkerInitJob = addNoWorkerInitJob;
+	exports.setMeshRendererDrawMode = setMeshRendererDrawMode;
+	exports.getMeshRendererDrawMode = getMeshRendererDrawMode;
 	exports.unsafeGetMeshRendererGameObject = unsafeGetMeshRendererGameObject;
 	exports.createMeshRenderer = createMeshRenderer;
 	exports.setPerspectiveCameraProjectionFar = setPerspectiveCameraProjectionFar;
@@ -41125,11 +42698,14 @@
 	exports.getAmbientLightColor = getAmbientLightColor;
 	exports.setCurrentCameraGameObject = setCurrentCameraGameObject;
 	exports.getCurrentCameraGameObject = getCurrentCameraGameObject;
+	exports.setScreenSize = setScreenSize;
 	exports.markSourceInstanceModelMatrixIsStatic = markSourceInstanceModelMatrixIsStatic;
 	exports.getSourceInstanceObjectInstanceTransformArray = getSourceInstanceObjectInstanceTransformArray;
 	exports.createObjectInstanceGameObject = createObjectInstanceGameObject;
 	exports.unsafeGetSourceInstanceGameObject = unsafeGetSourceInstanceGameObject;
 	exports.createSourceInstance = createSourceInstance;
+	exports.setSetStateFunc = setSetStateFunc;
+	exports.setUnsafeGetStateFunc = setUnsafeGetStateFunc;
 	exports.setIsDebug = setIsDebug;
 	exports.setStateToData = setStateToData;
 	exports.setState = setState;
@@ -41144,6 +42720,10 @@
 	exports.getGameTime = getGameTime;
 	exports.lookAtWithUp = lookAtWithUp;
 	exports.lookAt = lookAt;
+	exports.setTransformEulerAngles = setTransformEulerAngles;
+	exports.getTransformEulerAngles = getTransformEulerAngles;
+	exports.setTransformLocalEulerAngles = setTransformLocalEulerAngles;
+	exports.getTransformLocalEulerAngles = getTransformLocalEulerAngles;
 	exports.setTransformScale = setTransformScale;
 	exports.getTransformScale = getTransformScale;
 	exports.setTransformLocalScale = setTransformLocalScale;

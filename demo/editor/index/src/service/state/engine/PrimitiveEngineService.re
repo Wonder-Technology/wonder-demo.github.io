@@ -1,36 +1,48 @@
-let createBox = state => {
-  let (state, material) = LightMaterialEngineService.create(state);
-  let (state, meshRenderer) = MeshRendererEngineService.create(state);
-  let (state, obj) = GameObjectEngineService.create(state);
-  let (state, geometry) = GeometryEngineService.createBoxGeometry(state);
+let createEmptyGameObject = (editorState, engineState) => {
+  let (editorState, (engineState, obj)) =
+    GameObjectLogicService.createGameObject((editorState, engineState));
 
-  let state =
-    state
-    |> GameObjectEngineService.setGameObjectName("cube", obj)
-    |> GameObjectComponentEngineService.addLightMaterialComponent(
-         obj,
-         material,
-       )
-    |> GameObjectComponentEngineService.addMeshRendererComponent(
-         obj,
-         meshRenderer,
-       )
-    |> GameObjectComponentEngineService.addBoxGeometryComponent(obj, geometry);
+  let engineState =
+    engineState
+    |> GameObjectEngineService.setGameObjectName("gameObject", obj);
 
-  (state, obj);
+  (editorState, engineState, obj);
+};
+let createBox = (editorState, engineState) => {
+  let (editorState, (engineState, obj)) =
+    GameObjectLogicService.createGameObject((editorState, engineState));
+  let (engineState, material) =
+    LightMaterialEngineService.create(engineState);
+  let (engineState, meshRenderer) =
+    MeshRendererEngineService.create(engineState);
+  let (engineState, geometry) =
+    GeometryEngineService.createBoxGeometry(engineState);
+
+  let engineState =
+    engineState |> GameObjectEngineService.setGameObjectName("cube", obj);
+
+  let (editorState, engineState) =
+    (editorState, engineState)
+    |> GameObjectLogicService.addLightMaterialComponent(obj, material)
+    |> GameObjectLogicService.addBoxGeometryComponent(obj, geometry)
+    |> GameObjectLogicService.addMeshRendererComponent(obj, meshRenderer);
+
+  (editorState, engineState, obj);
 };
 
-let createDirectionLight = state => {
-  let (state, obj) = GameObjectEngineService.create(state);
-  let (state, directionLight) = DirectionLightEngineService.create(state);
+let createDirectionLight = (editorState, engineState) => {
+  let (editorState, (engineState, obj)) =
+    GameObjectLogicService.createGameObject((editorState, engineState));
+  let (engineState, directionLight) =
+    DirectionLightEngineService.create(engineState);
 
-  let state =
-    state
-    |> GameObjectEngineService.setGameObjectName("Direction Light", obj)
-    |> GameObjectComponentEngineService.addDirectionLightComponent(
-         obj,
-         directionLight,
-       );
+  let engineState =
+    engineState
+    |> GameObjectEngineService.setGameObjectName("Direction Light", obj);
 
-  (state, obj);
+  let (editorState, engineState) =
+    (editorState, engineState)
+    |> GameObjectLogicService.addDirectionLightComponent(obj, directionLight);
+
+  (editorState, engineState, obj);
 };

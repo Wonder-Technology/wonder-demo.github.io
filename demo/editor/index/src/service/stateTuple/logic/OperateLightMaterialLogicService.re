@@ -20,7 +20,7 @@ let disposeLightMaterial =
          {arguments: [|gameObject|], type_: GameObject},
          {arguments: [|material|], type_: LightMaterial},
        |],
-       GameObjectEngineService.disposeGameObjectLightMaterialComponent,
+       GameObjectComponentEngineService.disposeLightMaterialComponent,
      );
 
 let addLightMaterial =
@@ -51,3 +51,27 @@ let setLightMaterialMapToEngineState = (mapId, newMaterial, engineStateTuple) =>
        |],
        LightMaterialEngineService.setLightMaterialDiffuseMap,
      );
+
+let reInitAllMaterials = () => {
+  let runEngineState = StateLogicService.getRunEngineState();
+
+  LightMaterialEngineService.reInitMaterials(
+    GameObjectEngineService.getAllLightMaterials(
+      SceneEngineService.getSceneGameObject(runEngineState),
+      runEngineState,
+    ),
+    runEngineState,
+  )
+  |> StateLogicService.setRunEngineState;
+
+  let editEngineState = StateLogicService.getEditEngineState();
+
+  LightMaterialEngineService.reInitMaterials(
+    GameObjectEngineService.getAllLightMaterials(
+      SceneEngineService.getSceneGameObject(editEngineState),
+      editEngineState,
+    ),
+    editEngineState,
+  )
+  |> StateLogicService.setEditEngineState;
+};

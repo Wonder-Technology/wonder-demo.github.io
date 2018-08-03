@@ -1,20 +1,48 @@
 open DiffType;
 
+open InspectorComponentType;
+
 module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
-  type prepareTuple = string;
-  type dataTuple = Wonderjs.GameObjectType.gameObject;
+  type prepareTuple = Wonderjs.GameObjectType.gameObject;
+  type dataTuple = componentType;
 
-  let handleSelfLogic = ((store, dispatchFunc), type_, currentSceneTreeNode) => {
-    InspectorComponentUtils.addComponentByType(type_)
-    |> StateLogicService.getAndRefreshEngineStateWithDiff([|
-         {arguments: [|currentSceneTreeNode|], type_: GameObject},
-       |]);
+  let _isLightComponent = type_ => type_ === Light;
 
-    GameObjectComponentEngineService.hasSourceInstanceComponent(
-      currentSceneTreeNode,
-    )
-    |> StateLogicService.getEngineStateToGetData;
+  let handleSelfLogic = ((store, dispatchFunc), currentSceneTreeNode, type_) => {
+    let editorState = StateEditorService.getState();
+
+    let (_editorState, editEngineState) =
+      InspectorAddComponentUtils.addComponentByType(
+        type_,
+        StateLogicService.getEditEngineComponent(
+          DiffType.GameObject,
+          currentSceneTreeNode,
+        ),
+        (None, StateLogicService.getEditEngineState()),
+      );
+
+    editEngineState |> StateLogicService.setEditEngineState;
+
+    let (editorStateForComponent, runEngineState) =
+      InspectorAddComponentUtils.addComponentByType(
+        type_,
+        currentSceneTreeNode,
+        (editorState |. Some, StateLogicService.getRunEngineState()),
+      );
+
+    runEngineState |> StateLogicService.setRunEngineState;
+
+    switch (editorStateForComponent) {
+    | None => editorState |> StateEditorService.setState |> ignore
+    | Some(editorState) =>
+      editorState |> StateEditorService.setState |> ignore
+    };
+
+    _isLightComponent(type_) ?
+      OperateLightMaterialLogicService.reInitAllMaterials() : ();
+
+    StateLogicService.refreshEditAndRunEngineState();
 
     dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.Inspector|])))
     |> ignore;

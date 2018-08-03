@@ -1,4 +1,5 @@
 open UpdateStore;
+
 module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = unit;
@@ -52,7 +53,7 @@ module CustomEventHandler = {
       );
       (sceneGraphArr, None);
     | Some(gameObject) =>
-      CameraEngineService.isCamera(gameObject)
+      CameraEngineService.hasCameraComponent(gameObject)
       |> StateLogicService.getEngineStateToGetData ?
         HeaderUtils.doesSceneHasRemoveableCamera() ?
           {
@@ -71,6 +72,36 @@ module CustomEventHandler = {
         }
     };
 
+  let _hasLightComponent = removedTreeNode => {
+    open SceneGraphType;
+
+    let runEngineState = StateLogicService.getRunEngineState();
+
+    let rec _iterateJudge = (result, removedTreeNodeArr) =>
+      result ?
+        result :
+        removedTreeNodeArr
+        |> WonderCommonlib.ArrayService.reduceOneParam(
+             (. result, {uid, children}) =>
+               result ?
+                 result :
+                 _iterateJudge(
+                   GameObjectComponentEngineService.hasDirectionLightComponent(
+                     uid,
+                     runEngineState,
+                   )
+                   || GameObjectComponentEngineService.hasPointLightComponent(
+                        uid,
+                        runEngineState,
+                      ),
+                   children,
+                 ),
+             result,
+           );
+
+    _iterateJudge(false, [|removedTreeNode|]);
+  };
+
   let handleSelfLogic = ((store, dispatchFunc), (), ()) => {
     let sceneGraphArr = store |> StoreUtils.unsafeGetSceneGraphDataFromStore;
 
@@ -80,8 +111,17 @@ module CustomEventHandler = {
     switch (removedTreeNode) {
     | None => ()
     | Some(removedTreeNode) =>
+      let hasLightComponent = _hasLightComponent(removedTreeNode);
+
       removedTreeNode
-      |> CurrentSceneTreeNodeLogicService.disposeCurrentSceneTreeNode
+      |> CurrentSceneTreeNodeLogicService.disposeCurrentSceneTreeNode;
+
+      StateLogicService.refreshEditAndRunEngineState();
+
+      hasLightComponent ?
+        OperateLightMaterialLogicService.reInitAllMaterials() : ();
+
+      StateLogicService.refreshEditAndRunEngineState();
     };
 
     _checkSceneGraphDataAndDispatch(dispatchFunc, newSceneGraphArr);

@@ -4,12 +4,10 @@ let doesSceneHasRemoveableCamera = () =>
       engineState =>
         engineState
         |> GameObjectUtils.getChildren(
-             SceneEditorService.unsafeGetScene
-             |> StateLogicService.getEditorState,
+             engineState |> SceneEngineService.getSceneGameObject,
            )
         |> Js.Array.filter(gameObject =>
-             CameraEngineService.isCamera(gameObject)
-             |> StateLogicService.getEngineStateToGetData
+             engineState |> CameraEngineService.hasCameraComponent(gameObject)
            )
         |> Js.Array.length
     )
@@ -23,7 +21,7 @@ let isGameObjectNotRemoveable = gameObject =>
   switch (gameObject) {
   | None => true
   | Some(gameObject) =>
-    CameraEngineService.isCamera(gameObject)
+    CameraEngineService.hasCameraComponent(gameObject)
     |> StateLogicService.getEngineStateToGetData ?
       ! doesSceneHasRemoveableCamera() : false
   };

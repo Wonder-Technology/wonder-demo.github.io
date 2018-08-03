@@ -1,26 +1,22 @@
 open DiffType;
 
 module Method = {
-  let _buildComponentBox =
-      (
-        (type_, component),
+  let reNameGameObjectBlurEvent =
+      ((store, dispatchFunc), gameObject, newName) =>
+    GameObjectEngineService.unsafeGetGameObjectName(gameObject)
+    |> StateLogicService.getEngineStateToGetData
+    |> ValueService.isValueEqual(ValueType.String, newName) ?
+      () :
+      SceneTreeNodeRenameEventHandlder.MakeEventHandler.pushUndoStackWithNoCopyEngineState(
         (store, dispatchFunc),
-        isClosable,
-        buildComponentFunc,
-      ) =>
-    <ComponentBox
-      key=(DomHelper.getRandomKey())
-      header=type_
-      isClosable
-      gameObjectComponent=(
-        buildComponentFunc((store, dispatchFunc), component)
-      )
-    />;
-  let reNameGameObjectBlurEvent = SceneTreeNodeRenameEventHandlder.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
+        gameObject,
+        newName,
+      );
 
   let _buildNameFunc = ((store, dispatchFunc), gameObject) =>
     <div key=(DomHelper.getRandomKey())>
       <StringInput
+        label="Name"
         defaultValue=(
           GameObjectEngineService.unsafeGetGameObjectName(gameObject)
           |> StateLogicService.getEngineStateToGetData
@@ -30,124 +26,37 @@ module Method = {
       />
     </div>;
 
-  let _buildTransformFunc = ((store, dispatchFunc), component) =>
-    <MainEditorTransform
-      key=(DomHelper.getRandomKey())
-      store
-      dispatchFunc
-      transformComponent=component
-    />;
-
-  let _buildMaterialFunc = ((store, dispatchFunc), component) =>
-    <MainEditorMaterial key=(DomHelper.getRandomKey()) store dispatchFunc />;
-
-  let _buildLightFunc = ((store, dispatchFunc), component) =>
-    <MainEditorLight key=(DomHelper.getRandomKey()) store dispatchFunc />;
-
-  let _buildSouceInstanceFunc = ((store, dispatchFunc), component) =>
-    <div key=(DomHelper.getRandomKey())>
-      (DomHelper.textEl("simulate source instance"))
-    </div>;
-
-  let _buildBasicCameraViewFunc = ((store, dispatchFunc), component) =>
-    <div key=(DomHelper.getRandomKey())>
-      (DomHelper.textEl("simulate basic camera view"))
-    </div>;
-
-  let _buildPerspectiveCameraProjection = ((store, dispatchFunc), component) =>
-    <div key=(DomHelper.getRandomKey())>
-      (DomHelper.textEl("simulate perspective camera view"))
-    </div>;
-
-  let _buildComponentUIComponent =
-      ((type_, component), (store, dispatchFunc)) =>
-    switch (type_) {
-    | "transform" =>
-      _buildTransformFunc
-      |> _buildComponentBox(
-           (type_, component),
-           (store, dispatchFunc),
-           false,
-         )
-
-    | "material" =>
-      _buildMaterialFunc
-      |> _buildComponentBox((type_, component), (store, dispatchFunc), true)
-
-    | "light" =>
-      _buildLightFunc
-      |> _buildComponentBox((type_, component), (store, dispatchFunc), true)
-
-    | "sourceInstance" =>
-      _buildSouceInstanceFunc
-      |> _buildComponentBox((type_, component), (store, dispatchFunc), true)
-
-    | "basicCameraView" =>
-      _buildBasicCameraViewFunc
-      |> _buildComponentBox((type_, component), (store, dispatchFunc), true)
-
-    | "perspectiveCameraProjection" =>
-      _buildPerspectiveCameraProjection
-      |> _buildComponentBox((type_, component), (store, dispatchFunc), true)
-
-    | _ =>
-      WonderLog.Log.fatal(
-        WonderLog.Log.buildFatalMessage(
-          ~title="_buildComponentUIComponent",
-          ~description={j|the component: $type_ not exist|j},
-          ~reason="",
-          ~solution={j||j},
-          ~params={j|type:$type_, component:$component|j},
-        ),
-      )
-    };
   let _buildGameObjectAllShowComponent =
-      ((store, dispatchFunc), componentList) =>
-    componentList
-    |> Js.List.foldLeft(
-         (. componentArray, (type_, component)) =>
-           componentArray
-           |> ArrayService.push(
-                _buildComponentUIComponent(
-                  (type_, component),
-                  (store, dispatchFunc),
-                ),
-              ),
-         [||],
+      ((store, dispatchFunc), gameObject, componentTypeArr) =>
+    componentTypeArr
+    |> Js.Array.map((componentType: InspectorComponentType.componentType) =>
+         InspectorGameObjectUtils.buildComponentUIComponent(
+           (store, dispatchFunc),
+           componentType,
+           gameObject,
+         )
        );
 
   let buildCurrentSceneTreeNodeComponent =
-      ((store, dispatchFunc), allShowComponentConfig, currentSceneTreeNode) =>
+      ((store, dispatchFunc), addableComponentConfig, currentSceneTreeNode) =>
     switch (currentSceneTreeNode) {
     | None => [||]
     | Some(gameObject) =>
-      let (addedComponentList, addableComponentList) =
-        InspectorGameObjectUtils.buildCurrentSceneTreeNodeShowComponentList(
-          gameObject,
-          allShowComponentConfig,
-        )
-        |> StateLogicService.getEngineStateToGetData;
-
-      _buildGameObjectAllShowComponent(
-        (store, dispatchFunc),
-        addedComponentList,
-      )
+      StateEditorService.getState()
+      |> InspectorEditorService.getComponentTypeMap
+      |> WonderCommonlib.SparseMapService.unsafeGet(gameObject)
+      |> _buildGameObjectAllShowComponent((store, dispatchFunc), gameObject)
       |> ArrayService.push(
            <AddableComponent
              key=(DomHelper.getRandomKey())
              reduxTuple=(store, dispatchFunc)
              currentSceneTreeNode=gameObject
-             addableComponentList
+             addableComponentList=addableComponentConfig
            />,
          )
       |> ArrayService.unshift(
-           _buildComponentBox(
-             ("Name", gameObject),
-             (store, dispatchFunc),
-             false,
-             _buildNameFunc,
-           ),
-         );
+           _buildNameFunc((store, dispatchFunc), gameObject),
+         )
     };
 };
 
@@ -156,7 +65,7 @@ let component = ReasonReact.statelessComponent("SceneTreeInspector");
 let render =
     (
       (store, dispatchFunc),
-      allShowComponentConfig,
+      addableComponentConfig,
       currentSceneTreeNode,
       _self,
     ) =>
@@ -165,7 +74,7 @@ let render =
       ReasonReact.arrayToElement(
         Method.buildCurrentSceneTreeNodeComponent(
           (store, dispatchFunc),
-          allShowComponentConfig,
+          addableComponentConfig,
           currentSceneTreeNode,
         ),
       )
@@ -176,7 +85,7 @@ let make =
     (
       ~store: AppStore.appState,
       ~dispatchFunc,
-      ~allShowComponentConfig,
+      ~addableComponentConfig,
       ~currentSceneTreeNode,
       _children,
     ) => {
@@ -184,7 +93,7 @@ let make =
   render: self =>
     render(
       (store, dispatchFunc),
-      allShowComponentConfig,
+      addableComponentConfig,
       currentSceneTreeNode,
       self,
     ),

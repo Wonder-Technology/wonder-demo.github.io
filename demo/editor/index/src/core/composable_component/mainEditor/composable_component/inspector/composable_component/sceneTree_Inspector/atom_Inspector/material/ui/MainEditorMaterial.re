@@ -4,11 +4,7 @@ type action =
   | ChangeMaterial(int);
 
 module Method = {
-  let changeMaterial = (normalMaterialType, materialType) =>
-    MainEditorMaterialUtils.replaceMaterialByType(
-      normalMaterialType,
-      materialType,
-    );
+  let changeMaterial = MainEditorChangeMaterialEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
   let renderBasicMaterial = ((store, dispatchFunc), gameObject) =>
     <MainEditorBasicMaterial
@@ -36,7 +32,7 @@ let component = ReasonReact.reducerComponent("MainEditorMaterial");
 let reducer = ((store, dispatchFunc), action, state) =>
   switch (action) {
   | ChangeMaterial(value) =>
-    let normalMaterialType = state.materialType;
+    let originMaterialType = state.materialType;
 
     ReasonReactUtils.updateWithSideEffects(
       {
@@ -44,7 +40,11 @@ let reducer = ((store, dispatchFunc), action, state) =>
         materialType: value |> MainEditorMaterialType.convertIntToMaterialType,
       },
       state =>
-      Method.changeMaterial(normalMaterialType, state.materialType)
+      Method.changeMaterial(
+        (store, dispatchFunc),
+        (),
+        (originMaterialType, state.materialType),
+      )
     );
   };
 

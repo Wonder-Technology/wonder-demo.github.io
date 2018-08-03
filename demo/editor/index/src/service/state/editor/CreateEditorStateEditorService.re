@@ -2,7 +2,6 @@ open EditorType;
 
 let create = () => {
   sceneRecord: {
-    root: None,
     diffMap: None,
     currentSceneTreeNode: None,
     isRun: false,
@@ -16,6 +15,9 @@ let create = () => {
     jsonNodeMap: WonderCommonlib.SparseMapService.createEmpty(),
     imageBase64Map: WonderCommonlib.SparseMapService.createEmpty(),
     folderNodeMap: WonderCommonlib.SparseMapService.createEmpty(),
+  },
+  inspectorRecord: {
+    componentTypeMap: WonderCommonlib.SparseMapService.createEmpty(),
   },
   currentDragSource: (None, None),
   currentSelectSource: None,

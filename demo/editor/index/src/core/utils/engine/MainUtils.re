@@ -26,22 +26,154 @@ let _getLoadData = type_ => {
   };
 };
 
+let _buildSetStateFunc = setEngineStateFunc =>
+  (. state) => {
+    let state =
+      SceneEditorService.getIsRun |> StateLogicService.getEditorState ?
+        state : state |> DirectorEngineService.loopBody(0.);
+
+    state |> setEngineStateFunc;
+
+    state;
+  };
+
+let _setUnsafeGetStateFuncAndSetStateFuncForEvent =
+    (getEngineStateFunc, setEngineStateFunc, engineState) =>
+  engineState
+  |> StateEngineService.setUnsafeGetStateFunc((.) => getEngineStateFunc())
+  |> StateEngineService.setSetStateFunc(
+       _buildSetStateFunc(setEngineStateFunc),
+     );
+
+let _setEditEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent =
+    editEngineState =>
+  _setUnsafeGetStateFuncAndSetStateFuncForEvent(
+    StateLogicService.getEditEngineState,
+    StateLogicService.setEditEngineState,
+    editEngineState,
+  );
+
+let _setRunEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent =
+    runEngineState =>
+  _setUnsafeGetStateFuncAndSetStateFuncForEvent(
+    StateLogicService.getRunEngineState,
+    StateLogicService.setRunEngineState,
+    runEngineState,
+  );
+
+let _setIMGUIFunc = (scene, editEngineState) =>
+  ManageIMGUIEngineService.setIMGUIFunc(
+    scene |> Obj.magic,
+    Obj.magic((. scene, apiJsObj, state) => {
+      let imageFunc = apiJsObj##image;
+      let unsafeGetTransformChildren = apiJsObj##unsafeGetTransformChildren;
+      let getTransformPosition = apiJsObj##getTransformPosition;
+      let unsafeGetGameObjectTransformComponent = apiJsObj##unsafeGetGameObjectTransformComponent;
+      let unsafeGetGameObjectPerspectiveCameraProjectionComponent = apiJsObj##unsafeGetGameObjectPerspectiveCameraProjectionComponent;
+      let unsafeGetGameObjectBasicCameraViewComponent = apiJsObj##unsafeGetGameObjectBasicCameraViewComponent;
+      let unsafeGetTransformGameObject = apiJsObj##unsafeGetTransformGameObject;
+      let convertWorldToScreen = apiJsObj##convertWorldToScreen;
+
+      let _getChildren = (gameObject, engineState) =>
+        unsafeGetTransformChildren(.
+          unsafeGetGameObjectTransformComponent(. gameObject, engineState),
+          engineState,
+        )
+        |> Js.Array.map(transform =>
+             unsafeGetTransformGameObject(. transform, engineState)
+           );
+
+      let _getEditEngineServiceCameraGameObject = sceneChildren =>
+        Array.unsafe_get(sceneChildren, 1);
+
+      let _getEditEngineServiceDirectionLightGameObject = sceneChildren =>
+        Array.unsafe_get(sceneChildren, 5);
+
+      let sceneChildren = _getChildren(scene, state);
+
+      let camera = _getEditEngineServiceCameraGameObject(sceneChildren);
+      let directionLightGameObject =
+        _getEditEngineServiceDirectionLightGameObject(sceneChildren);
+
+      let (x, y, z) =
+        getTransformPosition(.
+          unsafeGetGameObjectTransformComponent(.
+            directionLightGameObject,
+            state,
+          ),
+          state,
+        );
+
+      let (x, y) =
+        convertWorldToScreen(.
+          unsafeGetGameObjectBasicCameraViewComponent(. camera, state),
+          unsafeGetGameObjectPerspectiveCameraProjectionComponent(.
+            camera,
+            state,
+          ),
+          /* TODO use canvas width/height */
+          (x, y, z, 553.0, 427.0),
+          state,
+        );
+
+      /* WonderLog.Log.print((x, y)) |> ignore; */
+
+      let imageX1 = 0;
+      let imageY1 = 0;
+      let imageWidth1 = 80;
+      let imageHeight1 = 80;
+
+      let state =
+        imageFunc(.
+          (x, y, imageWidth1, imageHeight1),
+          (0., 0., 1., 1.),
+          "directionLight",
+          state,
+        );
+
+      state;
+    }),
+    editEngineState,
+  );
+
 let init = editorState =>
   Wonderjs.StateDataMainType.(
     _getLoadData("edit")
+    |> WonderBsMost.Most.flatMap(editEngineState =>
+         LoaderManagerEngineService.loadIMGUIAsset(
+           "./public/font/myFont.fnt",
+           "./public/font/myFont.png",
+           Js.Nullable.return([|
+             ("./public/img/camera.png", "camera"),
+             ("./public/img/sun.png", "directionLight"),
+             ("./public/img/point.jpg", "pointLight"),
+           |]),
+           editEngineState,
+         )
+         |> WonderBsMost.Most.fromPromise
+       )
     |> WonderBsMost.Most.map(editEngineState => {
          StateEngineService.setIsDebug(true) |> ignore;
-         let (editEngineState, scene) =
-           GameObjectEngineService.create(editEngineState);
-         let (editEngineState, box) =
+
+         let editorStateForComponent = None;
+         let scene = editEngineState |> SceneEngineService.getSceneGameObject;
+         let (_editorStateForComponent, editEngineState, box) =
            editEngineState
            |> DefaultSceneUtils.prepareSpecificGameObjectsForEditEngineState(
-                scene,
+                editorStateForComponent,
               );
+         let (_editorStateForComponent, editEngineState, camera) =
+           editEngineState
+           |> DefaultSceneUtils.createDefaultScene(editorStateForComponent);
          let (editorState, editEngineState) =
            editEngineState |> DefaultSceneUtils.computeDiffValue(editorState);
-         let (editEngineState, camera) =
-           editEngineState |> DefaultSceneUtils.createDefaultScene(scene);
+
+         let editEngineState =
+           _setEditEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent(
+             editEngineState,
+           );
+
+         let editEngineState = _setIMGUIFunc(scene, editEngineState);
 
          let editEngineState =
            editEngineState
@@ -50,30 +182,29 @@ let init = editorState =>
            |> DirectorEngineService.init;
 
          editEngineState
-         |> InitEventUtils.initEvent(
-              Wonderjs.ViewService.unsafeGetCanvas(editEngineState.viewRecord)
-              |> DomHelperType.wonderjsHtmlElementToCanvas,
-              EngineStateDataEditorService.getEditEngineStateData(),
-              (
-                StateEngineService.getStateFromData,
-                StateEngineService.setStateToData,
-              ),
-            )
          |> DirectorEngineService.loopBody(0.)
          |> StateLogicService.setEditEngineState;
 
          editorState |> StateEditorService.setState |> ignore;
-
-         ();
        })
     |> WonderBsMost.Most.concat(
          _getLoadData("run")
          |> WonderBsMost.Most.map(runEngineState => {
               let editorState = StateEditorService.getState();
-              let (runEngineState, scene) =
-                GameObjectEngineService.create(runEngineState);
-              let (runEngineState, _) =
-                runEngineState |> DefaultSceneUtils.createDefaultScene(scene);
+              let editorStateForComponent = Some(editorState);
+
+              let scene =
+                runEngineState |> SceneEngineService.getSceneGameObject;
+              let (editorStateForComponent, runEngineState, _) =
+                runEngineState
+                |> DefaultSceneUtils.createDefaultScene(
+                     editorStateForComponent,
+                   );
+
+              let runEngineState =
+                _setRunEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent(
+                  runEngineState,
+                );
 
               let runEngineState =
                 runEngineState
@@ -81,25 +212,14 @@ let init = editorState =>
                 |> DirectorEngineService.init;
 
               runEngineState
-              |> InitEventUtils.initEvent(
-                   Wonderjs.ViewService.unsafeGetCanvas(
-                     runEngineState.viewRecord,
-                   )
-                   |> DomHelperType.wonderjsHtmlElementToCanvas,
-                   EngineStateDataEditorService.getRunEngineStateData(),
-                   (
-                     StateEngineService.getStateFromData,
-                     StateEngineService.setStateToData,
-                   ),
-                 )
               |> DirectorEngineService.loopBody(0.)
               |> StateLogicService.setRunEngineState;
 
-              editorState
-              |> SceneEditorService.setScene(scene)
-              |> StateEditorService.setState
-              |> ignore;
-              ();
+              switch (editorStateForComponent) {
+              | None => editorState |> StateEditorService.setState |> ignore
+              | Some(editorState) =>
+                editorState |> StateEditorService.setState |> ignore
+              };
             }),
        )
     |> WonderBsMost.Most.drain

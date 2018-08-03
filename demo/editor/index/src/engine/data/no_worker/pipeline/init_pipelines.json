@@ -18,6 +18,9 @@
           "name": "detect_gl"
         },
         {
+          "name": "init_event"
+        },
+        {
           "name": "init_camera"
         },
         {
@@ -37,6 +40,9 @@
         },
         {
           "name": "init_texture"
+        },
+        {
+          "name": "init_imgui"
         }
       ]
     }

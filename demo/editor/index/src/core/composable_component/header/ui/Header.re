@@ -2,14 +2,6 @@ open ColorType;
 
 open Color;
 
-type state = {
-  isShowColorPick: bool,
-  colorHex: string,
-};
-
-type action =
-  | ToggleShowColorPick;
-
 module Method = {
   let getStorageParentKey = () => "userExtension";
   /* todo use extension names instead of the name */
@@ -17,7 +9,7 @@ module Method = {
   let addExtension = text =>
     AppExtensionUtils.setExtension(getStorageParentKey(), text);
 
-  let addBox = HeaderAddGameObjectEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
+  let addGameObjectByType = HeaderAddGameObjectEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
   let disposeCurrentSceneTreeNode = HeaderDisposeGameObjectEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
@@ -48,7 +40,7 @@ module Method = {
   let buildOperateGameObjectComponent = (store, dispatchFunc) =>
     <div className="header-item">
       <div className="component-item">
-        <button onClick=(_e => addBox((store, dispatchFunc), "box", ()))>
+        <button onClick=(_e => addGameObjectByType((store, dispatchFunc), "box", ()))>
           (DomHelper.textEl("add box"))
         </button>
       </div>
@@ -100,68 +92,52 @@ module Method = {
     |> SceneEngineService.setAmbientLightColor
     |> StateLogicService.getAndRefreshEditAndRunEngineState;
 
-  let buildAmbientLightComponent = (state, send) =>
+  let getColor = () =>
+    SceneEngineService.getAmbientLightColor
+    |> StateLogicService.getEngineStateToGetData
+    |> getHexString;
+
+  let closeColorPick = AmbientLightCloseColorPickEventHandler.MakeEventHandler.pushUndoStackWithCopiedEngineState;
+
+  let buildAmbientLightComponent = (store, dispatchFunc) =>
     <div className="header-item">
       <div className="component-item">
-        <span className=""> (DomHelper.textEl("ambient light : ")) </span>
-        <span className=""> (DomHelper.textEl(state.colorHex)) </span>
-        <button className="" onClick=(_e => send(ToggleShowColorPick))>
-          (DomHelper.textEl("pick color"))
+        <PickColorComponent
+          key=(DomHelper.getRandomKey())
+          label="ambient color : "
+          getColorFunc=getColor
+          changeColorFunc=changeColor
+          closeColorPickFunc=(closeColorPick((store, dispatchFunc), ()))
+        />
+      </div>
+    </div>;
+
+  let buildEmptyGameObject = (store, dispatchFunc) =>
+    <div className="header-item">
+      <div className="component-item">
+        <button
+          onClick=(
+            _e => addGameObjectByType((store, dispatchFunc), "emptyGameObject", ())
+          )>
+          (DomHelper.textEl("add empty gameObject"))
         </button>
-        (
-          state.isShowColorPick ?
-            <div className="color-pick-item">
-              <ReactColor.Sketch
-                color=state.colorHex
-                onChange=((value, e) => changeColor(value))
-              />
-            </div> :
-            ReasonReact.nullElement
-        )
       </div>
     </div>;
 };
 
-let component = ReasonReact.reducerComponent("Header");
+let component = ReasonReact.statelessComponent("Header");
 
-let reducer = ((store, dispatchFunc), action, state) =>
-  switch (action) {
-  | ToggleShowColorPick =>
-    state.isShowColorPick ?
-      ReasonReact.Update({
-        ...state,
-        isShowColorPick: false,
-        colorHex:
-          SceneEngineService.getAmbientLightColor
-          |> StateLogicService.getEngineStateToGetData
-          |> getHexString,
-      }) :
-      ReasonReact.Update({...state, isShowColorPick: true})
-  };
-
-let render =
-    (
-      store: AppStore.appState,
-      dispatchFunc,
-      {state, send}: ReasonReact.self('a, 'b, 'c),
-    ) =>
+let render = (store: AppStore.appState, dispatchFunc, _self) =>
   <article key="header" className="wonder-header-component">
     (Method.buildOperateHistoryComponent(store, dispatchFunc))
     (Method.buildOperateGameObjectComponent(store, dispatchFunc))
     (Method.buildOperateExtensionComponent())
     (Method.buildOperateControllerComponent(store, dispatchFunc))
-    (Method.buildAmbientLightComponent(state, send))
+    (Method.buildAmbientLightComponent(store, dispatchFunc))
+    (Method.buildEmptyGameObject(store, dispatchFunc))
   </article>;
 
 let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {
   ...component,
-  initialState: () => {
-    isShowColorPick: false,
-    colorHex:
-      SceneEngineService.getAmbientLightColor
-      |> StateLogicService.getEngineStateToGetData
-      |> getHexString,
-  },
-  reducer: reducer((store, dispatchFunc)),
   render: self => render(store, dispatchFunc, self),
 };

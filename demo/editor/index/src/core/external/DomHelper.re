@@ -7,8 +7,15 @@ external createElement : string => document = "createElement";
 
 [@bs.val] [@bs.scope "document"]
 external getElementById : string => Dom.element = "getElementById";
+
+[@bs.val] external alert : string => unit = "alert";
+
 let getAttribute = [%raw (dom, prop) => "
   return dom.getAttribute(prop);
+"];
+
+let onresize = [%raw handleFunc => "
+  window.onresize = handleFunc;
 "];
 
 let apply = [%bs.raw
@@ -28,7 +35,7 @@ let deleteKeyInDict = [%raw
   |}
 ];
 
-let stopPropagation = e : unit => e##stopPropagation() |> ignore;
+let stopPropagation = e : unit => e##stopPropagation();
 
 let preventDefault = e : unit => e##preventDefault();
 
