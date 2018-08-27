@@ -1,88 +1,38 @@
-var ImguiTool = (function () {
+var DemoImguiTool = (function () {
     return {
-        setSetting: function (fontTexUvForWhite, state) {
-            return wd.setSetting(
-                {
-                    "textColor": [1.0, 1.0, 1.0],
-                    "buttonSetting": {
-                        "buttonColor": [0.5, 0.5, 0.5],
-                        "hoverButtonColor": [0.5, 0.0, 1.0],
-                        "clickButtonColor": [0.5, 1.0, 0.0]
-                    },
-                    "radioButtonSetting": {
-
-                        "radioButtonOuterColor": [0.3, 0.3, 0.3],
-                        "radioButtonInnerColor":
+        bindEvent: function (getIsShowPanelFunc, state) {
+            var state = wd.onCustomGlobalEvent(
+                wd.getPointDragEventName(),
+                100,
+                (event, state) => {
+                    var pointEvent = wd.getCustomEventUserData(event);
 
 
 
-                            [0.15, 0.15, 0.15],
-
-
-                        "radioButtonOuterColorHover":
-                            [0.33, 0.33, 0.33],
-
-
-                        "radioButtonInnerColorHover":
-
-                            [0.15, 0.15, 0.15],
-
-                        "radioButtonCircleSegments":
-
-                            9,
-
-                        "radioButtonInnerRadius": 0.6,
-
-                        "radioButtonOuterRadius":
-                            1.0
-                    },
-                    "checkboxSetting": {
-
-                        "checkboxOuterColor": [0.3, 0.3, 0.3],
-                        "checkboxInnerColor":
+                    var [x, y] = wd.getPointEventLocationInViewOfEvent(pointEvent);
 
 
 
-                            [0.15, 0.15, 0.15],
+                    var [regionX, regionY, regionWidth, regionHeight] = DemoImguiTool.getIMGUIRegion(window.innerWidth, window.innerHeight);
 
+                    if (
+                        getIsShowPanelFunc(state) === true &&
+                        x >= regionX && y >= regionY
+                    ) {
+                        document.exitPointerLock();
 
-                        "checkboxOuterColorHover":
-                            [0.33, 0.33, 0.33],
+                        return [
+                            state,
+                            wd.stopPropagationCustomEvent(event)
+                        ]
+                    }
 
-
-                        "checkboxInnerColorHover":
-
-                            [0.15, 0.15, 0.15],
-
-
-                        "checkboxInnerSizeRatio": 0.6,
-
-                        "checkboxOuterSizeRatio":
-                            1.0
-                    },
-                    "sliderSetting": {
-
-                        "sliderBackgroundColor": [0.3, 0.3, 0.3],
-                        "sliderFillColor":
-
-
-
-                            [0.15, 0.15, 0.15],
-
-
-                        "sliderBackgroundColorHover":
-                            [0.33, 0.33, 0.33],
-
-
-                        "sliderFillColorHover":
-
-                            [0.15, 0.15, 0.15],
-                    },
-
-
-                    "fontTexUvForWhite": fontTexUvForWhite
-                }, state
+                    return [state, event];
+                },
+                state
             );
+
+            return state;
         },
         getIMGUIRegion: function (screenWidth, screenHeight) {
             return [screenWidth / 1.8, 10, screenWidth - screenWidth / 1.8, screenHeight]

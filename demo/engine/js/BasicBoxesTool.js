@@ -156,7 +156,7 @@ var BasicBoxesTool = (function () {
 
 
 
-            state = wd.addGameObjectBoxGeometryComponent(obj, geometry, state);
+            state = wd.addGameObjectGeometryComponent(obj, geometry, state);
 
             return [state, obj];
         },
