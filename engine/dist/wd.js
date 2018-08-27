@@ -643,14 +643,14 @@
 	  return JSON.stringify(json);
 	}
 
-	function print(value) {
-	  console.log(value);
-	  return value;
+	function logJson($$var) {
+	  console.log(JSON.stringify($$var));
+	  return /* () */0;
 	}
 
-	function printJson(value) {
-	  console.log(JSON.stringify(value));
-	  return value;
+	function log(msg) {
+	  console.log("Log: " + (String(msg) + ""));
+	  return /* () */0;
 	}
 
 	function warn(msg) {
@@ -36832,10 +36832,6 @@
 	  var jsonChunkByteLength = jsonUint8Array.byteLength;
 	  var jsonChunkAlignedByteLength = alignedLength(jsonChunkByteLength);
 	  var totalByteLength = ((getWDBHeaderTotalByteLength(/* () */0) + jsonChunkAlignedByteLength | 0) + alignedLength(getStreamChunkTotalByteLength(streamChunkArr)) | 0) + getBinBufferChunkTotalAlignedByteLength(bufferViewDataArr) | 0;
-	  print(/* tuple */[
-	        jsonChunkByteLength,
-	        getStreamChunkTotalByteLength(streamChunkArr)
-	      ]);
 	  var wdb = new ArrayBuffer(totalByteLength);
 	  var dataView = create$65(wdb);
 	  var byteOffset = _writeHeader(totalByteLength, jsonChunkByteLength, getStreamChunkTotalByteLength(streamChunkArr), getBinBufferChunkTotalAlignedByteLength(bufferViewDataArr), dataView);
@@ -38538,57 +38534,6 @@
 
 	/* ArrayService-WonderCommonlib Not a pure module */
 
-	function createBasicSourceTexture$1(state) {
-	  return create$66(state);
-	}
-
-	var unsafeGetBasicSourceTextureSource$1 = unsafeGetSource$1;
-
-	var setBasicSourceTextureSource$1 = setSource$1;
-
-	var getBasicSourceTextureWidth$1 = getWidth$2;
-
-	var getBasicSourceTextureHeight$1 = getHeight$2;
-
-	var getBasicSourceTextureWrapS$1 = getWrapS$2;
-
-	var setBasicSourceTextureWrapS$1 = setWrapS$2;
-
-	var getBasicSourceTextureWrapT$1 = getWrapT$2;
-
-	var setBasicSourceTextureWrapT$1 = setWrapT$2;
-
-	var getBasicSourceTextureMagFilter$1 = getMagFilter$2;
-
-	var setBasicSourceTextureMagFilter$1 = setMagFilter$2;
-
-	var getBasicSourceTextureMinFilter$1 = getMinFilter$2;
-
-	var setBasicSourceTextureMinFilter$1 = setMinFilter$2;
-
-	var getBasicSourceTextureFormat$1 = getFormat$2;
-
-	var setBasicSourceTextureFormat$1 = setFormat$2;
-
-	var getBasicSourceTextureType$1 = getType$3;
-
-	var setBasicSourceTextureType$1 = setType$2;
-
-	var getBasicSourceTextureFlipY$1 = getFlipY$3;
-
-	var setBasicSourceTextureFlipY$1 = setFlipY$4;
-
-	var getBasicSourceTextureName$1 = getName$5;
-
-	var unsafeGetBasicSourceTextureName$1 = unsafeGetName$5;
-
-	function setBasicSourceTextureName$1(texture, name, state) {
-	  return setName$5(texture, name, state);
-	}
-
-
-	/* NameBasicSourceTextureMainService-Wonderjs Not a pure module */
-
 	function _batchSetBasicSourceTextureSources$1(imageBasicSourceTextures, default11Image, state) {
 	  return reduceOneParami((function (state, basicSourceTexture, _) {
 	                return setSource$1(basicSourceTexture, default11Image, state);
@@ -38733,12 +38678,7 @@
 
 	function _setGeometryData(geometryData, geometryArr, geometryGameObjects, gameObjectGeometrys, param, state) {
 	  var match = _getGameObjectsAndGeometrys(geometryData[/* meshIndex */0], geometryArr, geometryGameObjects, gameObjectGeometrys);
-	  var geometry = match[1];
-	  print(/* tuple */[
-	        "geometry:",
-	        geometry
-	      ]);
-	  return _3(param[0], geometry, _1(param[1], geometryData[/* arrayBuffer */1]), state);
+	  return _3(param[0], match[1], _1(param[1], geometryData[/* arrayBuffer */1]), state);
 	}
 
 	function _setImageData(imageData, basicSourceTextureArr, imageTextureIndices, state) {
@@ -38798,7 +38738,7 @@
 	}
 
 
-	/* Log-WonderLog Not a pure module */
+	/* ArrayService-Wonderjs Not a pure module */
 
 	function _build(_completeStreamChunkTotalLoadedAlignedByteLength, totalLoadedByteLength, _nextStreamChunkIndex, streamChunkArr, loadedArrayBuffer, images, _loadedStreamChunkDataArr) {
 	  while(true) {
@@ -38815,15 +38755,7 @@
 	      var match$1 = streamChunkArr[nextStreamChunkIndex];
 	      var type_ = match$1[/* type_ */2];
 	      var index = match$1[/* index */1];
-	      print(/* tuple */[
-	            "nextStreamChunkIndex: ",
-	            nextStreamChunkIndex
-	          ]);
 	      var nextCompleteStreamChunkTotalLoadedByteLength = completeStreamChunkTotalLoadedAlignedByteLength + match$1[/* byteLength */0] | 0;
-	      print(/* tuple */[
-	            nextCompleteStreamChunkTotalLoadedByteLength,
-	            totalLoadedByteLength
-	          ]);
 	      var match$2 = nextCompleteStreamChunkTotalLoadedByteLength > totalLoadedByteLength;
 	      if (match$2) {
 	        return /* tuple */[
@@ -38903,9 +38835,7 @@
 	                      var type_ = param[/* type_ */2];
 	                      if (type_ >= 4) {
 	                        var match = unsafeGet$1(param[/* imageData */1]);
-	                        var arrayBuffer = match[/* arrayBuffer */2];
 	                        var imageIndex = match[/* imageIndex */0];
-	                        print(arrayBuffer);
 	                        var match$1 = get$3(imageIndex, loadBlobImageMap);
 	                        if (match$1 !== undefined) {
 	                          push(/* record */[
@@ -38931,7 +38861,7 @@
 	                                                ], resultLoadedStreamChunkDataArr);
 	                                            set$1(imageIndex, image, loadBlobImageMap);
 	                                            return /* () */0;
-	                                          }), buildLoadImageStream(arrayBuffer, match[/* mimeType */1], "load image error. imageIndex: " + (String(imageIndex) + ""))));
+	                                          }), buildLoadImageStream(match[/* arrayBuffer */2], match[/* mimeType */1], "load image error. imageIndex: " + (String(imageIndex) + ""))));
 	                        }
 	                      } else {
 	                        push(/* record */[
@@ -38950,25 +38880,11 @@
 	}
 
 	function buildBinBufferChunkData(nextStreamChunkIndex, loadedStreamChunkArrWhichNotHasAllData, completeStreamChunkTotalLoadedAlignedByteLength, totalLoadedByteLength, loadedArrayBuffer, streamChunkArr, loadBlobImageMap, images) {
-	  print(/* tuple */[
-	        "completeStreamChunkTotalLoadedAlignedByteLength: ",
-	        completeStreamChunkTotalLoadedAlignedByteLength
-	      ]);
 	  var match = _build(completeStreamChunkTotalLoadedAlignedByteLength, totalLoadedByteLength, nextStreamChunkIndex, streamChunkArr, loadedArrayBuffer, images, loadedStreamChunkArrWhichNotHasAllData);
-	  var loadedStreamChunkDataArr = match[1];
 	  var nextStreamChunkIndex$1 = match[0];
-	  print(/* tuple */[
-	        "loadedStreamChunkDataArr:",
-	        loadedStreamChunkDataArr
-	      ]);
-	  var match$1 = _splitLoadedStreamChunkArrByJudgeHasAllGeometryPointDataOrHasImageData(nextStreamChunkIndex$1, streamChunkArr, loadedStreamChunkDataArr);
-	  var loadedStreamChunkDataArrWhichHasAllData = match$1[1];
+	  var match$1 = _splitLoadedStreamChunkArrByJudgeHasAllGeometryPointDataOrHasImageData(nextStreamChunkIndex$1, streamChunkArr, match[1]);
 	  var loadedStreamChunkArrWhichNotHasAllData$1 = match$1[0];
-	  printJson(/* tuple */[
-	        loadedStreamChunkArrWhichNotHasAllData$1,
-	        loadedStreamChunkDataArrWhichHasAllData
-	      ]);
-	  return _loadBlobImageFromImageArrayBufferData(loadedStreamChunkDataArrWhichHasAllData, loadBlobImageMap).then((function (param) {
+	  return _loadBlobImageFromImageArrayBufferData(match$1[1], loadBlobImageMap).then((function (param) {
 	                return Promise.resolve(/* tuple */[
 	                            param[0],
 	                            nextStreamChunkIndex$1,
@@ -39162,61 +39078,17 @@
 	  return _readReader(reader).then((function (streamData) {
 	                  var match = isDone(streamData);
 	                  if (match) {
-	                    print("done");
+	                    log("done");
 	                    _close(controller);
 	                    if (assembleData !== undefined) {
-	                      var rootGameObject = assembleData[0];
-	                      var getAllChildrenTransform = function (rootGameObject, state) {
-	                        var _addChildren = function (parentArr, state, childrenArr) {
-	                          var childrenArr$1 = childrenArr.concat(parentArr);
-	                          return reduceOneParam((function (param, parent) {
-	                                        var state = param[0];
-	                                        return _addChildren(unsafeGetTransformChildren$1(parent, state).sort(), state, param[1]);
-	                                      }), /* tuple */[
-	                                      state,
-	                                      childrenArr$1
-	                                    ], parentArr);
-	                        };
-	                        var parent = unsafeGetGameObjectTransformComponent$1(rootGameObject, state);
-	                        return _addChildren(unsafeGetTransformChildren$1(parent, state).sort(), state, /* array */[]);
-	                      };
-	                      var getAllGameObjects = function (rootGameObject, state) {
-	                        var match = getAllChildrenTransform(rootGameObject, state);
-	                        var state$1 = match[0];
-	                        return /* array */[rootGameObject].concat(match[1].map((function (transform) {
-	                                          return unsafeGetTransformGameObject$1(transform, state$1);
-	                                        })));
-	                      };
-	                      var getAllLightMaterials = function (rootGameObject, state) {
-	                        return getAllGameObjects(rootGameObject, state).filter((function (gameObject) {
-	                                        return hasGameObjectLightMaterialComponent$1(gameObject, state);
-	                                      })).map((function (gameObject) {
-	                                      return unsafeGetGameObjectLightMaterialComponent$1(gameObject, state);
-	                                    }));
-	                      };
-	                      var getAllDiffuseMaps = function (rootGameObject, state) {
-	                        return getAllLightMaterials(rootGameObject, state).filter((function (lightMaterial) {
-	                                        return hasLightMaterialDiffuseMap$1(lightMaterial, state);
-	                                      })).map((function (lightMaterial) {
-	                                      return unsafeGetLightMaterialDiffuseMap$1(lightMaterial, state);
-	                                    }));
-	                      };
-	                      print(/* tuple */[
-	                            "all diffuseMap : ",
-	                            getAllDiffuseMaps(rootGameObject, unsafeGetState$2(stateData)),
-	                            "all diffuseMap sources: ",
-	                            getAllDiffuseMaps(rootGameObject, unsafeGetState$2(stateData)).map((function (diffuseMap) {
-	                                    return unsafeGetBasicSourceTextureSource$1(diffuseMap, unsafeGetState$2(stateData)).width;
-	                                  }))
-	                          ]);
-	                      setState$2(stateData, _2(handleWhenDoneFunc, unsafeGetState$2(stateData), rootGameObject));
+	                      setState$2(stateData, _2(handleWhenDoneFunc, unsafeGetState$2(stateData), assembleData[0]));
 	                      return Promise.resolve(/* () */0);
 	                    } else {
 	                      return Promise.resolve(/* () */0);
 	                    }
 	                  } else {
 	                    var value = streamData.value;
-	                    printJson(/* tuple */[
+	                    logJson(/* tuple */[
 	                          "value",
 	                          value.byteLength
 	                        ]);
@@ -39253,10 +39125,6 @@
 	                          ]);
 	                      var streamChunkLength = allChunkLengths$1[1];
 	                      var jsonChunkLength = allChunkLengths$1[0];
-	                      print(/* tuple */[
-	                            "allChunkLengths: ",
-	                            allChunkLengths$1
-	                          ]);
 	                      var headerJsonStreamChunkTotalByteLength = _computeHeaderJsonStreamChunkTotalByteLength(jsonChunkLength, streamChunkLength);
 	                      var match$2 = caml_greaterequal(totalLoadedByteLength, headerJsonStreamChunkTotalByteLength);
 	                      if (match$2) {
@@ -39266,10 +39134,6 @@
 	                            ], totalLoadedByteLength, /* tuple */[
 	                              loadedUint8ArrayArr$1,
 	                              totalUint8Array
-	                            ]);
-	                        print(/* tuple */[
-	                              "streamChunkArr: ",
-	                              streamChunkArr$1
 	                            ]);
 	                        var state = unsafeGetState$2(stateData);
 	                        var match$3 = _assembleAndStartLoop(assembleData, jsonChunkLength, totalLoadedByteLength, /* tuple */[
@@ -39355,7 +39219,7 @@
 	  var match = getDefault11ImageUint8ArrayData(/* () */0);
 	  return flatMap((function (image) {
 	                return fromPromise(_1(fetchFunc, wdbPath).then((function (response) {
-	                                  var match = !print(response).ok;
+	                                  var match = !response.ok;
 	                                  if (match) {
 	                                    var status = response.status;
 	                                    var statusText = response.statusText;
@@ -40816,6 +40680,57 @@
 
 
 	/* AssembleStreamWDBSystem-Wonderjs Not a pure module */
+
+	function createBasicSourceTexture$1(state) {
+	  return create$66(state);
+	}
+
+	var unsafeGetBasicSourceTextureSource$1 = unsafeGetSource$1;
+
+	var setBasicSourceTextureSource$1 = setSource$1;
+
+	var getBasicSourceTextureWidth$1 = getWidth$2;
+
+	var getBasicSourceTextureHeight$1 = getHeight$2;
+
+	var getBasicSourceTextureWrapS$1 = getWrapS$2;
+
+	var setBasicSourceTextureWrapS$1 = setWrapS$2;
+
+	var getBasicSourceTextureWrapT$1 = getWrapT$2;
+
+	var setBasicSourceTextureWrapT$1 = setWrapT$2;
+
+	var getBasicSourceTextureMagFilter$1 = getMagFilter$2;
+
+	var setBasicSourceTextureMagFilter$1 = setMagFilter$2;
+
+	var getBasicSourceTextureMinFilter$1 = getMinFilter$2;
+
+	var setBasicSourceTextureMinFilter$1 = setMinFilter$2;
+
+	var getBasicSourceTextureFormat$1 = getFormat$2;
+
+	var setBasicSourceTextureFormat$1 = setFormat$2;
+
+	var getBasicSourceTextureType$1 = getType$3;
+
+	var setBasicSourceTextureType$1 = setType$2;
+
+	var getBasicSourceTextureFlipY$1 = getFlipY$3;
+
+	var setBasicSourceTextureFlipY$1 = setFlipY$4;
+
+	var getBasicSourceTextureName$1 = getName$5;
+
+	var unsafeGetBasicSourceTextureName$1 = unsafeGetName$5;
+
+	function setBasicSourceTextureName$1(texture, name, state) {
+	  return setName$5(texture, name, state);
+	}
+
+
+	/* NameBasicSourceTextureMainService-Wonderjs Not a pure module */
 
 	function _fillVertexBuffer(buffer, points, offset) {
 	  setFloat32Array(points, new Float32Array(buffer, offset, points.length));
