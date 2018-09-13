@@ -7,42 +7,34 @@ module CustomEventHandler = {
   type prepareTuple = Wonderjs.GameObjectType.gameObject;
   type dataTuple = componentType;
 
-  let _isLightComponent = type_ => type_ === Light;
-
   let handleSelfLogic = ((store, dispatchFunc), currentSceneTreeNode, type_) => {
-    let editorState = StateEditorService.getState();
+    StateLogicService.getEditEngineState()
+    |> InspectorAddComponentUtils.addComponentByTypeForEditEngineState(
+         type_,
+         StateLogicService.getEditEngineComponent(
+           DiffType.GameObject,
+           currentSceneTreeNode,
+         ),
+       )
+    |> StateLogicService.setEditEngineState;
 
-    let (_editorState, editEngineState) =
-      InspectorAddComponentUtils.addComponentByType(
-        type_,
-        StateLogicService.getEditEngineComponent(
-          DiffType.GameObject,
-          currentSceneTreeNode,
-        ),
-        (None, StateLogicService.getEditEngineState()),
-      );
-
-    editEngineState |> StateLogicService.setEditEngineState;
-
-    let (editorStateForComponent, runEngineState) =
-      InspectorAddComponentUtils.addComponentByType(
-        type_,
-        currentSceneTreeNode,
-        (editorState |. Some, StateLogicService.getRunEngineState()),
-      );
+    let (editorState, runEngineState) =
+      (StateEditorService.getState(), StateLogicService.getRunEngineState())
+      |> InspectorAddComponentUtils.addComponentByTypeForRunEngineState(
+           type_,
+           currentSceneTreeNode,
+         );
 
     runEngineState |> StateLogicService.setRunEngineState;
 
-    switch (editorStateForComponent) {
-    | None => editorState |> StateEditorService.setState |> ignore
-    | Some(editorState) =>
-      editorState |> StateEditorService.setState |> ignore
-    };
+    editorState |> StateEditorService.setState |> ignore;
 
-    _isLightComponent(type_) ?
-      OperateLightMaterialLogicService.reInitAllMaterials() : ();
+    GameObjectEngineService.initGameObject
+    |> StateLogicService.getAndSetEngineStateWithDiff([|
+         {arguments: [|currentSceneTreeNode|], type_: GameObject},
+       |]);
 
-    StateLogicService.refreshEditAndRunEngineState();
+    StateLogicService.getAndRefreshEditAndRunEngineState();
 
     dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.Inspector|])))
     |> ignore;

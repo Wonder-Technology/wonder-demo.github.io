@@ -1,11 +1,11 @@
 open SceneGraphType;
 
-let getFlag = () => EditorType.SceneTree;
+let getWidge = () => EditorType.SceneTree;
 
-let isFlag = startFlag =>
-  switch (startFlag) {
+let isWidge = startWidge =>
+  switch (startWidge) {
   | None => false
-  | Some(startFlag) => startFlag === getFlag()
+  | Some(startWidge) => startWidge === getWidge()
   };
 
 let _isDragedGameObjectBeTargetGameObjectParent =
@@ -132,7 +132,7 @@ let buildSceneGraphDataWithNewGameObject =
       oldSceneGraphData: array(SceneGraphType.sceneTreeNodeType),
       engineState,
     ) => {
-  let scene = oldSceneGraphData |> ArrayService.getFirst;
+  let scene = oldSceneGraphData |> ArrayService.unsafeGetFirst;
   [|
     {
       ...scene,

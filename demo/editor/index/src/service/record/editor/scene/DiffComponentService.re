@@ -4,6 +4,8 @@ let getEditEngineComponent = (type_, diffMap) =>
   switch (type_) {
   | GameObject =>
     WonderCommonlib.HashMapService.unsafeGet("gameObject", diffMap)
+  | Geometry =>
+    WonderCommonlib.HashMapService.unsafeGet("geometry", diffMap)
   | Transform =>
     WonderCommonlib.HashMapService.unsafeGet("transform", diffMap)
   | MeshRenderer =>
@@ -16,6 +18,10 @@ let getEditEngineComponent = (type_, diffMap) =>
     WonderCommonlib.HashMapService.unsafeGet("directionLight", diffMap)
   | PointLight =>
     WonderCommonlib.HashMapService.unsafeGet("pointLight", diffMap)
+  | BasicCameraView =>
+    WonderCommonlib.HashMapService.unsafeGet("basicCameraView", diffMap)
+  | PerspectiveCamera =>
+    WonderCommonlib.HashMapService.unsafeGet("perspectiveCamera", diffMap)
   | ArcballCameraController =>
     WonderCommonlib.HashMapService.unsafeGet(
       "arcballCameraController",

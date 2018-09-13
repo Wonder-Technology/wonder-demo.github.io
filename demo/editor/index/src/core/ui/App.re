@@ -15,9 +15,9 @@ module Method = {
         |> (
           value =>
             switch (value) {
-            | None => ReasonReact.nullElement
+            | None => ReasonReact.null
             | Some(value) =>
-              ReasonReact.arrayToElement(
+              ReasonReact.array(
                 ExtensionParseUtils.extensionPanelComponent(
                   "App",
                   value,
@@ -29,7 +29,7 @@ module Method = {
       )
       (
         store.isEditorAndEngineStart ?
-          <Header store dispatchFunc /> : ReasonReact.nullElement
+          <Header store dispatchFunc /> : ReasonReact.null
       )
       <MainEditor store dispatchFunc />
     </article>;
@@ -46,6 +46,9 @@ let render = ((store: AppStore.appState, dispatchFunc), _self) =>
 let make = (~state as store: AppStore.appState, ~dispatch, _children) => {
   ...component,
   didMount: _self => {
+
+    WonderLog.Wonder_Console.makeObjInToWindow();
+
     AppExtensionUtils.getExtension(Method.getStorageParentKey())
     |> (
       value =>

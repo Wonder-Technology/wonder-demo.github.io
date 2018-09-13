@@ -24,7 +24,9 @@ module Method = {
     };
   };
 
-  let onDrop = SceneTreeDragEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
+  let dragGameObjectIntoGameObject = SceneTreeDragGameObjectEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
+
+  let dragWDBIntoScene = SceneTreeDragWDBEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
   let _isSelected = (uid, currentSceneTreeNode) =>
     switch (currentSceneTreeNode) {
@@ -48,10 +50,10 @@ module Method = {
            isSelected=(_isSelected(uid, currentSceneTreeNode))
            isActive=true
            dragImg
-           flag=(SceneTreeUtils.getFlag())
+           widge=(SceneTreeUtils.getWidge())
            onSelect=onSelectFunc
            onDrop=onDropFunc
-           isFlag=SceneTreeUtils.isFlag
+           isWidge=SceneTreeUtils.isWidge
            handleRelationError=SceneTreeUtils.isGameObjectRelationError
            treeChildren=(
              buildSceneTreeArray(
@@ -77,14 +79,14 @@ let render = (store, dispatchFunc, _self) => {
       treeArray=(
         store
         |> StoreUtils.unsafeGetSceneGraphDataFromStore
-        |> ArrayService.getFirst
+        |> ArrayService.unsafeGetFirst
         |> (scene => scene.children)
         |> Method.buildSceneTreeArray(
              DomHelper.createElement("img"),
              editorState |> SceneEditorService.getCurrentSceneTreeNode,
              (
                Method.onSelect((store, dispatchFunc)),
-               Method.onDrop((store, dispatchFunc), ()),
+               Method.dragGameObjectIntoGameObject((store, dispatchFunc), ()),
              ),
            )
       )
@@ -92,9 +94,11 @@ let render = (store, dispatchFunc, _self) => {
         SceneEngineService.getSceneGameObject
         |> StateLogicService.getEngineStateToGetData
       )
-      onDrop=(Method.onDrop((store, dispatchFunc), ()))
-      isFlag=SceneTreeUtils.isFlag
+      dragGameObject=(Method.dragGameObjectIntoGameObject((store, dispatchFunc), ()))
+      dragWDB=(Method.dragWDBIntoScene((store, dispatchFunc), ()))
+      isWidge=SceneTreeUtils.isWidge
       handleRelationError=SceneTreeUtils.isGameObjectRelationError
+      isAssetWDBFile=AssetUtils.isAssetWDBFile
     />
   </article>;
 };

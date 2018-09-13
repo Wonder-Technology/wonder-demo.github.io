@@ -52,3 +52,34 @@ let setArcballCameraControllerMoveSpeedY = ArcballCameraControllerAPI.setArcball
 let unsafeGetArcballCameraControllerRotateSpeed = ArcballCameraControllerAPI.unsafeGetArcballCameraControllerRotateSpeed;
 
 let setArcballCameraControllerRotateSpeed = ArcballCameraControllerAPI.setArcballCameraControllerRotateSpeed;
+
+let bindArcballCameraControllerEvent = ArcballCameraControllerAPI.bindArcballCameraControllerEvent;
+
+let unbindArcballCameraControllerEvent = ArcballCameraControllerAPI.unbindArcballCameraControllerEvent;
+
+let isBindArcballCameraControllerEvent = ArcballCameraControllerAPI.isBindArcballCameraControllerEvent;
+
+let unbindArcballCameraControllerEventIfHasComponent = (gameObject, engineState) =>
+  engineState
+  |> GameObjectComponentEngineService.hasArcballCameraControllerComponent(
+       gameObject,
+     ) ?
+    engineState
+    |> GameObjectComponentEngineService.getArcballCameraControllerComponent(
+         gameObject,
+       )
+    |. unbindArcballCameraControllerEvent(engineState) :
+    engineState;
+
+let bindArcballCameraControllerEventIfHasComponent = (gameObject, engineState) =>
+  engineState
+  |> GameObjectComponentEngineService.hasArcballCameraControllerComponent(
+       gameObject,
+     ) ?
+    engineState
+    |> GameObjectComponentEngineService.getArcballCameraControllerComponent(
+         gameObject,
+       )
+    |. bindArcballCameraControllerEvent(engineState) :
+    engineState;
+

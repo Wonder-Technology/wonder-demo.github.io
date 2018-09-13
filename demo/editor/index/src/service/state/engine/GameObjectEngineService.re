@@ -4,9 +4,15 @@ let create = GameObjectAPI.createGameObject;
 
 let initGameObject = GameObjectAPI.initGameObject;
 
+let isGameObjectAlive = GameObjectAPI.isGameObjectAlive;
+
 let disposeGameObject = GameObjectAPI.disposeGameObject;
 
+let cloneGameObject = GameObjectAPI.cloneGameObject;
+
 let disposeGameObjectKeepOrder = GameObjectAPI.disposeGameObjectKeepOrder;
+
+let disposeGameObjectKeepOrderRemoveGeometry = GameObjectAPI.disposeGameObjectKeepOrderRemoveGeometry;
 
 /* let hasGameObjectBoxGeometryComponent = GameObjectAPI.hasGameObjectBoxGeometryComponent; */
 /*
@@ -16,45 +22,31 @@ let disposeGameObjectKeepOrder = GameObjectAPI.disposeGameObjectKeepOrder;
 
    let hasGameObjectPointLightComponent = GameObjectAPI.hasGameObjectPointLightComponent; */
 
+let getGameObjectName = GameObjectAPI.getGameObjectName;
+
 let unsafeGetGameObjectName = GameObjectAPI.unsafeGetGameObjectName;
 
 let setGameObjectName = (name, gameObject, engineState) =>
   GameObjectAPI.setGameObjectName(gameObject, name, engineState);
 
-let unsafeGetGameObjectChildren = (gameObject, engineState) =>
-  TransformAPI.unsafeGetTransformChildren(
-    GameObjectAPI.unsafeGetGameObjectTransformComponent(
-      gameObject,
-      engineState,
-    ),
-    engineState,
-  )
-  |> Js.Array.map(transform =>
-       TransformAPI.unsafeGetTransformGameObject(transform, engineState)
+let getAllChildrenTransform = (rootGameObject, state) =>
+  GameObjectAPI.getAllChildrenTransform(rootGameObject, state);
+
+let getAllGameObjects = (rootGameObject, state) =>
+  GameObjectAPI.getAllGameObjects(rootGameObject, state);
+
+let disposeGameObjectArr = (gameObjectArr, engineState) =>
+  gameObjectArr
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. state, gameObject) =>
+         state |> isGameObjectAlive(gameObject) ?
+           disposeGameObjectKeepOrder(gameObject, state) : state,
+       engineState,
      );
 
-let getAllLightMaterials = (gameObject, engineState) => {
-  let rec _iterate = (gameObjectArr, resultArr) =>
-    gameObjectArr
-    |> WonderCommonlib.ArrayService.reduceOneParam(
-         (. resultArr, gameObject) =>
-           _iterate(
-             unsafeGetGameObjectChildren(gameObject, engineState),
-             GameObjectAPI.hasGameObjectLightMaterialComponent(
-               gameObject,
-               engineState,
-             ) ?
-               resultArr
-               |> ArrayService.push(
-                    GameObjectAPI.unsafeGetGameObjectLightMaterialComponent(
-                      gameObject,
-                      engineState,
-                    ),
-                  ) :
-               resultArr,
-           ),
-         resultArr,
-       );
-
-  _iterate([|gameObject|], [||]);
-};
+let initAllGameObjects = (gameObject, state) =>
+  getAllGameObjects(gameObject, state)
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. state, gameObject) => initGameObject(gameObject, state),
+       state,
+     );

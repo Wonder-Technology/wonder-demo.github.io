@@ -1,21 +1,33 @@
 open InspectorComponentType;
 
-open CameraComponentType;
+open Wonderjs;
 
-let removeComponentByType =
-    (type_, currentSceneTreeNode, (editorState, engineState)) =>
+open CameraGroupType;
+
+let removeComponentByTypeForEditEngineState =
+    (type_, currentSceneTreeNode, engineState) =>
   switch (type_) {
-  | MeshRenderer =>
-    let meshRenderer =
-      engineState
-      |> GameObjectComponentEngineService.getMeshRendererComponent(
-           currentSceneTreeNode,
-         );
-    (editorState, engineState)
-    |> GameObjectLogicService.disposeMeshRendererComponent(
+  | RenderGroup =>
+    engineState
+    |> GameObjectLogicService.disposeRenderGroupForEditEngineState(
          currentSceneTreeNode,
-         meshRenderer,
-       );
+         engineState
+         |> MainEditorMaterialUtils.getMaterialTypeByGameObject(
+              currentSceneTreeNode,
+            ),
+       )
+
+  | Geometry =>
+    engineState
+    |> GameObjectComponentEngineService.unsafeGetGeometryComponent(
+         currentSceneTreeNode,
+       )
+    |> GameObjectLogicService.disposeGeometryForEditEngineState(
+         currentSceneTreeNode,
+         _,
+         engineState,
+       )
+
   | Light =>
     let lightType =
       MainEditorLightUtils.getLightTypeByGameObject(
@@ -23,41 +35,24 @@ let removeComponentByType =
         engineState,
       );
 
-    (editorState, engineState)
-    |> MainEditorLightUtils.disposeLightByLightType(
+    engineState
+    |> MainEditorLightUtils.disposeLightByLightTypeForEditEngineState(
          lightType,
          currentSceneTreeNode,
        );
 
-  | Material =>
-    let materialType =
-      MainEditorMaterialUtils.getMaterialTypeByGameObject(
-        currentSceneTreeNode,
-        engineState,
-      );
-
-    (editorState, engineState)
-    |> MainEditorMaterialUtils.disposeMaterialByMaterialType(
-         materialType,
+  | CameraGroup =>
+    engineState
+    |> GameObjectLogicService.disposeCameraGroupForEditEngineState(
          currentSceneTreeNode,
-       );
-
-  | Camera =>
-    (editorState, engineState)
-    |> GameObjectLogicService.disposeCameraComponent(
-         currentSceneTreeNode,
-         {
-           basicCameraView:
-             engineState
-             |> GameObjectComponentEngineService.getBasicCameraViewComponent(
-                  currentSceneTreeNode,
-                ),
-           perspectiveCameraProjection:
-             engineState
-             |> GameObjectComponentEngineService.getPerspectiveCameraProjectionComponent(
-                  currentSceneTreeNode,
-                ),
-         },
+         CameraGroupEngineService.getCameraGroupComponents(
+           currentSceneTreeNode,
+           (
+             GameObjectComponentEngineService.getBasicCameraViewComponent,
+             GameObjectComponentEngineService.getPerspectiveCameraProjectionComponent,
+           ),
+           engineState,
+         ),
        )
 
   | ArcballCameraController =>
@@ -67,15 +62,104 @@ let removeComponentByType =
            currentSceneTreeNode,
          );
 
-    (editorState, engineState)
-    |> GameObjectLogicService.disposeArcballCameraControllerComponent(
+    engineState
+    |> GameObjectLogicService.disposeArcballCameraControllerForEditEngineState(
          currentSceneTreeNode,
          arcballCameraController,
        );
   | _ =>
     WonderLog.Log.fatal(
       WonderLog.Log.buildFatalMessage(
-        ~title="removeComponentByType",
+        ~title="removeComponentByTypeForEditEngineState",
+        ~description=
+          {j|the type_:$type_ in InspectorComponentType is can't remove|j},
+        ~reason="",
+        ~solution={j||j},
+        ~params={j||j},
+      ),
+    )
+  };
+
+let removeComponentByTypeForRunEngineState =
+    (type_, currentSceneTreeNode, (editorState, engineState)) =>
+  switch (type_) {
+  | RenderGroup =>
+    (editorState, engineState)
+    |> GameObjectLogicService.disposeRenderGroupForRunEngineState(
+         currentSceneTreeNode,
+         engineState
+         |> MainEditorMaterialUtils.getMaterialTypeByGameObject(
+              currentSceneTreeNode,
+            ),
+       )
+
+  | Geometry =>
+    (editorState, engineState)
+    |> GameObjectLogicService.disposeGeometryForRunEngineState(
+         currentSceneTreeNode,
+         engineState
+         |> GameObjectComponentEngineService.unsafeGetGeometryComponent(
+              currentSceneTreeNode,
+            ),
+       )
+
+  | Light =>
+    let lightType =
+      MainEditorLightUtils.getLightTypeByGameObject(
+        currentSceneTreeNode,
+        engineState,
+      );
+
+    (editorState, engineState)
+    |> MainEditorLightUtils.disposeLightByLightTypeForRunEngineState(
+         lightType,
+         currentSceneTreeNode,
+       );
+
+  | CameraGroup =>
+    let engineState =
+      SceneUtils.doesSceneHasRemoveableCamera() ?
+        engineState
+        |> CameraEngineService.prepareForRemoveCameraGroup(
+             currentSceneTreeNode,
+           ) :
+        engineState;
+
+    (editorState, engineState)
+    |> GameObjectLogicService.disposeCameraGroupForRunEngineState(
+         currentSceneTreeNode,
+         CameraGroupEngineService.getCameraGroupComponents(
+           currentSceneTreeNode,
+           (
+             GameObjectComponentEngineService.getBasicCameraViewComponent,
+             GameObjectComponentEngineService.getPerspectiveCameraProjectionComponent,
+           ),
+           engineState,
+         ),
+       );
+
+  | ArcballCameraController =>
+    let arcballCameraController =
+      engineState
+      |> GameObjectComponentEngineService.getArcballCameraControllerComponent(
+           currentSceneTreeNode,
+         );
+
+    let engineState =
+      engineState
+      |> ArcballCameraEngineService.unbindArcballCameraControllerEventIfHasComponent(
+           currentSceneTreeNode,
+         );
+
+    (editorState, engineState)
+    |> GameObjectLogicService.disposeArcballCameraControllerForRunEngineState(
+         currentSceneTreeNode,
+         arcballCameraController,
+       );
+  | _ =>
+    WonderLog.Log.fatal(
+      WonderLog.Log.buildFatalMessage(
+        ~title="removeComponentByTypeForRunEngineState",
         ~description=
           {j|the type_:$type_ in InspectorComponentType is can't remove|j},
         ~reason="",

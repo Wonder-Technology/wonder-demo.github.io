@@ -2,16 +2,13 @@ open InspectorComponentType;
 
 let isHasSpecificComponentByType = (type_, gameObject, engineState) =>
   switch (type_) {
-  | MeshRenderer =>
+  | RenderGroup =>
     engineState
-    |> GameObjectComponentEngineService.hasMeshRendererComponent(gameObject)
+    |> InspectorRenderGroupUtils.hasRenderGroupComponents(gameObject)
 
-  /* | "CustomGeometry" =>
-     engineState
-     |> GameObjectLogicService.hasBoxGeometryComponent(gameObject) */
-
-  | Material =>
-    engineState |> MaterialEngineService.hasMaterialComponent(gameObject)
+  | Geometry =>
+    engineState
+    |> GameObjectComponentEngineService.hasGeometryComponent(gameObject)
 
   | Light => engineState |> LightEngineService.hasLightComponent(gameObject)
 
@@ -19,8 +16,8 @@ let isHasSpecificComponentByType = (type_, gameObject, engineState) =>
      engineState
      |> GameObjectLogicService.hasSourceInstanceComponent(gameObject) */
 
-  | Camera =>
-    engineState |> CameraEngineService.hasCameraComponent(gameObject)
+  | CameraGroup =>
+    engineState |> CameraEngineService.hasCameraGroup(gameObject)
 
   | ArcballCameraController =>
     engineState

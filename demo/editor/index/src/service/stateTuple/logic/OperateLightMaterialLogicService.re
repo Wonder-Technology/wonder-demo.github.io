@@ -4,7 +4,7 @@ let createLightMaterial = (editEngineState, runEngineState) => {
   let (runEngineState, runMaterial) =
     runEngineState |> LightMaterialEngineService.create;
 
-  MaterialService.checkEditAndRunMaterialWithDiff(
+  OperateMaterialLogicService.checkEditAndRunMaterialWithDiff(
     (_editMaterial, runMaterial),
     DiffType.LightMaterial,
     editEngineState,
@@ -52,26 +52,10 @@ let setLightMaterialMapToEngineState = (mapId, newMaterial, engineStateTuple) =>
        LightMaterialEngineService.setLightMaterialDiffuseMap,
      );
 
-let reInitAllMaterials = () => {
-  let runEngineState = StateLogicService.getRunEngineState();
-
+let reInitAllMaterials = engineState =>
   LightMaterialEngineService.reInitMaterials(
-    GameObjectEngineService.getAllLightMaterials(
-      SceneEngineService.getSceneGameObject(runEngineState),
-      runEngineState,
+    GameObjectComponentEngineService.getAllLightMaterialComponents(
+      engineState,
     ),
-    runEngineState,
-  )
-  |> StateLogicService.setRunEngineState;
-
-  let editEngineState = StateLogicService.getEditEngineState();
-
-  LightMaterialEngineService.reInitMaterials(
-    GameObjectEngineService.getAllLightMaterials(
-      SceneEngineService.getSceneGameObject(editEngineState),
-      editEngineState,
-    ),
-    editEngineState,
-  )
-  |> StateLogicService.setEditEngineState;
-};
+    engineState,
+  );

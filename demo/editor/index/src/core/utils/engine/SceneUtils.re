@@ -1,16 +1,7 @@
-let addGameObject = createGameObjectFunc => {
-  let (_editorState, editEngineState, editGameObject) =
-    StateLogicService.getEditEngineState() |> createGameObjectFunc(None);
-
-  editEngineState
-  |> GameObjectEngineService.initGameObject(editGameObject)
-  |> SceneEngineService.addSceneChild(editGameObject)
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setEditEngineState;
-
+let addGameObject = (createGameObjectForEditFunc, createGameObjectForRunFunc) => {
   let (editorState, runEngineState, runGameObject) =
     StateLogicService.getRunEngineState()
-    |> createGameObjectFunc(StateEditorService.getState() |. Some);
+    |> createGameObjectForRunFunc(StateEditorService.getState());
 
   runEngineState
   |> GameObjectEngineService.initGameObject(runGameObject)
@@ -18,10 +9,25 @@ let addGameObject = createGameObjectFunc => {
   |> DirectorEngineService.loopBody(0.)
   |> StateLogicService.setRunEngineState;
 
-  switch (editorState) {
-  | None => ()
-  | Some(editorState) => editorState |> StateEditorService.setState |> ignore
-  };
+  editorState |> StateEditorService.setState |> ignore;
+  let (editEngineState, editGameObject) =
+    StateLogicService.getEditEngineState() |> createGameObjectForEditFunc;
+
+  editEngineState
+  |> GameObjectEngineService.initGameObject(editGameObject)
+  |> SceneEngineService.addSceneChild(editGameObject)
+  |> DirectorEngineService.loopBody(0.)
+  |> StateLogicService.setEditEngineState;
 
   runGameObject;
 };
+
+let doesSceneHasRemoveableCamera = () =>
+  GameObjectComponentEngineService.getAllBasicCameraViewComponents
+  |> StateLogicService.getEngineStateToGetData
+  |> Js.Array.length > 1;
+
+let isSceneHaveNoCamera = () =>
+  GameObjectComponentEngineService.getAllBasicCameraViewComponents
+  |> StateLogicService.getEngineStateToGetData
+  |> Js.Array.length == 0;

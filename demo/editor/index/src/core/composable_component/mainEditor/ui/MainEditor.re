@@ -6,16 +6,6 @@ module Method = {
     parent##offsetHeight,
   );
 
-  let _setViewportAndRefresh = ((canvasWidth, canvasHeight), engineState) =>
-    engineState
-    |> DeviceManagerEngineService.setViewport((
-         0.,
-         0.,
-         canvasWidth,
-         canvasHeight,
-       ))
-    |> DirectorEngineService.loopBody(0.);
-
   let _setViewportAndSendUniformProjectionMatDataAndRefresh =
       ((canvasWidth, canvasHeight), engineState) =>
     engineState
@@ -31,8 +21,12 @@ module Method = {
            canvasWidth |> NumberType.convertFloatToInt,
            canvasHeight |> NumberType.convertFloatToInt,
          ),
-       )
-    |> DirectorEngineService.loopBody(0.);
+       );
+
+  let _setAllAspectsWhoseAspectBasedOnCanvasSize = engineState =>
+    GameObjectComponentEngineService.getAllPerspectiveCameraProjectionComponents(
+      engineState,
+    );
 
   let resizeCanvasAndViewPort = () => {
     let (width, height) =
@@ -51,33 +45,66 @@ module Method = {
     |> ignore;
 
     StateLogicService.getEditEngineState()
+    |> PerspectiveCameraProjectionEngineService.markAllPerspectiveCameraProjections
     |> _setViewportAndSendUniformProjectionMatDataAndRefresh((width, height))
+    |> DirectorEngineService.loopBody(0.)
     |> StateLogicService.setEditEngineState;
 
     StateLogicService.getRunEngineState()
-    |> _setViewportAndRefresh((width, height))
+    |> PerspectiveCameraProjectionEngineService.markAllPerspectiveCameraProjections
+    |> _setViewportAndSendUniformProjectionMatDataAndRefresh((width, height))
+    |> DirectorEngineService.loopBody(0.)
     |> StateLogicService.setRunEngineState;
   };
+
+  let buildStartedRunWebglComponent = () =>
+    SceneUtils.isSceneHaveNoCamera() ?
+      <div className="runNoCamera">
+        <span className="runNoCamera-text">
+          (DomHelper.textEl("No Camera !"))
+        </span>
+      </div> :
+      ReasonReact.null;
 };
 
 let component = ReasonReact.statelessComponentWithRetainedProps("MainEditor");
 
 let _buildNotStartElement = () =>
   <article key="mainEditor" className="wonder-mainEditor-component">
-    <div key="topComponent" className="top-component">
-      <div id="editCanvasParent" key="webglParent" className="webgl-parent">
-        <canvas key="editWebgl" id="editCanvas" />
+    <div key="leftComponent" className="left-component">
+      <div className="top-widget">
+        <div id="editCanvasParent" key="webglParent" className="webgl-parent">
+          <canvas key="editWebgl" id="editCanvas" />
+        </div>
+        <div key="webglRun" className="webgl-parent">
+          <canvas key="runWebgl" id="runCanvas" />
+        </div>
       </div>
-      <div key="webglRun" className="webgl-parent">
-        <canvas key="runWebgl" id="runCanvas" />
-      </div>
+      <div className="bottom-widget" />
     </div>
-    <div key="bottomComponent" className="bottom-component" />
+    <div key="rightComponent" className="right-component" />
   </article>;
 
 let _buildStartedElement = (store, dispatchFunc) =>
   <article key="mainEditor" className="wonder-mainEditor-component">
-    <div key="topComponent" className="top-component">
+    <div key="leftComponent" className="left-component">
+      <div className="top-widget">
+        <div className="inline-component sceneTree-parent">
+          <MainEditorSceneTree store dispatchFunc />
+        </div>
+        <div id="editCanvasParent" key="webglParent" className="webgl-parent">
+          <canvas key="editWebgl" id="editCanvas" />
+        </div>
+        <div key="webglRun" className="webgl-parent">
+          (Method.buildStartedRunWebglComponent())
+          <canvas key="runWebgl" id="runCanvas" />
+        </div>
+      </div>
+      <div className="bottom-widget">
+        <MainEditorBottomComponents store dispatchFunc />
+      </div>
+    </div>
+    <div key="rightComponent" className="right-component">
       <div className="inline-component inspector-parent">
         <MainEditorInspector
           store
@@ -87,18 +114,6 @@ let _buildStartedElement = (store, dispatchFunc) =>
           )
         />
       </div>
-      <div className="inline-component sceneTree-parent">
-        <MainEditorSceneTree store dispatchFunc />
-      </div>
-      <div id="editCanvasParent" key="webglParent" className="webgl-parent">
-        <canvas key="editWebgl" id="editCanvas" />
-      </div>
-      <div key="webglRun" className="webgl-parent">
-        <canvas key="runWebgl" id="runCanvas" />
-      </div>
-    </div>
-    <div key="bottomComponent" className="bottom-component">
-      <MainEditorAsset store dispatchFunc />
     </div>
   </article>;
 
@@ -122,10 +137,10 @@ let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {
       |> then_(_ => {
            (
              editorState => {
-               let (asseTree, editorState) =
+               let (assetTree, editorState) =
                  editorState |> AssetTreeNodeUtils.initRootAssetTree;
                editorState
-               |> AssetTreeRootEditorService.setAssetTreeRoot(asseTree);
+               |> AssetTreeRootEditorService.setAssetTreeRoot(assetTree);
              }
            )
            |> StateLogicService.getAndSetEditorState;

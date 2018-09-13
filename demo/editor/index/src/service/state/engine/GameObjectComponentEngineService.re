@@ -9,6 +9,7 @@ let getLightMaterialComponent = GameObjectAPI.unsafeGetGameObjectLightMaterialCo
 let addLightMaterialComponent = GameObjectAPI.addGameObjectLightMaterialComponent;
 
 let disposeLightMaterialComponent = GameObjectAPI.disposeGameObjectLightMaterialComponent;
+
 /* basic material */
 
 let hasBasicMaterialComponent = GameObjectAPI.hasGameObjectBasicMaterialComponent;
@@ -30,14 +31,19 @@ let disposeMeshRendererComponent = GameObjectAPI.disposeGameObjectMeshRendererCo
 
 /* geometry */
 
-let addBoxGeometryComponent = GameObjectAPI.addGameObjectBoxGeometryComponent;
-
-let getGeometryComponent = (gameObject, engineState) =>
+let unsafeGetGeometryComponent = (gameObject, engineState) =>
   engineState
   |> GameObjectAPI.unsafeGetGameObjectGeometryComponent(gameObject);
 
-let hasBoxGeometryComponent = GameObjectAPI.hasGameObjectBoxGeometryComponent;
+let removeGeometryComponent = GameObjectAPI.removeGameObjectGeometryComponent;
 
+let disposeGeometryComponent = GameObjectAPI.disposeGameObjectGeometryComponent;
+
+let removeGeometryComponent = GameObjectAPI.removeGameObjectGeometryComponent;
+
+let hasGeometryComponent = GameObjectAPI.hasGameObjectGeometryComponent;
+
+let addGeometryComponent = GameObjectAPI.addGameObjectGeometryComponent;
 /* perspective camera projection */
 
 let addPerspectiveCameraProjectionComponent = GameObjectAPI.addGameObjectPerspectiveCameraProjectionComponent;
@@ -91,8 +97,23 @@ let hasPointLightComponent = GameObjectAPI.hasGameObjectPointLightComponent;
 /* arcball camera */
 
 let addArcballCameraControllerComponent = GameObjectAPI.addGameObjectArcballCameraControllerComponent;
+
 let disposeArcballCameraControllerComponent = GameObjectAPI.disposeGameObjectArcballCameraControllerComponent;
 
 let getArcballCameraControllerComponent = GameObjectAPI.unsafeGetGameObjectArcballCameraControllerComponent;
 
 let hasArcballCameraControllerComponent = GameObjectAPI.hasGameObjectArcballCameraControllerComponent;
+
+/* all components */
+
+let getAllLightMaterialComponents = GameObjectAPI.getAllLightMaterialComponents;
+
+let getAllDirectionLightComponents = GameObjectAPI.getAllDirectionLightComponents;
+
+let getAllBasicCameraViewComponents = GameObjectAPI.getAllBasicCameraViewComponents;
+
+let getAllArcballCameraControllerComponents = GameObjectAPI.getAllArcballCameraControllerComponents;
+
+let getAllPerspectiveCameraProjectionComponents = GameObjectAPI.getAllPerspectiveCameraProjectionComponents;
+
+let getAllGeometryComponents = GameObjectAPI.getAllGeometryComponents;

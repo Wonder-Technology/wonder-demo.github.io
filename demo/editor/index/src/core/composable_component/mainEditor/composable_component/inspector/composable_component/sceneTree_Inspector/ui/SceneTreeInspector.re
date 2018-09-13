@@ -42,10 +42,16 @@ module Method = {
     switch (currentSceneTreeNode) {
     | None => [||]
     | Some(gameObject) =>
-      StateEditorService.getState()
-      |> InspectorEditorService.getComponentTypeMap
-      |> WonderCommonlib.SparseMapService.unsafeGet(gameObject)
-      |> _buildGameObjectAllShowComponent((store, dispatchFunc), gameObject)
+      [|_buildNameFunc((store, dispatchFunc), gameObject)|]
+      |> Js.Array.concat(
+           StateEditorService.getState()
+           |> InspectorEditorService.getComponentTypeMap
+           |> WonderCommonlib.SparseMapService.unsafeGet(gameObject)
+           |> _buildGameObjectAllShowComponent(
+                (store, dispatchFunc),
+                gameObject,
+              ),
+         )
       |> ArrayService.push(
            <AddableComponent
              key=(DomHelper.getRandomKey())
@@ -53,9 +59,6 @@ module Method = {
              currentSceneTreeNode=gameObject
              addableComponentList=addableComponentConfig
            />,
-         )
-      |> ArrayService.unshift(
-           _buildNameFunc((store, dispatchFunc), gameObject),
          )
     };
 };
@@ -71,7 +74,7 @@ let render =
     ) =>
   <article key="SceneTreeInspector" className="wonder-inspector-sceneTree">
     (
-      ReasonReact.arrayToElement(
+      ReasonReact.array(
         Method.buildCurrentSceneTreeNodeComponent(
           (store, dispatchFunc),
           addableComponentConfig,

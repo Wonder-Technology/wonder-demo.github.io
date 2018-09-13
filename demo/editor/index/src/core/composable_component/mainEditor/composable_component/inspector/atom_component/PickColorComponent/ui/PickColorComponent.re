@@ -28,7 +28,7 @@ let reducer = ((closeColorPickFunc, getColorFunc), action, state) =>
 
 let render =
     (label, changeColorFunc, {state, send}: ReasonReact.self('a, 'b, 'c)) =>
-  <article className="wonder-material-color">
+  <article className="wonder-color-pick">
     <div className="">
       <span className=""> (DomHelper.textEl(label)) </span>
       <span className=""> (DomHelper.textEl(state.colorHex)) </span>
@@ -49,7 +49,7 @@ let render =
               onClick=(_e => send(HideColorPick))
             />
           </div> :
-          ReasonReact.nullElement
+          ReasonReact.null
       )
     </div>
   </article>;

@@ -4,12 +4,12 @@ type updateAction('a) =
 type updateComponentType =
   | All
   | Inspector
-  | Asset
+  | BottomComponent
   | SceneTree;
 
 type updateComponentTypeArr = array(updateComponentType);
 
-type updateState = {componentTypeArr: array(updateComponentType)};
+type updateState = {componentTypeArr: updateComponentTypeArr};
 
 let updateReducer =
     (state: updateState, action: updateAction('a))

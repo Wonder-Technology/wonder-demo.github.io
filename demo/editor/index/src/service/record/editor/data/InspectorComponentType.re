@@ -1,9 +1,19 @@
+open Wonderjs;
+
 type componentType =
   | Transform
-  | MeshRenderer
-  | CustomGeometry
+  | RenderGroup
+  | Geometry
   | ArcballCameraController
-  | Camera
-  | Material
+  | CameraGroup
   | Light
   | SourceInstance;
+
+type gameObjectComponent = {
+  componentType,
+  hasComponentFunc: (int, StateDataMainType.state) => bool,
+};
+
+external convertComponentTypeToInt : componentType => int = "%identity";
+
+external convertIntToComponentType : int => componentType = "%identity";

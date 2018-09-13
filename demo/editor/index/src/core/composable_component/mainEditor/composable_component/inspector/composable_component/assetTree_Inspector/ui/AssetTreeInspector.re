@@ -6,7 +6,6 @@ open CurrentNodeDataType;
 type state = {
   inputValue: string,
   originalName: string,
-  postfix: string,
 };
 
 type action =
@@ -61,6 +60,7 @@ module Method = {
       <p> (DomHelper.textEl(jsonResult)) </p>
     </div>;
   };
+
   let buildTextureComponent =
       (
         (store, dispatchFunc),
@@ -83,6 +83,47 @@ module Method = {
     />;
   };
 
+  let buildMaterialComponent =
+      (
+        (store, dispatchFunc),
+        (currentNodeId, nodeType),
+        state,
+        materialNodeMap,
+      ) => {
+    let {name, type_, materialComponent} =
+      materialNodeMap
+      |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId);
+
+    <MaterialInspector
+      store
+      dispatchFunc
+      currentNodeId
+      name=state.inputValue
+      type_
+      materialComponent
+      renameFunc=(
+        renameAssetTreeNode(
+          (store, dispatchFunc),
+          (currentNodeId, nodeType),
+        )
+      )
+    />;
+  };
+
+  let buildWDBComponent = (state, send, currentNodeId, wdbNodeMap) =>
+    <div>
+      <h1> (DomHelper.textEl("Model")) </h1>
+      <hr />
+      <span className=""> (DomHelper.textEl("name:")) </span>
+      <input
+        className="input-component float-input"
+        _type="text"
+        value=state.inputValue
+        onChange=(_e => send(change(_e)))
+        onBlur=(_e => send(Blur))
+      />
+    </div>;
+
   let showAssetNodeComponent =
       (
         reduxTuple,
@@ -96,35 +137,51 @@ module Method = {
         buildFolderComponent(state, send, currentNodeId),
         buildJsonComponent(state, send, currentNodeId),
         buildTextureComponent(reduxTuple, (currentNodeId, nodeType), state),
+        buildMaterialComponent(reduxTuple, (currentNodeId, nodeType), state),
+        buildWDBComponent(state, send, currentNodeId),
       ),
-    );
+    )
+    |> StateLogicService.getEditorState;
 
   let initFolderName = (currentNodeId, folderNodeMap) => {
-    let (fileName, postfix) =
-      AssetFolderNodeMapEditorService.getFolderBaseNameAndExtName(
+    let folderName =
+      AssetFolderNodeMapEditorService.getFolderName(
         currentNodeId,
         folderNodeMap,
       );
 
-    {inputValue: fileName, originalName: fileName, postfix};
+    {inputValue: folderName, originalName: folderName};
   };
   let initJsonName = (currentNodeId, jsonNodeMap) => {
-    let (fileName, postfix) =
-      AssetJsonNodeMapEditorService.getJsonBaseNameAndExtName(
-        currentNodeId,
-        jsonNodeMap,
-      );
+    let baseName =
+      AssetJsonNodeMapEditorService.getJsonBaseName(currentNodeId, jsonNodeMap);
 
-    {inputValue: fileName, originalName: fileName, postfix};
+    {inputValue: baseName, originalName: baseName};
   };
   let initTextureName = (currentNodeId, textureNodeMap) => {
-    let (fileName, postfix) =
-      OperateTextureLogicService.getTextureBaseNameAndExtName(
+    let baseName =
+      OperateTextureLogicService.getTextureBaseName(
         currentNodeId,
         textureNodeMap,
       );
 
-    {inputValue: fileName, originalName: fileName, postfix};
+    {inputValue: baseName, originalName: baseName};
+  };
+
+  let initMaterialName = (currentNodeId, materialNodeMap) => {
+    let baseName =
+      AssetMaterialNodeMapEditorService.getMaterialBaseName(
+        currentNodeId,
+        materialNodeMap,
+      );
+
+    {inputValue: baseName, originalName: baseName};
+  };
+  let initWDBName = (currentNodeId, wdbNodeMap) => {
+    let baseName =
+      AssetWDBNodeMapEditorService.getWDBBaseName(currentNodeId, wdbNodeMap);
+
+    {inputValue: baseName, originalName: baseName};
   };
 };
 
@@ -148,7 +205,7 @@ let reducer = ((store, dispatchFunc), currentNodeId, nodeType, action) =>
               Method.renameAssetTreeNode(
                 (store, dispatchFunc),
                 (currentNodeId, nodeType),
-                value ++ state.postfix,
+                value,
               )
             )
         }
@@ -183,8 +240,11 @@ let make =
         Method.initFolderName(currentNodeId),
         Method.initJsonName(currentNodeId),
         Method.initTextureName(currentNodeId),
+        Method.initMaterialName(currentNodeId),
+        Method.initWDBName(currentNodeId),
       ),
-    ),
+    )
+    |> StateLogicService.getEditorState,
   reducer: reducer((store, dispatchFunc), currentNodeId, nodeType),
   render: self =>
     render((store, dispatchFunc), currentNodeId, nodeType, self),

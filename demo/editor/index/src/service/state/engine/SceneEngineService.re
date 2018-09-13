@@ -1,22 +1,54 @@
 open Wonderjs;
 
-let createDefaultSceneGameObjects =
-    (editorState, engineState, createCameraFunc) => {
+let createDefaultSceneGameObjectsForEditEngineState =
+    (cubeGeometry, engineState) => {
+  let (engineState, box1) =
+    PrimitiveEngineService.createBoxForEditEngineState(
+      cubeGeometry,
+      engineState,
+    );
+  let (engineState, box2) =
+    PrimitiveEngineService.createBoxForEditEngineState(
+      cubeGeometry,
+      engineState,
+    );
+  let (engineState, directionLight) =
+    PrimitiveEngineService.createDirectionLightForEditEngineState(
+      engineState,
+    );
+  let (engineState, camera) =
+    CameraEngineService.createCameraForEditEngineState(engineState);
+
+  (engineState, camera, box1, box2, directionLight);
+};
+
+let createDefaultSceneGameObjectsForRunEngineState =
+    (cubeGeometry, editorState, engineState) => {
   let (editorState, engineState, box1) =
-    PrimitiveEngineService.createBox(editorState, engineState);
+    PrimitiveEngineService.createBoxForRunEngineState(
+      cubeGeometry,
+      editorState,
+      engineState,
+    );
   let (editorState, engineState, box2) =
-    PrimitiveEngineService.createBox(editorState, engineState);
+    PrimitiveEngineService.createBoxForRunEngineState(
+      cubeGeometry,
+      editorState,
+      engineState,
+    );
   let (editorState, engineState, directionLight) =
-    PrimitiveEngineService.createDirectionLight(editorState, engineState);
+    PrimitiveEngineService.createDirectionLightForRunEngineState(
+      editorState,
+      engineState,
+    );
   let (editorState, engineState, camera) =
-    createCameraFunc(editorState, engineState);
+    CameraEngineService.createCameraForRunEngineState(
+      editorState,
+      engineState,
+    );
 
   (editorState, engineState, camera, box1, box2, directionLight);
 };
-
-let setCurrentCameraGameObject = SceneAPI.setCurrentCameraGameObject;
-
-let getCurrentCameraGameObject = SceneAPI.getCurrentCameraGameObject;
 
 let getAmbientLightColor = SceneAPI.getAmbientLightColor;
 
@@ -27,3 +59,21 @@ let getSceneGameObject = SceneAPI.getSceneGameObject;
 let addSceneChild = SceneAPI.addSceneChild;
 
 let addSceneChildren = SceneAPI.addSceneChildren;
+
+let setSceneGameObject = SceneAPI.setSceneGameObject;
+
+let disposeSceneAllChildrenKeepOrder = engineState => {
+  let scene = engineState |> getSceneGameObject;
+
+  engineState
+  |> GameObjectEngineService.getAllGameObjects(scene)
+  |> Js.Array.sliceFrom(1)
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. engineState, gameObject) =>
+         engineState
+         |> GameObjectEngineService.disposeGameObjectKeepOrderRemoveGeometry(
+              gameObject,
+            ),
+       engineState,
+     );
+};

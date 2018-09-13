@@ -7,44 +7,40 @@ module CustomEventHandler = {
   type prepareTuple = Wonderjs.GameObjectType.gameObject;
   type dataTuple = componentType;
 
-  let _isLightComponent = type_ => type_ === Light;
+  let _isRemoveLight = type_ => type_ === Light;
 
   let handleSelfLogic = ((store, dispatchFunc), currentSceneTreeNode, type_) => {
-    let editorState = StateEditorService.getState();
+    StateLogicService.getEditEngineState()
+    |> InspectorRemoveComponentUtils.removeComponentByTypeForEditEngineState(
+         type_,
+         StateLogicService.getEditEngineComponent(
+           DiffType.GameObject,
+           currentSceneTreeNode,
+         ),
+       )
+    |> StateLogicService.setEditEngineState;
 
-    let (_editorState, editEngineState) =
-      InspectorRemoveComponentUtils.removeComponentByType(
-        type_,
-        StateLogicService.getEditEngineComponent(
-          DiffType.GameObject,
-          currentSceneTreeNode,
-        ),
-        (None, StateLogicService.getEditEngineState()),
-      );
-
-    editEngineState |> StateLogicService.setEditEngineState;
-
-    let (editorStateForComponent, runEngineState) =
-      InspectorRemoveComponentUtils.removeComponentByType(
-        type_,
-        currentSceneTreeNode,
-        (editorState |. Some, StateLogicService.getRunEngineState()),
-      );
+    let (editorState, runEngineState) =
+      (StateEditorService.getState(), StateLogicService.getRunEngineState())
+      |> InspectorRemoveComponentUtils.removeComponentByTypeForRunEngineState(
+           type_,
+           currentSceneTreeNode,
+         );
 
     runEngineState |> StateLogicService.setRunEngineState;
 
-    switch (editorStateForComponent) {
-    | None => editorState |> StateEditorService.setState |> ignore
-    | Some(editorState) =>
-      editorState |> StateEditorService.setState |> ignore
-    };
+    editorState |> StateEditorService.setState |> ignore;
 
-    StateLogicService.refreshEditAndRunEngineState();
-    
-    _isLightComponent(type_) ?
-    OperateLightMaterialLogicService.reInitAllMaterials() : ();
-    
-    StateLogicService.refreshEditAndRunEngineState();
+    _isRemoveLight(type_) ?
+      {
+        StateLogicService.getAndRefreshEditAndRunEngineState();
+
+        OperateLightMaterialLogicService.reInitAllMaterials
+        |> StateLogicService.getAndSetEditAndRunEngineState;
+      } :
+      ();
+
+    StateLogicService.getAndRefreshEditAndRunEngineState();
 
     dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.Inspector|])))
     |> ignore;

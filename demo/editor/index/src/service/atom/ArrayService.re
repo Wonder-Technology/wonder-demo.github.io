@@ -8,8 +8,34 @@ let range = (a: int, b: int) => {
   result;
 };
 
-let getFirst = arr =>
+let unsafeGetFirst = arr =>
   WonderCommonlib.ArrayService.unsafeGet(arr, 0)
+  |> WonderLog.Contract.ensureCheck(
+       r =>
+         WonderLog.(
+           Contract.(
+             Operators.(
+               test(
+                 Log.buildAssertMessage(
+                   ~expect={j|array[0] element exist|j},
+                   ~actual={j|not|j},
+                 ),
+                 () =>
+                 r |> assertNullableExist
+               )
+             )
+           )
+         ),
+       StateEditorService.getStateIsDebug(),
+     );
+
+let getFirst = arr => Array.unsafe_get(arr, 0) |> Obj.magic |> Js.toOption;
+
+let unsafeGetLast = arr =>
+  arr
+  |> Js.Array.length
+  |> (len => len - 1)
+  |> WonderCommonlib.ArrayService.unsafeGet(arr)
   |> WonderLog.Contract.ensureCheck(
        r =>
          WonderLog.(
@@ -73,7 +99,7 @@ let removeFirst = arr => {
   arr |> Js.Array.shift |> OptionService.unsafeGet;
 };
 
-let getNth = (index, arr) =>
+let unsafeGetNth = (index, arr) =>
   WonderCommonlib.ArrayService.unsafeGet(arr, index)
   |> WonderLog.Contract.ensureCheck(
        r =>
@@ -114,3 +140,24 @@ let pushMany = (itemArr, arr) =>
      );
 
 let hasItemByFunc = (func, arr) => arr |> Js.Array.filter(func) |> hasItem;
+
+let removeDuplicateItems = (buildKeyFunc, arr) => {
+  open WonderCommonlib;
+
+  let resultArr = [||];
+  let map = HashMapService.createEmpty();
+
+  for (i in 0 to Js.Array.length(arr) - 1) {
+    let item = Array.unsafe_get(arr, i);
+    let key = buildKeyFunc(. item);
+
+    switch (HashMapService.get(key, map)) {
+    | None =>
+      Js.Array.push(item, resultArr) |> ignore;
+      HashMapService.set(key, item, map) |> ignore;
+    | Some(_) => ()
+    };
+  };
+
+  resultArr;
+};

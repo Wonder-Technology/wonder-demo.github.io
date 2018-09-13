@@ -40,17 +40,24 @@ module Method = {
   let buildOperateGameObjectComponent = (store, dispatchFunc) =>
     <div className="header-item">
       <div className="component-item">
-        <button onClick=(_e => addGameObjectByType((store, dispatchFunc), "box", ()))>
+        <button
+          onClick=(
+            _e =>
+              addGameObjectByType(
+                (store, dispatchFunc),
+                AddGameObjectType.Box,
+                (),
+              )
+          )>
           (DomHelper.textEl("add box"))
         </button>
       </div>
       <div className="component-item">
         <button
           disabled=(
-            HeaderUtils.isGameObjectNotRemoveable(
-              SceneEditorService.getCurrentSceneTreeNode
-              |> StateLogicService.getEditorState,
-            )
+            SceneEditorService.getCurrentSceneTreeNode
+            |> StateLogicService.getEditorState
+            |> Js.Option.isNone
           )
           onClick=(
             _e => disposeCurrentSceneTreeNode((store, dispatchFunc), (), ())
@@ -90,14 +97,14 @@ module Method = {
     |> convertColorObjToColorPickType
     |> getEngineColorRgbArr
     |> SceneEngineService.setAmbientLightColor
-    |> StateLogicService.getAndRefreshEditAndRunEngineState;
+    |> StateLogicService.getAndRefreshEditAndRunEngineStateWithFunc;
 
   let getColor = () =>
     SceneEngineService.getAmbientLightColor
     |> StateLogicService.getEngineStateToGetData
     |> getHexString;
 
-  let closeColorPick = AmbientLightCloseColorPickEventHandler.MakeEventHandler.pushUndoStackWithCopiedEngineState;
+  let closeColorPick = HeaderAmbientLightCloseColorPickEventHandler.MakeEventHandler.pushUndoStackWithCopiedEngineState;
 
   let buildAmbientLightComponent = (store, dispatchFunc) =>
     <div className="header-item">
@@ -117,10 +124,52 @@ module Method = {
       <div className="component-item">
         <button
           onClick=(
-            _e => addGameObjectByType((store, dispatchFunc), "emptyGameObject", ())
+            _e =>
+              addGameObjectByType(
+                (store, dispatchFunc),
+                AddGameObjectType.EmptyGameObject,
+                (),
+              )
           )>
           (DomHelper.textEl("add empty gameObject"))
         </button>
+      </div>
+    </div>;
+
+  let loadSceneWDB = HeaderUploadSceneWDBEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
+
+  let buildOperateWDB = (store, dispatchFunc) =>
+    <div className="header-item">
+      <div className="component-item">
+        <input
+          className="file-upload"
+          _type="file"
+          multiple=false
+          onChange=(e => loadSceneWDB((store, dispatchFunc), (), e))
+        />
+      </div>
+      <div className="component-item">
+        <button
+          onClick=(
+            _e => HeaderExportUtils.exportPackage(WonderBsJszip.Zip.create)
+          )>
+          (DomHelper.textEl("exportPackage"))
+        </button>
+      </div>
+      <div className="component-item">
+        <input
+          className="file-upload"
+          _type="file"
+          multiple=false
+          onChange=(
+            e =>
+              HeaderImportUtils.importPackage(
+                WonderBsJszip.Zip.create,
+                dispatchFunc,
+                e,
+              )
+          )
+        />
       </div>
     </div>;
 };
@@ -135,6 +184,7 @@ let render = (store: AppStore.appState, dispatchFunc, _self) =>
     (Method.buildOperateControllerComponent(store, dispatchFunc))
     (Method.buildAmbientLightComponent(store, dispatchFunc))
     (Method.buildEmptyGameObject(store, dispatchFunc))
+    (Method.buildOperateWDB(store, dispatchFunc))
   </article>;
 
 let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {

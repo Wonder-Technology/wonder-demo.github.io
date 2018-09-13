@@ -1,13 +1,20 @@
 open AssetNodeType;
 open DiffType;
 
-let getTextureBaseNameAndExtName = (currentNodeId, textureNodeMap) =>
+let getTextureBaseName = (currentNodeId, textureNodeMap) =>
   textureNodeMap
   |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
   |> (({textureIndex}) => textureIndex)
   |> BasicSourceTextureEngineService.unsafeGetBasicSourceTextureName
-  |> StateLogicService.getEngineStateToGetData
-  |> FileNameService.getBaseNameAndExtName;
+  |> StateLogicService.getEngineStateToGetData;
+
+let getTextureTotalName = (currentNodeId, textureNodeMap) =>
+  getTextureBaseName(currentNodeId, textureNodeMap)
+  ++ (
+    textureNodeMap
+    |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
+    |> (({postfix}: textureResultType) => postfix)
+  );
 
 let renameTextureToEngine = (texture, newName) =>
   BasicSourceTextureEngineService.setBasicSourceTextureName(newName)
@@ -23,18 +30,16 @@ let changeTextureMapAndRereshEngineState = (material, mapId, setMapFunc) => {
     )
     |> setMapFunc(mapId, material);
 
-  editEngineState
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setEditEngineState;
-  runEngineState
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setRunEngineState;
+  StateLogicService.refreshEditAndRunEngineState(
+    editEngineState,
+    runEngineState,
+  );
 };
 
 let _replaceMaterialAndRefreshEngineState =
     (
-      gameObject,
-      material,
+      (gameObject, material),
+      color,
       (
         disposeMaterialFunc,
         setColorFunc,
@@ -43,10 +48,6 @@ let _replaceMaterialAndRefreshEngineState =
       ),
       setMapFunc,
     ) => {
-  let color =
-    BasicMaterialEngineService.getColor(material)
-    |> StateLogicService.getEngineStateToGetData;
-
   let (editEngineState, runEngineState) =
     (
       StateLogicService.getEditEngineState(),
@@ -73,20 +74,16 @@ let _replaceMaterialAndRefreshEngineState =
          GameObjectEngineService.initGameObject,
        );
 
-  editEngineState
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setEditEngineState;
-
-  runEngineState
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setRunEngineState;
+  StateLogicService.refreshEditAndRunEngineState(
+    editEngineState,
+    runEngineState,
+  );
 };
 
-let replaceMaterialComponentToHasMapOne =
+let replaceMaterialComponentFromNoMapToHasMap =
     (
-      gameObject,
-      material,
-      mapId,
+      (gameObject, material, mapId),
+      color,
       (
         disposeMaterialFunc,
         setColorFunc,
@@ -96,16 +93,16 @@ let replaceMaterialComponentToHasMapOne =
       setMapFunc,
     ) =>
   _replaceMaterialAndRefreshEngineState(
-    gameObject,
-    material,
+    (gameObject, material),
+    color,
     (disposeMaterialFunc, setColorFunc, createMaterialFunc, addMaterialFunc),
     setMapFunc(mapId) |. Some,
   );
 
-let replaceMaterialComponentToNoMapOne =
+let replaceMaterialComponentFromHasMapToNoMap =
     (
-      gameObject,
-      material,
+      (gameObject, material),
+      color,
       (
         disposeMaterialFunc,
         setColorFunc,
@@ -114,8 +111,8 @@ let replaceMaterialComponentToNoMapOne =
       ),
     ) =>
   _replaceMaterialAndRefreshEngineState(
-    gameObject,
-    material,
+    (gameObject, material),
+    color,
     (disposeMaterialFunc, setColorFunc, createMaterialFunc, addMaterialFunc),
     None,
   );

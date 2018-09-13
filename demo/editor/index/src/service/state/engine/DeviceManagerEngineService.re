@@ -2,7 +2,7 @@ open Wonderjs;
 
 open StateDataMainType;
 
-let setViewport = (viewportData, state ) => {
+let setViewport = (viewportData, state) => {
   ...state,
   deviceManagerRecord:
     state.deviceManagerRecord
@@ -12,5 +12,7 @@ let setViewport = (viewportData, state ) => {
        )
     |> DeviceManagerService.setViewportData(viewportData),
 };
+
+let getViewport = state => state.deviceManagerRecord.viewport;
 
 let unsafeGetGl = DeviceManagerAPI.unsafeGetGl;
