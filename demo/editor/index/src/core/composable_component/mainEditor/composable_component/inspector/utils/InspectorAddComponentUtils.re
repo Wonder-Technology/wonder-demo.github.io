@@ -2,100 +2,7 @@ open Wonderjs;
 
 open InspectorComponentType;
 
-let addComponentByTypeForEditEngineState =
-    (type_, currentSceneTreeNode, engineState) =>
-  switch (type_) {
-  | RenderGroup =>
-    let (engineState, renderGroup) =
-      RenderGroupEngineService.createRenderGroup(
-        (MeshRendererEngineService.create, LightMaterialEngineService.create),
-        engineState,
-      );
-
-    engineState
-    |> GameObjectLogicService.addRenderGroupForEditEngineState(
-         currentSceneTreeNode,
-         renderGroup,
-         (
-           GameObjectAPI.addGameObjectMeshRendererComponent,
-           GameObjectAPI.addGameObjectLightMaterialComponent,
-         ),
-       );
-  | Geometry =>
-    let editorState = StateEditorService.getState();
-
-    let editCubeGeometry =
-      editorState
-      |> AssetGeometryDataEditorService.getGeometryData
-      |> (({defaultCubeGeometryIndex}) => defaultCubeGeometryIndex)
-      |> StateLogicService.getEditEngineComponent(DiffType.Geometry);
-
-    engineState
-    |> GameObjectLogicService.addGeometryForEditEngineState(
-         currentSceneTreeNode,
-         editCubeGeometry,
-       );
-
-  | Light =>
-    engineState |> DirectionLightEngineService.isMaxCount ?
-      {
-        Antd.Message.message
-        |> Antd.Message.convertToJsObj
-        |> (
-          messageObj =>
-            messageObj##info(
-              "the direction light count is exceed max count !",
-              4,
-            )
-        )
-        |> ignore;
-
-        engineState;
-      } :
-      {
-        let (engineState, directionLightComponent) =
-          engineState |> DirectionLightEngineService.create;
-
-        engineState
-        |> GameObjectLogicService.addDirectionLightForEditEngineState(
-             currentSceneTreeNode,
-             directionLightComponent,
-           )
-        |> OperateLightMaterialLogicService.reInitAllMaterials;
-      }
-
-  | CameraGroup =>
-    let (engineState, cameraComponentRecord) =
-      CameraEngineService.createCameraGroup(engineState);
-
-    engineState
-    |> GameObjectLogicService.addCameraGroupForEditEngineState(
-         currentSceneTreeNode,
-         cameraComponentRecord,
-       );
-
-  | ArcballCameraController =>
-    let (engineState, arcballCameraController) =
-      engineState |> ArcballCameraEngineService.create;
-
-    engineState
-    |> GameObjectLogicService.addArcballCameraControllerForEditEngineState(
-         currentSceneTreeNode,
-         arcballCameraController,
-       );
-  | _ =>
-    WonderLog.Log.fatal(
-      WonderLog.Log.buildFatalMessage(
-        ~title="addComponentByTypeForEditEngineState",
-        ~description=
-          {j|the type:$type_ in inspectorComponentType is can't add |j},
-        ~reason="",
-        ~solution={j||j},
-        ~params={j||j},
-      ),
-    )
-  };
-let addComponentByTypeForRunEngineState =
+let addComponentByType =
     (type_, currentSceneTreeNode, (editorState, engineState)) =>
   switch (type_) {
   | RenderGroup =>
@@ -106,7 +13,7 @@ let addComponentByTypeForRunEngineState =
       );
 
     (editorState, engineState)
-    |> GameObjectLogicService.addRenderGroupForRunEngineState(
+    |> GameObjectLogicService.addRenderGroup(
          currentSceneTreeNode,
          renderGroup,
          (
@@ -114,19 +21,18 @@ let addComponentByTypeForRunEngineState =
            GameObjectAPI.addGameObjectLightMaterialComponent,
          ),
        );
-
   | Geometry =>
-    let editorState = StateEditorService.getState();
+    /* let editorState = StateEditorService.getState(); */
 
-    let runCubeGeometry =
+    let defaultCubeGeometry =
       editorState
       |> AssetGeometryDataEditorService.getGeometryData
       |> (({defaultCubeGeometryIndex}) => defaultCubeGeometryIndex);
 
     (editorState, engineState)
-    |> GameObjectLogicService.addGeometryForRunEngineState(
+    |> GameObjectLogicService.addGeometry(
          currentSceneTreeNode,
-         runCubeGeometry,
+         defaultCubeGeometry,
        );
 
   | Light =>
@@ -150,14 +56,14 @@ let addComponentByTypeForRunEngineState =
           engineState |> DirectionLightEngineService.create;
 
         (editorState, engineState)
-        |> GameObjectLogicService.addDirectionLightForRunEngineState(
+        |> GameObjectLogicService.addDirectionLight(
              currentSceneTreeNode,
              directionLightComponent,
            )
         |> (
           ((editorState, engineState)) => (
             editorState,
-            engineState |> OperateLightMaterialLogicService.reInitAllMaterials,
+            engineState |> SceneEngineService.clearShaderCacheAndReInitSceneAllLightMaterials,
           )
         );
       }
@@ -167,48 +73,46 @@ let addComponentByTypeForRunEngineState =
       CameraEngineService.createCameraGroup(engineState);
 
     (editorState, engineState)
-    |> GameObjectLogicService.addCameraGroupForRunEngineState(
+    |> GameObjectLogicService.addCameraGroup(
          currentSceneTreeNode,
          cameraComponentRecord,
-       )
-    |> (
-      ((editorState, engineState)) => (
-        editorState,
-        engineState
-        |> BasicCameraViewEngineService.activeBasicCameraView(
-             GameObjectComponentEngineService.getBasicCameraViewComponent(
-               currentSceneTreeNode,
-               engineState,
-             ),
-           )
-        |> OperateComponentUtils.handleAddCameraGroupIfInRunMode(
-             currentSceneTreeNode,
-           ),
-      )
-    );
+       );
 
   | ArcballCameraController =>
-    let (engineState, arcballCameraController) =
+    let (engineState, cameraController) =
       engineState |> ArcballCameraEngineService.create;
 
-    (editorState, engineState)
-    |> GameObjectLogicService.addArcballCameraControllerForRunEngineState(
-         currentSceneTreeNode,
-         arcballCameraController,
-       )
-    |> (
-      ((editorState, engineState)) => (
-        editorState,
+    let engineState =
+      SceneEditorService.getIsRun(editorState) ?
         engineState
-        |> OperateComponentUtils.handleAddArcballCameraControllerIfInRunMode(
+        |> GameObjectComponentEngineService.hasBasicCameraViewComponent(
              currentSceneTreeNode,
-           ),
-      )
-    );
+           ) ?
+          engineState
+          |> GameObjectComponentEngineService.unsafeGetBasicCameraViewComponent(
+               currentSceneTreeNode,
+             )
+          |> BasicCameraViewEngineService.isActiveBasicCameraView(
+               _,
+               engineState,
+             ) ?
+            ArcballCameraEngineService.bindArcballCameraControllerEventForGameView(
+              cameraController,
+              engineState,
+            ) :
+            engineState :
+          engineState :
+        engineState;
+
+    (editorState, engineState)
+    |> GameObjectLogicService.addArcballCameraController(
+         currentSceneTreeNode,
+         cameraController,
+       );
   | _ =>
     WonderLog.Log.fatal(
       WonderLog.Log.buildFatalMessage(
-        ~title="addComponentByTypeForRunEngineState",
+        ~title="addComponentByType",
         ~description=
           {j|the type:$type_ in inspectorComponentType is can't add |j},
         ~reason="",

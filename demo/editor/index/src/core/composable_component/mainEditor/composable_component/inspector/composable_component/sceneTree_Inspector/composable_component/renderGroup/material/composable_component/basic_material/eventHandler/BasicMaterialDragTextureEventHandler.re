@@ -1,123 +1,40 @@
-open DiffType;
-
 module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = Wonderjs.MaterialType.material;
   type dataTuple = int;
   let _handleSetMap =
-      (gameObject, materialComponent, mapId, engineStateToGetData) =>
+      (materialGameObjects, materialComponent, textureIndex, engineState) =>
     switch (
-      BasicMaterialEngineService.getMap(
+      BasicMaterialEngineService.getBasicMaterialMap(
         materialComponent,
-        engineStateToGetData,
+        engineState,
       )
     ) {
     | None =>
-      let color =
-        BasicMaterialEngineService.getColor(materialComponent)
-        |> StateLogicService.getEngineStateToGetData;
-
-      OperateTextureLogicService.replaceMaterialComponentFromNoMapToHasMap(
-        (gameObject, materialComponent, mapId),
-        color,
+      OperateTextureLogicService.handleMaterialComponentFromNoMapToHasMap(
+        (materialComponent, textureIndex),
         (
-          OperateBasicMaterialLogicService.disposeBasicMaterial,
-          OperateBasicMaterialLogicService.setBasicMaterialColor,
-          OperateBasicMaterialLogicService.createBasicMaterial,
-          OperateBasicMaterialLogicService.addBasicMaterial,
+          BasicMaterialEngineService.setBasicMaterialMap,
+          BasicMaterialEngineService.reInitAllBasicMaterialsAndClearShaderCache,
         ),
-        OperateBasicMaterialLogicService.setBasicMaterialMapToEngineState,
-      );
-
+        engineState,
+      )
     | Some(_map) =>
-      OperateTextureLogicService.changeTextureMapAndRereshEngineState(
+      OperateTextureLogicService.changeTextureMapAndRefreshEngineState(
         materialComponent,
-        mapId,
+        textureIndex,
         OperateBasicMaterialLogicService.setBasicMaterialMapToEngineState,
+        engineState,
       )
     };
-  /*
-   todo implement when implement "import model" feature
 
-   let handleGeometryAddMap =
-               (gameObject, materialComponent, mapId, engineStateToGetData) =>
-             engineStateToGetData
-             |> GameObjectComponentEngineService.unsafeGetGeometryComponent(gameObject)
-             |. GeometryEngineService.getGeometryTexCoords(engineStateToGetData)
-             |> GeometryService.hasTexCoords ?
-               _handleSetMap(
-                 gameObject,
-                 materialComponent,
-                 mapId,
-                 engineStateToGetData,
-               ) :
-            WonderLog.Log.warn({j|the gameObject:$gameObject have no texCoords|j});
-      */
-
-  let _handleGeometryAddMap =
-      (
-        gameObject,
-        (geometryComponent, materialComponent),
-        mapId,
-        engineStateToGetData,
-      ) =>
-    engineStateToGetData
-    |> GeometryEngineService.getGeometryTexCoords(geometryComponent)
-    |> GeometryService.hasTexCoords ?
-      _handleSetMap(
-        gameObject,
-        materialComponent,
-        mapId,
-        engineStateToGetData,
-      ) :
-      WonderLog.Log.warn({j|the gameObject:$gameObject have no texCoords|j});
-
-  let handleSelfLogic = ((store, dispatchFunc), materialComponent, dragedId) => {
-    StateEditorService.getState()
-    |> AssetTextureNodeMapEditorService.getTextureNodeMap
-    |> WonderCommonlib.SparseMapService.unsafeGet(dragedId)
-    |> (
-      ({textureIndex}) => {
-        let gameObject =
-          SceneEditorService.unsafeGetCurrentSceneTreeNode
-          |> StateLogicService.getEditorState;
-
-        let engineStateToGetData = StateLogicService.getRunEngineState();
-
-        /* todo not judge geometry, add map even though has no geometry */
-        GameObjectComponentEngineService.hasGeometryComponent(
-          gameObject,
-          engineStateToGetData,
-        ) ?
-          _handleGeometryAddMap(
-            gameObject,
-            (
-              GameObjectComponentEngineService.unsafeGetGeometryComponent(
-                gameObject,
-                engineStateToGetData,
-              ),
-              materialComponent,
-            ),
-            textureIndex,
-            engineStateToGetData,
-          ) :
-          /* handleGeometryAddMap(
-               gameObject,
-               materialComponent,
-               result |> OptionService.unsafeGet |> int_of_string,
-               engineStateToGetData,
-             ); */
-          ();
-      }
+  let handleSelfLogic = ((store, dispatchFunc), materialComponent, dragedId) =>
+    MaterialDragTextureEventHandlerUtils.handleSelfLogic(
+      (store, dispatchFunc),
+      materialComponent,
+      dragedId,
+      _handleSetMap,
     );
-
-    dispatchFunc(
-      AppStore.UpdateAction(
-        Update([|UpdateStore.BottomComponent, UpdateStore.Inspector|]),
-      ),
-    )
-    |> ignore;
-  };
 };
 
 module MakeEventHandler = EventHandler.MakeEventHandler(CustomEventHandler);

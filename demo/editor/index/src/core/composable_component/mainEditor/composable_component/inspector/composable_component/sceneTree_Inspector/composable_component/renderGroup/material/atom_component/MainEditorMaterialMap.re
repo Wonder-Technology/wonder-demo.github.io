@@ -1,7 +1,5 @@
 open AssetNodeType;
 
-open DiffType;
-
 type state = {style: ReactDOMRe.Style.t};
 
 type retainedProps = {map: option(int)};
@@ -68,13 +66,15 @@ module Method = {
     ) {
     | None => <img src="./public/img/null.jpg" />
     | Some(map) =>
+      let source =
+        BasicSourceTextureEngineService.unsafeGetSource(
+          map,
+          StateEngineService.unsafeGetState(),
+        );
+
       <img
-        src=(
-          StateEditorService.getState()
-          |> AssetImageBase64MapEditorService.getImageBase64Map
-          |> WonderCommonlib.SparseMapService.unsafeGet(map)
-        )
-      />
+        src=ImageType.convertImageElementToSrcImageElements(source)##src
+      />;
     };
 
   let buildDragDiv = (state, send) =>

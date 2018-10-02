@@ -9,6 +9,7 @@ let create = () => {
   assetRecord: {
     assetTreeRoot: None,
     index: 0,
+    imageIndex: -1,
     removedAssetIdArray: [||],
     currentNodeData: None,
     currentNodeParentId: None,
@@ -24,10 +25,25 @@ let create = () => {
     },
     clonedGameObjectMap: WonderCommonlib.SparseMapService.createEmpty(),
   },
+  sceneViewRecord: {
+    viewRect: None,
+    gridPlane: None,
+    editCamera: None,
+  },
+  gameViewRecord: {
+    viewRect: None,
+    activedBasicCameraView: None,
+  },
+  eventRecord: {
+    eventTarget: EventType.Scene,
+  },
+  imguiRecord: {
+    gameViewIMGUIFunc: None,
+    gameViewCustomData: None,
+  },
   inspectorRecord: {
     componentTypeMap: WonderCommonlib.SparseMapService.createEmpty(),
   },
-  gameObjectRecord: RecordGameObjectService.create(),
   currentDragSource: (None, None),
   currentSelectSource: None,
   loopId: (-1),

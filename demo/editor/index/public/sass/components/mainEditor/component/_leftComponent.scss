@@ -25,6 +25,7 @@
             flex:1;
             order:20;
             position:relative;
+
             canvas{
                 position: absolute;
                 top:0px;
@@ -33,18 +34,18 @@
                 height:100%;
                 z-index: 10;
             }
-            .runNoCamera{
+            .gameViewNoCamera{
                 position: absolute;
                 top:0px;
-                left:0px;
-                width:100%;
+                left:50%;
+                width:50%;
                 height:100%;
                 z-index: 50;
                 background: black;
                 display: flex;
                 align-items: center;
                 justify-content: center;
-                .runNoCamera-text{
+                .gameViewNoCamera-text{
                     color:#ffffff;
                     font-size:24px;
                 }

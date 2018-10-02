@@ -89,26 +89,14 @@ let isTreeNodeRelationError =
         removedId,
       );
 
-let _removeClonedGameObjectIfHasIt =
-    (gameObjectUid, editorState, (editEngineState, runEngineState)) =>
+let _removeClonedGameObjectIfHasIt = (gameObjectUid, editorState, engineState) =>
   switch (
     editorState
     |> AssetClonedGameObjectMapEditorService.getClonedGameObjectMap
     |> WonderCommonlib.SparseMapService.get(gameObjectUid)
   ) {
-  | None => (editorState, (editEngineState, runEngineState))
-  | Some(runClonedGameObjectArr) =>
-    let editEngineState =
-      runClonedGameObjectArr
-      |> Js.Array.map(gameObject =>
-           StateLogicService.getEditEngineComponent(
-             DiffType.GameObject,
-             gameObject,
-           )
-         )
-      |. GameObjectEngineService.disposeGameObjectArr(editEngineState);
-
-    (
+  | None => (editorState, engineState)
+  | Some(clonedGameObjectArr) => (
       editorState
       |> AssetClonedGameObjectMapEditorService.getClonedGameObjectMap
       |> SparseMapService.copy
@@ -116,12 +104,9 @@ let _removeClonedGameObjectIfHasIt =
       |. AssetClonedGameObjectMapEditorService.setClonedGameObjectMap(
            editorState,
          ),
-      (
-        editEngineState,
-        runClonedGameObjectArr
-        |. GameObjectEngineService.disposeGameObjectArr(runEngineState),
-      ),
-    );
+      clonedGameObjectArr
+      |. GameObjectEngineService.disposeGameObjectArrKeepOrder(engineState),
+    )
   };
 
 let _handleRemoveWDBNode = (nodeId, editorState) => {
@@ -129,35 +114,113 @@ let _handleRemoveWDBNode = (nodeId, editorState) => {
     editorState
     |> AssetWDBNodeMapEditorService.getWDBNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId);
-  let runCubeGeometry =
+  let defaultCubeGeometryIndex =
     editorState
     |> AssetGeometryDataEditorService.getGeometryData
     |> (({defaultCubeGeometryIndex}) => defaultCubeGeometryIndex);
 
-  let (editorState, (editEngineState, runEngineState)) =
-    (
-      StateLogicService.getEditEngineState(),
-      StateLogicService.getRunEngineState(),
-    )
-    |> StateLogicService.handleFuncWithDiff(
-         [|
-           {arguments: [|wdbGameObject|], type_: GameObject},
-           {arguments: [|runCubeGeometry|], type_: Geometry},
-         |],
-         GeometryEngineService.replaceAllGameObjectGeometryToDefaultGeometry,
+  let (editorState, engineState) =
+    StateEngineService.unsafeGetState()
+    |> GeometryEngineService.replaceAllGameObjectGeometryToDefaultGeometry(
+         wdbGameObject,
+         defaultCubeGeometryIndex,
        )
     |> _removeClonedGameObjectIfHasIt(wdbGameObject, editorState);
 
-  StateLogicService.refreshEditAndRunEngineState(
-    editEngineState,
-    runEngineState,
-  );
+  StateLogicService.refreshEngineState(engineState);
 
   editorState
   |> AssetWDBNodeMapEditorService.getWDBNodeMap
   |> SparseMapService.copy
   |> DomHelper.deleteKeyInMap(nodeId)
   |. AssetWDBNodeMapEditorService.setWDBNodeMap(editorState);
+};
+
+let _removeTextureFromSceneBasicMaterials =
+    (textureIndex, editorState, engineState) =>
+  /* BasicMaterialEngineService.getAllBasicMaterials(engineState) */
+  SceneEngineService.getSceneAllBasicMaterials(engineState)
+  |> Js.Array.filter(basicMaterial =>
+       BasicMaterialEngineService.isBasicMaterialMap(
+         basicMaterial,
+         textureIndex,
+         engineState,
+       )
+     )
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. engineState, basicMaterial) =>
+         OperateTextureLogicService.handleBasicMaterialComponentFromHasMapToNoMap(
+           basicMaterial,
+           engineState,
+         ),
+       engineState,
+     );
+
+let _removeTextureFromSceneLightMaterials =
+    (textureIndex, editorState, engineState) =>
+  SceneEngineService.getSceneAllLightMaterials(engineState)
+  |> Js.Array.filter(lightMaterial =>
+       LightMaterialEngineService.isLightMaterialMap(
+         lightMaterial,
+         textureIndex,
+         engineState,
+       )
+     )
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. engineState, lightMaterial) =>
+         OperateTextureLogicService.handleLightMaterialComponentFromHasDiffuseMapToNoMap(
+           lightMaterial,
+           engineState,
+         ),
+       engineState,
+     );
+
+/* TODO remove texture from material assets */
+let _removeTextureEngineData = (textureIndex, editorState, engineState) =>
+  engineState
+  |> _removeTextureFromSceneBasicMaterials(textureIndex, editorState)
+  |> _removeTextureFromSceneLightMaterials(textureIndex, editorState);
+
+let _removeTextureEditorData = (nodeId, textureIndex, imageId, editorState) => {
+  let {textureArray} as imageResult =
+    editorState
+    |> AssetImageBase64MapEditorService.getImageBase64Map
+    |> WonderCommonlib.SparseMapService.unsafeGet(imageId);
+  let newTextureArr =
+    textureArray |> Js.Array.filter(texture => texture !== textureIndex);
+
+  let editorState =
+    switch (newTextureArr |> Js.Array.length) {
+    | 0 =>
+      editorState
+      |> AssetImageBase64MapEditorService.getImageBase64Map
+      |> Js.Array.copy
+      |> DomHelper.deleteKeyInMap(imageId)
+      |. AssetImageBase64MapEditorService.setImageBase64Map(editorState)
+    | _ =>
+      editorState
+      |> AssetImageBase64MapEditorService.setResult(
+           imageId,
+           {...imageResult, textureArray: newTextureArr},
+         )
+    };
+
+  editorState
+  |> AssetTextureNodeMapEditorService.getTextureNodeMap
+  |> SparseMapService.copy
+  |> DomHelper.deleteKeyInMap(nodeId)
+  |. AssetTextureNodeMapEditorService.setTextureNodeMap(editorState);
+};
+
+let _removeTextureTreeNode = (nodeId, editorState) => {
+  let {textureIndex, imageId} =
+    editorState
+    |> AssetTextureNodeMapEditorService.getTextureNodeMap
+    |> WonderCommonlib.SparseMapService.unsafeGet(nodeId);
+
+  _removeTextureEngineData(textureIndex, editorState)
+  |> StateLogicService.getAndSetEngineState;
+  _removeTextureEditorData(nodeId, textureIndex, imageId, editorState);
 };
 
 let deepRemoveTreeNode = (removedTreeNode, editorState) => {
@@ -178,23 +241,13 @@ let deepRemoveTreeNode = (removedTreeNode, editorState) => {
                |. AssetFolderNodeMapEditorService.setFolderNodeMap(
                     editorState,
                   )
-
-             | Texture =>
-               editorState
-               |> AssetTextureNodeMapEditorService.getTextureNodeMap
-               |> SparseMapService.copy
-               |> DomHelper.deleteKeyInMap(nodeId)
-               |. AssetTextureNodeMapEditorService.setTextureNodeMap(
-                    editorState,
-                  )
-
+             | Texture => _removeTextureTreeNode(nodeId, editorState)
              | Json =>
                editorState
                |> AssetJsonNodeMapEditorService.getJsonNodeMap
                |> SparseMapService.copy
                |> DomHelper.deleteKeyInMap(nodeId)
                |. AssetJsonNodeMapEditorService.setJsonNodeMap(editorState)
-
              | WDB => _handleRemoveWDBNode(nodeId, editorState)
              | _ => editorState
              };

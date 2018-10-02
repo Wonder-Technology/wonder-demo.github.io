@@ -1,26 +1,17 @@
-open DiffType;
-
 module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = unit;
   type dataTuple = Wonderjs.MaterialType.material;
 
   let handleSelfLogic = ((store, dispatchFunc), (), materialComponent) => {
-    OperateTextureLogicService.replaceMaterialComponentFromHasMapToNoMap(
-      (
-        SceneEditorService.unsafeGetCurrentSceneTreeNode
-        |> StateLogicService.getEditorState,
-        materialComponent,
-      ),
-      BasicMaterialEngineService.getColor(materialComponent)
-      |> StateLogicService.getEngineStateToGetData,
-      (
-        OperateBasicMaterialLogicService.disposeBasicMaterial,
-        OperateBasicMaterialLogicService.setBasicMaterialColor,
-        OperateBasicMaterialLogicService.createBasicMaterial,
-        OperateBasicMaterialLogicService.addBasicMaterial,
-      ),
-    );
+    let engineState = StateEngineService.unsafeGetState();
+
+    OperateTextureLogicService.handleBasicMaterialComponentFromHasMapToNoMap(
+      materialComponent,
+      engineState,
+    )
+    |> StateEngineService.setState
+    |> ignore;
 
     dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.Inspector|])))
     |> ignore;

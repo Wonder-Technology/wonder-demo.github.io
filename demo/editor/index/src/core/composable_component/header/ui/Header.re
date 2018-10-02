@@ -97,7 +97,7 @@ module Method = {
     |> convertColorObjToColorPickType
     |> getEngineColorRgbArr
     |> SceneEngineService.setAmbientLightColor
-    |> StateLogicService.getAndRefreshEditAndRunEngineStateWithFunc;
+    |> StateLogicService.getAndRefreshEngineStateWithFunc;
 
   let getColor = () =>
     SceneEngineService.getAmbientLightColor
@@ -151,7 +151,12 @@ module Method = {
       <div className="component-item">
         <button
           onClick=(
-            _e => HeaderExportUtils.exportPackage(WonderBsJszip.Zip.create)
+            _e =>
+              HeaderExportUtils.exportPackage(
+                WonderBsJszip.Zip.create,
+                Fetch.fetch,
+              )
+              |> ignore
           )>
           (DomHelper.textEl("exportPackage"))
         </button>

@@ -16,18 +16,18 @@ module Method = {
       gameObject,
       engineState,
     ) ?
-      GameObjectComponentEngineService.getBasicMaterialComponent(
+      GameObjectComponentEngineService.unsafeGetBasicMaterialComponent(
         gameObject,
         engineState,
       )
-      |> BasicMaterialEngineService.hasMap(_, engineState) :
+      |> BasicMaterialEngineService.hasBasicMaterialMap(_, engineState) :
       GameObjectComponentEngineService.hasLightMaterialComponent(
         gameObject,
         engineState,
       ) ?
         {
           let material =
-            GameObjectComponentEngineService.getLightMaterialComponent(
+            GameObjectComponentEngineService.unsafeGetLightMaterialComponent(
               gameObject,
               engineState,
             );
@@ -45,21 +45,21 @@ module Method = {
 
   let buildAssetGeometryComponent =
       (send, currentSceneTreeNode, currentGeometry) => {
-    let runEngineState = StateLogicService.getRunEngineState();
+    let engineState = StateEngineService.unsafeGetState();
     let allGeometrys =
       _isGameObjectMaterialComponentHasMap(
         currentSceneTreeNode,
-        runEngineState,
+        engineState,
       ) ?
-        runEngineState
-        |> GeometryEngineService.getAllGeometrys
+        engineState
+        |> GeometryEngineService.getAllAssetGeometrys
         |> Js.Array.filter(geometry =>
              GeometryEngineService.hasGeometryTexCoords(
                geometry,
-               runEngineState,
+               engineState,
              )
            ) :
-        runEngineState |> GeometryEngineService.getAllGeometrys;
+        engineState |> GeometryEngineService.getAllAssetGeometrys;
 
     allGeometrys
     |> Js.Array.map(geometry => {

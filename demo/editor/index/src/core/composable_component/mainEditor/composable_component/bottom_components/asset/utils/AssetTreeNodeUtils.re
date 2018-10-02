@@ -140,48 +140,101 @@ let handleJsonType =
   make((~resolve, ~reject) => resolve(. editorState));
 };
 
+let _getImageIdIfImageBase64MapHasIt = (imgBase64, editorState) => {
+  let sameLengthBase64Arr =
+    editorState
+    |> AssetImageBase64MapEditorService.getImageBase64Map
+    |> SparseMapService.getValidDataArr
+    |> Js.Array.filter(((imageId, {base64, name})) =>
+         base64 |> Js.String.length === (imgBase64 |> Js.String.length)
+       );
+
+  sameLengthBase64Arr |> Js.Array.length === 0 ?
+    None :
+    {
+      let sameBase64NodeArr =
+        sameLengthBase64Arr
+        |> Js.Array.filter(((imageId, {base64, name})) =>
+             base64 === imgBase64
+           );
+
+      sameBase64NodeArr |> Js.Array.length === 0 ?
+        None :
+        sameBase64NodeArr
+        |> ArrayService.unsafeGetFirst
+        |> (((imageId, _)) => imageId |. Some);
+    };
+};
+
 let handleImageType =
-    ((fileName, fileResult), (newIndex, parentId), editorState, ()) => {
-  let (baseName, _extName) = FileNameService.getBaseNameAndExtName(fileName);
-  let texturePostfix = ".tex";
-
-  let (texture, editEngineState, runEngineState) =
-    TextureUtils.createAndInitTexture(
-      baseName,
-      StateLogicService.getEditEngineState(),
-      StateLogicService.getRunEngineState(),
-    );
-
+    (
+      (baseName, fileName, imgBase64),
+      (newIndex, parentId, textureIndex),
+      (editorState, engineState),
+    ) =>
   make((~resolve, ~reject) =>
     Image.onload(
-      fileResult |> FileReader.convertResultToString,
+      imgBase64,
       loadedImg => {
-        editEngineState
+        engineState
         |> BasicSourceTextureEngineService.setSource(
              loadedImg |> ImageType.convertDomToImageElement,
-             texture,
+             textureIndex,
            )
-        |> StateLogicService.setEditEngineState;
+        |> StateEngineService.setState
+        |> ignore;
 
-        runEngineState
-        |> BasicSourceTextureEngineService.setSource(
-             loadedImg |> ImageType.convertDomToImageElement,
-             texture,
-           )
-        |> StateLogicService.setRunEngineState;
+        let (imageId, editorState) =
+          switch (_getImageIdIfImageBase64MapHasIt(imgBase64, editorState)) {
+          | None =>
+            let editorState =
+              editorState |> AssetImageIndexEditorService.increaseImageIndex;
+            let imageId =
+              editorState |> AssetImageIndexEditorService.getImageIndex;
+
+            (
+              imageId,
+              editorState
+              |> AssetImageBase64MapEditorService.setResult(
+                   imageId,
+                   AssetImageBase64MapEditorService.buildImageResult(
+                     imgBase64,
+                     fileName,
+                     ArrayService.create() |> ArrayService.push(textureIndex),
+                   ),
+                 ),
+            );
+
+          | Some(imageId) => (
+              imageId,
+              editorState
+              |> AssetImageBase64MapEditorService.getImageBase64Map
+              |> WonderCommonlib.SparseMapService.unsafeGet(imageId)
+              |> (
+                ({textureArray} as imageResult) => {
+                  ...imageResult,
+                  textureArray:
+                    textureArray
+                    |> Js.Array.copy
+                    |> ArrayService.push(textureIndex),
+                }
+              )
+              |. AssetImageBase64MapEditorService.setResult(
+                   imageId,
+                   _,
+                   editorState,
+                 ),
+            )
+          };
 
         let editorState =
           editorState
-          |> AssetImageBase64MapEditorService.setResult(
-               texture,
-               fileResult |> FileReader.convertResultToString,
-             )
           |> AssetTextureNodeMapEditorService.setResult(
                newIndex,
                AssetTextureNodeMapEditorService.buildTextureNodeResult(
-                 texturePostfix,
-                 texture,
+                 textureIndex,
                  parentId |. Some,
+                 imageId,
                ),
              )
           |> createNodeAndAddToTargetNodeChildren(
@@ -195,102 +248,74 @@ let handleImageType =
       },
     )
   );
-};
 
 let handleAssetWDBType =
-    ((fileName, fileResult), (newIndex, parentId), editorState, ()) => {
+    ((fileName, wdbArrayBuffer), (newIndex, parentId), editorState, ()) => {
   let (baseName, extName) = FileNameService.getBaseNameAndExtName(fileName);
-  let wdbArrayBuffer = fileResult |> FileReader.convertResultToArrayBuffer;
   let targetTreeNodeId = editorState |> AssetUtils.getTargetTreeNodeId;
 
   /* TODO use imageUint8ArrayDataMap */
-  StateLogicService.getEditEngineState()
+  StateEngineService.unsafeGetState()
   |> AssembleWDBEngineService.assembleWDB(
        wdbArrayBuffer,
        false,
        false,
        false,
      )
-  |> WonderBsMost.Most.map(((editEngineState, _, gameObject)) => {
-       let editEngineState =
-         editEngineState
+  |> WonderBsMost.Most.map(((engineState, _, gameObject)) => {
+       let allGameObjects =
+         GameObjectEngineService.getAllGameObjects(gameObject, engineState);
+
+       editorState
+       |> AssetClonedGameObjectMapEditorService.setResult(
+            gameObject,
+            allGameObjects,
+          )
+       |> AssetWDBNodeMapEditorService.setResult(
+            newIndex,
+            AssetWDBNodeMapEditorService.buildWDBNodeResult(
+              baseName,
+              extName,
+              targetTreeNodeId |. Some,
+              gameObject,
+              wdbArrayBuffer,
+            ),
+          )
+       |> createNodeAndAddToTargetNodeChildren(
+            targetTreeNodeId,
+            newIndex,
+            WDB,
+          )
+       |> StateEditorService.setState
+       |> ignore;
+
+       let engineState =
+         engineState
          |> GameObjectUtils.setGameObjectIsRenderIfHasMeshRenderer(
+              false,
+              gameObject,
+            )
+         |> GameObjectUtils.setGameObjectIsRenderIfHasDirectionLight(
+              false,
+              gameObject,
+            )
+         |> GameObjectUtils.setGameObjectIsRenderIfHasPointLight(
               false,
               gameObject,
             )
          |> GameObjectEngineService.setGameObjectName(baseName, gameObject);
 
-       GameObjectEngineService.initAllGameObjects(gameObject, editEngineState)
-       |> DirectorEngineService.loopBody(0.)
-       |> StateLogicService.setEditEngineState;
-     })
-  |> WonderBsMost.Most.flatMap(_ =>
-       StateLogicService.getRunEngineState()
-       |> AssembleWDBEngineService.assembleWDB(
-            wdbArrayBuffer,
-            false,
-            false,
-            false,
+       allGameObjects
+       |> WonderCommonlib.ArrayService.reduceOneParam(
+            (. engineState, gameObject) =>
+              GameObjectEngineService.initGameObject(gameObject, engineState),
+            engineState,
           )
-       |> WonderBsMost.Most.map(((runEngineState, _, gameObject)) => {
-            let allGameObjects =
-              GameObjectEngineService.getAllGameObjects(
-                gameObject,
-                runEngineState,
-              );
-
-            editorState
-            |> AssetClonedGameObjectMapEditorService.setResult(
-                 gameObject,
-                 allGameObjects,
-               )
-            |> AssetWDBNodeMapEditorService.setResult(
-                 newIndex,
-                 baseName
-                 |. AssetTreeEditorService.getUniqueTreeNodeName(
-                      WDB,
-                      targetTreeNodeId |. Some,
-                      editorState,
-                    )
-                 |. AssetWDBNodeMapEditorService.buildWDBNodeResult(
-                      extName,
-                      targetTreeNodeId |. Some,
-                      gameObject,
-                      wdbArrayBuffer,
-                    ),
-               )
-            |> createNodeAndAddToTargetNodeChildren(
-                 targetTreeNodeId,
-                 newIndex,
-                 WDB,
-               )
-            |> StateEditorService.setState
-            |> ignore;
-
-            let runEngineState =
-              runEngineState
-              |> GameObjectUtils.setGameObjectIsRenderIfHasMeshRenderer(
-                   false,
-                   gameObject,
-                 )
-              |> GameObjectEngineService.setGameObjectName(
-                   baseName,
-                   gameObject,
-                 );
-
-            allGameObjects
-            |> WonderCommonlib.ArrayService.reduceOneParam(
-                 (. runEngineState, gameObject) =>
-                   GameObjectEngineService.initGameObject(
-                     gameObject,
-                     runEngineState,
-                   ),
-                 runEngineState,
-               )
-            |> DirectorEngineService.loopBody(0.)
-            |> StateLogicService.setRunEngineState;
-          })
-     )
+       /* engineState */
+       |> DirectorEngineService.loopBody(0.)
+       |> StateEngineService.setState
+       |> ignore;
+     })
   |> WonderBsMost.Most.drain
   |> then_(_ => resolve(editorState));
 };
@@ -311,13 +336,30 @@ let handleFileByTypeAsync = (fileResult: nodeResultType) => {
         (newIndex, targetTreeNodeId),
         editorState,
       ),
-      handleImageType(
-        (fileResult.name, fileResult.result),
-        (newIndex, targetTreeNodeId),
-        editorState,
-      ),
+      () => {
+        let (baseName, _extName) =
+          FileNameService.getBaseNameAndExtName(fileResult.name);
+        let (textureIndex, engineState) =
+          TextureUtils.createAndInitTexture(
+            baseName,
+            StateEngineService.unsafeGetState(),
+          );
+
+        handleImageType(
+          (
+            baseName,
+            fileResult.name,
+            fileResult.result |> FileReader.convertResultToString,
+          ),
+          (newIndex, targetTreeNodeId, textureIndex),
+          (editorState, engineState),
+        );
+      },
       handleAssetWDBType(
-        (fileResult.name, fileResult.result),
+        (
+          fileResult.name,
+          fileResult.result |> FileReader.convertResultToArrayBuffer,
+        ),
         (newIndex, targetTreeNodeId),
         editorState,
       ),

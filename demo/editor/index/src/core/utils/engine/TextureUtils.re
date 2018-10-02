@@ -1,56 +1,79 @@
 open AssetNodeType;
 
-let _checkEditAndRunTextureWithDiff =
-    ((editTexture, runTexture), type_, editEngineState, runEngineState) => {
-  WonderLog.Contract.requireCheck(
-    () =>
-      WonderLog.(
-        Contract.(
-          Operators.(
-            test(
-              Log.buildAssertMessage(
-                ~expect=
-                  {j|editMateral and runTexture diff should == materialType diff value|j},
-                ~actual={j|not|j},
-              ),
-              () => {
-                let diffValue =
-                  StateEditorService.getState()
-                  |> SceneEditorService.unsafeGetDiffMap
-                  |> DiffComponentService.getEditEngineComponent(type_);
+/* let _checkEditAndRunTextureWithDiff =
+       ((editTexture, runTexture), type_, engineState, runEngineState) => {
+     WonderLog.Contract.requireCheck(
+       () =>
+         WonderLog.(
+           Contract.(
+             Operators.(
+               test(
+                 Log.buildAssertMessage(
+                   ~expect=
+                     {j|editMateral and runTexture diff should == materialType diff value|j},
+                   ~actual={j|not|j},
+                 ),
+                 () => {
+                   let diffValue =
+                     StateEditorService.getState()
+                     |> SceneEditorService.unsafeGetDiffMap
+                     |> DiffComponentService.getEditEngineComponent(type_);
 
-                editTexture - runTexture == diffValue;
-              },
-            )
-          )
-        )
-      ),
-    StateEditorService.getStateIsDebug(),
-  );
+                   editTexture - runTexture == diffValue;
+                 },
+               )
+             )
+           )
+         ),
+       StateEditorService.getStateIsDebug(),
+     );
 
-  (runTexture, editEngineState, runEngineState);
+     (runTexture, engineState, runEngineState);
+   }; */
+
+let createAndInitTexture = (textureName, engineState) => {
+  let (engineState, texture) =
+    engineState |> BasicSourceTextureEngineService.create;
+
+  let engineState =
+    engineState
+    |> BasicSourceTextureEngineService.setBasicSourceTextureName(
+         textureName,
+         texture,
+       )
+    |> BasicSourceTextureEngineService.initTexture(texture);
+
+  (texture, engineState);
 };
 
-let createAndInitTexture = (textureName, editEngineState, runEngineState) => {
-  let (editEngineState, editTexture) =
-    editEngineState |> BasicSourceTextureEngineService.create;
-  let (runEngineState, runTexture) =
-    runEngineState |> BasicSourceTextureEngineService.create;
+let createAndSetTextureProps =
+    (textureName, (warpS, warpT, minFilter, magFilter), engineState) => {
+  let (engineState, texture) =
+    engineState |> BasicSourceTextureEngineService.create;
 
-  _checkEditAndRunTextureWithDiff(
-    (editTexture, runTexture),
-    DiffType.Texture,
-    editEngineState
+  let engineState =
+    engineState
     |> BasicSourceTextureEngineService.setBasicSourceTextureName(
          textureName,
-         editTexture,
+         texture,
        )
-    |> BasicSourceTextureEngineService.initTexture(editTexture),
-    runEngineState
-    |> BasicSourceTextureEngineService.setBasicSourceTextureName(
-         textureName,
-         runTexture,
+    |> BasicSourceTextureEngineService.setWrapS(
+         warpS |> TextureTypeUtils.convertIntToWrap,
+         texture,
        )
-    |> BasicSourceTextureEngineService.initTexture(runTexture),
-  );
+    |> BasicSourceTextureEngineService.setWrapT(
+         warpT |> TextureTypeUtils.convertIntToWrap,
+         texture,
+       )
+    |> BasicSourceTextureEngineService.setMinFilter(
+         minFilter |> TextureTypeUtils.convertIntToFilter,
+         texture,
+       )
+    |> BasicSourceTextureEngineService.setMagFilter(
+         magFilter |> TextureTypeUtils.convertIntToFilter,
+         texture,
+       )
+    |> BasicSourceTextureEngineService.initTexture(texture);
+
+  (texture, engineState);
 };

@@ -1,24 +1,14 @@
-let getEditEngineStateCustomData = (editorState, editEngineState) =>
-  (
-    editEngineState |> SceneEngineService.getSceneGameObject,
-    GameObjectEditorService.unsafeGetEditCamera(editorState),
-    WonderCommonlib.ArrayService.reduceOneParam,
-    DomHelper.getElementById,
-  )
-  |> Obj.magic;
+let getEngineStateCustomData = (editorState, engineState) => Obj.magic(-1);
 
-let getEditEngineStateIMGUIFunc = () =>
-  Obj.magic(
-    (.
-      (scene, editCamera, reduceOneParamFunc, getElementByIdFunc),
-      apiJsObj,
-      state,
-    ) => {
-    let editCanvas = getElementByIdFunc(. "editCanvas") |> Obj.magic;
-    let (editCanvasWidth, editCanvasHeight) = (
-      editCanvas##width,
-      editCanvas##height,
-    );
+let getEngineStateIMGUIFunc = () =>
+  Obj.magic((. _, apiJsObj, engineState) => {
+    let editorState = StateEditorService.getState();
+
+    let scene = engineState |> SceneEngineService.getSceneGameObject;
+    let editCamera = SceneViewEditorService.unsafeGetEditCamera(editorState);
+
+    let (_, _, viewWidth, viewHeight) =
+      SceneViewEditorService.unsafeGetViewRect(editorState);
 
     let imageFunc = apiJsObj##image;
     let getTransformPosition = apiJsObj##getTransformPosition;
@@ -85,8 +75,8 @@ let getEditEngineStateIMGUIFunc = () =>
       );
 
     let _drawDirectionLight = (maxDistance, scene, engineState) =>
-      reduceOneParamFunc(.
-        (engineState, directionLightGameObject) => {
+      WonderCommonlib.ArrayService.reduceOneParam(
+        (. engineState, directionLightGameObject) => {
           let (x, y, z) =
             getTransformPosition(.
               unsafeGetGameObjectTransformComponent(.
@@ -116,7 +106,7 @@ let getEditEngineStateIMGUIFunc = () =>
                 editCamera,
                 engineState,
               ),
-              (x, y, z, editCanvasWidth, editCanvasHeight),
+              (x, y, z, viewWidth, viewHeight),
               engineState,
             )
             |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
@@ -133,8 +123,8 @@ let getEditEngineStateIMGUIFunc = () =>
       );
 
     let _drawPointLight = (maxDistance, scene, engineState) =>
-      reduceOneParamFunc(.
-        (engineState, pointLightGameObject) => {
+      WonderCommonlib.ArrayService.reduceOneParam(
+        (. engineState, pointLightGameObject) => {
           let (x, y, z) =
             getTransformPosition(.
               unsafeGetGameObjectTransformComponent(.
@@ -164,7 +154,7 @@ let getEditEngineStateIMGUIFunc = () =>
                 editCamera,
                 engineState,
               ),
-              (x, y, z, editCanvasWidth, editCanvasHeight),
+              (x, y, z, viewWidth, viewHeight),
               engineState,
             )
             |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
@@ -183,8 +173,8 @@ let getEditEngineStateIMGUIFunc = () =>
     /* WonderLog.Log.debug(WonderLog.Log.buildDebugMessage(~description={j|imgui -> scene: $scene|j}, ~params={j||j}), true); */
 
     let _drawSceneCamera = (maxDistance, scene, engineState) =>
-      reduceOneParamFunc(.
-        (engineState, sceneCameraGameObject) => {
+      WonderCommonlib.ArrayService.reduceOneParam(
+        (. engineState, sceneCameraGameObject) => {
           let (x, y, z) =
             getTransformPosition(.
               unsafeGetGameObjectTransformComponent(.
@@ -214,7 +204,7 @@ let getEditEngineStateIMGUIFunc = () =>
                 editCamera,
                 engineState,
               ),
-              (x, y, z, editCanvasWidth, editCanvasHeight),
+              (x, y, z, viewWidth, viewHeight),
               engineState,
             )
             |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
@@ -230,10 +220,10 @@ let getEditEngineStateIMGUIFunc = () =>
         _getSceneCameras(scene, engineState),
       );
 
-    let state =
-      _drawDirectionLight(maxDistance, scene, state)
+    let engineState =
+      _drawDirectionLight(maxDistance, scene, engineState)
       |> _drawPointLight(maxDistance, scene)
       |> _drawSceneCamera(maxDistance, scene);
 
-    state;
+    engineState;
   });

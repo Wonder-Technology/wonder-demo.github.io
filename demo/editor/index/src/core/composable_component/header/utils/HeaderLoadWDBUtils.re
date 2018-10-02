@@ -4,154 +4,90 @@ open AssetNodeType;
 
 open FileType;
 
-let _setIMGUI = (hasWDBIMGUIFunc, editorState, editEngineState) => {
+let _setIMGUIData = (hasWDBIMGUIFunc, editorState, engineState) => {
   let wdbImguiFunc =
     hasWDBIMGUIFunc ?
-      ManageIMGUIEngineService.getIMGUIFunc(editEngineState) : None;
+      ManageIMGUIEngineService.getIMGUIFunc(engineState) : None;
 
-  let editEngineStateCustomData =
-    EditIMGUIFuncUtils.getEditEngineStateCustomData(
-      editorState,
-      editEngineState,
-    );
-  let editEngineStateImguiFunc =
-    EditIMGUIFuncUtils.getEditEngineStateIMGUIFunc();
-
-  let editEngineState =
+  (
     switch (wdbImguiFunc) {
     | None =>
-      ManageIMGUIEngineService.setIMGUIFunc(
-        (editEngineStateCustomData, editEngineStateImguiFunc) |> Obj.magic,
-        Obj.magic(
-          (.
-            (editEngineStateCustomData, editEngineStateImguiFunc),
-            apiJsObj,
-            state,
-          ) =>
-          editEngineStateImguiFunc(.
-            editEngineStateCustomData,
-            apiJsObj,
-            state,
-          )
-        ),
-        editEngineState,
-      )
+      editorState
+      |> IMGUIEditorService.removeGameViewIMGUIFunc
+      |> IMGUIEditorService.removeGameViewIMGUICustomData
     | Some(wdbImguiFunc) =>
-      let wdbCustomData =
-        ManageIMGUIEngineService.getCustomData(editEngineState)
-        |> OptionService.unsafeGet;
-
-      ManageIMGUIEngineService.setIMGUIFunc(
-        (
-          (editEngineStateCustomData, editEngineStateImguiFunc),
-          (wdbImguiFunc, wdbCustomData),
-        )
-        |> Obj.magic,
-        Obj.magic(
-          (.
-            (
-              (editEngineStateCustomData, editEngineStateImguiFunc),
-              (wdbImguiFunc, wdbCustomData),
-            ),
-            apiJsObj,
-            state,
-          ) => {
-          let state =
-            editEngineStateImguiFunc(.
-              editEngineStateCustomData,
-              apiJsObj,
-              state,
-            );
-
-          wdbImguiFunc(. wdbCustomData, apiJsObj, state);
-        }),
-        editEngineState,
-      );
-    };
-
-  (editorState, editEngineState);
+      editorState
+      |> IMGUIEditorService.setGameViewIMGUIFunc(wdbImguiFunc)
+      |> IMGUIEditorService.setGameViewIMGUICustomData(
+           ManageIMGUIEngineService.getCustomData(engineState)
+           |> OptionService.unsafeGet,
+         )
+    },
+    engineState,
+  );
 };
 
-let _handleEditEngineState = (gameObject, hasWDBIMGUIFunc, editEngineState) => {
-  let editEngineState =
-    editEngineState
+let _handleEngineState = (gameObject, hasWDBIMGUIFunc, engineState) => {
+  let engineState =
+    engineState
     |> SceneEngineService.disposeSceneAllChildrenKeepOrder
     |> SceneEngineService.setSceneGameObject(gameObject);
 
-  let (editorState, editEngineState) =
-    _setIMGUI(
-      hasWDBIMGUIFunc,
-      StateEditorService.getState(),
-      editEngineState,
-    );
+  let editorState = StateEditorService.getState();
+  let editorState =
+    switch (
+      GameObjectEngineService.getGameObjectActiveBasicCameraView(
+        gameObject,
+        engineState,
+      )
+    ) {
+    | None => GameViewEditorService.removeActivedBasicCameraView(editorState)
+    | Some(activeBasicCameraView) =>
+      GameViewEditorService.setActivedBasicCameraView(
+        activeBasicCameraView,
+        editorState,
+      )
+    };
 
-  let scene = editEngineState |> SceneEngineService.getSceneGameObject;
+  let (editorState, engineState) =
+    _setIMGUIData(hasWDBIMGUIFunc, editorState, engineState);
 
-  let editEngineState =
-    editEngineState
-    |> GameObjectEngineService.setGameObjectName("scene", scene);
-
-  let editEngineState =
-    GameObjectEngineService.initAllGameObjects(gameObject, editEngineState);
-
-  editEngineState
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setEditEngineState;
-};
-
-let _handleRunEngineState = (gameObject, runEngineState) => {
   let (assetTree, editorState) =
-    StateEditorService.getState()
+    editorState
     |> InspectorEditorService.clearComponentTypeMap
     |> SceneEditorService.clearCurrentSceneTreeNode
     |> AssetTreeNodeUtils.initRootAssetTree;
 
   editorState
   |> GameObjectComponentLogicService.getGameObjectComponentStoreInComponentTypeMap(
-       runEngineState |> GameObjectUtils.getChildren(gameObject),
-       runEngineState,
+       engineState |> GameObjectUtils.getChildren(gameObject),
+       engineState,
      )
   |> AssetTreeRootEditorService.setAssetTreeRoot(assetTree)
   |> StateEditorService.setState
   |> ignore;
 
-  let runEngineState =
-    runEngineState
-    |> SceneEngineService.disposeSceneAllChildrenKeepOrder
-    |> SceneEngineService.setSceneGameObject(gameObject);
+  let scene = engineState |> SceneEngineService.getSceneGameObject;
 
-  let runEngineState =
-    GameObjectEngineService.initAllGameObjects(gameObject, runEngineState);
+  let engineState =
+    engineState |> GameObjectEngineService.setGameObjectName("scene", scene);
 
-  runEngineState
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setRunEngineState;
+  engineState
+  |> JobEngineService.execDisposeJob
+  |> ShaderEngineService.clearShaderCache
+  |> StateEngineService.setState;
+
+  GameObjectEngineService.initAllGameObjects(gameObject)
+  |> StateLogicService.getAndRefreshEngineStateWithFunc;
 };
 
 /* TODO use imageUint8ArrayDataMap */
-let handleSceneWDB = wdbResult =>
-  StateLogicService.getEditEngineState()
-  |> AssembleWDBEngineService.assembleWDB(
-       wdbResult.result |> FileReader.convertResultToArrayBuffer,
-       true,
-       false,
-       false,
-     )
+let handleSceneWDB = wdbArrayBuffer =>
+  StateEngineService.unsafeGetState()
+  |> AssembleWDBEngineService.assembleWDB(wdbArrayBuffer, true, false, true)
   |> WonderBsMost.Most.map(
-       ((editEngineState, (_, hasWDBIMGUIFunc), gameObject)) =>
-       _handleEditEngineState(gameObject, hasWDBIMGUIFunc, editEngineState)
-     )
-  |> WonderBsMost.Most.flatMap(_ =>
-       StateLogicService.getRunEngineState()
-       |> AssembleWDBEngineService.assembleWDB(
-            wdbResult.result |> FileReader.convertResultToArrayBuffer,
-            true,
-            false,
-            true,
-          )
-       |> WonderBsMost.Most.map(((runEngineState, _, gameObject)) =>
-            _handleRunEngineState(gameObject, runEngineState)
-          )
+       ((engineState, (_, hasWDBIMGUIFunc), gameObject)) =>
+       _handleEngineState(gameObject, hasWDBIMGUIFunc, engineState)
      );
 
 let loadSceneWDB = (dispatchFunc, event) => {
@@ -164,7 +100,14 @@ let loadSceneWDB = (dispatchFunc, event) => {
     |> Js.Array.map(AssetTreeNodeUtils.convertFileJsObjectToFileInfoRecord)
     |> ArrayService.getFirst
   ) {
-  | None => Js.Promise.make((~resolve, ~reject) => resolve(. Obj.magic(-1)))
+  | None =>
+    Js.Promise.make((~resolve, ~reject) =>
+      resolve(.
+        dispatchFunc(
+          AppStore.UpdateAction(Update([|UpdateStore.NoUpdate|])),
+        ),
+      )
+    )
   | Some(wdbInfo) =>
     WonderBsMost.Most.just(wdbInfo)
     |> WonderBsMost.Most.flatMap(wdbInfo =>
@@ -185,7 +128,9 @@ let loadSceneWDB = (dispatchFunc, event) => {
          )
        )
     |> WonderBsMost.Most.flatMap((wdbResult: nodeResultType) =>
-         wdbResult |> handleSceneWDB
+         wdbResult.result
+         |> FileReader.convertResultToArrayBuffer
+         |> handleSceneWDB
        )
     |> WonderBsMost.Most.drain
     |> then_(_ => {

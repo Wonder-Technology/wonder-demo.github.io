@@ -7,15 +7,12 @@ module CustomEventHandler = {
     let materialName = "New Material";
     let materialPostfix = ".mat";
 
-    let (newMaterial, editEngineState, runEngineState) =
+    let (newMaterial, engineState) =
       OperateLightMaterialLogicService.createLightMaterial(
-        StateLogicService.getEditEngineState(),
-        StateLogicService.getRunEngineState(),
+        StateEngineService.unsafeGetState(),
       );
 
-    editEngineState |> StateLogicService.setEditEngineState;
-
-    runEngineState |> StateLogicService.setRunEngineState;
+    engineState |> StateEngineService.setState |> ignore;
 
     let (editorState, newIndex) =
       AssetIdUtils.getAssetId |> StateLogicService.getEditorState;

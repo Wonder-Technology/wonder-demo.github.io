@@ -1,172 +1,52 @@
 open Js.Promise;
 
-let _getLoadData = type_ => {
-  let engineDataDir = "./src/engine/data/";
-  switch (type_) {
-  | "edit" =>
-    AssetEngineService.loadToData(
-      [|"./src/engine/setting/editSetting.json", engineDataDir|],
-      EngineStateDataEditorService.getEditEngineStateData(),
-    )
-  | "run" =>
-    AssetEngineService.loadToData(
-      [|"./src/engine/setting/runSetting.json", engineDataDir|],
-      EngineStateDataEditorService.getRunEngineStateData(),
-    )
-  | _ =>
-    WonderLog.Log.fatal(
-      WonderLog.Log.buildFatalMessage(
-        ~title="_getLoadData",
-        ~description={j|the type_ is not find|j},
-        ~reason="",
-        ~solution={j|check the param|j},
-        ~params={j|type:$type_|j},
-      ),
-    )
-  };
+let _getLoadData = () => {
+  let engineDataDir = "./src/engine/config/";
+
+  AssetEngineService.loadToData(
+    [|"./src/engine/config/setting.json", engineDataDir|],
+    StateDataEngineService.getEngineStateData(),
+  );
 };
 
-let _buildSetStateFuncForEditEngineState = setEngineStateFunc =>
-  (. state) => {
-    let state =
-      SceneEditorService.getIsRun |> StateLogicService.getEditorState ?
-        state : state |> DirectorEngineService.loopBody(0.);
-
-    state |> setEngineStateFunc;
-
-    state;
-  };
-
-let _buildSetStateFuncForRunEngineState = setEngineStateFunc =>
-  (. state) => {
-    state |> setEngineStateFunc;
-
-    state;
-  };
-
-let _setUnsafeGetStateFuncAndSetStateFuncForEvent =
-    (getEngineStateFunc, setEngineStateFunc, buildSetStateFunc, engineState) =>
-  engineState
-  |> StateEngineService.setUnsafeGetStateFunc((.) => getEngineStateFunc())
-  |> StateEngineService.setSetStateFunc(
-       buildSetStateFunc(setEngineStateFunc),
-     );
-
-let _setEditEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent =
-    editEngineState =>
-  _setUnsafeGetStateFuncAndSetStateFuncForEvent(
-    StateLogicService.getEditEngineState,
-    StateLogicService.setEditEngineState,
-    _buildSetStateFuncForEditEngineState,
-    editEngineState,
-  );
-
-let _setRunEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent =
-    runEngineState =>
-  _setUnsafeGetStateFuncAndSetStateFuncForEvent(
-    StateLogicService.getRunEngineState,
-    StateLogicService.setRunEngineState,
-    _buildSetStateFuncForRunEngineState,
-    runEngineState,
-  );
-
-let _setIMGUIFunc = (editorState, editEngineState) =>
-  ManageIMGUIEngineService.setIMGUIFunc(
-    EditIMGUIFuncUtils.getEditEngineStateCustomData(
-      editorState,
-      editEngineState,
-    ),
-    EditIMGUIFuncUtils.getEditEngineStateIMGUIFunc(),
-    editEngineState,
-  );
-
-let initEditorForEditEngineStateJob = (_, editEngineState) => {
-  let editorState = StateEditorService.getState();
-
-  let (editorState, editEngineState, editCamera) =
-    editEngineState
-    |> DefaultSceneUtils.prepareSpecificGameObjectsForEditEngineState(
-         editorState,
-       );
-
-  let (editEngineState, cubeGeometry) =
-    editEngineState
-    |> DefaultSceneUtils.prepareDefaultComponentForEditEngineState;
-  let editEngineState =
-    editEngineState
-    |> DefaultSceneUtils.createDefaultSceneForEditEngineState(cubeGeometry);
-  let editorState = DefaultSceneUtils.computeDiffValue(editorState);
-
-  editorState |> StateEditorService.setState |> ignore;
-
-  editEngineState
-  |> GameObjectComponentEngineService.getBasicCameraViewComponent(editCamera)
-  |. BasicCameraViewEngineService.activeBasicCameraView(editEngineState)
-  |> _setIMGUIFunc(editorState);
-};
-
-let handleEditEngineState = editEngineState => {
-  let editEngineState =
+let handleEngineState = engineState => {
+  let engineState =
     JobEngineService.registerNoWorkerInitJob(
       "init_editor",
-      initEditorForEditEngineStateJob,
-      editEngineState,
-    );
+      InitEditorJobUtils.initEditorJob,
+      engineState,
+    )
+    |> JobEngineService.registerNoWorkerInitJob(
+         "init_event_for_editor",
+         InitEventJobUtils.initEventForEditorJob,
+       )
+    |> JobEngineService.registerNoWorkerLoopJob(
+         "prepare_render_scene_view",
+         PrepareRenderViewJobUtils.prepareRenderSceneViewJob,
+       )
+    |> JobEngineService.registerNoWorkerLoopJob(
+         "prepare_render_game_view",
+         PrepareRenderViewJobUtils.prepareRenderGameViewJob,
+       )
+    |> JobEngineService.registerNoWorkerLoopJob(
+         "restore",
+         RestoreJobUtils.restoreJob,
+       );
 
   StateEngineService.setIsDebug(true) |> ignore;
 
-  let scene = editEngineState |> SceneEngineService.getSceneGameObject;
+  let scene = engineState |> SceneEngineService.getSceneGameObject;
 
-  editEngineState
-  |> _setEditEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent
+  engineState
   |> GameObjectEngineService.setGameObjectName("scene", scene)
   |> DirectorEngineService.init
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setEditEngineState;
-};
-
-let initEditorForRunEngineStateJob = (_, runEngineState) => {
-  let editorState = StateEditorService.getState();
-
-  let (editorState, runEngineState, cubeGeometry) =
-    DefaultSceneUtils.prepareDefaultComponentForRunEngineState(
-      editorState,
-      runEngineState,
-    );
-  let (editorState, runEngineState) =
-    runEngineState
-    |> DefaultSceneUtils.createDefaultSceneForRunEngineState(
-         cubeGeometry,
-         editorState,
-       );
-
-  editorState |> StateEditorService.setState |> ignore;
-
-  runEngineState;
-};
-
-let handleRunEngineState = runEngineState => {
-  let runEngineState =
-    JobEngineService.registerNoWorkerInitJob(
-      "init_editor",
-      initEditorForRunEngineStateJob,
-      runEngineState,
-    );
-
-  let scene = runEngineState |> SceneEngineService.getSceneGameObject;
-
-  runEngineState
-  |> _setRunEnginestateUnsafeGetStateFuncAndSetStateFuncForEvent
-  |> GameObjectEngineService.setGameObjectName("scene", scene)
-  |> DirectorEngineService.init
-  |> DirectorEngineService.loopBody(0.)
-  |> StateLogicService.setRunEngineState;
+  |> StateEngineService.setState;
 };
 
 let init = () =>
   Wonderjs.StateDataMainType.(
-    _getLoadData("edit")
-    |> WonderBsMost.Most.flatMap(editEngineState =>
+    _getLoadData()
+    |> WonderBsMost.Most.flatMap(engineState =>
          LoaderManagerEngineService.loadIMGUIAsset(
            "./public/font/myFont.fnt",
            "./public/font/myFont.png",
@@ -176,29 +56,11 @@ let init = () =>
              ("./public/img/point.png", "pointLight"),
            |]),
            (_, _) => (),
-           editEngineState,
+           engineState,
          )
          |> WonderBsMost.Most.fromPromise
        )
-    |> WonderBsMost.Most.map(editEngineState =>
-         editEngineState |> handleEditEngineState
-       )
-    |> WonderBsMost.Most.concat(
-         _getLoadData("run")
-         |> WonderBsMost.Most.flatMap(editEngineState =>
-              LoaderManagerEngineService.loadIMGUIAsset(
-                "./public/font/myFont.fnt",
-                "./public/font/myFont.png",
-                Js.Nullable.undefined,
-                (_, _) => (),
-                editEngineState,
-              )
-              |> WonderBsMost.Most.fromPromise
-            )
-         |> WonderBsMost.Most.map(runEngineState =>
-              runEngineState |> handleRunEngineState
-            ),
-       )
+    |> WonderBsMost.Most.map(engineState => engineState |> handleEngineState)
     |> WonderBsMost.Most.drain
   );
 

@@ -14,10 +14,8 @@ module Method = {
     value
     |> convertColorObjToColorPickType
     |> getEngineColorRgbArr
-    |> BasicMaterialEngineService.setColor
-    |> StateLogicService.getAndRefreshEngineStateWithDiff([|
-         {arguments: [|materialComponent|], type_: DiffType.BasicMaterial},
-       |]);
+    |> BasicMaterialEngineService.setColor(_, materialComponent)
+    |> StateLogicService.getAndRefreshEngineStateWithFunc;
 
   let closeColorPick = BasicMaterialCloseColorPickEventHandler.MakeEventHandler.pushUndoStackWithCopiedEngineState;
 
@@ -25,7 +23,7 @@ module Method = {
 
   let removeTexture = ((store, dispatchFunc), (), materialComponent) =>
     switch (
-      BasicMaterialEngineService.getMap(materialComponent)
+      BasicMaterialEngineService.getBasicMaterialMap(materialComponent)
       |> StateLogicService.getEngineStateToGetData
     ) {
     | None => ()
@@ -53,7 +51,7 @@ let render = ((store, dispatchFunc), materialComponent, _self) =>
       dispatchFunc
       materialComponent
       label="map : "
-      getMapFunc=BasicMaterialEngineService.getMap
+      getMapFunc=BasicMaterialEngineService.getBasicMaterialMap
       removeTextureFunc=Method.removeTexture
       onDropFunc=Method.onDrop
     />

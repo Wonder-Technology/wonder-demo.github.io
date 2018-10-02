@@ -2,10 +2,13 @@ open Wonderjs;
 
 let create = LightMaterialAPI.createLightMaterial;
 
-let unsafeGetLightMaterialGameObject = LightMaterialAPI.unsafeGetLightMaterialGameObject;
+let unsafeGetLightMaterialGameObjects = LightMaterialAPI.unsafeGetLightMaterialGameObjects;
 
-let disposeLightMaterial = (materialArr, state) =>
-  LightMaterialAPI.batchDisposeLightMaterial(state, materialArr);
+let getLightMaterialGameObjects = (material, engineState) =>
+  GameObjectLightMaterialService.getGameObjects(
+    material,
+    RecordLightMaterialMainService.getRecord(engineState),
+  );
 
 let unsafeGetLightMaterialName = LightMaterialAPI.unsafeGetLightMaterialName;
 
@@ -35,14 +38,31 @@ let setLightMaterialDiffuseMap = (map, material, engineState) =>
 
 let hasLightMaterialDiffuseMap = LightMaterialAPI.hasLightMaterialDiffuseMap;
 
+let removeLightMaterialDiffuseMap = LightMaterialAPI.removeLightMaterialDiffuseMap;
+
 let unsafeGetLightMaterialName = LightMaterialAPI.unsafeGetLightMaterialName;
 
 let setLightMaterialName = LightMaterialAPI.setLightMaterialName;
 
 let hasLightMaterialSpecularMap = LightMaterialAPI.hasLightMaterialSpecularMap;
 
+let isLightMaterialMap = (material, texture, engineState) =>
+  switch (getLightMaterialDiffuseMap(material, engineState)) {
+  | Some(map) when map === texture => true
+  | _ => false
+  };
+
+let removeLightMaterialSpecularMap = LightMaterialAPI.removeLightMaterialSpecularMap;
+
 /* let getLightMaterialSpecularColor = LightMaterialAPI.getLightMaterialSpecularColor;
 
    let setLightMaterialSpecularColor = LightMaterialAPI.setLightMaterialSpecularColor; */
 
-let reInitMaterials = LightMaterialAPI.reInitMaterials;
+let _reInitMaterials = LightMaterialAPI.reInitMaterials;
+
+let reInitAllLightMaterialsAndClearShaderCache = (materials, engineState) =>
+  engineState
+  |> _reInitMaterials(materials)
+  |> ShaderEngineService.clearShaderCache;
+
+let getAllLightMaterials = LightMaterialAPI.getAllLightMaterials;

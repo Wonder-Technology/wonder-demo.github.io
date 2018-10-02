@@ -16,17 +16,17 @@ module Method = {
 let component = ReasonReact.statelessComponent("MainEditorCameraView");
 
 let render = ((store, dispatchFunc), _self) => {
-  let engineState = StateLogicService.getRunEngineState();
+  let engineState = StateEngineService.unsafeGetState();
   let currentGameObjectBasicCameraViewComponent =
     engineState
-    |> GameObjectComponentEngineService.getBasicCameraViewComponent(
+    |> GameObjectComponentEngineService.unsafeGetBasicCameraViewComponent(
          SceneEditorService.unsafeGetCurrentSceneTreeNode
          |> StateLogicService.getEditorState,
        );
   let isCurrentCamera =
-    BasicCameraViewEngineService.isActiveBasicCameraView(
+    GameViewEditorService.isActiveBasicCameraView(
       currentGameObjectBasicCameraViewComponent,
-      engineState,
+      StateEditorService.getState(),
     );
 
   <article key="MainEditorCameraView" className="wonder-camera-view">

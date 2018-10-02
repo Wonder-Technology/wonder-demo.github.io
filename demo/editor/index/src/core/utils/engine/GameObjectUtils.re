@@ -1,11 +1,11 @@
 let setParentKeepOrder = (parent, child, engineState) =>
   engineState
   |> TransformEngineService.setParentKeepOrder(
-       GameObjectComponentEngineService.getTransformComponent(
+       GameObjectComponentEngineService.unsafeGetTransformComponent(
          parent,
          engineState,
        ),
-       GameObjectComponentEngineService.getTransformComponent(
+       GameObjectComponentEngineService.unsafeGetTransformComponent(
          child,
          engineState,
        ),
@@ -13,7 +13,7 @@ let setParentKeepOrder = (parent, child, engineState) =>
 
 let getParent = (child, engineState) =>
   TransformEngineService.getParent(
-    GameObjectComponentEngineService.getTransformComponent(
+    GameObjectComponentEngineService.unsafeGetTransformComponent(
       child,
       engineState,
     ),
@@ -22,11 +22,11 @@ let getParent = (child, engineState) =>
 
 let addChild = (parent, child, engineState) =>
   TransformEngineService.setParent(
-    GameObjectComponentEngineService.getTransformComponent(
+    GameObjectComponentEngineService.unsafeGetTransformComponent(
       parent,
       engineState,
     ),
-    GameObjectComponentEngineService.getTransformComponent(
+    GameObjectComponentEngineService.unsafeGetTransformComponent(
       child,
       engineState,
     ),
@@ -35,7 +35,7 @@ let addChild = (parent, child, engineState) =>
 
 let getChildren = (gameObject, engineState) =>
   TransformEngineService.getChildren(
-    GameObjectComponentEngineService.getTransformComponent(
+    GameObjectComponentEngineService.unsafeGetTransformComponent(
       gameObject,
       engineState,
     ),
@@ -47,7 +47,6 @@ let getChildren = (gameObject, engineState) =>
 
 let hasChildren = (gameObject, engineState) =>
   getChildren(gameObject, engineState) |> Js.Array.length > 0;
-
 
 let setGameObjectIsRenderIfHasMeshRenderer =
     (isRender, gameObject, engineState) => {
@@ -61,10 +60,73 @@ let setGameObjectIsRenderIfHasMeshRenderer =
                   gameObject,
                 ) ?
                engineState
-               |> GameObjectComponentEngineService.getMeshRendererComponent(
+               |> GameObjectComponentEngineService.unsafeGetMeshRendererComponent(
                     gameObject,
                   )
                |. MeshRendererEngineService.setMeshRendererIsRender(
+                    isRender,
+                    engineState,
+                  ) :
+               engineState;
+
+           _iterateGameObjectArr(
+             engineState |> getChildren(gameObject),
+             engineState,
+           );
+         },
+         engineState,
+       );
+
+  _iterateGameObjectArr([|gameObject|], engineState);
+};
+
+let setGameObjectIsRenderIfHasDirectionLight =
+    (isRender, gameObject, engineState) => {
+  let rec _iterateGameObjectArr = (gameObjectArr, engineState) =>
+    gameObjectArr
+    |> WonderCommonlib.ArrayService.reduceOneParam(
+         (. engineState, gameObject) => {
+           let engineState =
+             engineState
+             |> GameObjectComponentEngineService.hasDirectionLightComponent(
+                  gameObject,
+                ) ?
+               engineState
+               |> GameObjectComponentEngineService.unsafeGetDirectionLightComponent(
+                    gameObject,
+                  )
+               |. DirectionLightEngineService.setDirectionLightIsRender(
+                    isRender,
+                    engineState,
+                  ) :
+               engineState;
+
+           _iterateGameObjectArr(
+             engineState |> getChildren(gameObject),
+             engineState,
+           );
+         },
+         engineState,
+       );
+
+  _iterateGameObjectArr([|gameObject|], engineState);
+};
+
+let setGameObjectIsRenderIfHasPointLight = (isRender, gameObject, engineState) => {
+  let rec _iterateGameObjectArr = (gameObjectArr, engineState) =>
+    gameObjectArr
+    |> WonderCommonlib.ArrayService.reduceOneParam(
+         (. engineState, gameObject) => {
+           let engineState =
+             engineState
+             |> GameObjectComponentEngineService.hasPointLightComponent(
+                  gameObject,
+                ) ?
+               engineState
+               |> GameObjectComponentEngineService.unsafeGetPointLightComponent(
+                    gameObject,
+                  )
+               |. PointLightEngineService.setPointLightIsRender(
                     isRender,
                     engineState,
                   ) :

@@ -1,68 +1,51 @@
 open MainEditorMaterialType;
 
 let _removeSpecificMaterial =
-    (
-      (diffType, runMaterial),
-      disposeMaterialFunc,
-      (editEngineState, runEngineState),
-    ) => {
-  let editMaterial =
-    StateLogicService.getEditEngineComponent(diffType, runMaterial);
-
-  (
-    editEngineState |> disposeMaterialFunc([|editMaterial|]),
-    runEngineState |> disposeMaterialFunc([|runMaterial|]),
-  );
-};
+    (gameObject, material, removeMaterialFunc, engineState) =>
+  engineState |> removeMaterialFunc(gameObject, material);
 
 let _removeSourceMaterial =
-    (materialType, materialComponent, (editEngineState, runEngineState)) =>
+    (gameObject, materialType, materialComponent, engineState) =>
   switch (materialType) {
   | BasicMaterial =>
-    (editEngineState, runEngineState)
+    engineState
     |> _removeSpecificMaterial(
-         (DiffType.BasicMaterial, materialComponent),
-         BasicMaterialEngineService.disposeBasicMaterial,
+         gameObject,
+         materialComponent,
+         GameObjectComponentEngineService.removeBasicMaterialComponent,
        )
   | LightMaterial =>
-    (editEngineState, runEngineState)
+    engineState
     |> _removeSpecificMaterial(
-         (DiffType.LightMaterial, materialComponent),
-         LightMaterialEngineService.disposeLightMaterial,
+         gameObject,
+         materialComponent,
+         GameObjectComponentEngineService.removeLightMaterialComponent,
        )
   };
 
-let _getOperateTargetMaterialFunc =
-    (materialType, editEngineState, runEngineState) =>
+let _getOperateTargetMaterialFunc = (materialType, engineState) =>
   switch (materialType) {
   | BasicMaterial =>
-    OperateBasicMaterialLogicService.createBasicMaterial(
-      editEngineState,
-      runEngineState,
-    )
+    OperateBasicMaterialLogicService.createBasicMaterial(engineState)
   | LightMaterial =>
-    OperateLightMaterialLogicService.createLightMaterial(
-      editEngineState,
-      runEngineState,
-    )
+    OperateLightMaterialLogicService.createLightMaterial(engineState)
   };
 
 let replaceRenderGroupByMaterialType =
-    ((nodeId, materialComponent), sourceMateralType, targetMaterialType) => {
-  let editEngineState = StateLogicService.getEditEngineState();
-  let runEngineState = StateLogicService.getRunEngineState();
+    (
+      (nodeId, gameObject, materialComponent),
+      sourceMateralType,
+      targetMaterialType,
+    ) => {
+  let engineState = StateEngineService.unsafeGetState();
   let editorState = StateEditorService.getState();
 
-  let (editEngineState, runEngineState) =
-    (editEngineState, runEngineState)
-    |> _removeSourceMaterial(sourceMateralType, materialComponent);
+  let engineState =
+    engineState
+    |> _removeSourceMaterial(gameObject, sourceMateralType, materialComponent);
 
-  let (newMaterialComponent, editEngineState, runEngineState) =
-    _getOperateTargetMaterialFunc(
-      targetMaterialType,
-      editEngineState,
-      runEngineState,
-    );
+  let (newMaterialComponent, engineState) =
+    _getOperateTargetMaterialFunc(targetMaterialType, engineState);
 
   editorState
   |> AssetMaterialNodeMapEditorService.getMaterialNodeMap
@@ -78,8 +61,5 @@ let replaceRenderGroupByMaterialType =
   |> StateEditorService.setState
   |> ignore;
 
-  StateLogicService.refreshEditAndRunEngineState(
-    editEngineState,
-    runEngineState,
-  );
+  StateLogicService.refreshEngineState(engineState);
 };

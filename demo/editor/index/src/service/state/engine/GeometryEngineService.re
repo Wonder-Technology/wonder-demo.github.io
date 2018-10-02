@@ -42,9 +42,15 @@ let hasGeometryTexCoords = (geometry, engineState) =>
   getGeometryTexCoords(geometry, engineState) |> Float32Array.length > 0;
 
 let getAllGeometrys = GeometryAPI.getAllGeometrys;
+
+let _isAssetGeometry = geometry => geometry >= 1;
+
+let getAllAssetGeometrys = engineState =>
+  getAllGeometrys(engineState) |> Js.Array.filter(_isAssetGeometry);
+
 let unsafeGetGeometryGameObjects = Wonderjs.GeometryAPI.unsafeGetGeometryGameObjects;
 
-let getAllUniqueGeometrys = (gameObject, engineState) => {
+let _getAllUniqueGeometrys = (gameObject, engineState) => {
   let rec _iterateGameObjectArr = (gameObjectArr, resultArr, engineState) =>
     gameObjectArr
     |> WonderCommonlib.ArrayService.reduceOneParam(
@@ -79,7 +85,7 @@ let getAllUniqueGeometrys = (gameObject, engineState) => {
 let replaceAllGameObjectGeometryToDefaultGeometry =
     (gameObject, targetGeometry, engineState) =>
   engineState
-  |> getAllUniqueGeometrys(gameObject)
+  |> _getAllUniqueGeometrys(gameObject)
   |> Js.Array.map(geometryIndex =>
        engineState |> unsafeGetGeometryGameObjects(geometryIndex)
      )
@@ -121,7 +127,7 @@ let rec _generateGridPlanePoints =
 
 let createGridPlaneGameObject = ((size, step, y), color, engineState) => {
   let (engineState, gameObject) =
-    GameObjectLogicService.createGameObjectForEditEngineState(engineState);
+    GameObjectEngineService.create(engineState);
 
   let (engineState, geometry) = create(engineState);
 
@@ -151,11 +157,11 @@ let createGridPlaneGameObject = ((size, step, y), color, engineState) => {
       engineState,
     )
     |> BasicMaterialEngineService.setColor(color, renderGroup.material)
-    |> GameObjectLogicService.addGeometryForEditEngineState(
+    |> GameObjectComponentEngineService.addGeometryComponent(
          gameObject,
          geometry,
        )
-    |> GameObjectLogicService.addRenderGroupForEditEngineState(
+    |> RenderGroupEngineService.addRenderGroupComponents(
          gameObject,
          renderGroup,
          (

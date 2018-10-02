@@ -45,49 +45,45 @@ let handleSpecificFuncByLightType =
   };
 };
 
-let _isLightExceedMaxCountByType = (targetLightType, engineState) =>
+let isLightExceedMaxCountByType = (targetLightType, engineState) =>
   switch (targetLightType) {
   | DirectionLight => (
-      "the point light count is exceed max count !",
+      "the direction light count is exceed max count!",
       engineState |> DirectionLightEngineService.isMaxCount,
     )
 
   | PointLight => (
-      "the point light count is exceed max count !",
+      "the point light count is exceed max count!",
       engineState |> PointLightEngineService.isMaxCount,
     )
   };
 
-let _getOperateSourceLightFunc = (lightType, gameObject, engineStateToGetData) =>
+let _getOperateSourceLightFunc = (lightType, gameObject, engineState) =>
   switch (lightType) {
   | DirectionLight => (
-      engineStateToGetData
-      |> GameObjectComponentEngineService.getDirectionLightComponent(
+      engineState
+      |> GameObjectComponentEngineService.unsafeGetDirectionLightComponent(
            gameObject,
          ),
       OperateDirectionLightLogicService.disposeDirectionLight,
     )
   | PointLight => (
-      engineStateToGetData
-      |> GameObjectComponentEngineService.getPointLightComponent(gameObject),
+      engineState
+      |> GameObjectComponentEngineService.unsafeGetPointLightComponent(
+           gameObject,
+         ),
       OperatePointLightLogicService.disposePointLight,
     )
   };
 
-let _getOperateTargetLightFunc = (lightType, editEngineState, runEngineState) =>
+let _getOperateTargetLightFunc = (lightType, engineState) =>
   switch (lightType) {
   | DirectionLight => (
-      OperateDirectionLightLogicService.createDirectionLight(
-        editEngineState,
-        runEngineState,
-      ),
+      OperateDirectionLightLogicService.createDirectionLight(engineState),
       OperateDirectionLightLogicService.addDirectionLight,
     )
   | PointLight => (
-      OperatePointLightLogicService.createPointLight(
-        editEngineState,
-        runEngineState,
-      ),
+      OperatePointLightLogicService.createPointLight(engineState),
       OperatePointLightLogicService.addPointLight,
     )
   };
@@ -96,98 +92,52 @@ let replaceLightByType = (sourceLightType, targetLightType) => {
   let gameObject =
     SceneEditorService.unsafeGetCurrentSceneTreeNode
     |> StateLogicService.getEditorState;
-  let editEngineState = StateLogicService.getEditEngineState();
-  let runEngineState = StateLogicService.getRunEngineState();
+  let engineState = StateEngineService.unsafeGetState();
 
   let (message, isMaxCount) =
-    _isLightExceedMaxCountByType(targetLightType, runEngineState);
+    isLightExceedMaxCountByType(targetLightType, engineState);
 
   isMaxCount ?
-    Antd.Message.message
-    |> Antd.Message.convertToJsObj
-    |> (messageObj => messageObj##warn(message, 4))
-    |> ignore :
+    { ConsoleUtils.warn(message) } :
     {
       let (sourceLight, disposeSourceLightFunc) =
-        _getOperateSourceLightFunc(
-          sourceLightType,
-          gameObject,
-          runEngineState,
-        );
+        _getOperateSourceLightFunc(sourceLightType, gameObject, engineState);
 
-      let (
-        (targetLight, editEngineState, runEngineState),
-        addTargetLightFunc,
-      ) =
-        _getOperateTargetLightFunc(
-          targetLightType,
-          editEngineState,
-          runEngineState,
-        );
+      let ((engineState, targetLight), addTargetLightFunc) =
+        _getOperateTargetLightFunc(targetLightType, engineState);
 
-      let (editEngineState, runEngineState) =
-        (editEngineState, runEngineState)
+      let engineState =
+        engineState
         |> disposeSourceLightFunc(gameObject, sourceLight)
         |> addTargetLightFunc(gameObject, targetLight)
-        |> StateLogicService.handleFuncWithDiff(
-             [|{arguments: [|gameObject|], type_: GameObject}|],
-             GameObjectEngineService.initGameObject,
-           );
+        |> GameObjectEngineService.initGameObject(gameObject);
 
-      StateLogicService.refreshEditAndRunEngineState(
-        editEngineState,
-        runEngineState,
-      );
+      StateLogicService.refreshEngineState(engineState);
 
-      OperateLightMaterialLogicService.reInitAllMaterials
-      |> StateLogicService.getAndSetEditAndRunEngineState;
-
-      StateLogicService.getAndRefreshEditAndRunEngineState();
+      SceneEngineService.clearShaderCacheAndReInitSceneAllLightMaterials
+      |> StateLogicService.getAndRefreshEngineStateWithFunc;
     };
 };
 
-let disposeLightByLightTypeForEditEngineState =
-    (lightType, currentSceneTreeNode, engineState) =>
-  switch (lightType) {
-  | DirectionLight =>
-    engineState
-    |> GameObjectLogicService.disposeDirectionLightForEditEngineState(
-         currentSceneTreeNode,
-         engineState
-         |> GameObjectComponentEngineService.getDirectionLightComponent(
-              currentSceneTreeNode,
-            ),
-       )
-
-  | PointLight =>
-    engineState
-    |> GameObjectLogicService.disposePointLightForEditEngineState(
-         currentSceneTreeNode,
-         engineState
-         |> GameObjectComponentEngineService.getPointLightComponent(
-              currentSceneTreeNode,
-            ),
-       )
-  };
-let disposeLightByLightTypeForRunEngineState =
+let disposeLightByLightType =
     (lightType, currentSceneTreeNode, (editorState, engineState)) =>
   switch (lightType) {
   | DirectionLight =>
     (editorState, engineState)
-    |> GameObjectLogicService.disposeDirectionLightForRunEngineState(
+    |> GameObjectLogicService.disposeDirectionLight(
          currentSceneTreeNode,
          engineState
-         |> GameObjectComponentEngineService.getDirectionLightComponent(
+         |> GameObjectComponentEngineService.unsafeGetDirectionLightComponent(
               currentSceneTreeNode,
             ),
        )
 
   | PointLight =>
     (editorState, engineState)
-    |> GameObjectLogicService.disposePointLightForRunEngineState(
+    |> GameObjectLogicService.disposePointLight(
          currentSceneTreeNode,
          engineState
-         |> GameObjectComponentEngineService.getPointLightComponent(
+         |> GameObjectComponentEngineService.unsafeGetPointLightComponent(
               currentSceneTreeNode,
             ),
        )

@@ -3,7 +3,7 @@ let handleSpeficFuncByAssetNodeType =
     (
       type_,
       (
-        handleFodlerFunc,
+        handleFolderFunc,
         handleJsonFunc,
         handleTextureFunc,
         handleMaterialFunc,
@@ -15,7 +15,7 @@ let handleSpeficFuncByAssetNodeType =
   | Folder =>
     editorState
     |> AssetFolderNodeMapEditorService.getFolderNodeMap
-    |> handleFodlerFunc
+    |> handleFolderFunc
   | Texture =>
     editorState
     |> AssetTextureNodeMapEditorService.getTextureNodeMap
@@ -39,7 +39,7 @@ let getAssetNodeTotalName = (type_, currentNodeId, editorState) =>
        (
          AssetFolderNodeMapEditorService.getFolderName(currentNodeId),
          AssetJsonNodeMapEditorService.getJsonTotalName(currentNodeId),
-         OperateTextureLogicService.getTextureTotalName(currentNodeId),
+         OperateTextureLogicService.getTextureBaseName(currentNodeId),
          AssetMaterialNodeMapEditorService.getMaterialTotalName(
            currentNodeId,
          ),

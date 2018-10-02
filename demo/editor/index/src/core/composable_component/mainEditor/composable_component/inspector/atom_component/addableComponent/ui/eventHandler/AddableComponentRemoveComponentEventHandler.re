@@ -1,5 +1,3 @@
-open DiffType;
-
 open InspectorComponentType;
 
 module CustomEventHandler = {
@@ -10,37 +8,26 @@ module CustomEventHandler = {
   let _isRemoveLight = type_ => type_ === Light;
 
   let handleSelfLogic = ((store, dispatchFunc), currentSceneTreeNode, type_) => {
-    StateLogicService.getEditEngineState()
-    |> InspectorRemoveComponentUtils.removeComponentByTypeForEditEngineState(
-         type_,
-         StateLogicService.getEditEngineComponent(
-           DiffType.GameObject,
-           currentSceneTreeNode,
-         ),
-       )
-    |> StateLogicService.setEditEngineState;
-
-    let (editorState, runEngineState) =
-      (StateEditorService.getState(), StateLogicService.getRunEngineState())
-      |> InspectorRemoveComponentUtils.removeComponentByTypeForRunEngineState(
+    let (editorState, engineState) =
+      (StateEditorService.getState(), StateEngineService.unsafeGetState())
+      |> InspectorRemoveComponentUtils.removeComponentByType(
            type_,
            currentSceneTreeNode,
          );
 
-    runEngineState |> StateLogicService.setRunEngineState;
-
     editorState |> StateEditorService.setState |> ignore;
+    engineState |> StateEngineService.setState |> ignore;
 
     _isRemoveLight(type_) ?
       {
-        StateLogicService.getAndRefreshEditAndRunEngineState();
+        StateLogicService.getAndRefreshEngineState();
 
-        OperateLightMaterialLogicService.reInitAllMaterials
-        |> StateLogicService.getAndSetEditAndRunEngineState;
+        SceneEngineService.clearShaderCacheAndReInitSceneAllLightMaterials
+        |> StateLogicService.getAndSetEngineState;
       } :
       ();
 
-    StateLogicService.getAndRefreshEditAndRunEngineState();
+    StateLogicService.getAndRefreshEngineState();
 
     dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.Inspector|])))
     |> ignore;
