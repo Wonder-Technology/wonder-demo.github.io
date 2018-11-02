@@ -3,8 +3,9 @@ open AssetNodeType;
 open AssetTreeNodeType;
 
 module Method = {
-  let _isSelected = id =>
-    AssetUtils.getTargetTreeNodeId |> StateLogicService.getEditorState === id;
+  let _isSelected = nodeId =>
+    AssetUtils.getTargetTreeNodeId
+    |> StateLogicService.getEditorState === nodeId;
 
   let _isActive = () => {
     let editorState = StateEditorService.getState();
@@ -19,35 +20,67 @@ module Method = {
     };
   };
 
-  let _isNotRoot = id =>
+  let _isNotRoot = nodeId =>
     StateEditorService.getState()
-    |> AssetTreeRootEditorService.getRootTreeNodeId != id;
+    |> AssetTreeRootEditorService.getRootTreeNodeId != nodeId;
+
+  let handleToggleShowTreeChildren =
+      (store, dispatchFunc, targetId, isShowChildren) => {
+    let editorState = StateEditorService.getState();
+
+    AssetTreeUtils.setSpecificAssetTreeNodeIsShowChildren(
+      targetId,
+      isShowChildren,
+      [|editorState |> AssetTreeRootEditorService.unsafeGetAssetTreeRoot|],
+    )
+    |> ArrayService.unsafeGetFirst
+    |. AssetTreeRootEditorService.setAssetTreeRoot(editorState)
+    |> StateEditorService.setState;
+
+    dispatchFunc(
+      AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),
+    )
+    |> ignore;
+  };
 
   let buildAssetTreeArray =
-      (dragImg, (onSelectFunc, onDropFunc), assetTreeRoot) => {
+      (
+        (store, dispatchFunc, dragImg),
+        (onSelectFunc, onDropFunc),
+        assetTreeRoot,
+      ) => {
     let rec _iterateAssetTreeArray = assetTreeArray =>
       assetTreeArray
-      |> Js.Array.map(({id, type_, children}) =>
+      |> Js.Array.map(({nodeId, type_, isShowChildren, children}) =>
            switch (type_) {
            | Folder =>
              let {name}: folderResultType =
                StateEditorService.getState()
                |> AssetFolderNodeMapEditorService.getFolderNodeMap
-               |> WonderCommonlib.SparseMapService.unsafeGet(id);
+               |> WonderCommonlib.SparseMapService.unsafeGet(nodeId);
 
              <TreeNode
                key=(DomHelper.getRandomKey())
-               uid=id
+               id=nodeId
                name
-               isSelected=(_isSelected(id))
+               isSelected=(_isSelected(nodeId))
                isActive=(_isActive())
                dragImg
-               widge=(AssetUtils.getWidge())
-               icon="./public/img/12.jpg"
-               isDragable=(_isNotRoot(id))
+               widget=(AssetUtils.getWidget())
+               icon="./public/img/package.png"
+               isDragable=(_isNotRoot(nodeId))
                onSelect=(onSelectFunc(type_))
                onDrop=onDropFunc
-               isWidge=AssetUtils.isWidge
+               isWidget=AssetUtils.isWidget
+               isShowChildren
+               isHasChildren=(
+                 children
+                 |> Js.Array.filter(({type_}) => type_ === Folder)
+                 |> Js.Array.length >= 1
+               )
+               handleToggleShowTreeChildren=(
+                 handleToggleShowTreeChildren(store, dispatchFunc)
+               )
                handleRelationError=AssetUtils.isTreeNodeRelationError
                treeChildren=(_iterateAssetTreeArray(children))
              />;
@@ -68,7 +101,7 @@ let render = ((store, dispatchFunc), dragImg, _self) =>
         StateEditorService.getState()
         |> AssetTreeRootEditorService.unsafeGetAssetTreeRoot
         |> Method.buildAssetTreeArray(
-             dragImg,
+             (store, dispatchFunc, dragImg),
              (
                AssetTreeUtils.onSelect(dispatchFunc),
                AssetTreeUtils.dragNodeToFolderFunc(

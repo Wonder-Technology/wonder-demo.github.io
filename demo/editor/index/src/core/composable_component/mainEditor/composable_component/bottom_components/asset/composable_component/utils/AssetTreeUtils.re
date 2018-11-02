@@ -23,21 +23,26 @@ let onSelect = (dispatchFunc, nodeType, nodeId) => {
 
 let dragNodeToFolderFunc = AssetDragNodeToFolderEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
-let addFolderIntoNodeMap = (index, name, parentId, editorState) =>
+let addFolderIntoNodeMap = (index, name, parentFolderNodeId, editorState) =>
   name
-  |> AssetFolderNodeMapEditorService.buildFolderResult(parentId)
+  |> AssetFolderNodeMapEditorService.buildFolderNodeResult(
+       parentFolderNodeId,
+     )
   |> AssetFolderNodeMapEditorService.setResult(index, _, editorState);
 
-let rebuildRootAssetTree = (parentId, pathName, editorState) =>
+let rebuildRootAssetTree = (parentFolderNodeId, pathName, editorState) =>
   switch (AssetTreeRootEditorService.getAssetTreeRoot(editorState)) {
   | None =>
-    let (editorState, rootIndex) =
-      AssetIdUtils.getAssetId |> StateLogicService.getEditorState;
+    let (editorState, rootIndex) = AssetIdUtils.generateAssetId(editorState);
+
     let editorState =
       rootIndex
       |. AssetTreeEditorService.buildAssetTreeNodeByIndex(Folder)
-      |. AssetTreeRootEditorService.setAssetTreeRoot(editorState)
-      |> addFolderIntoNodeMap(rootIndex, pathName, parentId);
+      |. AssetTreeRootEditorService.setAssetTreeRoot(editorState);
+
+    let editorState =
+      editorState
+      |> addFolderIntoNodeMap(rootIndex, pathName, parentFolderNodeId);
 
     (rootIndex, editorState);
   | Some(assetTreeRoot) => (
@@ -46,26 +51,28 @@ let rebuildRootAssetTree = (parentId, pathName, editorState) =>
     )
   };
 
-let rebuildFolder = (parentId, pathName, editorState) => {
+let rebuildFolder =
+    (parentFolderNodeId, pathName, (editorState, engineState)) => {
   let resultArr =
-    AssetTreeEditorService.getChildrenNameAndIdArr(
-      parentId |> OptionService.unsafeGet,
+    AssetUtils.getChildrenNameAndIdArr(
+      parentFolderNodeId |> OptionService.unsafeGet,
       Folder,
-      editorState,
+      (editorState, engineState),
     )
     |> Js.Array.filter(((nodeName, nodeId)) => pathName === nodeName);
 
   resultArr |> Js.Array.length === 0 ?
     {
-      let (editorState, newIndex) = AssetIdUtils.getAssetId(editorState);
+      let (editorState, newIndex) = AssetIdUtils.generateAssetId(editorState);
 
       let editorState =
-        editorState |> addFolderIntoNodeMap(newIndex, pathName, parentId);
+        editorState
+        |> addFolderIntoNodeMap(newIndex, pathName, parentFolderNodeId);
 
       let editorState =
         editorState
         |> AssetTreeNodeUtils.createNodeAndAddToTargetNodeChildren(
-             parentId |> OptionService.unsafeGet,
+             parentFolderNodeId |> OptionService.unsafeGet,
              newIndex,
              Folder,
            );
@@ -78,3 +85,21 @@ let rebuildFolder = (parentId, pathName, editorState) => {
       (nodeId, editorState);
     };
 };
+
+let rec setSpecificAssetTreeNodeIsShowChildren =
+        (targetId, isShowChildren, assetTreeArray) =>
+  assetTreeArray
+  |> Js.Array.map(
+       ({nodeId, children} as treeNode: AssetTreeNodeType.assetTreeNodeType) =>
+       nodeId === targetId ?
+         {...treeNode, isShowChildren} :
+         {
+           ...treeNode,
+           children:
+             setSpecificAssetTreeNodeIsShowChildren(
+               targetId,
+               isShowChildren,
+               children,
+             ),
+         }
+     );

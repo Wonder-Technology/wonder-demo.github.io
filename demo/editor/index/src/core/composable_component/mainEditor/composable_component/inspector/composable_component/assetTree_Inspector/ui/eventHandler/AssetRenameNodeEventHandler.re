@@ -1,66 +1,134 @@
 open AppStore;
 
+open AssetNodeType;
 
 module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = (int, AssetNodeType.assetNodeType);
   type dataTuple = string;
 
-  let _renameFolderNode = (folderId, name, editorState, folderNodeMap) =>
+  let _renameFolderNode =
+      (nodeId, name, (editorState, engineState), folderNodeMap) => (
     folderNodeMap
-    |> WonderCommonlib.SparseMapService.unsafeGet(folderId)
-    |> AssetFolderNodeMapEditorService.renameFolderNodeResult(name)
-    |> AssetFolderNodeMapEditorService.setResult(folderId, _, editorState)
-    |> StateEditorService.setState
-    |> ignore;
-
-  let _renameJsonNode = (jsonId, name, editorState, jsonNodeMap) =>
-    jsonNodeMap
-    |> WonderCommonlib.SparseMapService.unsafeGet(jsonId)
-    |> AssetJsonNodeMapEditorService.renameJsonNodeResult(name)
-    |> AssetJsonNodeMapEditorService.setResult(jsonId, _, editorState)
-    |> StateEditorService.setState
-    |> ignore;
-
-  let _renameTextureNode = (textureIndex, name, _textureNodeMap) =>
-    OperateTextureLogicService.renameTextureToEngine(textureIndex, name);
-
-  let _renameMaterialNode = (nodeId, name, editorState, materialNodeMap) =>
-    materialNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
-    |> AssetMaterialNodeMapEditorService.renameMaterialNodeResult(name)
-    |> AssetMaterialNodeMapEditorService.setResult(nodeId, _, editorState)
-    |> StateEditorService.setState
-    |> ignore;
+    |> AssetFolderNodeMapEditorService.renameFolderNodeResult(name)
+    |> AssetFolderNodeMapEditorService.setResult(nodeId, _, editorState),
+    engineState,
+  );
 
+  let _renameTextureNode =
+      (nodeId, name, (editorState, engineState), textureNodeMap) => {
+    let {textureComponent} =
+      textureNodeMap |> WonderCommonlib.SparseMapService.unsafeGet(nodeId);
 
-  let _renameWDBNode = (nodeId, name, editorState, wdbNodeMap) =>
+    (
+      editorState,
+      engineState
+      |> BasicSourceTextureEngineService.setBasicSourceTextureName(
+           name,
+           textureComponent,
+         ),
+    );
+  };
+
+  let _isNameEqualDefaultMaterialName = (nodeId, name, materialNodeMap) => {
+    open AssetMaterialDataType;
+
+    let defaultName =
+      switch (
+        AssetMaterialNodeMapEditorService.getType(
+          nodeId,
+          materialNodeMap,
+        )
+      ) {
+      | BasicMaterial =>
+        PrepareDefaultComponentUtils.getDefaultBasicMaterialName()
+      | LightMaterial =>
+        PrepareDefaultComponentUtils.getDefaultLightMaterialName()
+      };
+
+    name === defaultName;
+  };
+
+  let _renameMaterialNode =
+      (nodeId, name, (editorState, engineState), materialNodeMap) =>
+    _isNameEqualDefaultMaterialName(nodeId, name, materialNodeMap) ?
+      {
+        ConsoleUtils.info(
+          {j|material name:$name shouldn't equal default material name|j},
+        );
+
+        (editorState, engineState);
+      } :
+      (
+        editorState,
+        engineState
+        |> AssetMaterialNodeMapLogicService.setMaterialBaseName(
+             nodeId,
+             name,
+             materialNodeMap,
+           ),
+      );
+
+  let _renameWDBNode = (nodeId, name, (editorState, engineState), wdbNodeMap) => (
     wdbNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
     |> AssetWDBNodeMapEditorService.renameWDBNodeResult(name)
-    |> AssetWDBNodeMapEditorService.setResult(nodeId, _, editorState)
-    |> StateEditorService.setState
-    |> ignore;
+    |> AssetWDBNodeMapEditorService.setResult(nodeId, _, editorState),
+    engineState,
+  );
 
   let handleSelfLogic = ((store, dispatchFunc), (nodeId, nodeType), value) => {
     let editorState = StateEditorService.getState();
+    let engineState = StateEngineService.unsafeGetState();
 
-    AssetNodeUtils.handleSpeficFuncByAssetNodeType(
-      nodeType,
-      (
-        _renameFolderNode(nodeId, value, editorState),
-        _renameJsonNode(nodeId, value, editorState),
-        _renameTextureNode(nodeId, value),
-        _renameMaterialNode(nodeId, value, editorState),
-        _renameWDBNode(nodeId, value, editorState),
-      ),
+    let parentNodeId =
       editorState
-    );
+      |> AssetNodeUtils.getAssetNodeParentId(nodeType, nodeId)
+      |> OptionService.unsafeGet;
 
-    dispatchFunc(
-      AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),
-    )
-    |> ignore;
+    let (editorState, engineState) =
+      AssetUtils.checkAssetNodeName(
+        (nodeId, value),
+        parentNodeId,
+        nodeType,
+        (
+          ((editorState, engineState)) => {
+            dispatchFunc(
+              AppStore.UpdateAction(Update([|UpdateStore.Inspector|])),
+            )
+            |> ignore;
+
+            (editorState, engineState);
+          },
+          ((editorState, engineState)) => {
+            let stateTuple = (editorState, engineState);
+
+            let (editorState, engineState) =
+              AssetNodeUtils.handleSpeficFuncByAssetNodeType(
+                nodeType,
+                (
+                  _renameFolderNode(nodeId, value, stateTuple),
+                  _renameTextureNode(nodeId, value, stateTuple),
+                  _renameMaterialNode(nodeId, value, stateTuple),
+                  _renameWDBNode(nodeId, value, stateTuple),
+                ),
+                editorState,
+              );
+
+            dispatchFunc(
+              AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),
+            )
+            |> ignore;
+
+            (editorState, engineState);
+          },
+        ),
+        (editorState, engineState),
+      );
+
+    StateEditorService.setState(editorState) |> ignore;
+    StateEngineService.setState(engineState) |> ignore;
   };
 };
 

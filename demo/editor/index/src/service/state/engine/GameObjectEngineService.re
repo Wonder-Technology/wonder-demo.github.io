@@ -14,6 +14,8 @@ let disposeGameObjectKeepOrder = GameObjectAPI.disposeGameObjectKeepOrder;
 
 let disposeGameObjectKeepOrderRemoveGeometry = GameObjectAPI.disposeGameObjectKeepOrderRemoveGeometry;
 
+let disposeGameObjectKeepOrderRemoveGeometryRemoveMaterial = GameObjectAPI.disposeGameObjectKeepOrderRemoveGeometryRemoveMaterial;
+
 /* let hasGameObjectBoxGeometryComponent = GameObjectAPI.hasGameObjectBoxGeometryComponent; */
 /*
  let hasGameObjectLightMaterialComponent = GameObjectAPI.hasGameObjectLightMaterialComponent; */
@@ -69,6 +71,16 @@ let getAllArcballCameraControllers = (allGameObjects, engineState) =>
     (
       GameObjectComponentEngineService.hasArcballCameraControllerComponent,
       GameObjectComponentEngineService.unsafeGetArcballCameraControllerComponent,
+    ),
+    engineState,
+  );
+
+let getAllGeometrys = (allGameObjects, engineState) =>
+  _getAllComponents(
+    allGameObjects,
+    (
+      GameObjectComponentEngineService.hasGeometryComponent,
+      GameObjectComponentEngineService.unsafeGetGeometryComponent,
     ),
     engineState,
   );

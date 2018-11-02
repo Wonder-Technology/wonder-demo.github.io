@@ -11,44 +11,38 @@ module Method = {
   let handleDragEnter =
       (
         id,
-        (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile),
+        (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile),
         _event,
       ) =>
     DragEventBaseUtils.isTriggerDragEnter(
       id,
-      handleWidgeFunc,
+      handleWidgetFunc,
       handleRelationErrorFunc,
     )
     || isAssetWDBFile() ?
       DragEnter : Nothing;
 
   let handleDragLeave =
-      (id, (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile), event) => {
+      (id, (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile), event) => {
     let e = ReactEventType.convertReactMouseEventToJsEvent(event);
-    DomHelper.stopPropagation(e);
+    /* DomHelper.stopPropagation(e); */
 
-    DragEventBaseUtils.isTriggerDragLeave(
-      id,
-      handleWidgeFunc,
-      handleRelationErrorFunc,
-    )
-    || isAssetWDBFile() ?
-      DragLeave : Nothing;
+    DragLeave;
   };
 
   let handleDrop =
       (
         rootUid,
-        (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile),
+        (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile),
         event,
       ) => {
     let e = ReactEventType.convertReactMouseEventToJsEvent(event);
-    let startId = DragUtils.getDragedUid(e);
+    let startId = DragUtils.getDragedId(e);
 
     DragEventBaseUtils.isTriggerDragDrop(
       rootUid,
       startId,
-      handleWidgeFunc,
+      handleWidgetFunc,
       handleRelationErrorFunc,
     ) ?
       DragGameObject(rootUid, startId) :
@@ -73,15 +67,14 @@ let reducer = (dragGameObject, dragWDB, action, state) =>
   | DragEnter =>
     ReasonReact.Update({
       ...state,
-      style:
-        ReactUtils.addStyleProp("backgroundColor", "yellow", state.style),
+      style: ReactUtils.addStyleProp("backgroundColor", "#333333", state.style),
     })
 
   | DragLeave =>
     ReasonReact.Update({
       ...state,
       style:
-        ReactUtils.addStyleProp("backgroundColor", "#c0c0c0", state.style),
+        ReactUtils.addStyleProp("backgroundColor", "#666666", state.style),
     })
 
   | DragGameObject(rootUid, removedId) =>
@@ -97,7 +90,7 @@ let render =
     (
       treeArray,
       rootUid,
-      (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile),
+      (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile),
       {state, send}: ReasonReact.self('a, 'b, 'c),
     ) =>
   <article className="wonder-drag-tree">
@@ -110,7 +103,7 @@ let render =
           send(
             Method.handleDragEnter(
               rootUid,
-              (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile),
+              (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile),
               _e,
             ),
           )
@@ -120,7 +113,7 @@ let render =
           send(
             Method.handleDragLeave(
               rootUid,
-              (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile),
+              (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile),
               _e,
             ),
           )
@@ -131,7 +124,7 @@ let render =
           send(
             Method.handleDrop(
               rootUid,
-              (handleWidgeFunc, handleRelationErrorFunc, isAssetWDBFile),
+              (handleWidgetFunc, handleRelationErrorFunc, isAssetWDBFile),
               _e,
             ),
           )
@@ -145,21 +138,21 @@ let make =
       ~rootUid,
       ~dragGameObject,
       ~dragWDB,
-      ~isWidge,
+      ~isWidget,
       ~handleRelationError,
       ~isAssetWDBFile,
       _children,
     ) => {
   ...component,
   initialState: () => {
-    style: ReactDOMRe.Style.make(~backgroundColor="#c0c0c0", ()),
+    style: ReactDOMRe.Style.make(~backgroundColor="#666666", ()),
   },
   reducer: reducer(dragGameObject, dragWDB),
   render: self =>
     render(
       treeArray,
       rootUid,
-      (isWidge, handleRelationError, isAssetWDBFile),
+      (isWidget, handleRelationError, isAssetWDBFile),
       self,
     ),
 };

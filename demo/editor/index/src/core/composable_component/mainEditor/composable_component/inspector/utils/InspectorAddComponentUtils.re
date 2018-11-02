@@ -6,10 +6,16 @@ let addComponentByType =
     (type_, currentSceneTreeNode, (editorState, engineState)) =>
   switch (type_) {
   | RenderGroup =>
-    let (engineState, renderGroup) =
-      RenderGroupEngineService.createRenderGroup(
-        (MeshRendererEngineService.create, LightMaterialEngineService.create),
-        engineState,
+    let defaultLightMaterial =
+      AssetMaterialDataEditorService.unsafeGetDefaultLightMaterial(
+        editorState,
+      );
+    let (engineState, meshRenderer) =
+      MeshRendererEngineService.create(engineState);
+    let renderGroup =
+      RenderGroupEngineService.buildRenderGroup(
+        meshRenderer,
+        defaultLightMaterial,
       );
 
     (editorState, engineState)
@@ -25,9 +31,9 @@ let addComponentByType =
     /* let editorState = StateEditorService.getState(); */
 
     let defaultCubeGeometry =
-      editorState
-      |> AssetGeometryDataEditorService.getGeometryData
-      |> (({defaultCubeGeometryIndex}) => defaultCubeGeometryIndex);
+      AssetGeometryDataEditorService.unsafeGetDefaultCubeGeometryComponent(
+        editorState,
+      );
 
     (editorState, engineState)
     |> GameObjectLogicService.addGeometry(
@@ -38,16 +44,7 @@ let addComponentByType =
   | Light =>
     engineState |> DirectionLightEngineService.isMaxCount ?
       {
-        Antd.Message.message
-        |> Antd.Message.convertToJsObj
-        |> (
-          messageObj =>
-            messageObj##info(
-              "the direction light count is exceed max count !",
-              4,
-            )
-        )
-        |> ignore;
+        ConsoleUtils.warn("the direction light count is exceed max count !");
 
         (editorState, engineState);
       } :
@@ -63,7 +60,8 @@ let addComponentByType =
         |> (
           ((editorState, engineState)) => (
             editorState,
-            engineState |> SceneEngineService.clearShaderCacheAndReInitSceneAllLightMaterials,
+            engineState
+            |> SceneEngineService.clearShaderCacheAndReInitSceneAllLightMaterials,
           )
         );
       }
@@ -114,7 +112,7 @@ let addComponentByType =
       WonderLog.Log.buildFatalMessage(
         ~title="addComponentByType",
         ~description=
-          {j|the type:$type_ in inspectorComponentType is can't add |j},
+          {j|the type:$type_ in inspectorComponentType can't add |j},
         ~reason="",
         ~solution={j||j},
         ~params={j||j},

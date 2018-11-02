@@ -4,38 +4,33 @@ module CustomEventHandler = {
   type dataTuple = unit;
 
   let handleSelfLogic = ((store, dispatchFunc), (), ()) => {
-    let materialName = "New Material";
-    let materialPostfix = ".mat";
-
-    let (newMaterial, engineState) =
-      OperateLightMaterialLogicService.createLightMaterial(
-        StateEngineService.unsafeGetState(),
-      );
-
-    engineState |> StateEngineService.setState |> ignore;
-
+    let engineState = StateEngineService.unsafeGetState();
     let (editorState, newIndex) =
-      AssetIdUtils.getAssetId |> StateLogicService.getEditorState;
+      AssetIdUtils.generateAssetId |> StateLogicService.getEditorState;
     let targetTreeNodeId = editorState |> AssetUtils.getTargetTreeNodeId;
 
-    editorState
-    |> AssetMaterialNodeMapEditorService.setResult(
-         newIndex,
-         AssetMaterialNodeMapEditorService.buildMaterialNodeResult(
-           materialName,
-           materialPostfix,
+    let materialName =
+      MainEditorMaterialUtils.getMaterilaDefaultName()
+      |. AssetUtils.getUniqueTreeNodeName(
+           Material,
            targetTreeNodeId |. Some,
-           MainEditorMaterialType.LightMaterial,
-           newMaterial,
-         ),
-       )
-    |> AssetTreeNodeUtils.createNodeAndAddToTargetNodeChildren(
-         targetTreeNodeId,
-         newIndex,
-         Material,
-       )
-    |> StateEditorService.setState
-    |> ignore;
+           (editorState, engineState),
+         );
+
+    let (newMaterial, engineState) =
+      OperateLightMaterialLogicService.createLightMaterialAndSetName(
+        materialName,
+        engineState,
+      );
+
+    let editorState =
+      AddMaterialNodeUtils.addMaterialNodeToAssetTree(
+        newMaterial,
+        (targetTreeNodeId, newIndex),
+        editorState,
+      );
+
+    editorState |> StateEditorService.setState |> ignore;
 
     dispatchFunc(
       AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),

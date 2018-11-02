@@ -1,19 +1,28 @@
 open AssetNodeType;
 
+let getTextureDefaultName = () => "New Texture";
+
+let getTextureBaseNameByTextureComponent = (texture, engineState) =>
+  switch (
+    BasicSourceTextureEngineService.getBasicSourceTextureName(
+      texture,
+      engineState,
+    )
+  ) {
+  | None => getTextureDefaultName()
+  | Some(name) => name
+  };
+
 let getTextureBaseName = (currentNodeId, textureNodeMap) =>
   textureNodeMap
   |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({textureIndex}) => textureIndex)
-  |> BasicSourceTextureEngineService.unsafeGetBasicSourceTextureName
+  |> (({textureComponent}) => textureComponent)
+  |> getTextureBaseNameByTextureComponent(_)
   |> StateLogicService.getEngineStateToGetData;
 
-let renameTextureToEngine = (texture, newName) =>
-  BasicSourceTextureEngineService.setBasicSourceTextureName(newName, texture)
-  |> StateLogicService.getAndSetEngineState;
-
 let changeTextureMapAndRefreshEngineState =
-    (material, textureIndex, setMapFunc, engineState) => {
-  let engineState = engineState |> setMapFunc(textureIndex, material);
+    (material, textureComponent, setMapFunc, engineState) => {
+  let engineState = engineState |> setMapFunc(textureComponent, material);
 
   StateLogicService.refreshEngineStateAndReturnEngineState(engineState);
 };
@@ -31,13 +40,16 @@ let _handleMapAndUpdateShaderAndRefreshEngineState =
 
 let handleMaterialComponentFromNoMapToHasMap =
     (
-      (material, textureIndex),
+      (material, textureComponent),
       (setMapFunc, reInitAllMaterialsAndClearShaderCacheFunc),
       engineState,
     ) =>
   _handleMapAndUpdateShaderAndRefreshEngineState(
     material,
-    (setMapFunc(textureIndex), reInitAllMaterialsAndClearShaderCacheFunc),
+    (
+      setMapFunc(textureComponent),
+      reInitAllMaterialsAndClearShaderCacheFunc,
+    ),
     engineState,
   );
 
@@ -50,17 +62,6 @@ let handleMaterialComponentFromHasMapToNoMap =
   _handleMapAndUpdateShaderAndRefreshEngineState(
     material,
     (removeMapFunc, reInitAllMaterialsAndClearShaderCacheFunc),
-    engineState,
-  );
-
-let handleBasicMaterialComponentFromHasMapToNoMap =
-    (material, engineState) =>
-  handleMaterialComponentFromHasMapToNoMap(
-    material,
-    (
-      BasicMaterialEngineService.removeBasicMaterialMap,
-      BasicMaterialEngineService.reInitAllBasicMaterialsAndClearShaderCache,
-    ),
     engineState,
   );
 

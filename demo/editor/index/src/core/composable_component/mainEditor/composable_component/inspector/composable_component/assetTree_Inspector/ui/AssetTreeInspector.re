@@ -22,44 +22,39 @@ module Method = {
 
   let renameAssetTreeNode = AssetRenameNodeEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
+  let _isFolderNameDisabled = nodeId =>
+    AssetUtils.isIdEqual(
+      AssetTreeRootEditorService.getRootTreeNodeId
+      |> StateLogicService.getEditorState,
+      nodeId,
+    );
+
   let buildFolderComponent = (state, send, currentNodeId, folderNodeMap) =>
-    <div className="">
+    <div className="inspector-asset-folder">
       <h1> (DomHelper.textEl("Folder")) </h1>
       <hr />
-      <span className=""> (DomHelper.textEl("name:")) </span>
-      <input
-        className="input-component float-input"
-        _type="text"
-        value=state.inputValue
-        disabled=(
-          AssetUtils.isIdEqual(
-            AssetTreeRootEditorService.getRootTreeNodeId
-            |> StateLogicService.getEditorState,
-            currentNodeId,
-          )
-        )
-        onChange=(_e => send(change(_e)))
-        onBlur=(_e => send(Blur))
-      />
+      <div className="inspector-item">
+        <div className="item-header">
+          <span> (DomHelper.textEl("Name")) </span>
+        </div>
+        <div className="item-content">
+          <input
+            className="input-component float-input"
+            _type="text"
+            value=state.inputValue
+            disabled=(
+              AssetUtils.isIdEqual(
+                AssetTreeRootEditorService.getRootTreeNodeId
+                |> StateLogicService.getEditorState,
+                currentNodeId,
+              )
+            )
+            onChange=(_e => send(change(_e)))
+            onBlur=(_e => send(Blur))
+          />
+        </div>
+      </div>
     </div>;
-
-  let buildJsonComponent = (state, send, currentNodeId, jsonNodeMap) => {
-    let {name, jsonResult} =
-      jsonNodeMap |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId);
-    <div>
-      <h1> (DomHelper.textEl("Json")) </h1>
-      <hr />
-      <span className=""> (DomHelper.textEl("name:")) </span>
-      <input
-        className="input-component float-input"
-        _type="text"
-        value=state.inputValue
-        onChange=(_e => send(change(_e)))
-        onBlur=(_e => send(Blur))
-      />
-      <p> (DomHelper.textEl(jsonResult)) </p>
-    </div>;
-  };
 
   let buildTextureComponent =
       (
@@ -68,7 +63,7 @@ module Method = {
         state,
         textureNodeMap,
       ) => {
-    let {textureIndex} =
+    let {textureComponent} =
       textureNodeMap
       |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId);
 
@@ -76,9 +71,12 @@ module Method = {
       store
       dispatchFunc
       name=state.inputValue
-      textureIndex
+      textureComponent
       renameFunc=(
-        renameAssetTreeNode((store, dispatchFunc), (textureIndex, nodeType))
+        renameAssetTreeNode(
+          (store, dispatchFunc),
+          (currentNodeId, nodeType),
+        )
       )
     />;
   };
@@ -90,7 +88,7 @@ module Method = {
         state,
         materialNodeMap,
       ) => {
-    let {name, type_, materialComponent} =
+    let {type_, materialComponent} =
       materialNodeMap
       |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId);
 
@@ -111,17 +109,23 @@ module Method = {
   };
 
   let buildWDBComponent = (state, send, currentNodeId, wdbNodeMap) =>
-    <div>
+    <div className="inspector-asset-wdb">
       <h1> (DomHelper.textEl("Model")) </h1>
       <hr />
-      <span className=""> (DomHelper.textEl("name:")) </span>
-      <input
-        className="input-component float-input"
-        _type="text"
-        value=state.inputValue
-        onChange=(_e => send(change(_e)))
-        onBlur=(_e => send(Blur))
-      />
+      <div className="inspector-item">
+        <div className="item-header">
+          <span className=""> (DomHelper.textEl("Name:")) </span>
+        </div>
+        <div className="item-content">
+          <input
+            className="input-component float-input"
+            _type="text"
+            value=state.inputValue
+            onChange=(_e => send(change(_e)))
+            onBlur=(_e => send(Blur))
+          />
+        </div>
+      </div>
     </div>;
 
   let showAssetNodeComponent =
@@ -135,7 +139,6 @@ module Method = {
       nodeType,
       (
         buildFolderComponent(state, send, currentNodeId),
-        buildJsonComponent(state, send, currentNodeId),
         buildTextureComponent(reduxTuple, (currentNodeId, nodeType), state),
         buildMaterialComponent(reduxTuple, (currentNodeId, nodeType), state),
         buildWDBComponent(state, send, currentNodeId),
@@ -152,15 +155,7 @@ module Method = {
 
     {inputValue: folderName, originalName: folderName};
   };
-  let initJsonName = (currentNodeId, jsonNodeMap) => {
-    let baseName =
-      AssetJsonNodeMapEditorService.getJsonBaseName(
-        currentNodeId,
-        jsonNodeMap,
-      );
 
-    {inputValue: baseName, originalName: baseName};
-  };
   let initTextureName = (currentNodeId, textureNodeMap) => {
     let baseName =
       OperateTextureLogicService.getTextureBaseName(
@@ -171,10 +166,11 @@ module Method = {
     {inputValue: baseName, originalName: baseName};
   };
 
-  let initMaterialName = (currentNodeId, materialNodeMap) => {
+  let initMaterialName = (currentNodeId, engineState, materialNodeMap) => {
     let baseName =
-      AssetMaterialNodeMapEditorService.getMaterialBaseName(
+      AssetMaterialNodeMapLogicService.getMaterialBaseName(
         currentNodeId,
+        engineState,
         materialNodeMap,
       );
 
@@ -236,18 +232,21 @@ let make =
       _children,
     ) => {
   ...component,
-  initialState: () =>
-    AssetNodeUtils.handleSpeficFuncByAssetNodeType(
-      nodeType,
-      (
-        Method.initFolderName(currentNodeId),
-        Method.initJsonName(currentNodeId),
-        Method.initTextureName(currentNodeId),
-        Method.initMaterialName(currentNodeId),
-        Method.initWDBName(currentNodeId),
-      ),
-    )
-    |> StateLogicService.getEditorState,
+  initialState: () => {
+    let editorState = StateEditorService.getState();
+    let engineState = StateEngineService.unsafeGetState();
+
+    editorState
+    |> AssetNodeUtils.handleSpeficFuncByAssetNodeType(
+         nodeType,
+         (
+           Method.initFolderName(currentNodeId),
+           Method.initTextureName(currentNodeId),
+           Method.initMaterialName(currentNodeId, engineState),
+           Method.initWDBName(currentNodeId),
+         ),
+       );
+  },
   reducer: reducer((store, dispatchFunc), currentNodeId, nodeType),
   render: self =>
     render((store, dispatchFunc), currentNodeId, nodeType, self),

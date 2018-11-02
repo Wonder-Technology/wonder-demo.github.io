@@ -1,5 +1,3 @@
-
-
 module Method = {
   let blurPositionEvent =
       ((store, dispatchFunc), transformComponent, (x, y, z)) => {
@@ -137,8 +135,11 @@ let component = ReasonReact.statelessComponent("MainEditorTransform");
 let render =
     ((store, dispatchFunc), (transformComponent, gameObject), _self) =>
   <article className="wonder-inspector-transform">
-    <div className="transform-item">
-      <div className=""> (DomHelper.textEl("position : ")) </div>
+    <div className="inspector-item">
+      <div className="item-header"> (DomHelper.textEl("Position")) </div>
+
+      <div className="item-content">
+      
       <TransformTemplate
         store
         dispatchFunc
@@ -150,9 +151,13 @@ let render =
         blurEventFunc=Method.blurPositionEvent
         canBeZero=true
       />
+      </div>
+
     </div>
-    <div className="transform-item">
-      <div className=""> (DomHelper.textEl("rotation : ")) </div>
+    <div className="inspector-item">
+      <div className="item-header"> (DomHelper.textEl("Rotation")) </div>
+      <div className="item-content">
+      
       <TransformTemplate
         store
         dispatchFunc
@@ -164,9 +169,12 @@ let render =
         blurEventFunc=Method.blurRotationEvent
         canBeZero=true
       />
+      </div> 
     </div>
-    <div className="transform-item">
-      <div className=""> (DomHelper.textEl("scale : ")) </div>
+    <div className="inspector-item">
+      <div className="item-header"> (DomHelper.textEl("Scale")) </div>
+      <div className="item-content">
+      
       <TransformTemplate
         store
         dispatchFunc
@@ -178,6 +186,7 @@ let render =
         blurEventFunc=Method.blurScaleEvent
         canBeZero=false
       />
+      </div> 
     </div>
     (Method.buildShadeComponent(gameObject))
   </article>;

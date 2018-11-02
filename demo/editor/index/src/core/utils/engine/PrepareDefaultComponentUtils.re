@@ -1,53 +1,101 @@
 open AssetGeometryDataType;
 
-let _buildCubeGeometryDefaultComponent = engineState => {
+let getDefaultCubeGeometryName = () => "Wonder-Default-Cube";
+
+let getDefaultSphereGeometryName = () => "Wonder-Default-Sphere";
+
+let _buildDefaultCubeGeometryComponent = engineState => {
   let (engineState, cubeGeometry) =
     GeometryEngineService.createCubeGeometry(engineState);
 
   (
-    engineState |> GeometryEngineService.setGeometryName(cubeGeometry, "Cube"),
+    engineState
+    |> GeometryEngineService.setGeometryName(
+         cubeGeometry,
+         getDefaultCubeGeometryName(),
+       ),
     cubeGeometry,
   );
 };
 
-let _buildSphereGeometryDefaultComponent = engineState => {
+let _buildDefaultSphereGeometryComponent = engineState => {
   let (engineState, sphereGeometry) =
     GeometryEngineService.createSphereGeometry(5., 28, engineState);
 
   (
     engineState
-    |> GeometryEngineService.setGeometryName(sphereGeometry, "Sphere"),
+    |> GeometryEngineService.setGeometryName(
+         sphereGeometry,
+         getDefaultSphereGeometryName(),
+       ),
     sphereGeometry,
   );
 };
 
-let buildCubeGeometryDefaultComponent = (editorState, engineState) => {
-  /* let newIndex = editorState |> AssetIndexEditorService.getIndex; */
+let buildDefaultCubeGeometryComponent = (editorState, engineState) => {
   let (engineState, cubeGeometry) =
-    _buildCubeGeometryDefaultComponent(engineState);
+    _buildDefaultCubeGeometryComponent(engineState);
 
   (
     editorState
     |> AssetGeometryDataEditorService.getGeometryData
-    |> (geometry => {...geometry, defaultCubeGeometryIndex: cubeGeometry})
+    |> (
+      geometry => {...geometry, defaultCubeGeometryComponent: cubeGeometry}
+    )
     |. AssetGeometryDataEditorService.setGeometryData(editorState),
     engineState,
     cubeGeometry,
   );
 };
 
-let buildSphereGeometryDefaultComponent = (editorState, engineState) => {
-  let (editorState, newIndex) = editorState |> AssetIdUtils.getAssetId;
+let buildDefaultSphereGeometryComponent = (editorState, engineState) => {
   let (engineState, sphereGeometry) =
-    _buildSphereGeometryDefaultComponent(engineState);
+    _buildDefaultSphereGeometryComponent(engineState);
 
   (
     editorState
     |> AssetGeometryDataEditorService.getGeometryData
     |> (
-      geometry => {...geometry, defaultSphereGeometryIndex: sphereGeometry}
+      geometry => {
+        ...geometry,
+        defaultSphereGeometryComponent: sphereGeometry,
+      }
     )
     |. AssetGeometryDataEditorService.setGeometryData(editorState),
     engineState,
   );
+};
+
+let getDefaultBasicMaterialName = () => "Wonder-Default-Basic-Material";
+
+let getDefaultLightMaterialName = () => "Wonder-Default-Light-Material";
+
+let buildDefaultMaterialComponents = (editorState, engineState) => {
+  let (engineState, basicMaterial) =
+    BasicMaterialEngineService.create(engineState);
+
+  let (engineState, lightMaterial) =
+    LightMaterialEngineService.create(engineState);
+
+  let engineState =
+    engineState
+    |> BasicMaterialEngineService.setBasicMaterialName(
+         basicMaterial,
+         getDefaultBasicMaterialName(),
+       )
+    |> LightMaterialEngineService.setLightMaterialName(
+         lightMaterial,
+         getDefaultLightMaterialName(),
+       );
+
+  let editorState =
+    editorState
+    |> AssetMaterialDataEditorService.setDefaultBasicMaterialData(
+         basicMaterial,
+       )
+    |> AssetMaterialDataEditorService.setDefaultLightMaterialData(
+         lightMaterial,
+       );
+
+  (editorState, engineState);
 };

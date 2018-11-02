@@ -12,25 +12,46 @@ let setTextureNodeMap = (textureNodeMap, editorState) => {
     |> TextureNodeMapAssetService.setTextureNodeMap(textureNodeMap),
 };
 
-let setResult = (index, result, editorState) => {
+let setResult = (nodeId, result, editorState) => {
   ...editorState,
   assetRecord:
     editorState.assetRecord
-    |> TextureNodeMapAssetService.setResult(index, result),
+    |> TextureNodeMapAssetService.setResult(nodeId, result),
 };
 
-let getTextureParentId = (currentNodeId, textureNodeMap) =>
+let getImage = (nodeId, textureNodeMap) =>
   textureNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({parentId}: textureResultType) => parentId);
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
+  |> (({image}: textureResultType) => image);
 
-let buildTextureNodeResult = (textureIndex, parentId, imageId) => {
-  textureIndex,
-  parentId,
-  imageId,
+let getParentFolderNodeId = (nodeId, textureNodeMap) =>
+  textureNodeMap
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
+  |> (({parentFolderNodeId}: textureResultType) => parentFolderNodeId);
+
+let buildTextureNodeResult = (textureComponent, parentFolderNodeId, image) => {
+  textureComponent,
+  parentFolderNodeId,
+  image,
 };
 
-let setTextureNodeResultParent = (parentId, texureResult: textureResultType) => {
+let setTextureNodeResultParent =
+    (parentFolderNodeId, texureResult: textureResultType) => {
   ...texureResult,
-  parentId,
+  parentFolderNodeId,
 };
+
+let getValidValues = editorState =>
+  getTextureNodeMap(editorState) |> SparseMapService.getValidValues;
+
+let getResultByTextureComponent = (textureComponent, editorState) =>
+  editorState
+  |> getValidValues
+  |> SparseMapService.find((texureResult: textureResultType) =>
+       texureResult.textureComponent === textureComponent
+     );
+
+let doesAnyTextureUseImage = (targetImage, editorState) =>
+  getValidValues(editorState)
+  |> Js.Array.filter(({image}) => image === targetImage)
+  |> Js.Array.length > 0;

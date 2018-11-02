@@ -1,65 +1,104 @@
-open MainEditorMaterialType;
+open AssetMaterialDataType;
 
-let _removeSpecificMaterial =
-    (gameObject, material, removeMaterialFunc, engineState) =>
-  engineState |> removeMaterialFunc(gameObject, material);
-
-let _removeSourceMaterial =
-    (gameObject, materialType, materialComponent, engineState) =>
+let _getOperateSourceRenderGroupData =
+    (meshRenderer, material, materialType, engineState) =>
   switch (materialType) {
-  | BasicMaterial =>
-    engineState
-    |> _removeSpecificMaterial(
-         gameObject,
-         materialComponent,
-         GameObjectComponentEngineService.removeBasicMaterialComponent,
-       )
-  | LightMaterial =>
-    engineState
-    |> _removeSpecificMaterial(
-         gameObject,
-         materialComponent,
-         GameObjectComponentEngineService.removeLightMaterialComponent,
-       )
+  | BasicMaterial => (
+      RenderGroupEngineService.buildRenderGroup(meshRenderer, material),
+      GameObjectComponentEngineService.disposeBasicMaterialComponent,
+    )
+  | LightMaterial => (
+      RenderGroupEngineService.buildRenderGroup(meshRenderer, material),
+      GameObjectComponentEngineService.disposeLightMaterialComponent,
+    )
   };
 
-let _getOperateTargetMaterialFunc = (materialType, engineState) =>
+let _getOperateTargetRenderGroupData =
+    (meshRenderer, material, materialType, engineState) =>
   switch (materialType) {
-  | BasicMaterial =>
-    OperateBasicMaterialLogicService.createBasicMaterial(engineState)
-  | LightMaterial =>
-    OperateLightMaterialLogicService.createLightMaterial(engineState)
+  | BasicMaterial => (
+      engineState,
+      RenderGroupEngineService.buildRenderGroup(meshRenderer, material),
+      GameObjectComponentEngineService.addBasicMaterialComponent,
+    )
+  | LightMaterial => (
+      engineState,
+      RenderGroupEngineService.buildRenderGroup(meshRenderer, material),
+      GameObjectComponentEngineService.addLightMaterialComponent,
+    )
   };
 
-let replaceRenderGroupByMaterialType =
+let _replaceMaterial =
     (
-      (nodeId, gameObject, materialComponent),
-      sourceMateralType,
-      targetMaterialType,
-    ) => {
+      gameObjects,
+      (sourceMaterial, targetMaterial),
+      (sourceMaterialType, targetMaterialType),
+      engineState,
+    ) =>
+  switch (gameObjects) {
+  | None => engineState
+
+  | Some(gameObjects) =>
+    let engineState =
+      gameObjects
+      |> WonderCommonlib.ArrayService.reduceOneParam(
+           (. engineState, gameObject) =>
+             InspectorRenderGroupUtils.Dispose.replaceMaterial(
+               gameObject,
+               (
+                 (sourceMaterial, targetMaterial),
+                 (sourceMaterialType, targetMaterialType),
+               ),
+               engineState,
+             ),
+           engineState,
+         );
+
+    engineState;
+  };
+
+let replaceMaterialByMaterialType =
+    ((nodeId, sourceMaterial), sourceMaterialType, targetMaterialType) => {
   let engineState = StateEngineService.unsafeGetState();
   let editorState = StateEditorService.getState();
 
+  let (engineState, targetMaterial) =
+    switch (targetMaterialType) {
+    | BasicMaterial => BasicMaterialEngineService.create(engineState)
+    | LightMaterial => LightMaterialEngineService.create(engineState)
+    };
+
   let engineState =
-    engineState
-    |> _removeSourceMaterial(gameObject, sourceMateralType, materialComponent);
+    MainEditorMaterialUtils.setName(
+      targetMaterial,
+      targetMaterialType,
+      AssetUtils.getUniqueTreeNodeName(
+        MainEditorMaterialUtils.getNewMaterilaAssetName(),
+        Material,
+        AssetMaterialNodeMapEditorService.getParentFolderNodeId(
+          nodeId,
+          AssetMaterialNodeMapEditorService.getMaterialNodeMap(editorState),
+        ),
+        (editorState, engineState),
+      ),
+      engineState,
+    );
 
-  let (newMaterialComponent, engineState) =
-    _getOperateTargetMaterialFunc(targetMaterialType, engineState);
+  let engineState =
+    InspectorRenderGroupUtils.Dispose.replaceGameObjectsMaterialsOfTheMaterial(
+      (
+        (sourceMaterial, targetMaterial),
+        (sourceMaterialType, targetMaterialType),
+      ),
+      engineState,
+    );
 
-  editorState
-  |> AssetMaterialNodeMapEditorService.getMaterialNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
-  |> (
-    materialResult => {
-      ...materialResult,
-      type_: targetMaterialType,
-      materialComponent: newMaterialComponent,
-    }
+  engineState |> StateLogicService.refreshEngineState;
+
+  AssetMaterialUpdateNodeEditorService.updateMaterialNodeData(
+    nodeId,
+    targetMaterial,
+    targetMaterialType,
   )
-  |> AssetMaterialNodeMapEditorService.setResult(nodeId, _, editorState)
-  |> StateEditorService.setState
-  |> ignore;
-
-  StateLogicService.refreshEngineState(engineState);
+  |> StateLogicService.getAndSetEditorState;
 };

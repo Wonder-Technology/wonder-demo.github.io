@@ -3,7 +3,18 @@ open WonderCommonlib;
 let immutableSet = (key, value, map) =>
   map |> Js.Array.copy |> SparseMapService.set(key, value);
 
+let immutableDeleteVal = (key, map) =>
+  map |> Js.Array.copy |> WonderCommonlib.SparseMapService.deleteVal(key);
+
 let isDeleted = item => item |> Obj.magic |> Js.Nullable.test;
+
+let filter = Js.Array.filter;
+
+let find = Js.Array.find;
+
+let map = Js.Array.map;
+
+let includes = Js.Array.includes;
 
 let length = Js.Array.length;
 
@@ -58,6 +69,18 @@ let forEachiValid = (func, map) =>
        }
      );
 
+let reduceValid = (func, initValue, map) =>
+  map
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. previousValue, value) =>
+         if (value |> Obj.magic === Js.Undefined.empty) {
+           previousValue;
+         } else {
+           func(. previousValue, value);
+         },
+       initValue,
+     );
+
 let reduceiValid = (func, initValue, map) =>
   map
   |> WonderCommonlib.ArrayService.reduceOneParami(
@@ -68,4 +91,17 @@ let reduceiValid = (func, initValue, map) =>
            func(. previousValue, value, index);
          },
        initValue,
+     );
+
+let mergeSparseMaps = mapArr =>
+  mapArr
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. resultMap, map) =>
+         map
+         |> reduceiValid(
+              (. resultMap, value, key) =>
+                resultMap |> WonderCommonlib.SparseMapService.set(key, value),
+              resultMap,
+            ),
+       WonderCommonlib.SparseMapService.createEmpty(),
      );

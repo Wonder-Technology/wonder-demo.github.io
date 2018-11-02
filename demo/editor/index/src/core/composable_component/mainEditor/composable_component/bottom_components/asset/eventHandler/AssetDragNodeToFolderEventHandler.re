@@ -5,29 +5,26 @@ module CustomEventHandler = {
   type prepareTuple = unit;
   type dataTuple = (int, int);
 
-  let _setFolderNodeParent = (folderId, parentId, editorState, folderNodeMap) =>
+  let _setFolderNodeParent =
+      (folderId, parentFolderNodeId, editorState, folderNodeMap) =>
     folderNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(folderId)
-    |> AssetFolderNodeMapEditorService.setFolderNodeResultParent(parentId)
+    |> AssetFolderNodeMapEditorService.setFolderNodeResultParent(
+         parentFolderNodeId,
+       )
     |> AssetFolderNodeMapEditorService.setResult(folderId, _, editorState)
     |> StateEditorService.setState
     |> ignore;
 
-  let _setJsonNodeParent = (jsonId, parentId, editorState, jsonNodeMap) =>
-    jsonNodeMap
-    |> WonderCommonlib.SparseMapService.unsafeGet(jsonId)
-    |> AssetJsonNodeMapEditorService.setJsonNodeResultParent(parentId)
-    |> AssetJsonNodeMapEditorService.setResult(jsonId, _, editorState)
-    |> StateEditorService.setState
-    |> ignore;
-
   let _setTextureNodeParent =
-      (textureIndex, parentId, editorState, textureNodeMap) =>
+      (textureComponent, parentFolderNodeId, editorState, textureNodeMap) =>
     textureNodeMap
-    |> WonderCommonlib.SparseMapService.unsafeGet(textureIndex)
-    |> AssetTextureNodeMapEditorService.setTextureNodeResultParent(parentId)
+    |> WonderCommonlib.SparseMapService.unsafeGet(textureComponent)
+    |> AssetTextureNodeMapEditorService.setTextureNodeResultParent(
+         parentFolderNodeId,
+       )
     |> AssetTextureNodeMapEditorService.setResult(
-         textureIndex,
+         textureComponent,
          _,
          editorState,
        )
@@ -35,28 +32,32 @@ module CustomEventHandler = {
     |> ignore;
 
   let _setMaterialNodeParent =
-      (nodeId, parentId, editorState, materialNodeMap) =>
+      (nodeId, parentFolderNodeId, editorState, materialNodeMap) =>
     materialNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
     |> AssetMaterialNodeMapEditorService.setMaterialNodeResultParent(
-         parentId,
+         parentFolderNodeId,
        )
     |> AssetMaterialNodeMapEditorService.setResult(nodeId, _, editorState)
     |> StateEditorService.setState
     |> ignore;
 
-  let _setWDBNodeParent = (nodeId, parentId, editorState, wdbNodeMap) =>
+  let _setWDBNodeParent =
+      (nodeId, parentFolderNodeId, editorState, wdbNodeMap) =>
     wdbNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
-    |> AssetWDBNodeMapEditorService.setWDBNodeResultParent(parentId)
+    |> AssetWDBNodeMapEditorService.setWDBNodeResultParent(
+         parentFolderNodeId,
+       )
     |> AssetWDBNodeMapEditorService.setResult(nodeId, _, editorState)
     |> StateEditorService.setState
     |> ignore;
 
-  let handleSelfLogic = ((store, dispatchFunc), (), (targetId, removedId)) => {
+  let handleSelfLogic =
+      ((store, dispatchFunc), (), (targetNodeId, removedNodeId)) => {
     let editorState = StateEditorService.getState();
 
-    AssetUtils.isIdEqual(targetId, removedId) ?
+    AssetUtils.isIdEqual(targetNodeId, removedNodeId) ?
       dispatchFunc(AppStore.UpdateAction(Update([|BottomComponent|])))
       |> ignore :
       {
@@ -64,18 +65,18 @@ module CustomEventHandler = {
           editorState
           |> AssetTreeRootEditorService.getAssetTreeRoot
           |> OptionService.unsafeGet
-          |> AssetUtils.getSpecificTreeNodeById(removedId)
+          |> AssetUtils.getSpecificTreeNodeById(removedNodeId)
           |> OptionService.unsafeGet;
 
         let (newAssetTreeRoot, removedTreeNode) =
           editorState
           |> AssetTreeRootEditorService.unsafeGetAssetTreeRoot
-          |> AssetUtils.removeSpecificTreeNode(removedId);
+          |> AssetUtils.removeSpecificTreeNode(removedNodeId);
 
         let editorState =
           newAssetTreeRoot
           |> AssetUtils.insertSourceTreeNodeToTargetTreeNodeChildren(
-               targetId,
+               targetNodeId,
                removedTreeNode,
              )
           |. AssetTreeRootEditorService.setAssetTreeRoot(editorState);
@@ -83,13 +84,28 @@ module CustomEventHandler = {
         AssetNodeUtils.handleSpeficFuncByAssetNodeType(
           type_,
           (
-            _setFolderNodeParent(removedId, targetId |. Some, editorState),
-            _setJsonNodeParent(removedId, targetId |. Some, editorState),
-            _setTextureNodeParent(removedId, targetId |. Some, editorState),
-            _setMaterialNodeParent(removedId, targetId |. Some, editorState),
-            _setWDBNodeParent(removedId, targetId |. Some, editorState),
+            _setFolderNodeParent(
+              removedNodeId,
+              targetNodeId |. Some,
+              editorState,
+            ),
+            _setTextureNodeParent(
+              removedNodeId,
+              targetNodeId |. Some,
+              editorState,
+            ),
+            _setMaterialNodeParent(
+              removedNodeId,
+              targetNodeId |. Some,
+              editorState,
+            ),
+            _setWDBNodeParent(
+              removedNodeId,
+              targetNodeId |. Some,
+              editorState,
+            ),
           ),
-          editorState
+          editorState,
         );
 
         dispatchFunc(AppStore.UpdateAction(Update([|BottomComponent|])))

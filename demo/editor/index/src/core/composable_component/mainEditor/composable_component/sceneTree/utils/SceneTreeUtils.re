@@ -1,11 +1,11 @@
 open SceneGraphType;
 
-let getWidge = () => EditorType.SceneTree;
+let getWidget = () => EditorType.SceneTree;
 
-let isWidge = startWidge =>
-  switch (startWidge) {
+let isWidget = startWidget =>
+  switch (startWidget) {
   | None => false
-  | Some(startWidge) => startWidge === getWidge()
+  | Some(startWidget) => startWidget === getWidget()
   };
 
 let _isDragedGameObjectBeTargetGameObjectParent =
@@ -75,6 +75,7 @@ let _buildTreeNode = (gameObject, engineState) => {
   name:
     engineState |> GameObjectEngineService.unsafeGetGameObjectName(gameObject),
   uid: gameObject,
+  isShowChildren: true,
   children: [||],
 };
 
@@ -115,6 +116,23 @@ let getSceneGraphDataFromEngine = ((editorState, engineState)) => [|
   ),
 |];
 
+let rec setSpecificSceneTreeNodeIsShowChildren =
+        (targetUid, isShowChildren, sceneGraphArray) =>
+  sceneGraphArray
+  |> Js.Array.map(({uid, children} as treeNode) =>
+       uid === targetUid ?
+         {...treeNode, isShowChildren} :
+         {
+           ...treeNode,
+           children:
+             setSpecificSceneTreeNodeIsShowChildren(
+               targetUid,
+               isShowChildren,
+               children,
+             ),
+         }
+     );
+
 let rec renameSceneGraphData = (targetUid, newName, sceneGraphArray) =>
   sceneGraphArray
   |> Js.Array.map(({uid, name, children} as treeNode) =>
@@ -141,8 +159,8 @@ let buildSceneGraphDataWithNewGameObject =
         |> Js.Array.copy
         |> ArrayService.push(engineState |> _buildTreeNode(newGameObject)),
     },
-  |]
-  |> WonderLog.Contract.ensureCheck(
+  |];
+  /* |> WonderLog.Contract.ensureCheck(
        sceneGraphArray =>
          WonderLog.(
            Contract.(
@@ -159,8 +177,8 @@ let buildSceneGraphDataWithNewGameObject =
              )
            )
          ),
-       StateEditorService.getStateIsDebug(),
-     );
+       StasdteEditorService.getStateIsDebug(),
+     ); */
 };
 
 let _checkDragedTreeNodeShouldExist = ((newSceneGraphArr, dragedTreeNode)) => {
@@ -245,23 +263,4 @@ let getDragedSceneGraphData =
       sceneGraphArray: array(sceneTreeNodeType),
     ) =>
   removeDragedTreeNode(dragedUid, sceneGraphArray)
-  |> dragedTreeNodeToTargetTreeNode(targetUid)
-  |> WonderLog.Contract.ensureCheck(
-       dragedSceneGraph =>
-         WonderLog.(
-           Contract.(
-             test(
-               Log.buildAssertMessage(
-                 ~expect=
-                   {j|the draged scene graph data == scene data from engine|j},
-                 ~actual={j|not|j},
-               ),
-               () =>
-               getSceneGraphDataFromEngine
-               |> StateLogicService.getStateToGetData == dragedSceneGraph
-               |> assertTrue
-             )
-           )
-         ),
-       StateEditorService.getStateIsDebug(),
-     );
+  |> dragedTreeNodeToTargetTreeNode(targetUid);

@@ -61,26 +61,22 @@ let reducer = ((store, dispatchFunc), action, state) =>
 
 let render =
     ((store, dispatchFunc), {state, send}: ReasonReact.self('a, 'b, 'c)) =>
-  <article key="MainEditorLight" className="wonder-light">
-    <div className="">
-      <Select
-        label="type : "
-        options=(MainEditorLightUtils.getLightOptions())
-        selectedKey=(state.lightType |> convertLightTypeToInt)
-        onChange=(value => send(ChangeLight(value)))
-      />
-    </div>
-    <div className="">
-      (
-        MainEditorLightUtils.handleSpecificFuncByLightType(
-          state.lightType,
-          (
-            Method.renderDirectionLight((store, dispatchFunc)),
-            Method.renderPointLight((store, dispatchFunc)),
-          ),
-        )
+  <article key="MainEditorLight" className="wonder-inspector-light">
+    <Select
+      label="Type"
+      options=(MainEditorLightUtils.getLightOptions())
+      selectedKey=(state.lightType |> convertLightTypeToInt)
+      onChange=(value => send(ChangeLight(value)))
+    />
+    (
+      MainEditorLightUtils.handleSpecificFuncByLightType(
+        state.lightType,
+        (
+          Method.renderDirectionLight((store, dispatchFunc)),
+          Method.renderPointLight((store, dispatchFunc)),
+        ),
       )
-    </div>
+    )
   </article>;
 
 let make = (~store, ~dispatchFunc, _children) => {

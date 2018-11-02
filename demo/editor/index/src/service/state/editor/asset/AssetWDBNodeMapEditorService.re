@@ -1,4 +1,5 @@
 open EditorType;
+
 open AssetNodeType;
 
 let getWDBNodeMap = editorState =>
@@ -17,26 +18,27 @@ let setResult = (index, result, editorState) => {
     editorState.assetRecord |> WDBNodeMapAssetService.setResult(index, result),
 };
 
-let getWDBBaseName = (currentNodeId, wdbNodeMap) =>
+let getWDBBaseName = (nodeId, wdbNodeMap) =>
   wdbNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
   |> (({name}: wdbResultType) => name);
 
-let getWDBTotalName = (currentNodeId, wdbNodeMap) =>
-  wdbNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({name, postfix}: wdbResultType) => name ++ postfix);
+let _getExtName = () => ".wdb";
 
-let getWDBParentId = (currentNodeId, wdbNodeMap) =>
+let getWDBTotalName = (nodeId, wdbNodeMap) =>
   wdbNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({parentId}: wdbResultType) => parentId);
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
+  |> (({name}: wdbResultType) => name ++ _getExtName());
+
+let getWDBParentId = (nodeId, wdbNodeMap) =>
+  wdbNodeMap
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
+  |> (({parentFolderNodeId}: wdbResultType) => parentFolderNodeId);
 
 let buildWDBNodeResult =
-    (name, postfix, parentId, wdbGameObject, wdbArrayBuffer) => {
+    (name, parentFolderNodeId, wdbGameObject, wdbArrayBuffer) => {
   name,
-  postfix,
-  parentId,
+  parentFolderNodeId,
   wdbGameObject,
   wdbArrayBuffer,
 };
@@ -46,7 +48,12 @@ let renameWDBNodeResult = (name, wdbNodeResult) : wdbResultType => {
   name,
 };
 
-let setWDBNodeResultParent = (parentId, wdbNodeResult) : wdbResultType => {
+let setWDBNodeResultParent =
+    (parentFolderNodeId, wdbNodeResult)
+    : wdbResultType => {
   ...wdbNodeResult,
-  parentId,
+  parentFolderNodeId,
 };
+
+let getValidValues = editorState =>
+  getWDBNodeMap(editorState) |> SparseMapService.getValidValues;

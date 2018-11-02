@@ -5,6 +5,7 @@ open Antd;
 type state = {isShowAddableComponent: bool};
 
 type action =
+  | HideAddableComponent
   | ToggleAddableComponent;
 
 module Method = {
@@ -57,6 +58,8 @@ let reducer = (action, state) =>
       ...state,
       isShowAddableComponent: ! state.isShowAddableComponent,
     })
+  | HideAddableComponent =>
+    ReasonReact.Update({...state, isShowAddableComponent: false})
   };
 
 let render =
@@ -68,22 +71,27 @@ let render =
     ) =>
   <article className="wonder-addable-component">
     <div className="addable-component-content">
-      <button
-        className="addable-btn" onClick=(_e => send(ToggleAddableComponent))>
-        (DomHelper.textEl("Add Component"))
-      </button>
+      <div className="content-btn">
+        <button
+          className="addable-btn"
+          onClick=(_e => send(ToggleAddableComponent))>
+          (DomHelper.textEl("Add Component"))
+        </button>
+      </div>
       (
         state.isShowAddableComponent ?
-          <div className="component-list">
-            (
-              ReasonReact.array(
-                addableComponentList
-                |> Method.buildGameObjectAddableComponent(
-                     (store, dispatchFunc),
-                     currentSceneTreeNode,
-                   ),
+          <div className="content-components">
+            <div className="component-list">
+              (
+                ReasonReact.array(
+                  addableComponentList
+                  |> Method.buildGameObjectAddableComponent(
+                       (store, dispatchFunc),
+                       currentSceneTreeNode,
+                     ),
+                )
               )
-            )
+            </div>
           </div> :
           ReasonReact.null
       )
@@ -97,4 +105,19 @@ let make =
   reducer,
   render: self =>
     render(reduxTuple, currentSceneTreeNode, addableComponentList, self),
+  didMount: ({state, send}: ReasonReact.self('a, 'b, 'c)) =>
+    DomHelper.addEventListener(
+      DomHelper.document,
+      "click",
+      e => {
+        let target = ReactEventRe.Form.target(e);
+        let targetArray = DomHelper.getElementsByClassName("addable-btn");
+        let notCloseArray =
+          DomHelper.getElementsByClassName("component-list");
+
+        DomUtils.isSpecificDomChildrenHasTargetDom(target, targetArray)
+        || DomUtils.isSpecificDomChildrenHasTargetDom(target, notCloseArray) ?
+          () : send(HideAddableComponent);
+      },
+    ),
 };

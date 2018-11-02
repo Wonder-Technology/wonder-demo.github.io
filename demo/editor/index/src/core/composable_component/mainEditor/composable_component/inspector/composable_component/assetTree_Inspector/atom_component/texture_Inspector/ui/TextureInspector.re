@@ -1,77 +1,73 @@
 module Method = {
-  let renderWrapSSelect = textureIndex =>
+  let renderWrapSSelect = textureComponent =>
     <Select
-      label="WrapS Mode"
+      label="WrapS"
       options=(TextureWrapUtils.getWrapOptions())
       selectedKey=(
-        BasicSourceTextureEngineService.getWrapS(textureIndex)
+        BasicSourceTextureEngineService.getWrapS(textureComponent)
         |> StateLogicService.getEngineStateToGetData
         |> TextureTypeUtils.convertWrapToInt
       )
-      onChange=(TextureWrapUtils.changeWrapS(textureIndex))
+      onChange=(TextureWrapUtils.changeWrapS(textureComponent))
     />;
 
-  let renderWrapTSelect = textureIndex =>
+  let renderWrapTSelect = textureComponent =>
     <Select
-      label="WrapT Mode"
+      label="WrapT"
       options=(TextureWrapUtils.getWrapOptions())
       selectedKey=(
-        BasicSourceTextureEngineService.getWrapT(textureIndex)
+        BasicSourceTextureEngineService.getWrapT(textureComponent)
         |> StateLogicService.getEngineStateToGetData
         |> TextureTypeUtils.convertWrapToInt
       )
-      onChange=(TextureWrapUtils.changeWrapT(textureIndex))
+      onChange=(TextureWrapUtils.changeWrapT(textureComponent))
     />;
-  let renderMagFilterSelect = textureIndex =>
+  let renderMagFilterSelect = textureComponent =>
     <Select
-      label="Mag Filter Mode"
+      label="Mag Filter"
       options=(TextureFilterUtils.getFilterOptions())
       selectedKey=(
-        BasicSourceTextureEngineService.getMagFilter(textureIndex)
+        BasicSourceTextureEngineService.getMagFilter(textureComponent)
         |> StateLogicService.getEngineStateToGetData
         |> TextureTypeUtils.convertFilterToInt
       )
-      onChange=(TextureFilterUtils.changeMagFilter(textureIndex))
+      onChange=(TextureFilterUtils.changeMagFilter(textureComponent))
     />;
 
-  let renderMinFilterSelect = textureIndex =>
+  let renderMinFilterSelect = textureComponent =>
     <Select
-      label="Min Filter Mode"
+      label="Min Filter"
       options=(TextureFilterUtils.getFilterOptions())
       selectedKey=(
-        BasicSourceTextureEngineService.getMinFilter(textureIndex)
+        BasicSourceTextureEngineService.getMinFilter(textureComponent)
         |> StateLogicService.getEngineStateToGetData
         |> TextureTypeUtils.convertFilterToInt
       )
-      onChange=(TextureFilterUtils.changeMinFilter(textureIndex))
+      onChange=(TextureFilterUtils.changeMinFilter(textureComponent))
     />;
 };
 
 let component = ReasonReact.statelessComponent("TextureInspector");
 
-let render = ((dispatchFunc, renameFunc), name, textureIndex, _self) =>
+let render = ((dispatchFunc, renameFunc), name, textureComponent, _self) =>
   <article key="TextureInspector" className="wonder-texture-assetTree">
-    <div className="">
-      <h1> (DomHelper.textEl("Texture")) </h1>
-      <hr />
-      <div className="">
-        <StringInput
-          label="name"
-          defaultValue=name
-          onBlur=renameFunc
-          canBeNull=false
-        />
-      </div>
-      <div className=""> (Method.renderWrapSSelect(textureIndex)) </div>
-      <div className=""> (Method.renderWrapTSelect(textureIndex)) </div>
-      <div className=""> (Method.renderMagFilterSelect(textureIndex)) </div>
-      <div className=""> (Method.renderMinFilterSelect(textureIndex)) </div>
-    </div>
+    <h1> (DomHelper.textEl("Texture")) </h1>
+    <hr />
+    <StringInput
+      label="Name"
+      defaultValue=name
+      onBlur=renameFunc
+      canBeNull=false
+    />
+    (Method.renderWrapSSelect(textureComponent))
+    (Method.renderWrapTSelect(textureComponent))
+    (Method.renderMagFilterSelect(textureComponent))
+    (Method.renderMinFilterSelect(textureComponent))
   </article>;
 
 let make =
-    (~store, ~dispatchFunc, ~name, ~textureIndex, ~renameFunc, _children) => {
+    (~store, ~dispatchFunc, ~name, ~textureComponent, ~renameFunc, _children) => {
   ...component,
   render: self =>
-    render((dispatchFunc, renameFunc), name, textureIndex, self),
+    render((dispatchFunc, renameFunc), name, textureComponent, self),
 };

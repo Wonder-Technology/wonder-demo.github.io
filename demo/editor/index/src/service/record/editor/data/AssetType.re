@@ -6,19 +6,22 @@ open CurrentNodeDataType;
 
 open AssetGeometryDataType;
 
+open AssetMaterialDataType;
+
 type assetRecord = {
   assetTreeRoot: option(assetTreeNodeType),
   index: int,
-  imageIndex:int,
+  imageIndex: int,
   removedAssetIdArray: array(int),
   currentNodeData: option(currentNodeDataType),
   currentNodeParentId: option(int),
   textureNodeMap: WonderCommonlib.SparseMapService.t(textureResultType),
-  jsonNodeMap: WonderCommonlib.SparseMapService.t(jsonResultType),
   folderNodeMap: WonderCommonlib.SparseMapService.t(folderResultType),
   wdbNodeMap: WonderCommonlib.SparseMapService.t(wdbResultType),
   materialNodeMap: WonderCommonlib.SparseMapService.t(materialResultType),
-  imageBase64Map: WonderCommonlib.SparseMapService.t(imageResultType),
+  materialNodeIdMap: WonderCommonlib.SparseMapService.t(nodeId),
+  imageNodeMap: WonderCommonlib.SparseMapService.t(imageResultType),
   geometryData,
+  materialData,
   clonedGameObjectMap: WonderCommonlib.SparseMapService.t(array(int)),
 };

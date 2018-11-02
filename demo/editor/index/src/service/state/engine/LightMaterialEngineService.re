@@ -10,6 +10,8 @@ let getLightMaterialGameObjects = (material, engineState) =>
     RecordLightMaterialMainService.getRecord(engineState),
   );
 
+let getLightMaterialName = NameLightMaterialMainService.getName;
+
 let unsafeGetLightMaterialName = LightMaterialAPI.unsafeGetLightMaterialName;
 
 let setLightMaterialName = LightMaterialAPI.setLightMaterialName;
@@ -46,7 +48,7 @@ let setLightMaterialName = LightMaterialAPI.setLightMaterialName;
 
 let hasLightMaterialSpecularMap = LightMaterialAPI.hasLightMaterialSpecularMap;
 
-let isLightMaterialMap = (material, texture, engineState) =>
+let isDiffuseMap = (material, texture, engineState) =>
   switch (getLightMaterialDiffuseMap(material, engineState)) {
   | Some(map) when map === texture => true
   | _ => false

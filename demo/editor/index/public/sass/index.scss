@@ -1,10 +1,12 @@
 @import "utils/baseMixin";
 
 @import "base/base";
+@import "base/loading";
+
+@import "./components/ui/modal";
+@import "./components/ui/singleInputModal";
 
 @import "components/app";
-
-@import "components/ui/uiComponentBase";
 
 @import "vendors/colorPickExtend";
 

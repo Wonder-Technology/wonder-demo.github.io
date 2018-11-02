@@ -12,43 +12,47 @@ let setMaterialNodeMap = (materialNodeMap, editorState) => {
     |> MaterialNodeMapAssetService.setMaterialNodeMap(materialNodeMap),
 };
 
-let setResult = (index, result, editorState) => {
+let unsafeGetResult = (nodeId, editorState) =>
+  editorState.assetRecord
+  |> MaterialNodeMapAssetService.unsafeGetResult(nodeId);
+
+let setResult = (nodeId, result, editorState) => {
   ...editorState,
   assetRecord:
     editorState.assetRecord
-    |> MaterialNodeMapAssetService.setResult(index, result),
+    |> MaterialNodeMapAssetService.setResult(nodeId, result),
 };
 
-let getMaterialBaseName = (currentNodeId, materialNodeMap) =>
+let getParentFolderNodeId = (nodeId, materialNodeMap) =>
   materialNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({name}: materialResultType) => name);
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
+  |> (({parentFolderNodeId}: materialResultType) => parentFolderNodeId);
 
-let getMaterialTotalName = (currentNodeId, materialNodeMap) =>
+let getType = (nodeId, materialNodeMap) =>
   materialNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({name, postfix}: materialResultType) => name ++ postfix);
+  |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
+  |> (({type_}: materialResultType) => type_);
 
-let getMaterialParentId = (currentNodeId, materialNodeMap) =>
-  materialNodeMap
-  |> WonderCommonlib.SparseMapService.unsafeGet(currentNodeId)
-  |> (({parentId}: materialResultType) => parentId);
-let buildMaterialNodeResult =
-    (name, postfix, parentId, type_, materialComponent) => {
-  name,
-  postfix,
-  parentId,
+let buildMaterialNodeResult = (parentFolderNodeId, type_, materialComponent) => {
+  parentFolderNodeId,
   type_,
   materialComponent,
 };
 
-let renameMaterialNodeResult = (name, materialNodeResult: materialResultType) => {
+let setMaterialNodeResultParent =
+    (parentFolderNodeId, materialNodeResult: materialResultType) => {
   ...materialNodeResult,
-  name,
+  parentFolderNodeId,
 };
 
-let setMaterialNodeResultParent =
-    (parentId, materialNodeResult: materialResultType) => {
-  ...materialNodeResult,
-  parentId,
+let getValidValues = editorState =>
+  getMaterialNodeMap(editorState) |> SparseMapService.getValidValues;
+
+let getResults = editorState =>
+  getMaterialNodeMap(editorState) |> SparseMapService.getValidDataArr;
+
+let remove = (nodeId, editorState) => {
+  ...editorState,
+  assetRecord:
+    editorState.assetRecord |> MaterialNodeMapAssetService.remove(nodeId),
 };

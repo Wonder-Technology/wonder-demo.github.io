@@ -42,28 +42,6 @@ module Method = {
       perspectiveCameraComponent,
     )
     |> StateLogicService.getAndRefreshEngineStateWithFunc;
-   /* let blurAspectEvent =
-      ((store, dispatchFunc), perspectiveCameraComponent, value) =>
-       PerspectiveCameraProjectionEngineService.unsafeGetPerspectiveCameraAspect(
-         perspectiveCameraComponent,
-         )
-        |> StateLogicService.getEngineStateToGetData
-       |> ValueService.isValueEqual(ValueType.Float, value) ?
-         () :
-         PerspectiveCameraAspectBlurEventHandler.MakeEventHandler.pushUndoStackWithCopiedEngineState(
-           (store, dispatchFunc),
-           perspectiveCameraComponent,
-           value,
-         );
-
-     let changeAspect = (perspectiveCameraComponent, value) =>
-       PerspectiveCameraProjectionEngineService.setPerspectiveCameraAspect(value)
-       |> StateLogicService.getAndRefreshEngineStateWithDiff([|
-            {
-              arguments: [|perspectiveCameraComponent|],
-              type_: DiffType.PerspectiveCamera,
-            },
-          |]); */
 
   let blurFovyEvent =
       ((store, dispatchFunc), perspectiveCameraComponent, value) =>
@@ -80,7 +58,10 @@ module Method = {
       );
 
   let changeFovy = (perspectiveCameraComponent, value) =>
-    PerspectiveCameraProjectionEngineService.setPerspectiveCameraFovy(value, perspectiveCameraComponent)
+    PerspectiveCameraProjectionEngineService.setPerspectiveCameraFovy(
+      value,
+      perspectiveCameraComponent,
+    )
     |> StateLogicService.getAndRefreshEngineStateWithFunc;
 
   let buildNearComponent =
@@ -173,9 +154,9 @@ let render = ((store, dispatchFunc), _self) => {
          |> StateLogicService.getEditorState,
        );
 
-  <article key="MainEditorCameraProjection" className="wonder-camera-view">
+  <article key="MainEditorCameraProjection" className="wonder-camera-projection">
     <Select
-      label="type : "
+      label="Type"
       options=(MainEditorCameraProjectionUtils.getCameraProjectionOptions())
       onChange=(value => ())
       selectedKey=(PerspectiveCamera |> convertCameraProjectionTypeToInt)

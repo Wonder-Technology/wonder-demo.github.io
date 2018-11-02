@@ -83,7 +83,7 @@ module Method = {
       ReasonReactUtils.updateWithSideEffects(
         {...state, inputValue: Some(value)}, _state =>
         triggerOnChange(value, onChangeFunc)
-      )
+      );
     };
 
   let handleBlurAction = (state, (onChangeFunc, onBlurFunc), canBeZero) =>
@@ -124,10 +124,7 @@ module Method = {
               triggerOnBlur(value, onBlurFunc)
             ),
           _value => {
-            Antd.Message.message
-            |> Antd.Message.convertToJsObj
-            |> (messageObj => messageObj##warn("the value can't be 0 !", 4))
-            |> ignore;
+            ConsoleUtils.warn("the scale value can't be 0 !");
 
             ReasonReact.Update({
               ...state,
@@ -156,28 +153,30 @@ let reducer = ((onChangeFunc, onBlurFunc), canBeZero, action, state) =>
 
 let render =
     (label, onBlurFunc, {state, handle, send}: ReasonReact.self('a, 'b, 'c)) =>
-  <article className="wonder-float-input">
+  <article className="inspector-item">
     (
       switch (label) {
       | None => ReasonReact.null
       | Some(value) =>
-        <span className="component-label">
-          (DomHelper.textEl(value ++ " : "))
-        </span>
+        <div className="item-header">
+          (DomHelper.textEl(value))
+        </div>
       }
     )
-    <input
-      className="input-component float-input"
-      _type="text"
-      value=(
-        switch (state.inputValue) {
-        | None => ""
-        | Some(value) => value
-        }
-      )
-      onChange=(_e => send(Method.change(_e)))
-      onBlur=(_e => send(Blur))
-    />
+    <div className="item-content">
+      <input
+        className="input-component float-input"
+        _type="text"
+        value=(
+          switch (state.inputValue) {
+          | None => ""
+          | Some(value) => value
+          }
+        )
+        onChange=(_e => send(Method.change(_e)))
+        onBlur=(_e => send(Blur))
+      />
+    </div>
   </article>;
 
 let make =

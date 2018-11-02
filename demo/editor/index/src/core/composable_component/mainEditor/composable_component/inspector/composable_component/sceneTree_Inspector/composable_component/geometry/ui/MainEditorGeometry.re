@@ -16,11 +16,12 @@ module Method = {
       gameObject,
       engineState,
     ) ?
-      GameObjectComponentEngineService.unsafeGetBasicMaterialComponent(
-        gameObject,
-        engineState,
-      )
-      |> BasicMaterialEngineService.hasBasicMaterialMap(_, engineState) :
+      false :
+      /* GameObjectComponentEngineService.unsafeGetBasicMaterialComponent(
+           gameObject,
+           engineState,
+         )
+         |> BasicMaterialEngineService.hasBasicMaterialMap(_, engineState) */
       GameObjectComponentEngineService.hasLightMaterialComponent(
         gameObject,
         engineState,
@@ -43,23 +44,23 @@ module Method = {
         } :
         false;
 
-  let buildAssetGeometryComponent =
-      (send, currentSceneTreeNode, currentGeometry) => {
+  let _getAllAssetGeometrys = engineState =>
+    GeometryEngineService.getAllGeometrys(engineState)
+    |> Js.Array.filter(DefaultSceneUtils.isAssetGeometry);
+
+  let _getAllShowGeometrys = (gameObject, engineState) =>
+    _isGameObjectMaterialComponentHasMap(gameObject, engineState) ?
+      engineState
+      |> _getAllAssetGeometrys
+      |> Js.Array.filter(geometry =>
+           GeometryEngineService.hasGeometryTexCoords(geometry, engineState)
+         ) :
+      engineState |> _getAllAssetGeometrys;
+
+  let showGeometryAssets = (send, currentSceneTreeNode, currentGeometry) => {
     let engineState = StateEngineService.unsafeGetState();
     let allGeometrys =
-      _isGameObjectMaterialComponentHasMap(
-        currentSceneTreeNode,
-        engineState,
-      ) ?
-        engineState
-        |> GeometryEngineService.getAllAssetGeometrys
-        |> Js.Array.filter(geometry =>
-             GeometryEngineService.hasGeometryTexCoords(
-               geometry,
-               engineState,
-             )
-           ) :
-        engineState |> GeometryEngineService.getAllAssetGeometrys;
+      _getAllShowGeometrys(currentSceneTreeNode, engineState);
 
     allGeometrys
     |> Js.Array.map(geometry => {
@@ -73,9 +74,7 @@ module Method = {
            onClick=(_e => send(ChangeGeometry(geometry)))>
            (
              DomHelper.textEl(
-               GeometryEngineService.getDefaultGeometryNameIfNotExistName(
-                 geometry,
-               )
+               MainEditorGeometryUtils.getName(geometry)
                |> StateLogicService.getEngineStateToGetData,
              )
            )
@@ -101,10 +100,8 @@ let reducer = (reduxTuple, currentSceneTreeNode, action, state) =>
           (sourceGeometry, targetGeometry),
         )
       );
-
   | ShowGeometryGroup =>
     ReasonReact.Update({...state, isShowGeometryGroup: true})
-
   | HideGeometryGroup =>
     ReasonReact.Update({...state, isShowGeometryGroup: false})
   };
@@ -116,18 +113,23 @@ let render =
       {state, send}: ReasonReact.self('a, 'b, 'c),
     ) =>
   <article key="MainEditorGeometry" className="wonder-inspector-geometry">
-    <div className="geometry-select">
-      (
-        DomHelper.textEl(
-          GeometryEngineService.getDefaultGeometryNameIfNotExistName(
-            state.currentGeometry,
-          )
-          |> StateLogicService.getEngineStateToGetData,
-        )
-      )
-      <span className="select-title" onClick=(_e => send(ShowGeometryGroup))>
-        (DomHelper.textEl("select"))
-      </span>
+    <div className="inspector-item">
+      <div className="item-header"> (DomHelper.textEl("Geometry")) </div>
+      <div className="item-content">
+        <div className="inspector-select">
+          <div className="select-name">
+            (
+              DomHelper.textEl(
+                MainEditorGeometryUtils.getName(state.currentGeometry)
+                |> StateLogicService.getEngineStateToGetData,
+              )
+            )
+          </div>
+          <div className="select-img" onClick=(_e => send(ShowGeometryGroup))>
+            <img src="./public/img/select.png" />
+          </div>
+        </div>
+      </div>
     </div>
     (
       state.isShowGeometryGroup ?
@@ -138,7 +140,7 @@ let render =
             </div>
             (
               ReasonReact.array(
-                Method.buildAssetGeometryComponent(
+                Method.showGeometryAssets(
                   send,
                   currentSceneTreeNode,
                   state.currentGeometry,
@@ -161,11 +163,12 @@ let make =
       ~dispatchFunc,
       ~currentSceneTreeNode,
       ~geometryComponent,
+      ~isShowGeometryGroup,
       _children,
     ) => {
   ...component,
   initialState: () => {
-    isShowGeometryGroup: false,
+    isShowGeometryGroup,
     currentGeometry: geometryComponent,
   },
   reducer: reducer((store, dispatchFunc), currentSceneTreeNode),

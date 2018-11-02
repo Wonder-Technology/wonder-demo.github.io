@@ -24,6 +24,25 @@ module Method = {
     };
   };
 
+  let handleToggleShowTreeChildren =
+      (store, dispatchFunc, targetId, isShowChildren) => {
+    let newSceneGraphData =
+      store
+      |> StoreUtils.unsafeGetSceneGraphDataFromStore
+      |> SceneTreeUtils.setSpecificSceneTreeNodeIsShowChildren(
+           targetId,
+           isShowChildren,
+         );
+
+    dispatchFunc(
+      AppStore.SceneTreeAction(SetSceneGraph(Some(newSceneGraphData))),
+    )
+    |> ignore;
+
+    dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.SceneTree|])))
+    |> ignore;
+  };
+
   let dragGameObjectIntoGameObject = SceneTreeDragGameObjectEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
   let dragWDBIntoScene = SceneTreeDragWDBEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
@@ -36,28 +55,35 @@ module Method = {
 
   let rec buildSceneTreeArray =
           (
-            dragImg,
+            (store, dispatchFunc, dragImg),
             currentSceneTreeNode,
             (onSelectFunc, onDropFunc),
             sceneGraphArr,
           ) =>
     sceneGraphArr
-    |> Js.Array.map(({uid, name, children}) =>
+    |> Js.Array.map(({uid, name, isShowChildren, children}) =>
          <TreeNode
            key=(DomHelper.getRandomKey())
-           uid
+           id=uid
            name
            isSelected=(_isSelected(uid, currentSceneTreeNode))
            isActive=true
            dragImg
-           widge=(SceneTreeUtils.getWidge())
+           widget=(SceneTreeUtils.getWidget())
            onSelect=onSelectFunc
            onDrop=onDropFunc
-           isWidge=SceneTreeUtils.isWidge
+           isWidget=SceneTreeUtils.isWidget
+           isShowChildren
+           isHasChildren=(
+             children |> Js.Array.length >= 1
+           )
+           handleToggleShowTreeChildren=(
+             handleToggleShowTreeChildren(store, dispatchFunc)
+           )
            handleRelationError=SceneTreeUtils.isGameObjectRelationError
            treeChildren=(
              buildSceneTreeArray(
-               dragImg,
+               (store, dispatchFunc, dragImg),
                currentSceneTreeNode,
                (onSelectFunc, onDropFunc),
                children,
@@ -82,11 +108,14 @@ let render = (store, dispatchFunc, _self) => {
         |> ArrayService.unsafeGetFirst
         |> (scene => scene.children)
         |> Method.buildSceneTreeArray(
-             DomHelper.createElement("img"),
+             (store, dispatchFunc, DomHelper.createElement("img")),
              editorState |> SceneEditorService.getCurrentSceneTreeNode,
              (
                Method.onSelect((store, dispatchFunc)),
-               Method.dragGameObjectIntoGameObject((store, dispatchFunc), ()),
+               Method.dragGameObjectIntoGameObject(
+                 (store, dispatchFunc),
+                 (),
+               ),
              ),
            )
       )
@@ -94,9 +123,11 @@ let render = (store, dispatchFunc, _self) => {
         SceneEngineService.getSceneGameObject
         |> StateLogicService.getEngineStateToGetData
       )
-      dragGameObject=(Method.dragGameObjectIntoGameObject((store, dispatchFunc), ()))
+      dragGameObject=(
+        Method.dragGameObjectIntoGameObject((store, dispatchFunc), ())
+      )
       dragWDB=(Method.dragWDBIntoScene((store, dispatchFunc), ()))
-      isWidge=SceneTreeUtils.isWidge
+      isWidget=SceneTreeUtils.isWidget
       handleRelationError=SceneTreeUtils.isGameObjectRelationError
       isAssetWDBFile=AssetUtils.isAssetWDBFile
     />

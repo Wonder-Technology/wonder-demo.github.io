@@ -1,14 +1,17 @@
 exception LoadException;
 
+type nodeId = int;
+
+type imageIndex = int;
+
 type uploadFileType =
   | LoadWDB
   | LoadImage
-  | LoadJson
+  | LoadWPK
   | LoadError;
 
 type assetNodeType =
   | Folder
-  | Json
   | Texture
   | WDB
   | Material;
@@ -21,40 +24,31 @@ type nodeResultType = {
 
 type folderResultType = {
   name: string,
-  parentId: option(int),
-};
-
-type jsonResultType = {
-  name: string,
-  postfix: string,
-  parentId: option(int),
-  jsonResult: string,
+  parentFolderNodeId: option(nodeId),
 };
 
 type imageResultType = {
-  base64: string,
+  base64: option(string),
+  uint8Array: option(Js.Typed_array.Uint8Array.t),
   name: string,
-  textureArray:array(int)
+  mimeType: string,
 };
 
 type textureResultType = {
-  textureIndex: int,
-  imageId: int,
-  parentId: option(int),
+  textureComponent: int,
+  image: imageIndex,
+  parentFolderNodeId: option(nodeId),
 };
 
 type wdbResultType = {
   name: string,
-  postfix: string,
-  parentId: option(int),
+  parentFolderNodeId: option(nodeId),
   wdbArrayBuffer: Js.Typed_array.ArrayBuffer.t,
   wdbGameObject: int,
 };
 
 type materialResultType = {
-  name: string,
-  postfix: string,
-  parentId: option(int),
-  type_: MainEditorMaterialType.materialType,
+  parentFolderNodeId: option(nodeId),
+  type_: AssetMaterialDataType.materialType,
   materialComponent: int,
 };

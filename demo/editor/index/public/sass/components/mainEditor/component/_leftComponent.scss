@@ -1,6 +1,5 @@
 .left-component{
     display: flex;
-    justify-content: center;
     flex:initial;
     height:100%;
     width:80%;
@@ -8,17 +7,20 @@
     .top-widget{
         flex: initial;
         width:100%;
-        height:72%;
+        height:71%;
         display: flex;
         .sceneTree-parent{
             flex:initial;
-            overflow-y: scroll;
-            width:20%;
+            width:17%;
             height:100%;
-            background: #c0c0c0;
+            background: #666666;
             order:10;
             position: relative;
             top:0px;
+            display: flex;
+            flex-direction: column;
+            min-width: 150px;
+            @import "component/sceneTree/sceneTreeHeader";
             @import "component/sceneTree/sceneTree";
         }
         .webgl-parent{
@@ -52,28 +54,55 @@
             }
         }
     }
+
     .bottom-widget{
         flex: initial;
         width:100%;
-        height:27%;
-        .bottom-widget-category{
+        height:29%;
+        .wonder-bottom-component{
             width:100%;
-            height:23px;
-            border-bottom:2px solid rgb(13, 11, 46);
-            .category-name {
-                width:60px;
-                height:21px;
-                line-height: 21px;
-                text-align: center;
-                display: inline-block;
-                margin:0 5px;
-                border:1px solid rgb(187, 128, 80);
+            height:100%;
+            background-color: #333333;
+            display: flex;
+            flex-direction: column;
+            .bottom-widget-category{
+                width:100%;
+                height:20px;
+                border-bottom:1px solid #fff;
+                display: flex;
+                flex-direction: row;
+                .category-name {
+                    width:80px;
+                    font-size:13px;
+                    height:18px;
+                    margin-right:0 5px;
+                    display: flex;
+                    .name-header{
+                        width:50px;
+                        height:100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                    .name-tail{
+                        margin-left:2px;
+                        margin-top:2px;
+                        border-radius: 5px;
+                        background: red;
+                        width:20px;
+                        height:14px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+                }
+                .category-active{
+                    background: #555555;
+                }
             }
-            .category-active{
-                background: rgba(190, 109, 43, 0.705);
-            }
+            @import "component/asset/asset";
+            @import "component/console/console";
         }
-        @import "component/asset/asset";
-        @import "component/console/console";
     }
+
 }

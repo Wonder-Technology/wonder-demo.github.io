@@ -1,7 +1,8 @@
 open AssetNodeType;
 
 type assetTreeNodeType = {
-  id: int,
+  nodeId: int,
   children: array(assetTreeNodeType),
   type_: assetNodeType,
+  isShowChildren:bool
 };

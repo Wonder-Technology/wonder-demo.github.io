@@ -1,12 +1,18 @@
 let prepareDefaultComponent = (editorState, engineState) => {
   let (editorState, engineState, cubeGeometry) =
-    PrepareDefaultComponentUtils.buildCubeGeometryDefaultComponent(
+    PrepareDefaultComponentUtils.buildDefaultCubeGeometryComponent(
       editorState,
       engineState,
     );
 
   let (editorState, engineState) =
-    PrepareDefaultComponentUtils.buildSphereGeometryDefaultComponent(
+    PrepareDefaultComponentUtils.buildDefaultSphereGeometryComponent(
+      editorState,
+      engineState,
+    );
+
+  let (editorState, engineState) =
+    PrepareDefaultComponentUtils.buildDefaultMaterialComponents(
       editorState,
       engineState,
     );
@@ -66,28 +72,11 @@ let prepareSpecificGameObjects = (editorState, engineState) => {
   (editorState, engineState, camera);
 };
 
-/* let computeDiffValue = editorState => {
-     let diffMap =
-       WonderCommonlib.HashMapService.createEmpty()
-       |> WonderCommonlib.HashMapService.set("gameObject", 2)
-       |> WonderCommonlib.HashMapService.set("transform", 2)
-       |> WonderCommonlib.HashMapService.set("geometry", 1)
-       |> WonderCommonlib.HashMapService.set("meshRenderer", 1)
-       |> WonderCommonlib.HashMapService.set("basicMaterial", 1)
-       |> WonderCommonlib.HashMapService.set("lightMaterial", 0)
-       |> WonderCommonlib.HashMapService.set("directionLight", 0)
-       |> WonderCommonlib.HashMapService.set("pointLight", 0)
-       |> WonderCommonlib.HashMapService.set("basicCameraView", 1)
-       |> WonderCommonlib.HashMapService.set("perspectiveCamera", 1)
-       |> WonderCommonlib.HashMapService.set("arcballCameraController", 1)
-       |> WonderCommonlib.HashMapService.set("texture", 0);
-
-     editorState |> SceneEditorService.setDiffMap(diffMap);
-   }; */
-
 let _prepareEngineState = ((camera, directionLight, box1, box2), engineState) =>
   engineState
-  |> GameObjectComponentEngineService.unsafeGetBasicCameraViewComponent(camera)
+  |> GameObjectComponentEngineService.unsafeGetBasicCameraViewComponent(
+       camera,
+     )
   |. BasicCameraViewEngineService.activeBasicCameraView(engineState)
   |> TransformEngineService.setLocalPosition(
        (0., 0., 40.),
@@ -116,9 +105,12 @@ let _prepareEngineState = ((camera, directionLight, box1, box2), engineState) =>
   |> SceneEngineService.addSceneChild(directionLight);
 
 let createDefaultScene = (cubeGeometry, editorState, engineState) => {
+  let defaultLightMaterial =
+    AssetMaterialDataEditorService.unsafeGetDefaultLightMaterial(editorState);
+
   let (editorState, engineState, camera, box1, box2, directionLight) =
     SceneEngineService.createDefaultSceneGameObjects(
-      cubeGeometry,
+      (cubeGeometry, defaultLightMaterial),
       editorState,
       engineState,
     );
@@ -129,3 +121,5 @@ let createDefaultScene = (cubeGeometry, editorState, engineState) => {
     camera,
   );
 };
+
+let isAssetGeometry = geometry => geometry >= 1;
