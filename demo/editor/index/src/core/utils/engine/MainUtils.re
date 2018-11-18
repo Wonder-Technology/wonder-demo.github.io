@@ -9,7 +9,7 @@ let _getLoadData = () => {
   );
 };
 
-let handleEngineState = engineState => {
+let _handleEngineState = engineState => {
   let engineState =
     JobEngineService.registerNoWorkerInitJob(
       "init_editor",
@@ -32,8 +32,6 @@ let handleEngineState = engineState => {
          "restore",
          RestoreJobUtils.restoreJob,
        );
-
-  StateEngineService.setIsDebug(true) |> ignore;
 
   let scene = engineState |> SceneEngineService.getSceneGameObject;
 
@@ -70,7 +68,27 @@ let init = () =>
          _hideLoading("loading");
          ();
        })
-    |> WonderBsMost.Most.map(engineState => engineState |> handleEngineState)
+    |> WonderBsMost.Most.flatMap(engineState =>
+         Fetch.fetch("./config/setting.json")
+         |> then_(response =>
+              response
+              |> Fetch.Response.json
+              |> then_(json => {
+                   json
+                   |> ParseSettingService.convertToRecord
+                   |> SetSettingEditorService.setSetting(
+                        _,
+                        StateEditorService.getState(),
+                      )
+                   |> StateEditorService.setState
+                   |> ignore;
+
+                   resolve(engineState);
+                 })
+            )
+         |> WonderBsMost.Most.fromPromise
+       )
+    |> WonderBsMost.Most.map(engineState => engineState |> _handleEngineState)
     |> WonderBsMost.Most.drain
   );
 

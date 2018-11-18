@@ -22,8 +22,7 @@ let getLightTypeByGameObject = (gameObject, engineState) =>
   | (false, true) => PointLight
   | _ =>
     WonderLog.Log.fatal(
-      WonderLog.Log.buildFatalMessage(
-        ~title="getLightTypeByGameObject",
+      LogUtils.buildFatalMessage(
         ~description={j|gameObject:$gameObject should has light component|j},
         ~reason="",
         ~solution={j||j},
@@ -40,20 +39,23 @@ let handleSpecificFuncByLightType =
 
   switch (lightType) {
   | DirectionLight => currentSceneTreeNode |> handleDirectionLightFunc
-
   | PointLight => currentSceneTreeNode |> handlePointLightFunc
   };
 };
 
+let getDirectionLightExceedMaxCountMessage = () => "the direction light count is exceed max count!";
+
+let getPointLightExceedMaxCountMessage = () => "the point light count is exceed max count!";
+
 let isLightExceedMaxCountByType = (targetLightType, engineState) =>
   switch (targetLightType) {
   | DirectionLight => (
-      "the direction light count is exceed max count!",
+      getDirectionLightExceedMaxCountMessage(),
       engineState |> DirectionLightEngineService.isMaxCount,
     )
 
   | PointLight => (
-      "the point light count is exceed max count!",
+      getPointLightExceedMaxCountMessage(),
       engineState |> PointLightEngineService.isMaxCount,
     )
   };
@@ -92,13 +94,14 @@ let replaceLightByType = (sourceLightType, targetLightType) => {
   let gameObject =
     SceneEditorService.unsafeGetCurrentSceneTreeNode
     |> StateLogicService.getEditorState;
+  let editorState = StateEditorService.getState();
   let engineState = StateEngineService.unsafeGetState();
 
   let (message, isMaxCount) =
     isLightExceedMaxCountByType(targetLightType, engineState);
 
   isMaxCount ?
-    { ConsoleUtils.warn(message) } :
+    ConsoleUtils.warn(message, editorState) :
     {
       let (sourceLight, disposeSourceLightFunc) =
         _getOperateSourceLightFunc(sourceLightType, gameObject, engineState);

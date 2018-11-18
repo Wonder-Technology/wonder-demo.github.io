@@ -4,6 +4,7 @@ module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = (int, int);
   type dataTuple = (materialType, materialType);
+  type return = unit;
 
   let handleSelfLogic =
       (
@@ -18,7 +19,7 @@ module CustomEventHandler = {
     );
 
     dispatchFunc(
-      AppStore.UpdateAction(Update([|BottomComponent, Inspector|])),
+      AppStore.UpdateAction(Update([|Project, Inspector|])),
     )
     |> ignore;
   };

@@ -4,20 +4,31 @@ let _loopBodyWhenStop = engineState =>
   SceneEditorService.getIsRun |> StateLogicService.getEditorState ?
     engineState : engineState |> DirectorEngineService.loopBody(0.);
 
+let _deferExec = [%bs.raw
+  func => {|
+      setTimeout(() => {
+        func();
+      }, 0)
+      |}
+];
+
 let _triggerRefreshInspectorEvent = engineState => {
-  let (engineState, _) =
-    ManageEventEngineService.triggerCustomGlobalEvent(
-      CreateCustomEventEngineService.create(
-        EventEditorService.getRefreshInspectorEventName(),
-        None,
-      ),
-      engineState,
-    );
+  _deferExec(() => {
+    let engineState = StateEngineService.unsafeGetState();
+    let (engineState, _) =
+      ManageEventEngineService.triggerCustomGlobalEvent(
+        CreateCustomEventEngineService.create(
+          EventEditorService.getRefreshInspectorEventName(),
+          None,
+        ),
+        engineState,
+      );
+
+    engineState |> StateEngineService.setState |> ignore;
+  });
 
   engineState;
 };
-
-let _getBody = () => DomHelper.document##body |> bodyToEventTarget;
 
 let _isTriggerGameViewEvent = () =>
   EventEditorService.getEventTarget(StateEditorService.getState()) === Game;
@@ -29,10 +40,10 @@ let _isTriggerOtherEvent = () =>
   EventEditorService.getEventTarget(StateEditorService.getState()) === Other;
 
 let _fromPointDomEvent = (eventName, engineState) =>
-  WonderBsMost.Most.fromEvent(eventName, _getBody(), false);
+  WonderBsMost.Most.fromEvent(eventName, EventUtils.getBody(), false);
 
 let _fromKeyboardDomEvent = (eventName, engineState) =>
-  WonderBsMost.Most.fromEvent(eventName, _getBody(), false);
+  WonderBsMost.Most.fromEvent(eventName, EventUtils.getBody(), false);
 
 let _convertMouseEventToPointEvent =
     (
@@ -51,7 +62,7 @@ let _convertMouseEventToPointEvent =
 
 let _bindDomEventToTriggerPointEvent =
     (
-      (domEventName, customEventName, pointEventName),
+      (domEventName, customEventName, pointEventName, eventTarget),
       (
         onDomEventFunc,
         convertDomEventToPointEventFunc,
@@ -78,7 +89,10 @@ let _bindDomEventToTriggerPointEvent =
                 engineState,
               );
 
-            _loopBodyWhenStop(engineState);
+            switch (eventTarget) {
+            | Scene => _loopBodyWhenStop(engineState)
+            | _ => engineState
+            };
           } :
           engineState,
     ~state=engineState,
@@ -90,11 +104,12 @@ let _bindMouseEventToTriggerViewPointEvent =
       mouseEventName,
       customEventName,
       pointEventName,
+      eventTarget,
       isTriggerCustomGlobalEventFunc,
       engineState,
     ) =>
   _bindDomEventToTriggerPointEvent(
-    (mouseEventName, customEventName, pointEventName),
+    (mouseEventName, customEventName, pointEventName, eventTarget),
     (
       ManageEventEngineService.onMouseEvent(~priority=0),
       _convertMouseEventToPointEvent,
@@ -115,6 +130,7 @@ let _bindMouseEventToTriggerSceneViewPointEvent =
     mouseEventName,
     customEventName,
     pointEventName,
+    Scene,
     isTriggerCustomGlobalEventFunc,
     engineState,
   );
@@ -131,11 +147,12 @@ let _bindMouseEventToTriggerGameViewPointEvent =
     mouseEventName,
     customEventName,
     pointEventName,
+    Game,
     isTriggerCustomGlobalEventFunc,
     engineState,
   );
 
-let bindDomEventToTriggerPointEvent = engineState =>
+let bindDomEventToTriggerPointEvent = (editorState, engineState) =>
   BrowserEngineService.isPC(engineState) ?
     engineState
     |> _bindMouseEventToTriggerGameViewPointEvent(
@@ -210,16 +227,19 @@ let bindDomEventToTriggerPointEvent = engineState =>
          PointDrag,
          _isTriggerSceneViewEvent,
        ) :
-    /* TODO error to user, not fatal */
-    WonderLog.Log.fatal(
-      WonderLog.Log.buildFatalMessage(
-        ~title="bindDomEventToTriggerPointEvent",
-        ~description={j|unknown browser|j},
-        ~reason="",
-        ~solution={j||j},
-        ~params={j||j},
-      ),
-    );
+    {
+      ConsoleUtils.error(
+        LogUtils.buildErrorMessage(
+          ~description={j|unknown browser|j},
+          ~reason="",
+          ~solution={j||j},
+          ~params={j||j},
+        ),
+        editorState,
+      );
+
+      engineState;
+    };
 
 let _preventContextMenuEvent = event => {
   HandleDomEventEngineService.preventDefault(
@@ -366,20 +386,22 @@ let _mapAndExecMouseEventHandle = (eventName, event) =>
   |> _execMouseEventHandle;
 
 let _execViewKeyboardEventHandle =
-    (sceneViewEventName, gameViewEventName, event) => {
+    (sceneViewEventName, gameViewEventName, event) =>
   _isTriggerGameViewEvent() ?
     {
       _triggerRefreshInspectorEvent |> StateLogicService.getAndSetEngineState;
       _execKeyboardEventHandle(gameViewEventName, event);
     } :
     _isTriggerSceneViewEvent() ?
-      _execKeyboardEventHandle(sceneViewEventName |> Obj.magic, event) : ();
+      {
+        _execKeyboardEventHandle(sceneViewEventName |> Obj.magic, event);
 
-  _loopBodyWhenStop |> StateLogicService.getAndSetEngineState;
-};
+        _loopBodyWhenStop |> StateLogicService.getAndSetEngineState;
+      } :
+      ();
 
 let _fromPCDomEventArr = engineState => [|
-  WonderBsMost.Most.fromEvent("contextmenu", _getBody(), false)
+  WonderBsMost.Most.fromEvent("contextmenu", EventUtils.getBody(), false)
   |> WonderBsMost.Most.tap(event => _preventContextMenuEvent(event)),
   _fromPointDomEvent("click", engineState)
   |> WonderBsMost.Most.tap(event => _mapAndExecMouseEventHandle(Click, event)),
@@ -429,41 +451,46 @@ let _fromPCDomEventArr = engineState => [|
      ),
 |];
 
-let fromDomEvent = engineState =>
+let fromDomEvent = (editorState, engineState) =>
   WonderBsMost.Most.mergeArray(
     BrowserEngineService.isPC(engineState) ?
       _fromPCDomEventArr(engineState) :
-      /* TODO error to user, not fatal */
-      WonderLog.Log.fatal(
-        WonderLog.Log.buildFatalMessage(
-          ~title="fromDomEvent",
-          ~description={j|unknown browser|j},
-          ~reason="",
-          ~solution={j||j},
-          ~params={j||j},
-        ),
-      ),
+      {
+        ConsoleUtils.error(
+          LogUtils.buildErrorMessage(
+            ~description={j|unknown browser|j},
+            ~reason="",
+            ~solution={j||j},
+            ~params={j||j},
+          ),
+          editorState,
+        );
+
+        [||];
+      },
   );
 
-let handleDomEventStreamError = e => {
+let handleDomEventStreamError = (e, editorState) => {
   let message = Obj.magic(e)##message;
   let stack = Obj.magic(e)##stack;
 
-  WonderLog.Log.debug(
-    WonderLog.Log.buildDebugMessage(
+  ConsoleUtils.debug(
+    LogUtils.buildDebugMessage(
       ~description={j|from dom event stream error|j},
       ~params={j|message:$message\nstack:$stack|j},
     ),
     StateEditorService.getStateIsDebug(),
+    editorState,
   );
 };
 
 let initEventForEditorJob = (_, engineState) => {
+  let editorState = StateEditorService.getState();
   let domEventStreamSubscription =
-    fromDomEvent(engineState)
+    fromDomEvent(editorState, engineState)
     |> WonderBsMost.Most.subscribe({
          "next": _ => (),
-         "error": e => handleDomEventStreamError(e),
+         "error": e => handleDomEventStreamError(e, editorState),
          "complete": () => (),
        });
 
@@ -471,5 +498,5 @@ let initEventForEditorJob = (_, engineState) => {
   |> ManageEventEngineService.setDomEventStreamSubscription(
        domEventStreamSubscription,
      )
-  |> bindDomEventToTriggerPointEvent;
+  |> bindDomEventToTriggerPointEvent(editorState);
 };

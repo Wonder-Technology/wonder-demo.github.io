@@ -11,6 +11,10 @@ type action =
 module Method = {
   let changeGeometry = MainEditorChangeGeometryEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
+  /* let _isValidGeometry = (geometry, engineState) =>
+     GeometryEngineService.getGeometryVertices(geometry, engineState)
+     |> Js.Typed_array.Float32Array.length > 0; */
+
   let _isGameObjectMaterialComponentHasMap = (gameObject, engineState) =>
     GameObjectComponentEngineService.hasBasicMaterialComponent(
       gameObject,
@@ -44,23 +48,40 @@ module Method = {
         } :
         false;
 
-  let _getAllAssetGeometrys = engineState =>
-    GeometryEngineService.getAllGeometrys(engineState)
-    |> Js.Array.filter(DefaultSceneUtils.isAssetGeometry);
+  let _sortByName = (allGeometryAssets, engineState) =>
+    allGeometryAssets
+    |> Js.Array.sortInPlaceWith((geometry1, geometry2) =>
+         Js.String.localeCompare(
+           MainEditorGeometryUtils.getName(geometry2, engineState)
+           |> Js.String.charAt(0),
+           MainEditorGeometryUtils.getName(geometry1, engineState)
+           |> Js.String.charAt(0),
+         )
+         |> NumberType.convertFloatToInt
+       );
 
-  let _getAllShowGeometrys = (gameObject, engineState) =>
+  let _getAllGeometryAssetsAndDefaultGeometrys = (editorState, engineState) =>
+    ArrayService.fastConcat(
+      GeometryAssetLogicService.getGeometryAssets(editorState, engineState)
+      |> _sortByName(_, engineState),
+      GeometryDataAssetEditorService.unsafeGetDefaultGeometryComponents(
+        editorState,
+      ),
+    );
+
+  let _getAllShowGeometrys = (gameObject, (editorState, engineState)) =>
     _isGameObjectMaterialComponentHasMap(gameObject, engineState) ?
-      engineState
-      |> _getAllAssetGeometrys
+      _getAllGeometryAssetsAndDefaultGeometrys(editorState, engineState)
       |> Js.Array.filter(geometry =>
            GeometryEngineService.hasGeometryTexCoords(geometry, engineState)
          ) :
-      engineState |> _getAllAssetGeometrys;
+      _getAllGeometryAssetsAndDefaultGeometrys(editorState, engineState);
 
   let showGeometryAssets = (send, currentSceneTreeNode, currentGeometry) => {
+    let editorState = StateEditorService.getState();
     let engineState = StateEngineService.unsafeGetState();
     let allGeometrys =
-      _getAllShowGeometrys(currentSceneTreeNode, engineState);
+      _getAllShowGeometrys(currentSceneTreeNode, (editorState, engineState));
 
     allGeometrys
     |> Js.Array.map(geometry => {

@@ -1,4 +1,4 @@
-exception LoadException;
+exception LoadException(string);
 
 type nodeId = int;
 
@@ -6,6 +6,8 @@ type imageIndex = int;
 
 type uploadFileType =
   | LoadWDB
+  | LoadGLB
+  | LoadGLTFZip
   | LoadImage
   | LoadWPK
   | LoadError;
@@ -30,6 +32,7 @@ type folderResultType = {
 type imageResultType = {
   base64: option(string),
   uint8Array: option(Js.Typed_array.Uint8Array.t),
+  blobObjectURL: option(string),
   name: string,
   mimeType: string,
 };

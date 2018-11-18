@@ -1,111 +1,84 @@
-type retainedProps = {updateTypeArr: UpdateStore.updateComponentTypeArr};
-
 module Method = {
-  let showProject = dispatchFunc => {
-    dispatchFunc(AppStore.ShowComponentAction(ChangeComponent(Project)))
-    |> ignore;
+  let triggerConsoleByType = (dispatchFunc, type_, message) => {
+    MessageArrayConsoleEditorService.addConsoleMessage({
+      message,
+      consoleType: type_,
+      traceInfo: None,
+    })
+    |> StateLogicService.getAndSetEditorState;
 
     dispatchFunc(
-      AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),
+      AppStore.UpdateAction(
+        Update([|UpdateStore.Console, UpdateStore.BottomHeader|]),
+      ),
     )
     |> ignore;
   };
 
-  let showConsole = dispatchFunc => {
-    dispatchFunc(AppStore.ShowComponentAction(ChangeComponent(Console)))
-    |> ignore;
+  let triggerTrace = (dispatchFunc, message) => {
+    let editorState = StateEditorService.getState();
+    let copiedMessageArr =
+      editorState
+      |> MessageArrayConsoleEditorService.getConsoleMessageArray
+      |> Js.Array.copy;
+
+    switch (copiedMessageArr |> Js.Array.pop) {
+    | None => ()
+    | Some({traceInfo} as messageRecord) =>
+      switch (traceInfo) {
+      | None =>
+        editorState
+        |> MessageArrayConsoleEditorService.setConsoleMessageArray(
+             copiedMessageArr
+             |> ArrayService.push({
+                  ...messageRecord,
+                  traceInfo: Some(message),
+                }),
+           )
+        |> StateEditorService.setState
+        |> ignore
+
+      | Some(_) => ()
+      }
+    };
 
     dispatchFunc(
-      AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),
+      AppStore.UpdateAction(
+        Update([|UpdateStore.Console, UpdateStore.BottomHeader|]),
+      ),
     )
     |> ignore;
   };
-
-  let getConsoleMessageUnReadCount = (componentType, editorState) =>
-    componentType |> MainEditorBottomComponentUtils.isTypeEqualConsole ?
-      "0" :
-      {
-        let count =
-          editorState |> ConsoleCheckedCountEditorService.unreadConsoleMessage;
-
-        count >= 99 ? "99" : count |> string_of_int;
-      };
 };
 
-let component =
-  ReasonReact.statelessComponentWithRetainedProps(
-    "MainEditorBottomComponents",
-  );
+let component = ReasonReact.statelessComponent("MainEditorBottomComponents");
 
 let render = ((store, dispatchFunc), _self) => {
   let currentComponentType = store |> StoreUtils.getBottomCurrentComponentType;
 
   <article
     key="MainEditorBottomComponents" className="wonder-bottom-component">
-    <div className="bottom-widget-category">
-      <div
-        className=(
-          "category-name"
-          ++ (
-            MainEditorBottomComponentUtils.isTypeEqualProject(
-              currentComponentType,
-            ) ?
-              " category-active" : ""
-          )
-        )
-        onClick=(
-          _e =>
-            MainEditorBottomComponentUtils.isTypeEqualProject(
-              currentComponentType,
-            ) ?
-              () : Method.showProject(dispatchFunc)
-        )>
-        <div className="name-header"> (DomHelper.textEl("Project")) </div>
-      </div>
-      <div
-        className=(
-          "category-name"
-          ++ (
-            MainEditorBottomComponentUtils.isTypeEqualConsole(
-              currentComponentType,
-            ) ?
-              " category-active" : ""
-          )
-        )
-        onClick=(
-          _e =>
-            MainEditorBottomComponentUtils.isTypeEqualConsole(
-              currentComponentType,
-            ) ?
-              () : Method.showConsole(dispatchFunc)
-        )>
-        <div className="name-header"> (DomHelper.textEl("Console")) </div>
-        <div className="name-tail">
-          (
-            DomHelper.textEl(
-              Method.getConsoleMessageUnReadCount(currentComponentType)
-              |> StateLogicService.getEditorState,
-            )
-          )
-        </div>
-      </div>
-      <span className="category-name" />
-    </div>
-    <MainEditorAsset store dispatchFunc />
-    <MainEditorConsole store dispatchFunc />
+    <MainEditorBottomHeader store dispatchFunc />
+    (
+      MainEditorBottomComponentUtils.isTypeEqualProject(currentComponentType) ?
+        <MainEditorProject store dispatchFunc /> : ReasonReact.null
+    )
+    (
+      MainEditorBottomComponentUtils.isTypeEqualConsole(currentComponentType) ?
+        <MainEditorConsole store dispatchFunc /> : ReasonReact.null
+    )
   </article>;
 };
 
-let shouldUpdate =
-    ({newSelf}: ReasonReact.oldNewSelf('a, retainedProps, 'c)) =>
-  newSelf.retainedProps.updateTypeArr
-  |> StoreUtils.shouldComponentUpdate(UpdateStore.BottomComponent);
-
 let make = (~store, ~dispatchFunc, _children) => {
-  ...component,
-  retainedProps: {
-    updateTypeArr: StoreUtils.getUpdateComponentTypeArr(store),
-  },
-  shouldUpdate,
-  render: self => render((store, dispatchFunc), self),
+  Console.stubConsole(
+    Method.triggerConsoleByType(dispatchFunc, Error),
+    Method.triggerConsoleByType(dispatchFunc, Info),
+    Method.triggerConsoleByType(dispatchFunc, Warn),
+    Method.triggerConsoleByType(dispatchFunc, Debug),
+    Method.triggerTrace(dispatchFunc),
+    Method.triggerConsoleByType(dispatchFunc, Log),
+  );
+
+  {...component, render: self => render((store, dispatchFunc), self)};
 };

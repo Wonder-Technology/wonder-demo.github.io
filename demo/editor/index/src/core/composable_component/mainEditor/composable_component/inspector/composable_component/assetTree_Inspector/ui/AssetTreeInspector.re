@@ -23,8 +23,8 @@ module Method = {
   let renameAssetTreeNode = AssetRenameNodeEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
   let _isFolderNameDisabled = nodeId =>
-    AssetUtils.isIdEqual(
-      AssetTreeRootEditorService.getRootTreeNodeId
+    TreeAssetEditorService.isIdEqual(
+      TreeRootAssetEditorService.getRootTreeNodeId
       |> StateLogicService.getEditorState,
       nodeId,
     );
@@ -43,8 +43,8 @@ module Method = {
             _type="text"
             value=state.inputValue
             disabled=(
-              AssetUtils.isIdEqual(
-                AssetTreeRootEditorService.getRootTreeNodeId
+              TreeAssetEditorService.isIdEqual(
+                TreeRootAssetEditorService.getRootTreeNodeId
                 |> StateLogicService.getEditorState,
                 currentNodeId,
               )
@@ -148,7 +148,7 @@ module Method = {
 
   let initFolderName = (currentNodeId, folderNodeMap) => {
     let folderName =
-      AssetFolderNodeMapEditorService.getFolderName(
+      FolderNodeMapAssetEditorService.getFolderName(
         currentNodeId,
         folderNodeMap,
       );
@@ -168,7 +168,7 @@ module Method = {
 
   let initMaterialName = (currentNodeId, engineState, materialNodeMap) => {
     let baseName =
-      AssetMaterialNodeMapLogicService.getMaterialBaseName(
+      MaterialNodeMapAssetLogicService.getMaterialBaseName(
         currentNodeId,
         engineState,
         materialNodeMap,
@@ -178,7 +178,7 @@ module Method = {
   };
   let initWDBName = (currentNodeId, wdbNodeMap) => {
     let baseName =
-      AssetWDBNodeMapEditorService.getWDBBaseName(currentNodeId, wdbNodeMap);
+      WDBNodeMapAssetEditorService.getWDBBaseName(currentNodeId, wdbNodeMap);
 
     {inputValue: baseName, originalName: baseName};
   };

@@ -1,6 +1,7 @@
 open EditorType;
 
 let create = () => {
+  settingRecord: RecordSettingService.create(),
   sceneRecord: {
     currentSceneTreeNode: None,
     isRun: false,
@@ -26,11 +27,10 @@ let create = () => {
       defaultBasicMaterialData: None,
       defaultLightMaterialData: None,
     },
-    clonedGameObjectMap: WonderCommonlib.SparseMapService.createEmpty(),
   },
   consoleRecord: {
     consoleMessageArray: [||],
-    consoleCheckedCount : 0
+    consoleCheckedCount: 0,
   },
   sceneViewRecord: {
     viewRect: None,
@@ -42,7 +42,7 @@ let create = () => {
     activedBasicCameraView: None,
   },
   eventRecord: {
-    eventTarget: EventType.Scene,
+    eventTarget: EventType.Other,
   },
   imguiRecord: {
     gameViewIMGUIFunc: None,
@@ -53,6 +53,11 @@ let create = () => {
   },
   uiRecord: {
     isFileInputOpen: false,
+  },
+  transformRecord: {
+    localEulerAngleMapX: WonderCommonlib.SparseMapService.createEmpty(),
+    localEulerAngleMapY: WonderCommonlib.SparseMapService.createEmpty(),
+    localEulerAngleMapZ: WonderCommonlib.SparseMapService.createEmpty(),
   },
   currentDragSource: (None, None),
   currentSelectSource: None,

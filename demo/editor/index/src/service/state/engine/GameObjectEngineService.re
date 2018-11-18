@@ -16,6 +16,8 @@ let disposeGameObjectKeepOrderRemoveGeometry = GameObjectAPI.disposeGameObjectKe
 
 let disposeGameObjectKeepOrderRemoveGeometryRemoveMaterial = GameObjectAPI.disposeGameObjectKeepOrderRemoveGeometryRemoveMaterial;
 
+let disposeGameObjectDisposeGeometryRemoveMaterial = GameObjectAPI.disposeGameObjectDisposeGeometryRemoveMaterial;
+
 /* let hasGameObjectBoxGeometryComponent = GameObjectAPI.hasGameObjectBoxGeometryComponent; */
 /*
  let hasGameObjectLightMaterialComponent = GameObjectAPI.hasGameObjectLightMaterialComponent; */
@@ -81,6 +83,26 @@ let getAllGeometrys = (allGameObjects, engineState) =>
     (
       GameObjectComponentEngineService.hasGeometryComponent,
       GameObjectComponentEngineService.unsafeGetGeometryComponent,
+    ),
+    engineState,
+  );
+
+let getAllDirectionLights = (allGameObjects, engineState) =>
+  _getAllComponents(
+    allGameObjects,
+    (
+      GameObjectComponentEngineService.hasDirectionLightComponent,
+      GameObjectComponentEngineService.unsafeGetDirectionLightComponent,
+    ),
+    engineState,
+  );
+
+let getAllPointLights = (allGameObjects, engineState) =>
+  _getAllComponents(
+    allGameObjects,
+    (
+      GameObjectComponentEngineService.hasPointLightComponent,
+      GameObjectComponentEngineService.unsafeGetPointLightComponent,
     ),
     engineState,
   );

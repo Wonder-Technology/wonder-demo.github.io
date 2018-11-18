@@ -52,16 +52,41 @@ module Method = {
     />;
   };
 
-  let _getAllAssetMaterialData = editorState =>
+  let _sortByName = (allMaterialAssetData, engineState) =>
+    allMaterialAssetData
+    |> Js.Array.sortInPlaceWith(
+         (
+           (_, (materialComponent1, materialType1)),
+           (_, (materialComponent2, materialType2)),
+         ) =>
+         Js.String.localeCompare(
+           MainEditorMaterialUtils.getName(
+             materialComponent2,
+             materialType2,
+             engineState,
+           )
+           |> Js.String.charAt(0),
+           MainEditorMaterialUtils.getName(
+             materialComponent1,
+             materialType1,
+             engineState,
+           )
+           |> Js.String.charAt(0),
+         )
+         |> NumberType.convertFloatToInt
+       );
+
+  let _getAllMaterialAssetData = (editorState, engineState) =>
     AssetNodeType.(
-      Js.Array.concat(
-        AssetMaterialDataEditorService.getAllDefaultMaterialData(editorState)
-        |> Js.Array.map(materialData => (None, materialData)),
-        AssetMaterialNodeMapEditorService.getResults(editorState)
+      ArrayService.fastConcat(
+        MaterialNodeMapAssetEditorService.getResults(editorState)
         |> Js.Array.map(((materialNodeId, {materialComponent, type_})) =>
              (Some(materialNodeId), (materialComponent, type_))
            ),
+        MaterialDataAssetEditorService.getAllDefaultMaterialData(editorState)
+        |> Js.Array.map(materialData => (None, materialData)),
       )
+      |> _sortByName(_, engineState)
     );
 
   let showMaterialAssets =
@@ -69,7 +94,7 @@ module Method = {
     let engineState = StateEngineService.unsafeGetState();
     let editorState = StateEditorService.getState();
 
-    _getAllAssetMaterialData(editorState)
+    _getAllMaterialAssetData(editorState, engineState)
     |> Js.Array.map(((materialNodeId, (material, materialType))) => {
          let className =
            (material, materialType) == (currentMaterial, currentMaterialType) ?
@@ -99,7 +124,7 @@ module Method = {
 
   let _isEqualDefaultMaterial = (material, materialType, editorState) => {
     let (defaultMaterial, _) =
-      AssetMaterialDataEditorService.unsafeGetMaterialDataByType(
+      MaterialDataAssetEditorService.unsafeGetMaterialDataByType(
         materialType,
         editorState,
       );
@@ -160,7 +185,7 @@ let reducer = (reduxTuple, currentSceneTreeNode, action, state) =>
   | ShowMaterialGroup =>
     ReasonReact.Update({...state, isShowMaterialGroup: true})
   | HideMaterialGroup =>
-    ReasonReact.Update({...state, isShowMaterialGroup: false});
+    ReasonReact.Update({...state, isShowMaterialGroup: false})
   };
 
 let render =
@@ -218,7 +243,7 @@ let render =
     )
     <div className="material-value">
       <Select
-        label="Shader"
+        label="Type"
         options=(MainEditorMaterialUtils.getMaterialOptions())
         selectedKey=(
           state.materialType |> MainEditorMaterialType.convertMaterialTypeToInt

@@ -43,12 +43,7 @@ module Method = {
 
     StateEngineService.unsafeGetState()
     |> PerspectiveCameraProjectionEngineService.markAllPerspectiveCameraProjectionsDirty
-    |> DeviceManagerEngineService.setViewport((
-         0,
-         0,
-         width |> NumberType.convertFloatToInt,
-         height |> NumberType.convertFloatToInt,
-       ))
+    |> DeviceManagerEngineService.setViewport((0, 0, width, height))
     |> DirectorEngineService.loopBody(0.)
     |> StateEngineService.setState
     |> ignore;
@@ -86,16 +81,23 @@ module Method = {
     )
     |> StateEngineService.setState
     |> ignore;
+
+  let dragWDB = MainEditorDragWDBEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 };
 
 let component = ReasonReact.statelessComponentWithRetainedProps("MainEditor");
 
-let _buildNotStartElement = () =>
+let _buildNotStartElement = (store, dispatchFunc) =>
   <article key="mainEditor" className="wonder-mainEditor-component">
     <div key="leftComponent" className="left-component">
       <div className="top-widget">
         <div id="canvasParent" key="webglParent" className="webgl-parent">
-          <canvas key="webgl" id="canvas" />
+          <Canvas
+            key="webgl"
+            domId="canvas"
+            dragWDB=(Method.dragWDB((store, dispatchFunc), ()))
+            isWDBAssetFile=AssetUtils.isWDBAssetFile
+          />
         </div>
       </div>
       <div className="bottom-widget" />
@@ -107,13 +109,15 @@ let _buildStartedElement = (store, dispatchFunc) =>
   <article key="mainEditor" className="wonder-mainEditor-component">
     <div key="leftComponent" className="left-component">
       <div className="top-widget">
-        <div className="inline-component sceneTree-parent">
-          <MainEditorSceneTreeHeader store dispatchFunc />
-          <MainEditorSceneTree store dispatchFunc />
-        </div>
+        <MainEditorLeftComponents store dispatchFunc />
         <div id="canvasParent" key="webglParent" className="webgl-parent">
           (Method.buildStartedRunWebglComponent())
-          <canvas key="webgl" id="canvas" />
+          <Canvas
+            key="webgl"
+            domId="canvas"
+            dragWDB=(Method.dragWDB((store, dispatchFunc), ()))
+            isWDBAssetFile=AssetUtils.isWDBAssetFile
+          />
         </div>
       </div>
       <div className="bottom-widget">
@@ -135,7 +139,8 @@ let _buildStartedElement = (store, dispatchFunc) =>
 
 let render = (store: AppStore.appState, dispatchFunc, _self) =>
   store.isEditorAndEngineStart ?
-    _buildStartedElement(store, dispatchFunc) : _buildNotStartElement();
+    _buildStartedElement(store, dispatchFunc) :
+    _buildNotStartElement(store, dispatchFunc);
 
 let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {
   ...component,
@@ -154,13 +159,13 @@ let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {
            (
              editorState => {
                let (assetTree, editorState) =
-                 AssetTreeNodeUtils.initRootAssetTree(
+                 AssetTreeUtils.initRootAssetTree(
                    editorState,
                    StateEngineService.unsafeGetState(),
                  );
 
                editorState
-               |> AssetTreeRootEditorService.setAssetTreeRoot(assetTree);
+               |> TreeRootAssetEditorService.setAssetTreeRoot(assetTree);
              }
            )
            |> StateLogicService.getAndSetEditorState;
@@ -168,7 +173,7 @@ let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {
              AppStore.SceneTreeAction(
                SetSceneGraph(
                  Some(
-                   SceneTreeUtils.getSceneGraphDataFromEngine
+                   SceneGraphUtils.getSceneGraphDataFromEngine
                    |> StateLogicService.getStateToGetData,
                  ),
                ),

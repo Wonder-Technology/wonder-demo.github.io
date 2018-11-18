@@ -8,6 +8,7 @@ module CustomEventHandler = {
     (int, int),
     (materialType, materialType),
   );
+  type return = unit;
 
   let handleSelfLogic =
       (
@@ -25,7 +26,7 @@ module CustomEventHandler = {
       switch (materialNodeId) {
       | None => editorState
       | Some(materialNodeId) =>
-        AssetMaterialNodeIdMapEditorService.setNodeId(
+        MaterialNodeIdMapAssetEditorService.setNodeId(
           targetMaterial,
           materialNodeId,
           editorState,

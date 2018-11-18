@@ -6,8 +6,6 @@ open FileType;
 
 [@bs.send] external readAsDataURL : (fileReader, file) => unit = "";
 
-[@bs.send] external readAsDataURL : (fileReader, file) => unit = "";
-
 [@bs.send] external readAsArrayBuffer : (fileReader, file) => unit = "";
 
 [@bs.send] external readAsText : (fileReader, file) => unit = "";
@@ -24,8 +22,23 @@ let onload: (fileReader, resultType => unit) => unit = [%bs.raw
   |}
 ];
 
+let makeSureCanLoadSameNameFileAgain = targetDom => {
+  targetDom##value#="";
+
+  ();
+};
+
+let convertFileJsObjectToFileInfoRecord = fileObject => {
+  name: fileObject##name,
+  type_: fileObject##_type,
+  file: FileType.convertFileJsObjectToFile(fileObject),
+};
+
 external convertResultToString : resultType => string = "%identity";
 
 external convertResultToArrayBuffer :
   resultType => Js.Typed_array.ArrayBuffer.t =
+  "%identity";
+
+external convertResultToJsZipBlob : resultType => WonderBsJszip.Blob.t =
   "%identity";

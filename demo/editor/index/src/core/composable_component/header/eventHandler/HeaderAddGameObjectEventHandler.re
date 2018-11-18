@@ -4,6 +4,7 @@ module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = addGameObjectType;
   type dataTuple = unit;
+  type return = unit;
 
   let handleSelfLogic = ((store, dispatchFunc), type_, ()) => {
     let newGameObject =
@@ -12,17 +13,17 @@ module CustomEventHandler = {
         let editorState = StateEditorService.getState();
 
         let defaultCubeGeometry =
-          AssetGeometryDataEditorService.unsafeGetDefaultCubeGeometryComponent(
+          GeometryDataAssetEditorService.unsafeGetDefaultCubeGeometryComponent(
             editorState,
           );
 
         let defaultLightMaterial =
-          AssetMaterialDataEditorService.unsafeGetDefaultLightMaterial(
+          MaterialDataAssetEditorService.unsafeGetDefaultLightMaterial(
             editorState,
           );
 
         SceneUtils.addGameObject(
-          PrimitiveEngineService.createBox((
+          PrimitiveEngineService.createCube((
             defaultCubeGeometry,
             defaultLightMaterial,
           )),
@@ -31,15 +32,19 @@ module CustomEventHandler = {
         SceneUtils.addGameObject(PrimitiveEngineService.createEmptyGameObject)
       };
 
+    let engineState = StateEngineService.unsafeGetState();
+
     dispatchFunc(
       AppStore.SceneTreeAction(
         SetSceneGraph(
           Some(
-            SceneTreeUtils.buildSceneGraphDataWithNewGameObject(
-              newGameObject,
-              store |> StoreUtils.unsafeGetSceneGraphDataFromStore,
-            )
-            |> StateLogicService.getEngineStateToGetData,
+            SceneGraphUtils.buildTreeNode(newGameObject, engineState)
+            |> SceneGraphUtils.addTreeNodeSceneGraphData(
+                 _,
+                 SceneEngineService.getSceneGameObject(engineState),
+                 store |> StoreUtils.unsafeGetSceneGraphDataFromStore,
+                 engineState,
+               ),
           ),
         ),
       ),

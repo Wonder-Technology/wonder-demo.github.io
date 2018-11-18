@@ -1,3 +1,5 @@
+open SettingType;
+
 open SceneType;
 
 open AssetType;
@@ -16,11 +18,14 @@ open UIType;
 
 open ConsoleType;
 
+open TransformType;
+
 type widgetType =
   | SceneTree
   | Asset;
 
 type editorState = {
+  settingRecord,
   sceneRecord,
   assetRecord,
   sceneViewRecord,
@@ -30,6 +35,7 @@ type editorState = {
   inspectorRecord,
   uiRecord,
   consoleRecord,
+  transformRecord,
   currentDragSource: (option(widgetType), option(int)),
   currentSelectSource: option(widgetType),
   loopId: int,

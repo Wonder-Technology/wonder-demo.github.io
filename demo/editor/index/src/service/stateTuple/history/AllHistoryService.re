@@ -17,12 +17,19 @@ let undoHistoryState = (store, dispatchFunc, (editorState, engineState)) => {
       UIHistoryService.undo(AllStateData.getHistoryState(), store),
     ),
   );
+
+  let editorState =
+    editorState |> EditorHistoryService.undo(AllStateData.getHistoryState());
+
+  let engineState =
+    engineState |> EngineHistoryService.undo(AllStateData.getHistoryState());
+
+  editorState |> StateEditorService.setState |> ignore;
+  engineState |> StateEngineService.setState |> ignore;
+
   dispatchFunc(AppStore.UpdateAction(Update([|All|]))) |> ignore;
-  (
-    editorState |> EditorHistoryService.undo(AllStateData.getHistoryState()),
-    engineState
-    |> EngineHistoryService.undo(AllStateData.getHistoryState()),
-  );
+
+  (editorState, engineState);
 };
 
 let redoHistoryState = (store, dispatchFunc, (editorState, engineState)) => {
@@ -31,10 +38,22 @@ let redoHistoryState = (store, dispatchFunc, (editorState, engineState)) => {
       UIHistoryService.redo(AllStateData.getHistoryState(), store),
     ),
   );
+
+  let editorState =
+    editorState |> EditorHistoryService.redo(AllStateData.getHistoryState());
+  let engineState =
+    engineState |> EngineHistoryService.redo(AllStateData.getHistoryState());
+
+  editorState |> StateEditorService.setState |> ignore;
+  engineState |> StateEngineService.setState |> ignore;
+
   dispatchFunc(AppStore.UpdateAction(Update([|All|]))) |> ignore;
-  (
-    editorState |> EditorHistoryService.redo(AllStateData.getHistoryState()),
-    engineState
-    |> EngineHistoryService.redo(AllStateData.getHistoryState()),
-  );
+
+  (editorState, engineState);
 };
+
+let handleUndo = (store, dispatchFunc) =>
+  OperateStateHistoryService.hasUndoState(AllStateData.getHistoryState()) ?
+    undoHistoryState(store, dispatchFunc)
+    |> StateHistoryService.getAndRefreshStateForHistory :
+    ();

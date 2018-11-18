@@ -12,7 +12,7 @@ let unsafeGetGeometryName = GeometryAPI.unsafeGetGeometryName;
 
 let setGeometryName = GeometryAPI.setGeometryName;
 
-let createCubeGeometry = GeometryAPI.createBoxGeometry;
+let createBoxGeometry = GeometryAPI.createBoxGeometry;
 
 let createSphereGeometry = GeometryAPI.createSphereGeometry;
 
@@ -32,69 +32,16 @@ let getGeometryIndices = GeometryAPI.getGeometryIndices;
 
 let setGeometryIndices = GeometryAPI.setGeometryIndices;
 
+let getGeometryIndices32 = GeometryAPI.getGeometryIndices32;
+
+let setGeometryIndices32 = GeometryAPI.setGeometryIndices32;
+
 let hasGeometryTexCoords = (geometry, engineState) =>
   getGeometryTexCoords(geometry, engineState) |> Float32Array.length > 0;
 
 let getAllGeometrys = GeometryAPI.getAllGeometrys;
 
 let unsafeGetGeometryGameObjects = Wonderjs.GeometryAPI.unsafeGetGeometryGameObjects;
-
-let _getAllUniqueGeometrys = (gameObject, engineState) => {
-  let rec _iterateGameObjectArr = (gameObjectArr, resultArr, engineState) =>
-    gameObjectArr
-    |> WonderCommonlib.ArrayService.reduceOneParam(
-         (. resultArr, gameObject) => {
-           let resultArr =
-             engineState
-             |> GameObjectComponentEngineService.hasGeometryComponent(
-                  gameObject,
-                ) ?
-               resultArr
-               |> ArrayService.push(
-                    engineState
-                    |> GameObjectComponentEngineService.unsafeGetGeometryComponent(
-                         gameObject,
-                       ),
-                  ) :
-               resultArr;
-
-           _iterateGameObjectArr(
-             engineState |> GameObjectUtils.getChildren(gameObject),
-             resultArr,
-             engineState,
-           );
-         },
-         resultArr,
-       );
-
-  _iterateGameObjectArr([|gameObject|], [||], engineState)
-  |> ArrayService.removeDuplicateItems((. id) => id |> string_of_int);
-};
-
-let replaceAllGameObjectGeometryToDefaultGeometry =
-    (gameObject, targetGeometry, engineState) =>
-  engineState
-  |> _getAllUniqueGeometrys(gameObject)
-  |> Js.Array.map(geometryIndex =>
-       engineState |> unsafeGetGeometryGameObjects(geometryIndex)
-     )
-  |> WonderCommonlib.ArrayService.flatten
-  |> WonderCommonlib.ArrayService.reduceOneParam(
-       (. state, gameObject) =>
-         state
-         |> GameObjectComponentEngineService.disposeGeometryComponent(
-              gameObject,
-              state
-              |> GameObjectComponentEngineService.unsafeGetGeometryComponent(
-                   gameObject,
-                 ),
-            )
-         |> GameObjectComponentEngineService.addGeometryComponent(
-              gameObject,
-              targetGeometry,
-            ),
-       engineState,
-     );
 
 let rec _generateGridPlanePoints =
         ((size, step, y), (num, index), vertices, indices) =>
@@ -163,3 +110,5 @@ let createGridPlaneGameObject = ((size, step, y), color, engineState) => {
 };
 
 let getGeometryTexCoords = GeometryAPI.getGeometryTexCoords;
+
+let batchDisposeGeometry = GeometryAPI.batchDisposeGeometry;

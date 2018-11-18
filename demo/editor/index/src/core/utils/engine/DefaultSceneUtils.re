@@ -106,7 +106,7 @@ let _prepareEngineState = ((camera, directionLight, box1, box2), engineState) =>
 
 let createDefaultScene = (cubeGeometry, editorState, engineState) => {
   let defaultLightMaterial =
-    AssetMaterialDataEditorService.unsafeGetDefaultLightMaterial(editorState);
+    MaterialDataAssetEditorService.unsafeGetDefaultLightMaterial(editorState);
 
   let (editorState, engineState, camera, box1, box2, directionLight) =
     SceneEngineService.createDefaultSceneGameObjects(
@@ -122,4 +122,4 @@ let createDefaultScene = (cubeGeometry, editorState, engineState) => {
   );
 };
 
-let isAssetGeometry = geometry => geometry >= 1;
+/* let isAssetGeometry = geometry => geometry >= 1; */

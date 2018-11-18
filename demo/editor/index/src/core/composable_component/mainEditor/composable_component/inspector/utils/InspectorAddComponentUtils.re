@@ -7,7 +7,7 @@ let addComponentByType =
   switch (type_) {
   | RenderGroup =>
     let defaultLightMaterial =
-      AssetMaterialDataEditorService.unsafeGetDefaultLightMaterial(
+      MaterialDataAssetEditorService.unsafeGetDefaultLightMaterial(
         editorState,
       );
     let (engineState, meshRenderer) =
@@ -31,7 +31,7 @@ let addComponentByType =
     /* let editorState = StateEditorService.getState(); */
 
     let defaultCubeGeometry =
-      AssetGeometryDataEditorService.unsafeGetDefaultCubeGeometryComponent(
+      GeometryDataAssetEditorService.unsafeGetDefaultCubeGeometryComponent(
         editorState,
       );
 
@@ -44,7 +44,10 @@ let addComponentByType =
   | Light =>
     engineState |> DirectionLightEngineService.isMaxCount ?
       {
-        ConsoleUtils.warn("the direction light count is exceed max count !");
+        ConsoleUtils.warn(
+          "the direction light count is exceed max count !",
+          editorState,
+        );
 
         (editorState, engineState);
       } :
@@ -108,14 +111,16 @@ let addComponentByType =
          cameraController,
        );
   | _ =>
-    WonderLog.Log.fatal(
-      WonderLog.Log.buildFatalMessage(
-        ~title="addComponentByType",
+    ConsoleUtils.error(
+      LogUtils.buildErrorMessage(
         ~description=
           {j|the type:$type_ in inspectorComponentType can't add |j},
         ~reason="",
         ~solution={j||j},
         ~params={j||j},
       ),
-    )
+      editorState,
+    );
+
+    (editorState, engineState);
   };

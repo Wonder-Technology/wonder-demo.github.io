@@ -2,8 +2,11 @@ open AppStore;
 
 open UpdateStore;
 
+let getSceneGraphDataFromStore = (store: AppStore.appState) =>
+  store.sceneTreeState.sceneGraphData;
+
 let unsafeGetSceneGraphDataFromStore = (store: AppStore.appState) =>
-  store.sceneTreeState.sceneGraphData |> OptionService.unsafeGet;
+  getSceneGraphDataFromStore(store) |> OptionService.unsafeGet;
 
 let getUpdateComponentTypeArr = store => store.updateState.componentTypeArr;
 
@@ -24,3 +27,8 @@ let shouldComponentUpdate = (componentType, updateComponentTypeArr) =>
   |> Js.Array.includes(componentType)
   || updateComponentTypeArr
   |> Js.Array.includes(All);
+
+let shouldComponentUpdateMany = (componentTypeArr, updateComponentTypeArr) =>
+  ArrayService.hasIntersect(updateComponentTypeArr, componentTypeArr)
+  || updateComponentTypeArr
+  |> Js.Array.includes(UpdateStore.All);

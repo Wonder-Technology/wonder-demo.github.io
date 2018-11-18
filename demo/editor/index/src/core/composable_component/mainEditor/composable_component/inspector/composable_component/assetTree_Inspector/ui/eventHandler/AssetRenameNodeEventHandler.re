@@ -6,13 +6,14 @@ module CustomEventHandler = {
   include EmptyEventHandler.EmptyEventHandler;
   type prepareTuple = (int, AssetNodeType.assetNodeType);
   type dataTuple = string;
+  type return = unit;
 
   let _renameFolderNode =
       (nodeId, name, (editorState, engineState), folderNodeMap) => (
     folderNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
-    |> AssetFolderNodeMapEditorService.renameFolderNodeResult(name)
-    |> AssetFolderNodeMapEditorService.setResult(nodeId, _, editorState),
+    |> FolderNodeMapAssetEditorService.renameFolderNodeResult(name)
+    |> FolderNodeMapAssetEditorService.setResult(nodeId, _, editorState),
     engineState,
   );
 
@@ -36,10 +37,7 @@ module CustomEventHandler = {
 
     let defaultName =
       switch (
-        AssetMaterialNodeMapEditorService.getType(
-          nodeId,
-          materialNodeMap,
-        )
+        MaterialNodeMapAssetEditorService.getType(nodeId, materialNodeMap)
       ) {
       | BasicMaterial =>
         PrepareDefaultComponentUtils.getDefaultBasicMaterialName()
@@ -54,8 +52,9 @@ module CustomEventHandler = {
       (nodeId, name, (editorState, engineState), materialNodeMap) =>
     _isNameEqualDefaultMaterialName(nodeId, name, materialNodeMap) ?
       {
-        ConsoleUtils.info(
+        ConsoleUtils.warn(
           {j|material name:$name shouldn't equal default material name|j},
+          editorState,
         );
 
         (editorState, engineState);
@@ -63,7 +62,7 @@ module CustomEventHandler = {
       (
         editorState,
         engineState
-        |> AssetMaterialNodeMapLogicService.setMaterialBaseName(
+        |> MaterialNodeMapAssetLogicService.setMaterialBaseName(
              nodeId,
              name,
              materialNodeMap,
@@ -73,8 +72,8 @@ module CustomEventHandler = {
   let _renameWDBNode = (nodeId, name, (editorState, engineState), wdbNodeMap) => (
     wdbNodeMap
     |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
-    |> AssetWDBNodeMapEditorService.renameWDBNodeResult(name)
-    |> AssetWDBNodeMapEditorService.setResult(nodeId, _, editorState),
+    |> WDBNodeMapAssetEditorService.renameWDBNodeResult(name)
+    |> WDBNodeMapAssetEditorService.setResult(nodeId, _, editorState),
     engineState,
   );
 
@@ -88,14 +87,25 @@ module CustomEventHandler = {
       |> OptionService.unsafeGet;
 
     let (editorState, engineState) =
-      AssetUtils.checkAssetNodeName(
+      AssetTreeUtils.checkAssetNodeName(
         (nodeId, value),
         parentNodeId,
         nodeType,
         (
           ((editorState, engineState)) => {
+            ConsoleUtils.warn(
+              "the asset can't has the same name !",
+              editorState,
+            );
+
             dispatchFunc(
-              AppStore.UpdateAction(Update([|UpdateStore.Inspector|])),
+              AppStore.UpdateAction(
+                Update([|
+                  UpdateStore.Console,
+                  UpdateStore.BottomHeader,
+                  UpdateStore.Inspector,
+                |]),
+              ),
             )
             |> ignore;
 
@@ -117,7 +127,7 @@ module CustomEventHandler = {
               );
 
             dispatchFunc(
-              AppStore.UpdateAction(Update([|UpdateStore.BottomComponent|])),
+              AppStore.UpdateAction(Update([|UpdateStore.Project|])),
             )
             |> ignore;
 

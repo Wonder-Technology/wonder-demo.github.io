@@ -1,11 +1,10 @@
 open Wonderjs;
 
-let createDefaultSceneGameObjects =
-    (componentData, editorState, engineState) => {
+let createDefaultSceneGameObjects = (componentData, editorState, engineState) => {
   let (editorState, engineState, box1) =
-    PrimitiveEngineService.createBox(componentData, editorState, engineState);
+    PrimitiveEngineService.createCube(componentData, editorState, engineState);
   let (editorState, engineState, box2) =
-    PrimitiveEngineService.createBox(componentData, editorState, engineState);
+    PrimitiveEngineService.createCube(componentData, editorState, engineState);
   let (editorState, engineState, directionLight) =
     PrimitiveEngineService.createDirectionLight(editorState, engineState);
   let (editorState, engineState, camera) =
@@ -89,6 +88,16 @@ let clearShaderCacheAndReInitSceneAllLightMaterials = engineState =>
     getSceneAllLightMaterials(engineState),
     engineState,
   );
+
+let doesNeedReInitSceneAllLightMaterials = (gameObjects, engineState) =>
+  gameObjects
+  |> Js.Array.filter(gameObject =>
+       GameObjectComponentEngineService.hasLightComponent(
+         gameObject,
+         engineState,
+       )
+     )
+  |> Js.Array.length > 0;
 
 let unsafeGetSceneGameObjectsFromGameObjectMaterialComponent =
     (gameObject, engineState) => {

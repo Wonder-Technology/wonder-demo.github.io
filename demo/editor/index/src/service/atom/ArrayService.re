@@ -169,3 +169,25 @@ let removeDuplicateItems = (buildKeyFunc, arr) => {
 
   resultArr;
 };
+
+let exclude = (excludeArr, arr) =>
+  arr |> Js.Array.filter(value => ! (excludeArr |> Js.Array.includes(value)));
+
+let intersect = (arr1, arr2) =>
+  arr1 |> Js.Array.filter(value => arr2 |> Js.Array.includes(value));
+
+let hasIntersect = (arr1, arr2) =>
+  intersect(arr1, arr2) |> Js.Array.length > 0;
+
+let fastConcat = (arr1, arr2) =>
+  arr2
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. arr1, value2) => arr1 |> push(value2),
+       arr1,
+     );
+
+let isEqual = (arr1, arr2) =>
+  arr1 |> Js.Array.sortInPlace == (arr2 |> Js.Array.sortInPlace);
+
+let isInclude = (sourceArr, targetArr) =>
+  intersect(sourceArr, targetArr) |> isEqual(_, targetArr);

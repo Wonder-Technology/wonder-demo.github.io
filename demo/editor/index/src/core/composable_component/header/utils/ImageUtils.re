@@ -10,19 +10,23 @@ let getImageWidth = image => Obj.magic(image)##width;
 
 let getImageHeight = image => Obj.magic(image)##height;
 
-let getImageMimeType = extName =>
+let getImageMimeType = (extName, editorState) =>
   switch (extName) {
   | ".png" => "image/png"
   | ".jpg"
   | ".jpeg" => "image/jpeg"
   | mimeType =>
-    WonderLog.Log.fatal(
-      WonderLog.Log.buildFatalMessage(
-        ~title="getImageMimeType",
+    ConsoleUtils.error(
+      LogUtils.buildErrorMessage(
         ~description={j|unknown image mimeType: $mimeType|j},
         ~reason="",
         ~solution={j||j},
         ~params={j||j},
       ),
-    )
+      editorState,
+    );
+
+    mimeType;
   };
+
+let getNullImageSrc = () => "./public/null.png";

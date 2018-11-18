@@ -23,9 +23,7 @@ let _setIMGUIData = (hasWDBIMGUIFunc, editorState, engineState) => {
 
 let _handleEngineState = (gameObject, hasWDBIMGUIFunc, engineState) => {
   let engineState =
-    engineState
-    |> SceneEngineService.disposeSceneAllChildrenKeepOrderRemoveGeometryRemoveMaterial
-    |> SceneEngineService.setSceneGameObject(gameObject);
+    engineState |> SceneEngineService.setSceneGameObject(gameObject);
 
   let editorState = StateEditorService.getState();
   let editorState =
@@ -51,14 +49,14 @@ let _handleEngineState = (gameObject, hasWDBIMGUIFunc, engineState) => {
     editorState
     |> InspectorEditorService.clearComponentTypeMap
     |> SceneEditorService.clearCurrentSceneTreeNode;
-  /* |> AssetTreeNodeUtils.initRootAssetTree(_, engineState); */
+  /* |> AssetTreeUtils.initRootAssetTree(_, engineState); */
 
   editorState
   |> GameObjectComponentLogicService.getGameObjectComponentStoreInComponentTypeMap(
        engineState |> GameObjectUtils.getChildren(gameObject),
        engineState,
      )
-  /* |> AssetTreeRootEditorService.setAssetTreeRoot(assetTree) */
+  /* |> TreeRootAssetEditorService.setAssetTreeRoot(assetTree) */
   |> StateEditorService.setState
   |> ignore;
 
@@ -67,10 +65,7 @@ let _handleEngineState = (gameObject, hasWDBIMGUIFunc, engineState) => {
   let engineState =
     engineState |> GameObjectEngineService.setGameObjectName("scene", scene);
 
-  let engineState =
-    engineState
-    |> JobEngineService.execDisposeJob
-    |> ShaderEngineService.clearShaderCache;
+  let engineState = engineState |> ShaderEngineService.clearShaderCache;
 
   /* GameObjectEngineService.initAllGameObjects(gameObject)
      |> StateLogicService.getAndRefreshEngineStateWithFunc; */
@@ -78,16 +73,23 @@ let _handleEngineState = (gameObject, hasWDBIMGUIFunc, engineState) => {
   (gameObject, engineState);
 };
 
-let importSceneWDB = wdbArrayBuffer =>
-  StateEngineService.unsafeGetState()
-  |> AssembleWDBEngineService.assembleWDB(wdbArrayBuffer, true, false, true)
+let importSceneWDB = wdbArrayBuffer => {
+  let engineState =
+    StateEngineService.unsafeGetState()
+    |> SceneEngineService.disposeSceneAllChildrenKeepOrderRemoveGeometryRemoveMaterial
+    |> JobEngineService.execDisposeJob;
+
+  engineState
+  |> AssembleWDBEngineService.assembleWDB(
+       wdbArrayBuffer,
+       true,
+       false,
+       true,
+       true,
+     )
   |> WonderBsMost.Most.map(
        (
-         (
-           engineState,
-           (imageUint8ArrayDataMap, hasWDBIMGUIFunc),
-           gameObject,
-         ),
+         (engineState, (imageUint8ArrayDataMap, hasWDBIMGUIFunc), gameObject),
        ) => {
        let (gameObject, engineState) =
          _handleEngineState(gameObject, hasWDBIMGUIFunc, engineState);
@@ -96,3 +98,4 @@ let importSceneWDB = wdbArrayBuffer =>
 
        (gameObject, imageUint8ArrayDataMap);
      });
+};
