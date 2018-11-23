@@ -10,11 +10,11 @@ type state = {
 };
 
 module Method = {
-  let getStorageParentKey = () => "userExtension";
-  /* todo use extension names instead of the name */
+  /* let getStorageParentKey = () => "userExtension";
+     /* todo use extension names instead of the name */
 
-  let addExtension = text =>
-    AppExtensionUtils.setExtension(getStorageParentKey(), text);
+     let addExtension = text =>
+       AppExtensionUtils.setExtension(getStorageParentKey(), text); */
 
   let importPackage = HeaderImportPackageEventHandler.MakeEventHandler.pushUndoStackWithNoCopyEngineState;
 
@@ -39,19 +39,17 @@ module Method = {
               className="content-section"
               onClick=(
                 _e =>
-                  OperateStateHistoryService.hasUndoState(
-                    AllStateData.getHistoryState(),
-                  ) ?
-                    AllHistoryService.undoHistoryState(store, dispatchFunc)
-                    |> StateHistoryService.getAndRefreshStateForHistory :
-                    ()
+                  AllHistoryService.handleUndo(
+                    store,
+                    Obj.magic(dispatchFunc),
+                  )
               )>
               <span className="section-header">
                 (DomHelper.textEl("Undo"))
               </span>
-              <span className="section-tail">
+              /* <span className="section-tail">
                 (DomHelper.textEl("Ctrl+Z"))
-              </span>
+              </span> */
             </div>
             <div
               className="content-section"
@@ -67,9 +65,9 @@ module Method = {
               <span className="section-header">
                 (DomHelper.textEl("Redo"))
               </span>
-              <span className="section-tail">
+              /* <span className="section-tail">
                 (DomHelper.textEl("Ctrl+U"))
-              </span>
+              </span> */
             </div>
           </div> :
           ReasonReact.null
@@ -214,16 +212,17 @@ module Method = {
       )
       (
         state.isShowPublishLocalModal ?
-          <SingleInputModal
+          <PublishLocalModal
             title="Local"
-            defaultValue="WonderLocal"
+            defaultName="WonderLocal"
+            defaultUseWorker=false
             closeFunc=(() => send(HidePublishLocalModal))
             submitFunc=(
-              zipName => {
+              (zipName, useWorker) => {
                 HeaderPublishLocalUtils.Publish.publishZip(
+                  (zipName, useWorker),
                   WonderBsJszip.Zip.create,
                   Fetch.fetch,
-                  zipName,
                 );
 
                 send(HidePublishLocalModal);
@@ -370,7 +369,6 @@ let make = (~store: AppStore.appState, ~dispatchFunc, _children) => {
 
         DomUtils.isSpecificDomChildrenHasTargetDom(target, targetArray)
         || UIEditorService.isFileInputOpen(StateEditorService.getState()) ?
-          /* ? */
           () : send(BlurNav);
       },
     ),
