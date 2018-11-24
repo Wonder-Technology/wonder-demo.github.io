@@ -3,9 +3,60 @@ open Js.Typed_array;
 let isValueEqual = (key1, key2, getFunc, engineState) =>
   getFunc(key1, engineState) == getFunc(key2, engineState);
 
-let isBasicMaterialDataEqual = ((name, color), material2, engineState) =>
-  name
-  == BasicMaterialEngineService.getBasicMaterialName(material2, engineState)
+let _isNameEqual =
+    (name1, component2, (getNameFunc, isDefaultNameFunc), engineState) =>
+  switch (name1, getNameFunc(component2, engineState)) {
+  | (Some(name1), Some(name2)) =>
+    isDefaultNameFunc(name1) && isDefaultNameFunc(name2) ?
+      true : name1 == name2
+  | (None, None) => true
+  | _ => false
+  };
+
+let _isBasicMaterialNameEqual = (name1, material2, engineState) =>
+  _isNameEqual(
+    name1,
+    material2,
+    (
+      BasicMaterialEngineService.getBasicMaterialName,
+      ConverterEngineService.isDefaultBasicMaterialName,
+    ),
+    engineState,
+  );
+
+let _isLightMaterialNameEqual = (name1, material2, engineState) =>
+  _isNameEqual(
+    name1,
+    material2,
+    (
+      LightMaterialEngineService.getLightMaterialName,
+      ConverterEngineService.isDefaultLightMaterialName,
+    ),
+    engineState,
+  );
+
+let _isTextureNameEqual = (name1, texture2, engineState) =>
+  _isNameEqual(
+    name1,
+    texture2,
+    (
+      BasicSourceTextureEngineService.getBasicSourceTextureName,
+      ConverterEngineService.isDefaultTextureName,
+    ),
+    engineState,
+  );
+
+let _isImageNameEqual = (name1, image2) => {
+  let name2 = ImageUtils.getImageName(image2);
+
+  ConverterEngineService.isDefaultImageName(name1)
+  && ConverterEngineService.isDefaultImageName(name2) ?
+    true : name1 == name2;
+};
+
+let isBasicMaterialDataEqual =
+    ((name, color), material2, _imageUint8ArrayDataMap, engineState) =>
+  _isBasicMaterialNameEqual(name, material2, engineState)
   && color == BasicMaterialEngineService.getColor(material2, engineState);
 
 let _isImageValueEqual = (image1, image2, getFunc) =>
@@ -26,22 +77,34 @@ let _getImageUint8ArrayByTextureComponent = (textureComponent, editorState) =>
     )
   };
 
-let _isImageNodeDataEqual = ((name, width, height), image2) =>
-  name == ImageUtils.getImageName(image2)
+let _isImageNodeDataEqual =
+    (
+      (name, width, height, uint8Array),
+      image2,
+      texture2,
+      imageUint8ArrayDataMap,
+    ) =>
+  _isImageNameEqual(name, image2)
   && width == ImageUtils.getImageWidth(image2)
-  && height == ImageUtils.getImageHeight(image2);
+  && height == ImageUtils.getImageHeight(image2)
+  && (
+    switch (
+      imageUint8ArrayDataMap |> WonderCommonlib.SparseMapService.get(texture2)
+    ) {
+    | None => true
+    | Some((_, uint8Array2)) =>
+      Uint8ArrayService.isUint8ArrayEqual(uint8Array, uint8Array2 |. Some)
+    }
+  );
 
 let isTextureDataEqual =
     (
       (name, wrapS, wrapT, minFilter, magFilter, imageData),
       texture2,
+      imageUint8ArrayDataMap,
       engineState,
     ) =>
-  name
-  == BasicSourceTextureEngineService.getBasicSourceTextureName(
-       texture2,
-       engineState,
-     )
+  _isTextureNameEqual(name, texture2, engineState)
   && wrapS == BasicSourceTextureEngineService.getWrapS(texture2, engineState)
   && wrapT == BasicSourceTextureEngineService.getWrapT(texture2, engineState)
   &&
@@ -57,12 +120,18 @@ let isTextureDataEqual =
   && _isImageNodeDataEqual(
        imageData,
        BasicSourceTextureEngineService.unsafeGetSource(texture2, engineState),
+       texture2,
+       imageUint8ArrayDataMap,
      );
 
 let isLightMaterialDataEqual =
-    ((name, diffuseColor, shininess, textureData), material2, engineState) =>
-  name
-  == LightMaterialEngineService.getLightMaterialName(material2, engineState)
+    (
+      (name, diffuseColor, shininess, textureData),
+      material2,
+      imageUint8ArrayDataMap,
+      engineState,
+    ) =>
+  _isLightMaterialNameEqual(name, material2, engineState)
   &&
   diffuseColor == LightMaterialEngineService.getLightMaterialDiffuseColor(
                     material2,
@@ -83,7 +152,12 @@ let isLightMaterialDataEqual =
     ) {
     | (None, None) => true
     | (Some(textureData), Some(map2)) =>
-      isTextureDataEqual(textureData, map2, engineState)
+      isTextureDataEqual(
+        textureData,
+        map2,
+        imageUint8ArrayDataMap,
+        engineState,
+      )
     | _ => false
     }
   );
@@ -104,6 +178,7 @@ let getRelatedMaterialData =
     (
       gameObject,
       replacedTargetMaterialMap,
+      imageUint8ArrayDataMap,
       (materialType, assetMaterialDataMap, defaultMaterialData),
       (
         unsafeGetMaterialComponentFunc,
@@ -160,6 +235,7 @@ let getRelatedMaterialData =
                    isMaterialDataEqualFunc(
                      assetMaterialData,
                      material,
+                     imageUint8ArrayDataMap,
                      engineState,
                    )
                  )
@@ -190,6 +266,7 @@ let getRelatedMaterialDataFromGameObject =
     (
       gameObject,
       replacedTargetMaterialMap,
+      imageUint8ArrayDataMap,
       (defaultBasicMaterialData, defaultLightMaterialData),
       (basicMaterialDataMap, lightMaterialDataMap),
       engineState,
@@ -201,6 +278,7 @@ let getRelatedMaterialDataFromGameObject =
     getRelatedMaterialData(
       gameObject,
       replacedTargetMaterialMap,
+      imageUint8ArrayDataMap,
       (
         AssetMaterialDataType.BasicMaterial,
         basicMaterialDataMap,
@@ -220,6 +298,7 @@ let getRelatedMaterialDataFromGameObject =
       getRelatedMaterialData(
         gameObject,
         replacedTargetMaterialMap,
+        imageUint8ArrayDataMap,
         (
           AssetMaterialDataType.LightMaterial,
           lightMaterialDataMap,
@@ -275,6 +354,7 @@ let getRelatedTextureData =
       gameObject,
       replacedTargetTextureMap,
       textureAssetDataMap,
+      imageUint8ArrayDataMap,
       (unsafeGetMaterialComponentFunc, getMapFunc, setMapFunc),
       (editorState, engineState),
     ) => {
@@ -296,6 +376,7 @@ let getRelatedTextureData =
                  isTextureDataEqual(
                    textureAssetData,
                    sourceTexture,
+                   imageUint8ArrayDataMap,
                    engineState,
                  )
                )
@@ -335,6 +416,7 @@ let getRelatedTextureDataFromGameObject =
       gameObject,
       replacedTargetTextureMap,
       textureAssetDataMap,
+      imageUint8ArrayDataMap,
       (editorState, engineState),
     ) =>
   GameObjectComponentEngineService.hasBasicMaterialComponent(
@@ -350,6 +432,7 @@ let getRelatedTextureDataFromGameObject =
         gameObject,
         replacedTargetTextureMap,
         textureAssetDataMap,
+        imageUint8ArrayDataMap,
         (
           GameObjectComponentEngineService.unsafeGetLightMaterialComponent,
           LightMaterialEngineService.getLightMaterialDiffuseMap,
@@ -559,13 +642,14 @@ let getBasicMaterialData = (material, engineState) => (
   BasicMaterialEngineService.getColor(material, engineState),
 );
 
-let _getImageData = image => (
+let _getImageData = (image, texture, editorState) => (
   ImageUtils.getImageName(image),
   ImageUtils.getImageWidth(image),
   ImageUtils.getImageHeight(image),
+  _getImageUint8ArrayByTextureComponent(texture, editorState),
 );
 
-let getTextureData = (texture, engineState) => (
+let getTextureData = (texture, (editorState, engineState)) => (
   BasicSourceTextureEngineService.getBasicSourceTextureName(
     texture,
     engineState,
@@ -575,10 +659,10 @@ let getTextureData = (texture, engineState) => (
   BasicSourceTextureEngineService.getMinFilter(texture, engineState),
   BasicSourceTextureEngineService.getMagFilter(texture, engineState),
   BasicSourceTextureEngineService.unsafeGetSource(texture, engineState)
-  |> _getImageData,
+  |> _getImageData(_, texture, editorState),
 );
 
-let getLightMaterialData = (material, engineState) => (
+let getLightMaterialData = (material, (editorState, engineState)) => (
   LightMaterialEngineService.getLightMaterialName(material, engineState),
   LightMaterialEngineService.getLightMaterialDiffuseColor(
     material,
@@ -592,7 +676,7 @@ let getLightMaterialData = (material, engineState) => (
     )
   ) {
   | None => None
-  | Some(map) => Some(getTextureData(map, engineState))
+  | Some(map) => Some(getTextureData(map, (editorState, engineState)))
   },
 );
 
@@ -608,7 +692,7 @@ let getDefaultMaterialData = (editorState, engineState) => {
     MaterialDataAssetEditorService.unsafeGetDefaultLightMaterial(editorState);
   let defaultLightMaterialData = (
     defaultLightMaterial,
-    getLightMaterialData(defaultLightMaterial, engineState),
+    getLightMaterialData(defaultLightMaterial, (editorState, engineState)),
   );
 
   (defaultBasicMaterialData, defaultLightMaterialData);
@@ -621,9 +705,12 @@ let getBasicMaterialDataMap = (basicMaterialMap, engineState) =>
        (material, getBasicMaterialData(material, engineState))
      );
 
-let getLightMaterialDataMap = (lightMaterialMap, engineState) =>
+let getLightMaterialDataMap = (lightMaterialMap, (editorState, engineState)) =>
   lightMaterialMap
   |> SparseMapService.getValidValues
   |> Js.Array.map(material =>
-       (material, getLightMaterialData(material, engineState))
+       (
+         material,
+         getLightMaterialData(material, (editorState, engineState)),
+       )
      );

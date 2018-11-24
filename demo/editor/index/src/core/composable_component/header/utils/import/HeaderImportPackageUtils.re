@@ -74,6 +74,9 @@ let _import = result => {
       WonderCommonlib.SparseMapService.createEmpty(),
     ));
 
+  let imageUint8ArrayDataMapRef =
+    ref(WonderCommonlib.SparseMapService.createEmpty());
+
   let wdbAssetGameObjectGeometryAssetArrRef = ref([||]);
 
   let engineState = StateEngineService.unsafeGetState();
@@ -84,6 +87,7 @@ let _import = result => {
        ImportPackageRelateGameObjectAndAssetUtils.relateWDBAssetGameObjectsAndAssets(
          allWDBGameObjectsArr,
          materialMapTuple,
+         imageUint8ArrayDataMap,
        );
 
        materialMapTupleRef := materialMapTuple;
@@ -92,6 +96,7 @@ let _import = result => {
            allWDBGameObjectsArr,
          )
          |> StateLogicService.getStateToGetData;
+       imageUint8ArrayDataMapRef := imageUint8ArrayDataMap;
 
        ();
      })
@@ -107,6 +112,11 @@ let _import = result => {
                   sceneGameObject,
                   engineState,
                 ),
+                /* TODO use asset->imageUint8ArrayDataMap? */
+                SparseMapService.mergeSparseMaps([|
+                  imageUint8ArrayDataMapRef^,
+                  imageUint8ArrayDataMap,
+                |]),
                 materialMapTupleRef^,
                 wdbAssetGameObjectGeometryAssetArrRef^,
               );
@@ -116,7 +126,62 @@ let _import = result => {
        ),
      )
   |> WonderBsMost.Most.concat(
-       MostUtils.callFunc(() => StateLogicService.getAndRefreshEngineState()),
+       MostUtils.callFunc(() => {
+         WonderLog.Contract.requireCheck(
+           () =>
+             WonderLog.(
+               Contract.(
+                 test(
+                   Log.buildAssertMessage(
+                     ~expect=
+                       {j|all scene gameObjects->textures should be texture assets|j},
+                     ~actual={j|not|j},
+                   ),
+                   () => {
+                     let sceneTextures =
+                       GameObjectEngineService.getAllLightMaterials(
+                         SceneEngineService.getSceneGameObject(
+                           StateEngineService.unsafeGetState(),
+                         )
+                         |> GameObjectEngineService.getAllGameObjects(
+                              _,
+                              StateEngineService.unsafeGetState(),
+                            ),
+                         StateEngineService.unsafeGetState(),
+                       )
+                       |> Js.Array.map(material =>
+                            LightMaterialEngineService.getLightMaterialDiffuseMap(
+                              material,
+                              StateEngineService.unsafeGetState(),
+                            )
+                          )
+                       |> Js.Array.filter(diffuseMap =>
+                            diffuseMap |> Js.Option.isSome
+                          )
+                       |> Js.Array.map(diffuseMap =>
+                            diffuseMap |> OptionService.unsafeGet
+                          );
+
+                     sceneTextures |> Js.Array.sortInPlace;
+
+                     let textureAssets =
+                       TextureNodeMapAssetEditorService.getTextureComponents(
+                         StateEditorService.getState(),
+                       );
+
+                     textureAssets |> Js.Array.sortInPlace;
+
+                     ArrayService.isInclude(textureAssets, sceneTextures)
+                     |> assertTrue;
+                   },
+                 )
+               )
+             ),
+           StateEditorService.getStateIsDebug(),
+         );
+
+         StateLogicService.getAndRefreshEngineState();
+       }),
      );
 };
 

@@ -12,6 +12,7 @@ let _extractAndRelateMaterialAssets =
         hasExtractedMaterialAssetMap,
         extractedMaterialAssetDataArr,
       ),
+      imageUint8ArrayDataMap,
       defaultMaterialData,
       materialDataMapData,
       engineState,
@@ -25,6 +26,7 @@ let _extractAndRelateMaterialAssets =
     RelateGameObjectAndAssetUtils.getRelatedMaterialDataFromGameObject(
       gameObject,
       replacedTargetMaterialMap,
+      imageUint8ArrayDataMap,
       defaultMaterialData,
       materialDataMapData,
       engineState,
@@ -99,6 +101,7 @@ let _extractAndRelateTextureAssets =
       gameObject,
       replacedTargetTextureMap,
       textureAssetDataMap,
+      imageUint8ArrayDataMap,
       (editorState, engineState),
     );
 
@@ -192,18 +195,17 @@ let extractAndRelateAssets =
   let lightMaterialDataMap =
     RelateGameObjectAndAssetUtils.getLightMaterialDataMap(
       lightMaterialMap,
-      engineState,
+      (editorState, engineState),
     );
 
   let textureAssetDataMap =
-    TextureNodeMapAssetEditorService.getValidValues(editorState)
-    |> SparseMapService.map(
-         ({textureComponent}: AssetNodeType.textureResultType) =>
+    TextureNodeMapAssetEditorService.getTextureComponents(editorState)
+    |> SparseMapService.map(textureComponent =>
          (
            textureComponent,
            RelateGameObjectAndAssetUtils.getTextureData(
              textureComponent,
-             engineState,
+             (editorState, engineState),
            ),
          )
        );
@@ -239,6 +241,7 @@ let extractAndRelateAssets =
                  hasExtractedMaterialAssetMap,
                  extractedMaterialAssetDataArr,
                ),
+               imageUint8ArrayDataMap,
                defaultMaterialData,
                (basicMaterialDataMap, lightMaterialDataMap),
                engineState,
