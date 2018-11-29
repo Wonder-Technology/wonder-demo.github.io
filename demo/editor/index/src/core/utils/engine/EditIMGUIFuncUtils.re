@@ -74,8 +74,34 @@ let getEngineStateIMGUIFunc = () =>
         engineState,
       );
 
-    let _drawDirectionLight =
-        (maxDistance, scene, allGameObjects, engineState) =>
+    let _convertPosition =
+        (
+          (x, y, z, viewWidth, viewHeight),
+          (imageWidth, imageHeight),
+          editCamera,
+          engineState,
+        ) =>
+      convertWorldToScreen(.
+        unsafeGetGameObjectBasicCameraViewComponent(.
+          editCamera,
+          engineState,
+        ),
+        unsafeGetGameObjectPerspectiveCameraProjectionComponent(.
+          editCamera,
+          engineState,
+        ),
+        (x, y, z, viewWidth, viewHeight),
+        engineState,
+      )
+      |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
+
+    let _drawLight =
+        (
+          (maxDistance, scene, allGameObjects),
+          name,
+          sceneLights,
+          engineState,
+        ) =>
       WonderCommonlib.ArrayService.reduceOneParam(
         (. engineState, directionLightGameObject) => {
           let (x, y, z) =
@@ -98,77 +124,39 @@ let getEngineStateIMGUIFunc = () =>
                );
 
           let (x, y) =
-            convertWorldToScreen(.
-              unsafeGetGameObjectBasicCameraViewComponent(.
-                editCamera,
-                engineState,
-              ),
-              unsafeGetGameObjectPerspectiveCameraProjectionComponent(.
-                editCamera,
-                engineState,
-              ),
+            _convertPosition(
               (x, y, z, viewWidth, viewHeight),
-              engineState,
-            )
-            |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
-
-          imageFunc(.
-            (x, y, imageWidth, imageHeight),
-            (0., 0., 1., 1.),
-            "directionLight",
-            engineState,
-          );
-        },
-        engineState,
-        _getSceneDirectionLights(scene, allGameObjects, engineState),
-      );
-
-    let _drawPointLight = (maxDistance, scene, allGameObjects, engineState) =>
-      WonderCommonlib.ArrayService.reduceOneParam(
-        (. engineState, pointLightGameObject) => {
-          let (x, y, z) =
-            getTransformPosition(.
-              unsafeGetGameObjectTransformComponent(.
-                pointLightGameObject,
-                engineState,
-              ),
+              (imageWidth, imageHeight),
+              editCamera,
               engineState,
             );
 
-          let (imageWidth, imageHeight) =
-            engineState
-            |> _getEditCameraPosition(editCamera)
-            |> _getDistanceWithTwoGameObject((x, y, z))
-            |> _getDeepWidthAndHeight(
-                 imageMaxWidth,
-                 imageMaxHeight,
-                 maxDistance,
-               );
-
-          let (x, y) =
-            convertWorldToScreen(.
-              unsafeGetGameObjectBasicCameraViewComponent(.
-                editCamera,
-                engineState,
-              ),
-              unsafeGetGameObjectPerspectiveCameraProjectionComponent(.
-                editCamera,
-                engineState,
-              ),
-              (x, y, z, viewWidth, viewHeight),
-              engineState,
-            )
-            |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
-
           imageFunc(.
             (x, y, imageWidth, imageHeight),
             (0., 0., 1., 1.),
-            "pointLight",
+            name,
             engineState,
           );
         },
         engineState,
+        sceneLights,
+      );
+
+    let _drawDirectionLight =
+        (maxDistance, scene, allGameObjects, engineState) =>
+      _drawLight(
+        (maxDistance, scene, allGameObjects),
+        "directionLight",
+        _getSceneDirectionLights(scene, allGameObjects, engineState),
+        engineState,
+      );
+
+    let _drawPointLight = (maxDistance, scene, allGameObjects, engineState) =>
+      _drawLight(
+        (maxDistance, scene, allGameObjects),
+        "pointLight",
         _getScenePointLights(scene, allGameObjects, engineState),
+        engineState,
       );
 
     let _drawSceneCamera = (maxDistance, scene, allGameObjects, engineState) =>
@@ -194,19 +182,12 @@ let getEngineStateIMGUIFunc = () =>
                );
 
           let (x, y) =
-            convertWorldToScreen(.
-              unsafeGetGameObjectBasicCameraViewComponent(.
-                editCamera,
-                engineState,
-              ),
-              unsafeGetGameObjectPerspectiveCameraProjectionComponent(.
-                editCamera,
-                engineState,
-              ),
+            _convertPosition(
               (x, y, z, viewWidth, viewHeight),
+              (imageWidth, imageHeight),
+              editCamera,
               engineState,
-            )
-            |> _convertAnchorFromTopLeftToCenter((imageWidth, imageHeight));
+            );
 
           imageFunc(.
             (x, y, imageWidth, imageHeight),

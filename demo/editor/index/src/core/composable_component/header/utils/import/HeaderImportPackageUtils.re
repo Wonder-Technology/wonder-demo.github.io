@@ -55,10 +55,100 @@ let _initAssetTreeRoot = () => {
   ();
 };
 
+let _reInitDefaultMaterials = (editorState, engineState) => {
+  let engineState =
+    [|
+      MaterialDataAssetEditorService.unsafeGetDefaultBasicMaterial(
+        editorState,
+      ),
+    |]
+    |> BasicMaterialEngineService.reInitMaterials(_, engineState);
+
+  [|
+    MaterialDataAssetEditorService.unsafeGetDefaultLightMaterial(editorState),
+  |]
+  |> LightMaterialEngineService.reInitMaterials(_, engineState);
+};
+
+let _checkSceneTextures = () =>
+  WonderLog.(
+    Contract.(
+      Operators.(
+        test(
+          Log.buildAssertMessage(
+            ~expect=
+              {j|all scene gameObjects->textures should be texture assets|j},
+            ~actual={j|not|j},
+          ),
+          () => {
+            let sceneTextures =
+              GameObjectEngineService.getAllLightMaterials(
+                SceneEngineService.getSceneGameObject(
+                  StateEngineService.unsafeGetState(),
+                )
+                |> GameObjectEngineService.getAllGameObjects(
+                     _,
+                     StateEngineService.unsafeGetState(),
+                   ),
+                StateEngineService.unsafeGetState(),
+              )
+              |> Js.Array.map(material =>
+                   LightMaterialEngineService.getLightMaterialDiffuseMap(
+                     material,
+                     StateEngineService.unsafeGetState(),
+                   )
+                 )
+              |> Js.Array.filter(diffuseMap => diffuseMap |> Js.Option.isSome)
+              |> Js.Array.map(diffuseMap =>
+                   diffuseMap |> OptionService.unsafeGet
+                 );
+
+            sceneTextures |> Js.Array.sortInPlace;
+
+            let textureAssets =
+              TextureNodeMapAssetEditorService.getTextureComponents(
+                StateEditorService.getState(),
+              );
+
+            textureAssets |> Js.Array.sortInPlace;
+
+            ArrayService.isInclude(textureAssets, sceneTextures) |> assertTrue;
+          },
+        )
+      )
+    )
+  );
+
+let _init = allWDBGameObjectsArrRef => {
+  let editorState = StateEditorService.getState();
+  let engineState = StateEngineService.unsafeGetState();
+
+  let engineState = engineState |> ShaderEngineService.clearShaderCache;
+
+  let engineState = _reInitDefaultMaterials(editorState, engineState);
+
+  ArrayService.fastConcat(
+    allWDBGameObjectsArrRef^,
+    GameObjectEngineService.getAllGameObjects(
+      SceneEngineService.getSceneGameObject(engineState),
+      engineState,
+    ),
+  )
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (. engineState, gameObject) =>
+         GameObjectEngineService.initGameObject(gameObject, engineState),
+       engineState,
+     );
+};
+
 let _import = result => {
   _disposeAssets();
 
-  JobEngineService.execDisposeJob |> StateLogicService.getAndSetEngineState;
+  StateEngineService.unsafeGetState()
+  |> JobEngineService.execDisposeJob
+  |> ReallocateCPUMemoryJobUtils.reallocate(0.1)
+  |> StateEngineService.setState
+  |> ignore;
 
   _initAssetTreeRoot();
 
@@ -77,6 +167,8 @@ let _import = result => {
   let imageUint8ArrayDataMapRef =
     ref(WonderCommonlib.SparseMapService.createEmpty());
 
+  let allWDBGameObjectsArrRef = ref([||]);
+
   let wdbAssetGameObjectGeometryAssetArrRef = ref([||]);
 
   let engineState = StateEngineService.unsafeGetState();
@@ -90,6 +182,7 @@ let _import = result => {
          imageUint8ArrayDataMap,
        );
 
+       allWDBGameObjectsArrRef := allWDBGameObjectsArr;
        materialMapTupleRef := materialMapTuple;
        wdbAssetGameObjectGeometryAssetArrRef :=
          GeometryAssetLogicService.getGeometryAssetsFromWDBGameObjects(
@@ -112,7 +205,6 @@ let _import = result => {
                   sceneGameObject,
                   engineState,
                 ),
-                /* TODO use asset->imageUint8ArrayDataMap? */
                 SparseMapService.mergeSparseMaps([|
                   imageUint8ArrayDataMapRef^,
                   imageUint8ArrayDataMap,
@@ -128,81 +220,64 @@ let _import = result => {
   |> WonderBsMost.Most.concat(
        MostUtils.callFunc(() => {
          WonderLog.Contract.requireCheck(
-           () =>
-             WonderLog.(
-               Contract.(
-                 test(
-                   Log.buildAssertMessage(
-                     ~expect=
-                       {j|all scene gameObjects->textures should be texture assets|j},
-                     ~actual={j|not|j},
-                   ),
-                   () => {
-                     let sceneTextures =
-                       GameObjectEngineService.getAllLightMaterials(
-                         SceneEngineService.getSceneGameObject(
-                           StateEngineService.unsafeGetState(),
-                         )
-                         |> GameObjectEngineService.getAllGameObjects(
-                              _,
-                              StateEngineService.unsafeGetState(),
-                            ),
-                         StateEngineService.unsafeGetState(),
-                       )
-                       |> Js.Array.map(material =>
-                            LightMaterialEngineService.getLightMaterialDiffuseMap(
-                              material,
-                              StateEngineService.unsafeGetState(),
-                            )
-                          )
-                       |> Js.Array.filter(diffuseMap =>
-                            diffuseMap |> Js.Option.isSome
-                          )
-                       |> Js.Array.map(diffuseMap =>
-                            diffuseMap |> OptionService.unsafeGet
-                          );
-
-                     sceneTextures |> Js.Array.sortInPlace;
-
-                     let textureAssets =
-                       TextureNodeMapAssetEditorService.getTextureComponents(
-                         StateEditorService.getState(),
-                       );
-
-                     textureAssets |> Js.Array.sortInPlace;
-
-                     ArrayService.isInclude(textureAssets, sceneTextures)
-                     |> assertTrue;
-                   },
-                 )
-               )
-             ),
+           () => WonderLog.(Contract.(_checkSceneTextures())),
            StateEditorService.getStateIsDebug(),
          );
 
-         StateLogicService.getAndRefreshEngineState();
+         _init(allWDBGameObjectsArrRef)
+         |> StateLogicService.refreshEngineState;
        }),
      );
+};
+
+let _handleIsRun = (dispatchFunc, editorState) => {
+  ConsoleUtils.warn(
+    "should import package when stop, but now is run!",
+    editorState,
+  );
+
+  Js.Promise.make((~resolve, ~reject) =>
+    resolve(.
+      dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.NoUpdate|]))),
+    )
+  );
+};
+
+let _readFile = (fileInfo: FileType.fileInfoType, resolve) => {
+  let reader = FileReader.createFileReader();
+
+  FileReader.onload(reader, result =>
+    resolve(.
+      {
+        name: fileInfo.name,
+        type_: LoadAssetUtils.getUploadPackageType(fileInfo.name),
+        result,
+      }: AssetNodeType.nodeResultType,
+    )
+  );
+
+  LoadAssetUtils.readPakckageByTypeSync(reader, fileInfo);
+};
+
+let _dispatch = dispatchFunc => {
+  dispatchFunc(
+    AppStore.SceneTreeAction(
+      SetSceneGraph(
+        Some(
+          SceneGraphUtils.getSceneGraphDataFromEngine
+          |> StateLogicService.getStateToGetData,
+        ),
+      ),
+    ),
+  );
+  dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.All|])));
 };
 
 let importPackage = (dispatchFunc, event) => {
   let editorState = StateEditorService.getState();
 
   StateEditorService.getIsRun() ?
-    {
-      ConsoleUtils.warn(
-        "should import package when stop, but now is run!",
-        editorState,
-      );
-
-      Js.Promise.make((~resolve, ~reject) =>
-        resolve(.
-          dispatchFunc(
-            AppStore.UpdateAction(Update([|UpdateStore.NoUpdate|])),
-          ),
-        )
-      );
-    } :
+    _handleIsRun(dispatchFunc, editorState) :
     {
       let e = ReactEventType.convertReactFormEventToJsEvent(event);
       DomHelper.preventDefault(e);
@@ -221,21 +296,9 @@ let importPackage = (dispatchFunc, event) => {
           file |> FileReader.convertFileJsObjectToFileInfoRecord;
 
         WonderBsMost.Most.fromPromise(
-          Js.Promise.make((~resolve, ~reject) => {
-            let reader = FileReader.createFileReader();
-
-            FileReader.onload(reader, result =>
-              resolve(.
-                {
-                  name: fileInfo.name,
-                  type_: LoadAssetUtils.getUploadPackageType(fileInfo.name),
-                  result,
-                }: AssetNodeType.nodeResultType,
-              )
-            );
-
-            LoadAssetUtils.readPakckageByTypeSync(reader, fileInfo);
-          }),
+          Js.Promise.make((~resolve, ~reject) =>
+            _readFile(fileInfo, resolve)
+          ),
         )
         |> WonderBsMost.Most.flatMap(
              (fileResult: AssetNodeType.nodeResultType) =>
@@ -243,20 +306,11 @@ let importPackage = (dispatchFunc, event) => {
            )
         |> WonderBsMost.Most.drain
         |> then_(_ => {
-             dispatchFunc(
-               AppStore.SceneTreeAction(
-                 SetSceneGraph(
-                   Some(
-                     SceneGraphUtils.getSceneGraphDataFromEngine
-                     |> StateLogicService.getStateToGetData,
-                   ),
-                 ),
-               ),
+             StackHistoryService.clearAllStack(
+               AllStateData.getHistoryState(),
              );
-             dispatchFunc(
-               AppStore.UpdateAction(Update([|UpdateStore.All|])),
-             )
-             |> resolve;
+
+             _dispatch(dispatchFunc) |> resolve;
            });
       };
     };
