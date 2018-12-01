@@ -33,7 +33,8 @@ let getType = (nodeId, materialNodeMap) =>
   |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
   |> (({type_}: materialResultType) => type_);
 
-let buildMaterialNodeResult = (parentFolderNodeId, type_, materialComponent) => {
+let buildMaterialNodeResult =
+    (~type_, ~materialComponent, ~parentFolderNodeId=None, ()) => {
   parentFolderNodeId,
   type_,
   materialComponent,
@@ -56,3 +57,8 @@ let remove = (nodeId, editorState) => {
   assetRecord:
     editorState.assetRecord |> MaterialNodeMapAssetService.remove(nodeId),
 };
+
+let getMaterialComponentsByType = (materialType, editorState) =>
+  getValidValues(editorState)
+  |> SparseMapService.filter(({type_}) => type_ === materialType)
+  |> SparseMapService.map(({materialComponent}) => materialComponent);

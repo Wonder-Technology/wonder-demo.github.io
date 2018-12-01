@@ -75,10 +75,11 @@ let buildImageData =
            |> ImageNodeMapAssetEditorService.setResult(
                 assetNodeId,
                 ImageNodeMapAssetEditorService.buildImageNodeResult(
-                  None,
-                  Some(uint8Array),
-                  name,
-                  mimeType,
+                  ~base64=None,
+                  ~uint8Array=Some(uint8Array),
+                  ~name,
+                  ~mimeType,
+                  (),
                 ),
               ),
          );
@@ -166,10 +167,12 @@ let buildTextureData =
            |> TextureNodeMapAssetEditorService.setResult(
                 assetNodeId,
                 TextureNodeMapAssetEditorService.buildTextureNodeResult(
-                  texture,
-                  parentFolderNodeId,
-                  imageNodeIdMap
-                  |> WonderCommonlib.SparseMapService.unsafeGet(source),
+                  ~textureComponent=texture,
+                  ~parentFolderNodeId,
+                  ~image=
+                    imageNodeIdMap
+                    |> WonderCommonlib.SparseMapService.unsafeGet(source),
+                  (),
                 ),
               )
            |> AssetTreeUtils.createNodeAndAddToTargetNodeChildren(
@@ -201,9 +204,10 @@ let _buildMaterialEditorData =
   |> MaterialNodeMapAssetEditorService.setResult(
        assetNodeId,
        MaterialNodeMapAssetEditorService.buildMaterialNodeResult(
-         parentFolderNodeId,
-         type_,
-         material,
+         ~parentFolderNodeId,
+         ~type_,
+         ~materialComponent=material,
+         (),
        ),
      )
   |> AssetTreeUtils.createNodeAndAddToTargetNodeChildren(
@@ -326,6 +330,27 @@ let buildMaterialData =
   (basicMaterialMap, lightMaterialMap, (editorState, engineState));
 };
 
+let addExtractedMateriialAssetDataToMaterialData =
+    (extractedMaterialAssetDataArr, (basicMaterialMap, lightMaterialMap)) =>
+  extractedMaterialAssetDataArr
+  |> WonderCommonlib.ArrayService.reduceOneParam(
+       (.
+         (basicMaterialMap, lightMaterialMap),
+         ((material, materialType), _),
+       ) =>
+         switch (materialType) {
+         | AssetMaterialDataType.BasicMaterial => (
+             basicMaterialMap |> SparseMapService.push(material),
+             lightMaterialMap,
+           )
+         | AssetMaterialDataType.LightMaterial => (
+             basicMaterialMap,
+             lightMaterialMap |> SparseMapService.push(material),
+           )
+         },
+       (basicMaterialMap, lightMaterialMap),
+     );
+
 let _mergeImageUint8ArrayDataMap =
     (totalImageUint8ArrayDataMap, targetImageUint8ArrayDataMap) => {
   WonderLog.Contract.requireCheck(
@@ -369,8 +394,8 @@ let buildWDBData =
   editorState |> StateEditorService.setState |> ignore;
   engineState |> StateEngineService.setState |> ignore;
   let allGameObjectsArrRef = ref([||]);
-  let totalImageUint8ArrayDataMapRef =
-    ref(WonderCommonlib.SparseMapService.createEmpty());
+  /* let totalImageUint8ArrayDataMapRef =
+     ref(WonderCommonlib.SparseMapService.createEmpty()); */
 
   wdbs
   |> WonderBsMost.Most.from
@@ -390,7 +415,7 @@ let buildWDBData =
            (editorState, engineState),
          );
 
-       AssetWDBUtils.importAssetWDB(
+       HeaderImportASBWDBUtils.importWDB(
          (name, arrayBuffer),
          (assetNodeId, parentFolderNodeId |> OptionService.unsafeGet),
          (editorState, engineState),
@@ -398,21 +423,41 @@ let buildWDBData =
        |> then_(
             (
               (
-                (allGameObjects, imageUint8ArrayDataMap),
+                (allGameObjects, _wdbImageUint8ArrayDataMap),
                 (editorState, engineState),
               ),
             ) => {
+            WonderLog.Contract.requireCheck(
+              () =>
+                WonderLog.(
+                  Contract.(
+                    Operators.(
+                      test(
+                        Log.buildAssertMessage(
+                          ~expect={j|wdbImageUint8ArrayDataMap be empty|j},
+                          ~actual={j|not|j},
+                        ),
+                        () =>
+                        _wdbImageUint8ArrayDataMap
+                        |> SparseMapService.length == 0
+                      )
+                    )
+                  )
+                ),
+              StateEditorService.getStateIsDebug(),
+            );
+
             editorState |> StateEditorService.setState |> ignore;
             engineState |> StateEngineService.setState |> ignore;
 
             allGameObjectsArrRef :=
               allGameObjectsArrRef^ |> Js.Array.concat(allGameObjects);
 
-            totalImageUint8ArrayDataMapRef :=
-              _mergeImageUint8ArrayDataMap(
-                totalImageUint8ArrayDataMapRef^,
-                imageUint8ArrayDataMap,
-              );
+            /* totalImageUint8ArrayDataMapRef :=
+               _mergeImageUint8ArrayDataMap(
+                 totalImageUint8ArrayDataMapRef^,
+                 imageUint8ArrayDataMap,
+               ); */
 
             () |> resolve;
           })
@@ -423,10 +468,6 @@ let buildWDBData =
        let editorState = StateEditorService.getState();
        let engineState = StateEngineService.unsafeGetState();
 
-       (
-         (allGameObjectsArrRef^, totalImageUint8ArrayDataMapRef^),
-         (editorState, engineState),
-       )
-       |> resolve;
+       (allGameObjectsArrRef^, (editorState, engineState)) |> resolve;
      });
 };

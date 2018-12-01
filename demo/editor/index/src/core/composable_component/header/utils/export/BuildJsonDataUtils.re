@@ -275,20 +275,32 @@ let _buildMaterialData = (textureIndexMap, (editorState, engineState)) =>
      );
 
 let _buildWDBData =
-    (imageAlignedByteLength, imageBufferViewArr, (editorState, engineState)) => {
+    (
+      imageUint8ArrayMap,
+      imageAlignedByteLength,
+      imageBufferViewArr,
+      (editorState, engineState),
+    ) => {
   let imageBufferViewIndex = imageBufferViewArr |> Js.Array.length;
 
-  let (wdbArr, arrayBufferArr, bufferViewArr, byteOffset) =
+  let (engineState, wdbArr, arrayBufferArr, bufferViewArr, byteOffset) =
     WDBNodeMapAssetEditorService.getWDBNodeMap(editorState)
     |> SparseMapService.reduceValid(
          (.
-           (wdbArr, arrayBufferArr, bufferViewArr, byteOffset),
-           {name, parentFolderNodeId, wdbArrayBuffer}: AssetNodeType.wdbResultType,
+           (engineState, wdbArr, arrayBufferArr, bufferViewArr, byteOffset),
+           {name, parentFolderNodeId, wdbGameObject}: AssetNodeType.wdbResultType,
          ) => {
+           let (engineState, wdbArrayBuffer) =
+             HeaderExportAssetWDBUtils.generate(
+               wdbGameObject,
+               imageUint8ArrayMap,
+               engineState,
+             );
            let byteLength = wdbArrayBuffer |> ArrayBuffer.byteLength;
            let alignedByteLength = BufferUtils.alignedLength(byteLength);
 
            (
+             engineState,
              wdbArr
              |> ArrayService.push(
                   {
@@ -311,10 +323,11 @@ let _buildWDBData =
              byteOffset + alignedByteLength,
            );
          },
-         ([||], [||], [||], imageAlignedByteLength),
+         (engineState, [||], [||], [||], imageAlignedByteLength),
        );
 
   (
+    engineState,
     wdbArr,
     arrayBufferArr,
     bufferViewArr,
@@ -323,7 +336,7 @@ let _buildWDBData =
   );
 };
 
-let buildJsonData = (editorState, engineState) => {
+let buildJsonData = (imageUint8ArrayMap, (editorState, engineState)) => {
   let (
     imageIndexMap,
     imageArr,
@@ -338,18 +351,21 @@ let buildJsonData = (editorState, engineState) => {
   let (basicMaterialArr, lightMaterialArr) =
     _buildMaterialData(textureIndexMap, (editorState, engineState));
   let (
+    engineState,
     wdbArr,
     wdbArrayBufferArr,
     wdbBufferViewArr,
     bufferTotalAlignedByteLength,
   ) =
     _buildWDBData(
+      imageUint8ArrayMap,
       imageAlignedByteLength,
       imageBufferViewArr,
       (editorState, engineState),
     );
 
   (
+    engineState,
     (imageArr, textureArr, basicMaterialArr, lightMaterialArr, wdbArr),
     (imageBufferViewArr, wdbBufferViewArr),
     (imageUint8ArrayArr, wdbArrayBufferArr),

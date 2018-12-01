@@ -29,7 +29,8 @@ let getParentFolderNodeId = (nodeId, textureNodeMap) =>
   |> WonderCommonlib.SparseMapService.unsafeGet(nodeId)
   |> (({parentFolderNodeId}: textureResultType) => parentFolderNodeId);
 
-let buildTextureNodeResult = (textureComponent, parentFolderNodeId, image) => {
+let buildTextureNodeResult =
+    (~textureComponent, ~image, ~parentFolderNodeId=None, ()) => {
   textureComponent,
   parentFolderNodeId,
   image,

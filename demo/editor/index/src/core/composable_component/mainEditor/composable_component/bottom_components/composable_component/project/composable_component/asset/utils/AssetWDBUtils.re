@@ -4,6 +4,7 @@ let importAssetWDB =
     (
       (name, wdbArrayBuffer),
       (wdbNodeId, parentFolderNodeId),
+      isLoadImage,
       (editorState, engineState),
     ) => {
   let allGameObjectsRef = ref([||]);
@@ -17,7 +18,7 @@ let importAssetWDB =
        false,
        false,
        false,
-       true,
+       isLoadImage,
      )
   |> WonderBsMost.Most.tap(
        ((engineState, (imageUint8ArrayDataMap, _), gameObject)) => {
@@ -31,7 +32,6 @@ let importAssetWDB =
               name,
               parentFolderNodeId |. Some,
               gameObject,
-              wdbArrayBuffer,
             ),
           )
        |> AssetTreeUtils.createNodeAndAddToTargetNodeChildren(

@@ -33,9 +33,7 @@ module CustomEventHandler = {
 
     editorState |> StateEditorService.setState |> ignore;
 
-    dispatchFunc(
-      AppStore.UpdateAction(Update([|UpdateStore.Project|])),
-    )
+    dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.Project|])))
     |> ignore;
   };
 };

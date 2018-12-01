@@ -33,9 +33,10 @@ let addMaterialIntoNodeMap =
   |> MaterialNodeMapAssetEditorService.setResult(
        nodeId,
        MaterialNodeMapAssetEditorService.buildMaterialNodeResult(
-         parentFolderNodeId,
-         AssetMaterialDataType.LightMaterial,
-         material,
+         ~parentFolderNodeId,
+         ~type_=AssetMaterialDataType.LightMaterial,
+         ~materialComponent=material,
+         (),
        ),
      );
 
@@ -45,9 +46,10 @@ let addTextureIntoNodeMap =
   |> TextureNodeMapAssetEditorService.setResult(
        nodeId,
        TextureNodeMapAssetEditorService.buildTextureNodeResult(
-         texture,
-         parentFolderNodeId,
-         imageNodeId,
+         ~textureComponent=texture,
+         ~parentFolderNodeId,
+         ~image=imageNodeId,
+         (),
        ),
      );
 

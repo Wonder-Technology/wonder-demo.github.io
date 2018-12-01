@@ -46,7 +46,6 @@ type textureResultType = {
 type wdbResultType = {
   name: string,
   parentFolderNodeId: option(nodeId),
-  wdbArrayBuffer: Js.Typed_array.ArrayBuffer.t,
   wdbGameObject: int,
 };
 

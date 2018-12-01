@@ -56,10 +56,11 @@ let addImageNodeByBase64 = (base64, fileName, mimeType, editorState) =>
       |> ImageNodeMapAssetEditorService.setResult(
            imageNodeId,
            ImageNodeMapAssetEditorService.buildImageNodeResult(
-             Some(base64),
-             None,
-             fileName,
-             mimeType,
+             ~base64=Some(base64),
+             ~uint8Array=None,
+             ~name=fileName,
+             ~mimeType,
+             (),
            ),
          ),
     );
@@ -78,10 +79,11 @@ let addImageNodeByUint8Array = (uint8Array, name, mimeType, editorState) =>
       |> ImageNodeMapAssetEditorService.setResult(
            imageNodeId,
            ImageNodeMapAssetEditorService.buildImageNodeResult(
-             None,
-             Some(uint8Array),
-             name,
-             mimeType,
+             ~base64=None,
+             ~uint8Array=Some(uint8Array),
+             ~name,
+             ~mimeType,
+             (),
            ),
          ),
     );
