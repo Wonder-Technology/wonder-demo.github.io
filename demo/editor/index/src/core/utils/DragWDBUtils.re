@@ -1,8 +1,13 @@
+open SceneTreeNodeType;
+
 let _checkLightCount = (gameObject, (editorState, engineState)) => {
   let result =
     (
       GameObjectEngineService.getAllDirectionLights(
-        GameObjectEngineService.getAllGameObjects(gameObject, engineState),
+        HierarchyGameObjectEngineService.getAllGameObjects(
+          gameObject,
+          engineState,
+        ),
         engineState,
       )
       |> Js.Array.length
@@ -19,7 +24,10 @@ let _checkLightCount = (gameObject, (editorState, engineState)) => {
       } :
       (
         GameObjectEngineService.getAllPointLights(
-          GameObjectEngineService.getAllGameObjects(gameObject, engineState),
+          HierarchyGameObjectEngineService.getAllGameObjects(
+            gameObject,
+            engineState,
+          ),
           engineState,
         )
         |> Js.Array.length
@@ -39,32 +47,80 @@ let _checkLightCount = (gameObject, (editorState, engineState)) => {
   (engineState, result);
 };
 
+let _setHierachy =
+    (dragPosition, targetGameObject, clonedWDBGameObject, engineState) =>
+  switch (dragPosition) {
+  | DragBeforeTarget =>
+    engineState
+    |> HierarchyGameObjectEngineService.addChild(
+         HierarchyGameObjectEngineService.getParentGameObject(
+           targetGameObject,
+           engineState,
+         )
+         |> OptionService.unsafeGet,
+         clonedWDBGameObject,
+       )
+    |> HierarchyGameObjectEngineService.changeGameObjectChildOrder(
+         clonedWDBGameObject,
+         targetGameObject,
+         Wonderjs.TransformType.Before,
+       )
+
+  | DragIntoTarget =>
+    engineState
+    |> HierarchyGameObjectEngineService.addChild(
+         targetGameObject,
+         clonedWDBGameObject,
+       )
+
+  | DragAfterTarget =>
+    engineState
+    |> HierarchyGameObjectEngineService.addChild(
+         HierarchyGameObjectEngineService.getParentGameObject(
+           targetGameObject,
+           engineState,
+         )
+         |> OptionService.unsafeGet,
+         clonedWDBGameObject,
+       )
+    |> HierarchyGameObjectEngineService.changeGameObjectChildOrder(
+         clonedWDBGameObject,
+         targetGameObject,
+         Wonderjs.TransformType.After,
+       )
+  };
+
 let dragWDB =
-    (wdbGameObjectUid, targetGameObjectUid, (editorState, engineState)) =>
-  switch (_checkLightCount(wdbGameObjectUid, (editorState, engineState))) {
+    (
+      wdbGameObject,
+      targetGameObject,
+      dragPosition,
+      (editorState, engineState),
+    ) =>
+  switch (_checkLightCount(wdbGameObject, (editorState, engineState))) {
   | (engineState, false) => (false, (editorState, engineState))
   | (engineState, true) =>
     let (cloneGameObjectArr, engineState) =
       engineState
-      |> OperateGameObjectLogicService.cloneGameObject(
-           wdbGameObjectUid,
-           1,
-           true,
-         );
-    let flatCloneGameObjectArr =
+      |> GameObjectEngineService.cloneGameObject(wdbGameObject, 1, true);
+
+    let allClonedGameObjectArr =
       cloneGameObjectArr
-      |> OperateGameObjectLogicService.getFlattenClonedGameObjectArr;
+      |> CloneGameObjectLogicService.getAllClonedGameObjectArr;
 
     let clonedWDBGameObject =
-      flatCloneGameObjectArr |> ArrayService.unsafeGetFirst;
+      cloneGameObjectArr |> CloneGameObjectLogicService.getClonedGameObject;
+
+    _setHierachy(
+      dragPosition,
+      targetGameObject,
+      clonedWDBGameObject,
+      engineState,
+    );
 
     let engineState =
-      engineState
-      |> GameObjectUtils.addChild(targetGameObjectUid, clonedWDBGameObject);
-
-    let engineState =
-      SceneEngineService.doesNeedReInitSceneAllLightMaterials(
-        flatCloneGameObjectArr,
+      SceneEngineService.isNeedReInitSceneAllLightMaterials(
+        allClonedGameObjectArr,
         engineState,
       ) ?
         engineState
@@ -73,8 +129,9 @@ let dragWDB =
 
     let editorState =
       editorState
-      |> GameObjectComponentLogicService.getGameObjectComponentStoreInComponentTypeMap(
+      |> GameObjectComponentLogicService.setGameObjectArrComponentTypeMap(
            [|clonedWDBGameObject|],
+           GameObjectComponentLogicService.buildAllComponentArray(),
            engineState,
          );
 

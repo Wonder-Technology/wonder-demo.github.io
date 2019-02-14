@@ -29,9 +29,7 @@ let isLightMaterialDataEqual =
     (
       (name, diffuseColor, shininess, textureData),
       material2,
-      imageUint8ArrayDataMap,
-      isTextureDataEqualFunc,
-      engineState,
+      (imageUint8ArrayDataMap, isTextureDataEqualFunc, engineState),
     ) =>
   _isLightMaterialNameEqual(name, material2, engineState)
   &&
@@ -93,7 +91,7 @@ let _findMaterialAsset =
     ) =>
   switch (
     materialAssetDataMap
-    |> SparseMapService.find(((_, materialAssetData)) =>
+    |> ImmutableSparseMapService.find(((_, materialAssetData)) =>
          isMaterialDataEqualFunc(
            materialAssetData,
            material,
@@ -106,11 +104,9 @@ let _findMaterialAsset =
   | Some((materialAssetComponent, _)) => Some(materialAssetComponent)
   };
 
-let getRelatedMaterialData =
+let _getRelatedMaterialData =
     (
-      gameObject,
-      replacedTargetMaterialMap,
-      imageUint8ArrayDataMap,
+      (gameObject, replacedTargetMaterialMap, imageUint8ArrayDataMap),
       (materialType, materialAssetDataMap, defaultMaterialData),
       (
         unsafeGetMaterialComponentFunc,
@@ -150,7 +146,7 @@ let getRelatedMaterialData =
   let (targetMaterial, replacedTargetMaterialMap) =
     switch (
       replacedTargetMaterialMap
-      |> WonderCommonlib.SparseMapService.get(material)
+      |> WonderCommonlib.ImmutableSparseMapService.get(material)
     ) {
     | None =>
       let targetMaterial =
@@ -169,7 +165,10 @@ let getRelatedMaterialData =
       (
         targetMaterial,
         replacedTargetMaterialMap
-        |> WonderCommonlib.SparseMapService.set(material, targetMaterial),
+        |> WonderCommonlib.ImmutableSparseMapService.set(
+             material,
+             targetMaterial,
+           ),
       );
     | Some(targetMaterial) => (targetMaterial, replacedTargetMaterialMap)
     };
@@ -196,12 +195,10 @@ let getRelatedMaterialDataFromGameObject =
     gameObject,
     engineState,
   ) ?
-    getRelatedMaterialData(
-      gameObject,
-      replacedTargetMaterialMap,
-      imageUint8ArrayDataMap,
+    _getRelatedMaterialData(
+      (gameObject, replacedTargetMaterialMap, imageUint8ArrayDataMap),
       (
-        AssetMaterialDataType.BasicMaterial,
+        MaterialDataAssetType.BasicMaterial,
         basicMaterialDataMap,
         defaultBasicMaterialData,
       ),
@@ -216,12 +213,10 @@ let getRelatedMaterialDataFromGameObject =
       gameObject,
       engineState,
     ) ?
-      getRelatedMaterialData(
-        gameObject,
-        replacedTargetMaterialMap,
-        imageUint8ArrayDataMap,
+      _getRelatedMaterialData(
+        (gameObject, replacedTargetMaterialMap, imageUint8ArrayDataMap),
         (
-          AssetMaterialDataType.LightMaterial,
+          MaterialDataAssetType.LightMaterial,
           lightMaterialDataMap,
           defaultLightMaterialData,
         ),
@@ -246,7 +241,7 @@ let replaceToMaterialAssetMaterialComponent =
   switch (sourceMaterial, targetMaterial, materialType) {
   | (Some(sourceMaterial), Some(targetMaterial), Some(materialType)) =>
     switch (materialType) {
-    | AssetMaterialDataType.BasicMaterial =>
+    | MaterialDataAssetType.BasicMaterial =>
       engineState
       |> GameObjectComponentEngineService.disposeBasicMaterialComponent(
            gameObject,
@@ -256,7 +251,7 @@ let replaceToMaterialAssetMaterialComponent =
            gameObject,
            targetMaterial,
          )
-    | AssetMaterialDataType.LightMaterial =>
+    | MaterialDataAssetType.LightMaterial =>
       engineState
       |> GameObjectComponentEngineService.disposeLightMaterialComponent(
            gameObject,
@@ -295,18 +290,21 @@ let getLightMaterialData = (material, (editorState, engineState)) => (
 );
 
 let getDefaultMaterialData = (editorState, engineState) => {
-  let defaultBasicMaterial =
+  let defaultBasicMaterialData =
     MaterialDataAssetEditorService.unsafeGetDefaultBasicMaterial(editorState);
   let defaultBasicMaterialData = (
-    defaultBasicMaterial,
-    getBasicMaterialData(defaultBasicMaterial, engineState),
+    defaultBasicMaterialData,
+    getBasicMaterialData(defaultBasicMaterialData, engineState),
   );
 
-  let defaultLightMaterial =
+  let defaultLightMaterialData =
     MaterialDataAssetEditorService.unsafeGetDefaultLightMaterial(editorState);
   let defaultLightMaterialData = (
-    defaultLightMaterial,
-    getLightMaterialData(defaultLightMaterial, (editorState, engineState)),
+    defaultLightMaterialData,
+    getLightMaterialData(
+      defaultLightMaterialData,
+      (editorState, engineState),
+    ),
   );
 
   (defaultBasicMaterialData, defaultLightMaterialData);
@@ -314,15 +312,15 @@ let getDefaultMaterialData = (editorState, engineState) => {
 
 let getBasicMaterialDataMap = (basicMaterialMap, engineState) =>
   basicMaterialMap
-  |> SparseMapService.getValidValues
-  |> Js.Array.map(material =>
+  /* |> WonderCommonlib.ImmutableSparseMapService.getValidValues */
+  |> WonderCommonlib.ImmutableSparseMapService.mapValid((. material) =>
        (material, getBasicMaterialData(material, engineState))
      );
 
 let getLightMaterialDataMap = (lightMaterialMap, (editorState, engineState)) =>
   lightMaterialMap
-  |> SparseMapService.getValidValues
-  |> Js.Array.map(material =>
+  /* |> WonderCommonlib.ImmutableSparseMapService.getValidValues */
+  |> WonderCommonlib.ImmutableSparseMapService.mapValid((. material) =>
        (
          material,
          getLightMaterialData(material, (editorState, engineState)),
