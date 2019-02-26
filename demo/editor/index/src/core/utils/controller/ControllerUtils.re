@@ -15,6 +15,19 @@ let run = uiState => {
   LoopEngineService.loop() |> ignore;
 };
 
+let _restoreScreen = () => {
+  let editorState = StateEditorService.getState();
+
+  SceneViewEditorService.hasViewRect(editorState) ?
+    ResizeUtils.isViewSizeChange(
+      SceneViewEditorService.unsafeGetViewRect(editorState),
+      GameViewEditorService.unsafeGetViewRect(editorState),
+      ResizeUtils.getCanvasSize(),
+    ) ?
+      ResizeUtils.resizeScreen() : () :
+    ();
+};
+
 let stop = dispatchFunc => {
   StateEditorService.setIsRun(false);
 
@@ -35,4 +48,6 @@ let stop = dispatchFunc => {
   |> ArcballCameraControllerLogicService.unbindGameViewActiveCameraArcballCameraControllerEvent
   |> StateEngineService.setState
   |> ignore;
+
+  _restoreScreen();
 };

@@ -35,12 +35,9 @@ let restoreHistoryStack =
 
     (
       lastEditorState,
-      lastEngineState |> StateEngineService.restoreState(engineState),
+      lastEngineState |> RestoreStateEngineService.restoreState(engineState),
     )
     |> StateHistoryService.refreshStateForHistory;
-
-    dispatchFunc(AppStore.UpdateAction(Update([|UpdateStore.All|])))
-    |> ignore;
 
     AllStateData.setHistoryState({
       copiedRedoUndoStackRecord: None,

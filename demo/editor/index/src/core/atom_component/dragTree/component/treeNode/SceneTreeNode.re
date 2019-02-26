@@ -36,14 +36,14 @@ module Method = {
 
   let _calcDragPosition = (event, domElement) => {
     let domClientRect = DomHelper.getDomClientRect(domElement);
-    let domOffsetTop = domClientRect##top;
+    let domTop = domClientRect##top;
     let domOffsetHeight = domClientRect##height;
     let gapHeight = TreeNodeUtils.getGapHeight();
 
     switch (event |> ReactEventRe.Mouse.pageY) {
-    | pageY when pageY > domOffsetHeight + domOffsetTop - gapHeight =>
+    | pageY when pageY > domOffsetHeight + domTop - gapHeight =>
       DragAfterTarget
-    | pageY when pageY < domOffsetTop + gapHeight => DragBeforeTarget
+    | pageY when pageY < domTop + gapHeight => DragBeforeTarget
     | pageY => DragIntoTarget
     };
   };
@@ -102,14 +102,6 @@ module Method = {
         checkNodeRelationFunc,
       );
 
-    relationResult
-    |> OptionService.handleSomeAndIgnore(relationResult =>
-         relationResult
-         |> Result.RelationResult.handleError(msg =>
-              ConsoleUtils.error(msg, StateEditorService.getState())
-            )
-       );
-
     isValid ?
       DragGameObject(gameObject, startId, dragPosition) :
       isAssetWDBFileFunc() ?
@@ -153,6 +145,7 @@ module Method = {
           state.dragGapClass,
         |])
       )
+      id={j|sceneTreeNode-$gameObject|j}
       style=state.style
       draggable=(
         ! (
@@ -160,7 +153,7 @@ module Method = {
           |> StateLogicService.getEngineStateToGetData
         )
       )
-      onMouseDown=(_event => onSelectFunc(gameObject))
+      onClick=(event => onSelectFunc(gameObject))
       onDragStart=(
         e => send(handleDragStart(gameObject, widget, (dragImg, "move"), e))
       )
@@ -398,5 +391,15 @@ let make =
       (onSelect, isWidget, checkNodeRelation, isAssetWDBFile),
       treeChildren,
       self,
+    ),
+  didUpdate: _self =>
+    SceneTreeNodeScrollUtils.handleSelectedSceneTreeNodeScroll(
+      isSelected,
+      gameObject,
+    ),
+  didMount: _ =>
+    SceneTreeNodeScrollUtils.handleSelectedSceneTreeNodeScroll(
+      isSelected,
+      gameObject,
     ),
 };

@@ -30,11 +30,10 @@ let handleSelfLogic =
       materialComponent,
       draggedNodeId,
       handleSetMapFunc,
-    ) => {
+    ) =>
   StateEditorService.getState()
   |> OperateTreeAssetEditorService.unsafeFindNodeById(draggedNodeId)
   |> (
-    /* ({textureComponent}: NodeAssetType.textureNodeData) => { */
     textureNode => {
       let editorState = StateEditorService.getState();
       let gameObject =
@@ -66,11 +65,3 @@ let handleSelfLogic =
       engineState |> StateEngineService.setState |> ignore;
     }
   );
-
-  /* dispatchFunc(
-    AppStore.UpdateAction(
-      Update([|UpdateStore.Project, UpdateStore.Inspector|]),
-    ),
-  )
-  |> ignore; */
-};

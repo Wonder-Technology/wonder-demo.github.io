@@ -57,6 +57,49 @@ let _getTopOne = (cameraGameObject, engineState, intersectedDatas) => {
   |> Js.Option.map((. (gameObject, _)) => gameObject);
 };
 
+let _isCurrentSceneTreeNode = (gameObject, currentSceneTreeNodeOpt) =>
+  switch (currentSceneTreeNodeOpt) {
+  | None => false
+  | Some(currentSceneTreeNode) => gameObject == currentSceneTreeNode
+  };
+
+let _findRootGameObject = (parentGameObject, rootGameObject, engineState) =>
+  GameObjectEngineService.unsafeGetGameObjectIsRoot(
+    parentGameObject,
+    engineState,
+  ) ?
+    parentGameObject : rootGameObject;
+
+let rec _find =
+        (gameObject, rootGameObject, currentSceneTreeNodeOpt, engineState) =>
+  switch (
+    HierarchyGameObjectEngineService.getParentGameObject(
+      gameObject,
+      engineState,
+    )
+  ) {
+  | None => rootGameObject
+  | Some(parentGameObject) =>
+    _isCurrentSceneTreeNode(parentGameObject, currentSceneTreeNodeOpt) ?
+      rootGameObject :
+      _find(
+        parentGameObject,
+        _findRootGameObject(parentGameObject, rootGameObject, engineState),
+        currentSceneTreeNodeOpt,
+        engineState,
+      )
+  };
+
+let _findTopRootGameObject = ((editorState, engineState), gameObjectOpt) => {
+  let currentSceneTreeNodeOpt =
+    SceneTreeEditorService.getCurrentSceneTreeNode(editorState);
+
+  gameObjectOpt
+  |> Js.Option.map((. gameObject) =>
+       _find(gameObject, gameObject, currentSceneTreeNodeOpt, engineState)
+     );
+};
+
 let _getAllGameObjectData = engineState =>
   HierarchyGameObjectEngineService.getAllGameObjects(
     SceneEngineService.getSceneGameObject(engineState),
@@ -135,7 +178,8 @@ let _findPickedOne = (event, allGameObjectData, (editorState, engineState)) => {
   |> Js.Array.map(((gameObject, checkData)) =>
        (gameObject, OptionService.unsafeGet(checkData))
      )
-  |> _getTopOne(cameraGameObject, engineState);
+  |> _getTopOne(cameraGameObject, engineState)
+  |> _findTopRootGameObject((editorState, engineState));
 };
 
 let _isNotNeedPushToHistoryStack = pickedGameObjectOpt =>

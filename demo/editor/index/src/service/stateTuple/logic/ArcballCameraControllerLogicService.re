@@ -1,3 +1,5 @@
+open ShapeType;
+
 let _renderWhenStop = (event, handleFunc, engineState) => {
   let (engineState, event) = handleFunc(. event, engineState);
 

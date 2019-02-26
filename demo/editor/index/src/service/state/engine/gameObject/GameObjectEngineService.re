@@ -41,13 +41,21 @@ let unsafeGetGameObjectName = GameObjectAPI.unsafeGetGameObjectName;
 let setGameObjectName = (name, gameObject, engineState) =>
   GameObjectAPI.setGameObjectName(gameObject, name, engineState);
 
+let getGameObjectIsRoot = (gameObject, engineState) =>
+  IsRootGameObjectMainService.getIsRoot(gameObject, engineState);
+
+let unsafeGetGameObjectIsRoot = GameObjectAPI.unsafeGetGameObjectIsRoot;
+
+let setGameObjectIsRoot = GameObjectAPI.setGameObjectIsRoot;
+
 let _getAllComponents =
     (allGameObjects, (hasComponentFunc, unsafeGetComponentFunc), engineState) =>
   allGameObjects
   |> Js.Array.filter(gameObject => hasComponentFunc(gameObject, engineState))
   |> Js.Array.map(gameObject =>
        unsafeGetComponentFunc(gameObject, engineState)
-     );
+     )
+  |> WonderCommonlib.ArrayService.removeDuplicateItems;
 
 let getAllBasicMaterials = (allGameObjects, engineState) =>
   _getAllComponents(

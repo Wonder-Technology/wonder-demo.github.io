@@ -449,7 +449,9 @@ module DomEvent = {
        ),
     _fromPointDomEvent("mousewheel", engineState)
     |> WonderBsMost.Most.tap(event =>
-         _mapAndExecMouseEventHandle(MouseWheel, event)
+         _setEventTarget(_convertDomEventToMouseEvent(MouseWheel, event))
+         |> _mapMouseEventToView
+         |> _execMouseEventHandle
        ),
     _fromPointDomEvent("mousedown", engineState)
     |> WonderBsMost.Most.tap(event =>
@@ -529,19 +531,31 @@ module DomEvent = {
   };
 };
 
+let rec _fromDomEventAndHandleError = (editorState, engineState) =>
+  DomEvent.fromDomEvent(editorState, engineState)
+  |> WonderBsMost.Most.recoverWith(e => {
+       Console.throwFatal(e |> Obj.magic) |> ignore;
+
+       _fromDomEventAndHandleError(editorState, engineState);
+     });
+
 let initEventForEditorJob = (_, engineState) => {
   let editorState = StateEditorService.getState();
   let domEventStreamSubscription =
-    DomEvent.fromDomEvent(editorState, engineState)
+    _fromDomEventAndHandleError(editorState, engineState)
     |> WonderBsMost.Most.subscribe({
          "next": _ => (),
-         "error": e => DomEvent.handleDomEventStreamError(e, editorState),
+         "error": e => {
+           Console.throwFatal(e |> Obj.magic) |> ignore;
+
+           ();
+         },
          "complete": () => (),
        });
 
   engineState
   |> ManageEventEngineService.setDomEventStreamSubscription(
-       domEventStreamSubscription,
+       domEventStreamSubscription |> Obj.magic,
      )
   |> PointEvent.bindDomEventToTriggerPointEvent(editorState);
 };
