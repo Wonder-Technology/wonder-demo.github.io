@@ -1,3 +1,0 @@
-type widgetType =
-  | SceneTree
-  | Asset;

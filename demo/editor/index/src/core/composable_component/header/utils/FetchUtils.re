@@ -1,1 +1,0 @@
-let fetch = (. filePath) => Fetch.fetch(filePath);
