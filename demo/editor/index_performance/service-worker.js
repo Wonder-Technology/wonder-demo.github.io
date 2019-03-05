@@ -1,10 +1,10 @@
 var dataCacheName = 'wonder-editor';
-var cacheName = 'wonder-editor-cache-1.0.0-beta.3.1';
+var cacheName = 'wonder-editor-cache-1.0.0-rc.1';
 var filesToCache = [
     './',
     './index.html',
     './manifest.json',
-    './dist/index.min.js',
+    './dist/index.js',
     './config/engine/render/shader/shader_libs.json',
     './config/engine/render/shader/shaders.json',
     './config/engine/no_worker/pipeline/loop_pipelines.json',
