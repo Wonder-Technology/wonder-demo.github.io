@@ -1,5 +1,5 @@
 var dataCacheName = 'wonder-editor';
-var cacheName = 'wonder-editor-cache-1.0.1';
+var cacheName = 'wonder-editor-cache-1.0.0';
 var filesToCache = [
     './',
     './index.html',
@@ -57,7 +57,7 @@ var filesToCache = [
 
 self.addEventListener('install', function (e) {
     console.log('[ServiceWorker] Install');
-    self.skipWaiting();
+    // self.skipWaiting();
 
 
     e.waitUntil(
