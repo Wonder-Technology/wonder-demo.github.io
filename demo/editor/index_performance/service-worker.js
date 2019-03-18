@@ -1,5 +1,5 @@
 var dataCacheName = 'wonder-editor';
-var cacheName = 'wonder-editor-cache-1.0.0-rc.1';
+var cacheName = 'wonder-editor-cache-1.0.2';
 var filesToCache = [
     './',
     './index.html',
@@ -18,6 +18,9 @@ var filesToCache = [
     './public/font/empty.fnt',
     './public/logo/favicon.ico',
     './public/logo/logo.png',
+    './public/img/lightIcon.png',
+    './public/img/gameObjectIcon.png',
+    './public/img/cameraIcon.png',
     './public/img/debug.png',
     './public/img/error.png',
     './public/img/info.png',
@@ -54,6 +57,7 @@ var filesToCache = [
 
 self.addEventListener('install', function (e) {
     console.log('[ServiceWorker] Install');
+    self.skipWaiting();
     e.waitUntil(
         caches.open(cacheName).then(function (cache) {
             console.log('[ServiceWorker] Caching app shell');
