@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>load model</title>
+</head>
+
+<body>
+    <script src="./js/AssetTool.js"></script>
+    <script src="./js/LightBoxesTool.js"></script>
+    <script src="./js/LightTool.js"></script>
+    <script src="./js/CameraTool.js"></script>
+    <script src="./js/LightMaterialTool.js"></script>
+    <script src="./wd.js"></script>
+
+    <script>
+
+        var _findGameObjectsByName = (rootGameObject, name, state) => {
+            return wd.getAllGameObjects(
+                rootGameObject, state
+            )
+                .filter(gameObject =>
+                    wd.unsafeGetGameObjectName(gameObject, state)
+                        .indexOf(name) > -1
+                );
+        };
+
+        var _animation = (rootGameObject, state) => {
+            var state =
+                _findGameObjectsByName(rootGameObject, "right_propeller", state)
+                    .concat(
+                        _findGameObjectsByName(rootGameObject, "left_propeller", state)
+                    )
+                    .reduce((state, gameObject) => {
+                        var transform = wd.unsafeGetGameObjectTransformComponent(
+                            gameObject, state
+                        );
+
+                        var [x, y, z] =
+                            wd.getTransformLocalEulerAngles(
+                                transform, state
+                            );
+
+                        var state =
+                            wd.setTransformLocalEulerAngles(
+                                transform, [x, y, z + 5], state
+                            );
+
+                        return state;
+                    }, state);
+
+            return state;
+        };
+
+        var _getKey = (event) => event[6];
+
+        var _buildKeyDownEventName = () => 10;
+
+        var _controlAirCraft = (rootGameObject, state) => {
+            var state =
+                wd.onKeyboardEvent(
+                    _buildKeyDownEventName(),
+                    0,
+                    (event, state) => {
+                        switch (_getKey(event)) {
+                            case "q":
+                                var transform = wd.unsafeGetGameObjectTransformComponent(
+                                    rootGameObject, state
+                                );
+
+                                var [x, y, z] =
+                                    wd.getTransformLocalPosition(
+                                        transform, state
+                                    );
+
+                                var state =
+                                    wd.setTransformLocalPosition(
+                                        transform, [x, y + 2, z], state
+                                    );
+
+                                return state;
+                            case "e":
+                                var transform = wd.unsafeGetGameObjectTransformComponent(
+                                    rootGameObject, state
+                                );
+
+                                var [x, y, z] =
+                                    wd.getTransformLocalPosition(
+                                        transform, state
+                                    );
+
+                                var state =
+                                    wd.setTransformLocalPosition(
+                                        transform, [x, y - 2, z], state
+                                    );
+                            default:
+                                return state
+                        }
+                    },
+                    state
+                );
+
+            return state;
+        };
+
+
+        window.onload = function () {
+            return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
+                return AssetTool.loadWholeWDB(
+                    "./aircraft.wdb", (a, b) => {
+
+                    }, ([state, imageUint8ArrayMap, gameObject]) => {
+                        return initSample(gameObject, state);
+
+                    }, wd.unsafeGetState()
+                )
+            });
+
+            function initSample(rootGameObject, state) {
+                var state = wd.registerNoWorkerLoopJob("animation",
+                    (_, state) => {
+                        return _animation(rootGameObject, state);
+                    }, state);
+
+
+                var state = wd.registerNoWorkerInitJob("control_airCraft",
+                    (_, state) => {
+                        return _controlAirCraft(rootGameObject, state);
+                    }, state);
+
+
+                var [state, directionLightGameObject] = LightTool.createDirectionLight(state);
+                var transform = wd.unsafeGetGameObjectTransformComponent(directionLightGameObject, state);
+                var state = wd.setTransformLocalEulerAngles(transform, [45, 180, 0], state);
+                var light = wd.unsafeGetGameObjectDirectionLightComponent(directionLightGameObject, state);
+                var state = wd.setDirectionLightColor(light, [1.0, 1.0, 1.0], state);
+
+
+                var [state, cameraGameObject] = CameraTool.createCamera(state);
+
+                var transform = wd.unsafeGetGameObjectTransformComponent(cameraGameObject, state);
+
+                state = wd.setTransformLocalPosition(transform, [0, 0, 30], state);
+
+
+                wd.startDirector(state);
+            }
+        };
+    </script>
+</body>
+
+</html>
