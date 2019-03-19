@@ -3,28 +3,200 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>load model</title>
+
+    <link rel="icon" href="./res/loading/favicon.ico" type="image/x-icon" />
+
+    <title>Wonder</title>
+    <style>
+        #stream-loading {
+            display: none;
+        }
+
+        #stream-loading .loading-img {
+            display: block;
+            width: 250px;
+            height: 250px;
+        }
+
+        #stream-loading .loading-text {
+            color: #e7981f;
+            margin-top: 10px;
+            font-size: 85px;
+            font-weight: bold;
+        }
+
+
+
+
+        #whole-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: #1d1b22;
+        }
+
+        #whole-loading .loading-content {
+            width: 50%;
+            height: 50%;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #whole-loading .loading-content .loading-img {
+            width: 250px;
+            height: 250px;
+        }
+
+        #whole-loading .loading-content .loading-text {
+            color: #e7981f;
+            margin-top: 10px;
+            font-size: 85px;
+            font-weight: bold;
+        }
+    </style>
 </head>
 
 <body>
-    <script src="./js/AssetTool.js"></script>
+
+    <!-- <script src="./js/AssetTool.js"></script> -->
     <script src="./js/LightBoxesTool.js"></script>
     <script src="./js/LightTool.js"></script>
     <script src="./js/CameraTool.js"></script>
     <script src="./js/LightMaterialTool.js"></script>
     <script src="./wd.js"></script>
 
+    <div id="stream-loading">
+        <img id="logo" class="loading-img" src="./res/loading/logo.png" />
+        <br />
+        <span id="text" class="loading-text"></span>
+    </div>
+
+
+    <div id="whole-loading">
+        <div class="loading-content">
+            <div>
+                <img id="logo" class="loading-img" src="./res/loading/logo.png" />
+            </div>
+            <div>
+                <div id="text" class="loading-text"></div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+    <script src="./wd.js"></script>
+
     <script>
+        var AssetTool = (function () {
+            function computeLoadingPercent(
+                loadedIMGUIByteLength,
+                totalByteLength
+            ) {
+                return loadedIMGUIByteLength >= totalByteLength ? 100 : Math.ceil(loadedIMGUIByteLength / totalByteLength * 100);
+            }
+
+            function getStreamLoadTextDom() {
+                return document.querySelector("#stream-loading #text");
+            }
+
+            function getWholeLoadTextDom() {
+                return document.querySelector("#whole-loading #text");
+            }
+
+            return {
+                isSupportStreamLoad: function () {
+                    return typeof window.ReadableStream !== "undefined";
+                },
+                showStreamLoading: function () {
+                    var windowWidth = window.innerWidth;
+                    var windowHeight = window.innerHeight;
+
+
+                    document.querySelector("#stream-loading").style.display = "block";
+                    document.querySelector("#whole-loading").style.display = "none";
+
+
+
+                    var dom = document.querySelector("#stream-loading");
+
+                    var totalWidth = 250;
+                    var totalHeight = 360 - 10;
+
+                    var top = (windowHeight - totalHeight) / 2;
+                    var left = (windowWidth - totalWidth) / 2;
+
+
+                    dom.style.cssText = 'display:block;position:absolute;top:' + top + 'px;left:' + left + 'px;color:bisque; text-align: center;';
+                },
+                showWholeLoading: function () {
+                    document.querySelector("#stream-loading").style.display = "none";
+                    document.querySelector("#whole-loading").style.display = "flex";
+                },
+                showOrCreateLoadingInfo: function (
+                    loadedIMGUIByteLength,
+                    totalByteLength,
+                ) {
+                    var loadingPercentStr = String(computeLoadingPercent(
+
+                        loadedIMGUIByteLength,
+                        totalByteLength
+                    )) + '%';
+
+                    getStreamLoadTextDom().innerHTML = loadingPercentStr;
+                    getWholeLoadTextDom().innerHTML = loadingPercentStr;
+
+                },
+                removeLoadingInfo: function () {
+                    document.querySelector("#stream-loading").remove();
+                    document.querySelector("#whole-loading").remove();
+                },
+                loadConfig: function (jsonPathArr, nextFunc, completeFunc) {
+                    return wd.loadConfig(jsonPathArr).forEach(function (state) {
+                        if (!!nextFunc) {
+                            nextFunc(state)
+                        }
+                    }).then(function () {
+                        if (!!completeFunc) {
+                            return completeFunc()
+                        }
+                    })
+                },
+                loadStreamWDB: function (wdbPath, handleWhenLoadingFunc, handleBeforeStartLoopFunc, handleWhenDoneFunc, handleWhenLoadWholeWDBFunc, state) {
+                    return wd.loadStreamWDB(wdbPath, handleWhenLoadingFunc, handleBeforeStartLoopFunc, handleWhenDoneFunc, handleWhenLoadWholeWDBFunc, state).drain()
+                }
+            }
+        })()
+
+
+
 
         var _findGameObjectsByName = (rootGameObject, name, state) => {
             return wd.getAllGameObjects(
                 rootGameObject, state
             )
-                .filter(gameObject =>
-                    wd.unsafeGetGameObjectName(gameObject, state)
-                        .indexOf(name) > -1
+                .filter(gameObject => {
+                    var gameObjectName = wd.getGameObjectName(gameObject, state);
+
+                    return gameObjectName !== undefined ?
+                        gameObjectName
+                            .indexOf(name) > -1
+                        : false
+                }
                 );
         };
+
+
+        // var _findGameObjectByName = (rootGameObject, name, state) => {
+        //     return _findGameObjectsByName(rootGameObject, name, state)[0];
+        // };
 
         var _animation = (rootGameObject, state) => {
             var state =
@@ -105,29 +277,60 @@
         };
 
 
+
         window.onload = function () {
+            // var totalByteLength = 2.5 * 1024 * 1024;
+
+            if (
+                AssetTool.isSupportStreamLoad()
+            ) {
+                AssetTool.showStreamLoading();
+            }
+            else {
+                AssetTool.showWholeLoading();
+            }
+
+
+
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
-                return AssetTool.loadWholeWDB(
-                    "./aircraft.wdb", (a, b) => {
+                // var state = wd.unsafeGetState();
 
-                    }, ([state, imageUint8ArrayMap, gameObject]) => {
-                        return initSample(gameObject, state);
+                // var state = wd.registerNoWorkerLoopJob("animation",
+                //     (_, state) => {
+                //         return _animation(rootGameObject, state);
+                //     }, state);
 
-                    }, wd.unsafeGetState()
-                )
-            });
 
-            function initSample(rootGameObject, state) {
+                // var state = wd.registerNoWorkerInitJob("control_airCraft",
+                //     (_, state) => {
+                //         return _controlAirCraft(rootGameObject, state);
+                //     }, state);
+
+
+                // wd.setState(state);
+
+
+                var state = wd.unsafeGetState();
+
                 var state = wd.registerNoWorkerLoopJob("animation",
                     (_, state) => {
-                        return _animation(rootGameObject, state);
+                        // _findGameObjectByName(
+
+                        // )
+
+                        // aircraft
+
+                        return _animation(wd.getSceneGameObject(state), state);
                     }, state);
 
 
                 var state = wd.registerNoWorkerInitJob("control_airCraft",
                     (_, state) => {
-                        return _controlAirCraft(rootGameObject, state);
+                        return _controlAirCraft(wd.getSceneGameObject(state), state);
                     }, state);
+
+
+
 
 
                 var [state, directionLightGameObject] = LightTool.createDirectionLight(state);
@@ -144,8 +347,45 @@
                 state = wd.setTransformLocalPosition(transform, [0, 0, 30], state);
 
 
-                wd.startDirector(state);
-            }
+                wd.setState(state);
+
+
+
+                return AssetTool.loadStreamWDB(
+                    "./aircraft.wdb",
+
+                    function (totalLoadedByteLength, contentLength, wdbPath) {
+                        AssetTool.showOrCreateLoadingInfo(
+                            totalLoadedByteLength,
+                            // totalByteLength
+                            contentLength
+                        );
+                    },
+                    function (state, gameObject) {
+                        return state;
+                    },
+                    function (state, gameObject) {
+                        AssetTool.removeLoadingInfo();
+
+                        var state = wd.addSceneChild(
+                            gameObject, state
+                        );
+
+                        return state;
+                    },
+                    function (state, _, gameObject) {
+                        AssetTool.removeLoadingInfo();
+
+                        var state = wd.addSceneChild(
+                            gameObject, state
+                        );
+
+
+                        wd.startDirector(state);
+                    },
+                    wd.unsafeGetState()
+                )
+            });
         };
     </script>
 </body>
