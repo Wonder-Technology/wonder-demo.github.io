@@ -403,6 +403,8 @@
                         wd.getPointDragStartEventName(),
                         0,
                         (event, state) => {
+                            event.preventDefault();
+
                             if (!isDrawing) {
                                 return [state, event];
                             }
@@ -437,11 +439,12 @@
                         wd.getPointDragOverEventName(),
                         0,
                         (event, state) => {
+                            event.preventDefault();
+
                             if (!isDrawing) {
                                 return [state, event];
                             }
 
-                            event.preventDefault();
 
 
                             oneDragDrawPointArr.push(
