@@ -91,6 +91,16 @@
                 return initSample(wd.unsafeGetState());
             });
 
+            function _preventDefault(customEvent) {
+                var event = wd.getPointEventEventOfEvent(wd.getCustomEventUserData(customEvent));
+
+                if (event.cancelable) {
+                    if (!event.defaultPrevented) {
+                        event.preventDefault();
+                    }
+                }
+            }
+
 
             function _getInterctedPoint(event, cameraGameObject, state, box2) {
                 var ray = wd.createPerspectiveCameraRayFromEvent(
@@ -403,7 +413,7 @@
                         wd.getPointDragStartEventName(),
                         0,
                         (event, state) => {
-                            event.preventDefault();
+                            _preventDefault(event);
 
                             if (!isDrawing) {
                                 return [state, event];
@@ -439,7 +449,7 @@
                         wd.getPointDragOverEventName(),
                         0,
                         (event, state) => {
-                            event.preventDefault();
+                            _preventDefault(event);
 
                             if (!isDrawing) {
                                 return [state, event];
