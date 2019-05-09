@@ -102,7 +102,12 @@
 
         window.onload = function () {
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
-                return initSample(wd.unsafeGetState());
+                try {
+                    initSample(wd.unsafeGetState())
+                }
+                catch (e) {
+                    console.log("error: ", e)
+                }
             });
 
             function _preventDefault(customEvent) {
@@ -176,7 +181,7 @@
 
 
             function initSample(state) {
-console.log("begin");
+                console.log("begin");
 
                 var uiCanvas = document.querySelector("#ui-canvas");
 
@@ -187,7 +192,7 @@ console.log("begin");
                 uiCanvas.style.height = "100%";
 
 
-                var uiContext = uiCanvas.getContext("2d");
+                var uiContext = uiCanvas.getContext("2d")[0][1];
 
 
 
@@ -594,7 +599,7 @@ console.log("begin");
                 wd.startDirector(state);
 
 
-console.log("end");
+                console.log("end");
             }
         };
     </script>
