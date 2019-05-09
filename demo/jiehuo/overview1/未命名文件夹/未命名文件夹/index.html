@@ -37,7 +37,7 @@
     left:0px;
     top:0px;
     z-index:101;
-    ">开始实线</button>
+    ">开始画线</button>
 
 
     <select id="line_type" style="width:100px;height:100px;
@@ -337,7 +337,7 @@
 
 
 
-                document.querySelector("#clear_draw_line").addEventListener("touchstart", function () {
+                document.querySelector("#clear_draw_line").addEventListener("touchend", function () {
                     // isDrawing = false;
                     oneDragDrawPointArr = [];
                     totalDrawPointArr = [];
@@ -348,30 +348,39 @@
 
 
 
-                document.querySelector("#line_type").addEventListener("touchstart", function () {
-                    if(isDrawing){
-                        return
-                    };
+                // document.querySelector("#line_type").addEventListener("touchstart", function () {
+                //     if(isDrawing){
+                //         return
+                //     };
 
-                    var state = wd.unsafeGetState();
+                //     var state = wd.unsafeGetState();
 
-                    var state =
-                        wd.unbindArcballCameraControllerEvent(
-                            cameraController, state
-                        );
+                //     var state =
+                //         wd.unbindArcballCameraControllerEvent(
+                //             cameraController, state
+                //         );
 
-                    wd.setState(state);
-                }, true);
+                //     wd.setState(state);
+                // }, true);
 
 
 
-                document.querySelector("#line_type").addEventListener("blur", function () {
-                    if (isDrawing) {
-                        return
-                    };
+                // document.querySelector("#line_type").addEventListener("change", function () {
+                //     if (isDrawing) {
+                //         return
+                //     };
 
-                    _bindArcballCameraControllerEvent(cameraController, state)
-                }, true);
+                //     _bindArcballCameraControllerEvent(cameraController, state)
+                // }, true);
+
+
+                // document.querySelector("#line_type").addEventListener("blur", function () {
+                //     if (isDrawing) {
+                //         return
+                //     };
+
+                //     _bindArcballCameraControllerEvent(cameraController, state)
+                // }, true);
 
 
 
