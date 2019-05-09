@@ -349,6 +349,10 @@
 
 
                 document.querySelector("#line_type").addEventListener("touchstart", function () {
+                    if(isDrawing){
+                        return
+                    };
+
                     var state = wd.unsafeGetState();
 
                     var state =
@@ -413,7 +417,7 @@
                         wd.getPointDragStartEventName(),
                         0,
                         (event, state) => {
-                            _preventDefault(event);
+                            // _preventDefault(event);
 
                             if (!isDrawing) {
                                 return [state, event];
