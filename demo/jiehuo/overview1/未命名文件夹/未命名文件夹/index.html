@@ -14,6 +14,15 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
 
+
+
+    <script src="./vconsole.min.js"></script>
+    <script>
+        var vConsole = new VConsole();
+    </script>
+
+
+
     <title>Wonder</title>
 </head>
 
@@ -26,6 +35,7 @@
     <script src="../../test/e2e/js/CameraTool.js"></script>
     <script src="../../test/e2e/js/LightMaterialTool.js"></script>
     <script src="../../dist/wd.js"></script>
+
 
 
     <canvas id="ui-canvas" style="
@@ -89,6 +99,7 @@
 
 
     <script>
+
         window.onload = function () {
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
                 return initSample(wd.unsafeGetState());
@@ -165,6 +176,8 @@
 
 
             function initSample(state) {
+console.log("begin");
+
                 var uiCanvas = document.querySelector("#ui-canvas");
 
                 uiCanvas.width = window.innerWidth;
@@ -175,7 +188,6 @@
 
 
                 var uiContext = uiCanvas.getContext("2d");
-
 
 
 
@@ -580,6 +592,9 @@
 
 
                 wd.startDirector(state);
+
+
+console.log("end");
             }
         };
     </script>
