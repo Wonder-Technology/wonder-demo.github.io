@@ -45,7 +45,7 @@
     z-index:100;
     "></canvas>
 
-    <button id="begin_draw_line" style="width:100px;height:100px;
+    <button id="begin_draw_line" style="width:50px;height:50px;
     position:absolute;
     left:0px;
     top:0px;
@@ -53,10 +53,10 @@
     ">开始画线</button>
 
 
-    <select id="line_type" style="width:100px;height:100px;
+    <select id="line_type" style="width:50px;height:50px;
     position:absolute;
     left:0px;
-    top:200px;
+    top:100px;
     z-index:101;
     ">
         <option value="solid">实线</option>
@@ -71,19 +71,19 @@
     ">开始虚线</button> -->
 
 
-    <button id="end_draw_line" style="width:100px;height:100px;
+    <button id="end_draw_line" style="width:50px;height:50px;
     position:absolute;
-    left:200px;
+    left:100px;
     top:0px;
     z-index:101;
     ">结束画线</button>
 
 
     <button id="clear_draw_line" style="
-    width:100px;height:100px;
+    width:50px;height:50px;
     position:absolute;
-    left:200px;
-    top:200px;
+    left:100px;
+    top:100px;
     z-index:101;
     ">清空</button>
 
@@ -91,14 +91,60 @@
 
     <input type="range" id="line_alpha" name="line_alpha" value="1" min="0" max="1" step="0.05" style="
     position:absolute;
-    left:100px;
-    top:100px;
+    left:50px;
+    top:50px;
     z-index:101;
     ">
 
 
+    <textarea id="mark_text" style="
+    position:absolute;
+    left:150px;
+    top:0px;
+    z-index:101;
+    ">加入描述信息</textarea>
+
+
+
+    <button id="mark_button" style="
+    width:50px;height:50px;
+    position:absolute;
+    left:150px;
+    top:100px;
+    z-index:101;
+    ">标记</button>
+
+
 
     <script>
+        var isDrawLine = false;
+
+        var needRestoreDrawForLineAlpha = false;
+
+        var SOLID = 0;
+        var DASH = 1;
+
+        var lineType = SOLID;
+
+        var lineAlpha = 1;
+
+
+        var totalDrawPointArr = [];
+
+        var oneDragDrawPointArr = [];
+
+
+
+
+        var markData = {
+            isPressMarkButton: false,
+            markPosInWorld: null,
+            totalMarkPosInWorld: []
+        };
+
+
+
+
 
         window.onload = function () {
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
@@ -169,6 +215,9 @@
                 }
             });
 
+
+
+
             function _preventDefault(customEvent) {
                 var event = wd.getPointEventEventOfEvent(wd.getCustomEventUserData(customEvent));
 
@@ -217,8 +266,13 @@
                 return [window.innerWidth, window.innerHeight];
             };
 
-            function _isPointInScreenValid([pointInScreen, _lineType, _lineAlpha]) {
+
+            function _isPointInScreenValid(pointInScreen) {
                 return pointInScreen !== undefined;
+            }
+
+            function _isPointInScreenDataValid([pointInScreen, _lineType, _lineAlpha]) {
+                return _isPointInScreenValid(pointInScreen);
             }
 
 
@@ -260,18 +314,119 @@
 
 
             function _bindArcballCameraControllerEvent(cameraController, state) {
-                var state = wd.unsafeGetState();
-
-                var state =
-                    wd.isBindArcballCameraControllerEvent(
+                return wd.isBindArcballCameraControllerEvent(
+                    cameraController, state
+                ) ?
+                    state
+                    : wd.bindArcballCameraControllerEvent(
                         cameraController, state
-                    ) ?
-                        state
-                        : wd.bindArcballCameraControllerEvent(
-                            cameraController, state
+                    );
+            }
+
+
+
+            function _drawLine(uiContext, totalDrawPointArr, cameraGameObject, state) {
+                uiContext.lineWidth = 1;
+
+                var pointInScreenDataArrArr =
+                    totalDrawPointArr.map((oneDragDrawPointArr) => {
+                        return oneDragDrawPointArr.map(([pointInWorld, lineType, lineAlpha]) => {
+                            var [screenWidth, screenHeight] = _getScreenSize();
+
+                            return [
+                                wd.convertWorldToScreen(
+                                    wd.unsafeGetGameObjectBasicCameraViewComponent(
+                                        cameraGameObject, state
+                                    ),
+                                    wd.unsafeGetGameObjectPerspectiveCameraProjectionComponent(
+                                        cameraGameObject, state
+                                    ),
+                                    [
+                                        pointInWorld[0],
+                                        pointInWorld[1],
+                                        pointInWorld[2],
+                                        screenWidth, screenHeight
+                                    ],
+                                    state
+                                ),
+                                lineType,
+                                lineAlpha
+                            ];
+                        }).filter(_isPointInScreenDataValid)
+                    }).filter((pointInScreenDataArr) => {
+                        return pointInScreenDataArr.length > 0;
+                    }).map(_removeNearPoints);
+
+
+                pointInScreenDataArrArr.forEach((pointInScreenDataArr) => {
+                    uiContext.beginPath();
+
+                    var firstPointInScreenData = pointInScreenDataArr[0];
+
+                    var _ =
+                        pointInScreenDataArr.slice(1).reduce((lastPointInScreen,
+                            [pointInScreen, lineType, lineAlpha]
+                        ) => {
+
+                            uiContext.strokeStyle = "rgba(255,0,255," + String(lineAlpha) + ")";
+
+
+                            if (lineType === DASH) {
+                                uiContext.setLineDash([5, 20]);
+                            }
+                            else {
+                                uiContext.setLineDash([]);
+                            }
+
+                            uiContext.moveTo(lastPointInScreen[0], lastPointInScreen[1]);
+
+                            uiContext.lineTo(pointInScreen[0], pointInScreen[1]);
+
+                            return pointInScreen;
+                        }, firstPointInScreenData[0]);
+
+
+                    uiContext.stroke();
+                })
+            }
+
+            function _drawMark(uiContext, markData, cameraGameObject, state) {
+                markData.totalMarkPosInWorld.forEach(([markPosInWorld, text]) => {
+                    var [screenWidth, screenHeight] = _getScreenSize();
+
+                    var pointInScreen =
+                        wd.convertWorldToScreen(
+                            wd.unsafeGetGameObjectBasicCameraViewComponent(
+                                cameraGameObject, state
+                            ),
+                            wd.unsafeGetGameObjectPerspectiveCameraProjectionComponent(
+                                cameraGameObject, state
+                            ),
+                            [
+                                markPosInWorld[0],
+                                markPosInWorld[1],
+                                markPosInWorld[2],
+                                screenWidth, screenHeight
+                            ],
+                            state
                         );
 
-                wd.setState(state);
+                    if (!_isPointInScreenValid(pointInScreen)) {
+                        return;
+                    }
+
+
+
+                    uiContext.textAlign = "center";
+                    uiContext.textBaseline = "middle";
+
+                    uiContext.fillStyle = "blue";
+
+                    uiContext.fillText(text, pointInScreen[0], pointInScreen[1]);
+                });
+
+
+                return markData;
             }
 
 
@@ -396,22 +551,6 @@
 
 
 
-                var isDrawing = false;
-
-                var needRestoreDrawForLineAlpha = false;
-
-                var SOLID = 0;
-                var DASH = 1;
-
-                var lineType = SOLID;
-
-                var lineAlpha = 1;
-
-
-                var totalDrawPointArr = [];
-
-                var oneDragDrawPointArr = [];
-
 
                 document.querySelector("#begin_draw_line").addEventListener("touchstart", function () {
                     var state = wd.unsafeGetState();
@@ -423,7 +562,7 @@
 
                     wd.setState(state);
 
-                    isDrawing = true;
+                    isDrawLine = true;
 
                 }, true);
 
@@ -440,7 +579,7 @@
                 //     wd.setState(state);
 
 
-                //     isDrawing = true;
+                //     isDrawLine = true;
 
                 // }, true);
 
@@ -454,9 +593,9 @@
 
 
                 document.querySelector("#end_draw_line").addEventListener("touchend", function () {
-                    _bindArcballCameraControllerEvent(cameraController, state);
+                    wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
 
-                    isDrawing = false;
+                    isDrawLine = false;
                 }, true)
 
 
@@ -465,7 +604,7 @@
 
 
                 document.querySelector("#clear_draw_line").addEventListener("touchend", function () {
-                    // isDrawing = false;
+                    // isDrawLine = false;
                     oneDragDrawPointArr = [];
                     totalDrawPointArr = [];
                 }, true)
@@ -476,7 +615,7 @@
 
 
                 // document.querySelector("#line_type").addEventListener("touchstart", function () {
-                //     if(isDrawing){
+                //     if(isDrawLine){
                 //         return
                 //     };
 
@@ -493,7 +632,7 @@
 
 
                 // document.querySelector("#line_type").addEventListener("change", function () {
-                //     if (isDrawing) {
+                //     if (isDrawLine) {
                 //         return
                 //     };
 
@@ -502,7 +641,7 @@
 
 
                 // document.querySelector("#line_type").addEventListener("blur", function () {
-                //     if (isDrawing) {
+                //     if (isDrawLine) {
                 //         return
                 //     };
 
@@ -513,8 +652,8 @@
 
 
                 document.querySelector("#line_alpha").addEventListener("touchstart", function () {
-                    if (isDrawing) {
-                        isDrawing = false;
+                    if (isDrawLine) {
+                        isDrawLine = false;
 
                         needRestoreDrawForLineAlpha = true;
 
@@ -536,15 +675,118 @@
 
                 document.querySelector("#line_alpha").addEventListener("touchend", function () {
                     if (needRestoreDrawForLineAlpha) {
-                        isDrawing = true;
+                        isDrawLine = true;
 
                         needRestoreDrawForLineAlpha = false;
 
                         return;
                     }
 
-                    _bindArcballCameraControllerEvent(cameraController, state);
+                    wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
                 }, true);
+
+
+
+
+
+
+                document.querySelector("#mark_text").addEventListener("focus", function () {
+                    wd.setState(wd.unbindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
+                }, true);
+
+
+                document.querySelector("#mark_text").addEventListener("blur", function () {
+                    wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
+                }, true);
+
+
+
+                document.querySelector("#mark_button").addEventListener("touchend", function () {
+                    markData.isPressMarkButton = true;
+
+                    var state = wd.unsafeGetState();
+
+                    var state =
+                        wd.unbindArcballCameraControllerEvent(
+                            cameraController, state
+                        );
+
+                    wd.setState(state);
+                }, true)
+
+
+
+
+
+
+
+
+
+                // var state =
+                //     wd.onCustomGlobalEvent(
+                //         wd.getPointDownEventName(),
+                //         0,
+                //         (event, state) => {
+                //             if (!markData.isPressMarkButton) {
+                //                 return [state, event];
+                //             }
+
+                //             var state =
+                //                 wd.unbindArcballCameraControllerEvent(
+                //                     cameraController, state
+                //                 );
+
+
+                //             return [state, event];
+
+                //         }, state
+                //     );
+
+
+
+
+                var state =
+                    wd.onCustomGlobalEvent(
+                        wd.getPointDownEventName(),
+                        0,
+                        (event, state) => {
+                            if (!markData.isPressMarkButton) {
+                                return [state, event];
+                            }
+
+                            markData.totalMarkPosInWorld.push([
+                                _getInterctedPoint(event, cameraGameObject, state, box2),
+                                document.querySelector("#mark_text").value
+                            ]);
+
+                            markData.isPressMarkButton = false;
+
+                            var state = _bindArcballCameraControllerEvent(cameraController, state);
+
+
+                            return [state, event];
+
+                        }, state
+                    );
+
+
+                // var state =
+                //     wd.onCustomGlobalEvent(
+                //         wd.getPointUpEventName(),
+                //         0,
+                //         (event, state) => {
+                //             if (!markData.isPressMarkButton) {
+                //                 return [state, event];
+                //             }
+
+                //             var state = _bindArcballCameraControllerEvent(cameraController, state);
+
+                //             return [state, event];
+
+                //         }, state
+                //     );
+
+
 
 
 
@@ -555,7 +797,7 @@
                         (event, state) => {
                             // _preventDefault(event);
 
-                            if (!isDrawing) {
+                            if (!isDrawLine) {
                                 return [state, event];
                             }
 
@@ -591,7 +833,7 @@
                         (event, state) => {
                             // _preventDefault(event);
 
-                            if (!isDrawing) {
+                            if (!isDrawLine) {
                                 return [state, event];
                             }
 
@@ -614,83 +856,12 @@
                 var state = wd.registerNoWorkerLoopJob("update_ui", (_, state) => {
                     uiContext.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
 
-                    uiContext.lineWidth = 1;
+                    _drawLine(uiContext, totalDrawPointArr, cameraGameObject, state);
 
-                    let pointInScreenDataArrArr =
-                        totalDrawPointArr.map((oneDragDrawPointArr) => {
-                            return oneDragDrawPointArr.map(([pointInWorld, lineType, lineAlpha]) => {
-                                var [screenWidth, screenHeight] = _getScreenSize();
-
-                                return [
-                                    wd.convertWorldToScreen(
-                                        wd.unsafeGetGameObjectBasicCameraViewComponent(
-                                            cameraGameObject, state
-                                        ),
-                                        wd.unsafeGetGameObjectPerspectiveCameraProjectionComponent(
-                                            cameraGameObject, state
-                                        ),
-                                        [
-                                            pointInWorld[0],
-                                            pointInWorld[1],
-                                            pointInWorld[2],
-                                            screenWidth, screenHeight
-                                        ],
-                                        state
-                                    ),
-                                    lineType,
-                                    lineAlpha
-                                ];
-                            }).filter(_isPointInScreenValid)
-                        }).filter((pointInScreenDataArr) => {
-                            return pointInScreenDataArr.length > 0;
-                        }).map(_removeNearPoints);
-
-
-                    pointInScreenDataArrArr.forEach((pointInScreenDataArr) => {
-                        uiContext.beginPath();
-
-                        var firstPointInScreenData = pointInScreenDataArr[0];
-
-                        var _ =
-                            pointInScreenDataArr.slice(1).reduce((lastPointInScreen,
-                                [pointInScreen, lineType, lineAlpha]
-                            ) => {
-
-                                uiContext.strokeStyle = "rgba(255,0,255," + String(lineAlpha) + ")";
-
-
-                                if (lineType === DASH) {
-                                    uiContext.setLineDash([5, 20]);
-                                }
-                                else {
-                                    uiContext.setLineDash([]);
-                                }
-
-                                uiContext.moveTo(lastPointInScreen[0], lastPointInScreen[1]);
-
-                                uiContext.lineTo(pointInScreen[0], pointInScreen[1]);
-
-                                return pointInScreen;
-                            }, firstPointInScreenData[0]);
-
-
-                        uiContext.stroke();
-                    })
-
-
-
-
-
-                    // pointInScreenArr
-                    //                     .forEach((pointInScreen) => {
-
-
-                    //                         uiContext.fillStyle = "#0000ff";
-                    //                         uiContext.fillRect(pointInScreen[0], pointInScreen[1], 50, 30);
-                    //                     })
-
-
-
+                    markData = _drawMark(
+                        uiContext,
+                        markData, cameraGameObject, state
+                    );
 
                     return state;
                 }, state);
