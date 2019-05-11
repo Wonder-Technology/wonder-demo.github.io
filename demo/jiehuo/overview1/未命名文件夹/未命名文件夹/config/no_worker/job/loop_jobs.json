@@ -1,8 +1,5 @@
 [
     {
-        "name": "update_ui"
-    },
-    {
         "name": "tick"
     },
     {
@@ -60,5 +57,11 @@
     },
     {
         "name": "render_imgui"
+    },
+    {
+        "name": "render_skybox"
+    },
+    {
+        "name": "update_ui"
     }
 ]

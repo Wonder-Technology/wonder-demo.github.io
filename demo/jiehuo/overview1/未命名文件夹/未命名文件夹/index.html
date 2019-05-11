@@ -16,10 +16,10 @@
 
 
 
-    <script src="./vconsole.min.js"></script>
+    <!-- <script src="./vconsole.min.js"></script>
     <script>
         var vConsole = new VConsole();
-    </script>
+    </script> -->
 
 
 
@@ -103,7 +103,66 @@
         window.onload = function () {
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
                 try {
-                    initSample(wd.unsafeGetState())
+                    // initSample(wd.unsafeGetState())
+
+                    var nx = new Image();
+                    nx.src = "./res/skybox/nx.jpg";
+                    nx.onload = () => {
+
+                        var px = new Image();
+                        px.src = "./res/skybox/px.jpg";
+                        px.onload = () => {
+
+
+
+                            var ny = new Image();
+                            ny.src = "./res/skybox/ny.jpg";
+                            ny.onload = () => {
+
+
+
+                                var py = new Image();
+                                py.src = "./res/skybox/py.jpg";
+                                py.onload = () => {
+
+
+                                    var nz = new Image();
+                                    nz.src = "./res/skybox/nz.jpg";
+                                    nz.onload = () => {
+
+                                        var pz = new Image();
+                                        pz.src = "./res/skybox/pz.jpg";
+                                        pz.onload = () => {
+
+                                            return initSample(
+                                                [
+                                                    px, nx, py, ny, pz, nz
+                                                ],
+                                                wd.unsafeGetState());
+
+
+                                        };
+
+                                    };
+
+
+
+                                };
+
+
+
+
+                            };
+
+
+                        };
+
+
+                    };
+
+
+
+
                 }
                 catch (e) {
                     console.log("error: ", e)
@@ -180,8 +239,20 @@
             }
 
 
-            function initSample(state) {
+            function initSample(
+                [
+                    px, nx, py, ny, pz, nz
+                ],
+                state
+            ) {
                 console.log("begin");
+
+                var state = wd.setSkyboxImage(
+                    [
+                        px, nx, py, ny, pz, nz
+                    ], state
+                );
+
 
                 var uiCanvas = document.querySelector("#ui-canvas");
 
@@ -482,7 +553,7 @@
                         wd.getPointDragOverEventName(),
                         0,
                         (event, state) => {
-                            _preventDefault(event);
+                            // _preventDefault(event);
 
                             if (!isDrawing) {
                                 return [state, event];
