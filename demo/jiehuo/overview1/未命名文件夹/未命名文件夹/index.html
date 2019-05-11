@@ -222,6 +222,42 @@
             }
 
 
+            function _isPointNear([x1, y1], [x2, y2], range) {
+                return (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) < range;
+            }
+
+
+            function _remove(lastPointInScreen, newPointInScreenDataArr, range, remainPointInScreenDataArr) {
+                var [lastPointInScreen, newPointInScreenDataArr] =
+                    remainPointInScreenDataArr.reduce(([lastPointInScreen, newPointInScreenDataArr],
+                        [pointInScreen, lineType, lineAlpha]
+                    ) => {
+                        if (_isPointNear(lastPointInScreen, pointInScreen, range)) {
+                            return [lastPointInScreen, newPointInScreenDataArr]
+                        }
+
+                        newPointInScreenDataArr.push(
+                            [pointInScreen, lineType, lineAlpha]
+                        );
+
+                        return [
+                            pointInScreen,
+                            newPointInScreenDataArr
+                        ]
+                    }, [lastPointInScreen, newPointInScreenDataArr]);
+
+                return newPointInScreenDataArr;
+            };
+
+
+            function _removeNearPoints(pointInScreenDataArr) {
+                if (pointInScreenDataArr.length <= 2) {
+                    return pointInScreenDataArr;
+                }
+
+                return _remove(pointInScreenDataArr[2][0], [pointInScreenDataArr[0], pointInScreenDataArr[1]], 40, pointInScreenDataArr.slice(2));
+            };
+
 
             function _bindArcballCameraControllerEvent(cameraController, state) {
                 var state = wd.unsafeGetState();
@@ -607,14 +643,13 @@
                             }).filter(_isPointInScreenValid)
                         }).filter((pointInScreenDataArr) => {
                             return pointInScreenDataArr.length > 0;
-                        });
-
+                        }).map(_removeNearPoints);
 
 
                     pointInScreenDataArrArr.forEach((pointInScreenDataArr) => {
                         uiContext.beginPath();
 
-                        var firstPointInScreen = pointInScreenDataArr[0];
+                        var firstPointInScreenData = pointInScreenDataArr[0];
 
                         var _ =
                             pointInScreenDataArr.slice(1).reduce((lastPointInScreen,
@@ -636,7 +671,7 @@
                                 uiContext.lineTo(pointInScreen[0], pointInScreen[1]);
 
                                 return pointInScreen;
-                            }, firstPointInScreen);
+                            }, firstPointInScreenData[0]);
 
 
                         uiContext.stroke();
