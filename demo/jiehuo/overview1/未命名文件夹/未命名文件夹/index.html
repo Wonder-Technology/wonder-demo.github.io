@@ -154,32 +154,90 @@
 
 
     <script>
-        var isDrawLine = false;
+        // var isDrawLine = false;
 
-        var needRestoreDrawForLineAlpha = false;
+        // var needRestoreDrawForLineAlpha = false;
+
+        // var SOLID = 0;
+        // var DASH = 1;
+
+        // var lineType = SOLID;
+
+        // var lineAlpha = 1;
+
+
+        // var totalDrawPointArr = [];
+
+        // var oneDragDrawPointArr = [];
+
+
+
+
+        // var markData = {
+        //     isBeginMark: false,
+        //     totalMarkPosInWorld: []
+        // };
+
+
+        var currentSkybox = 0;
+
+
 
         var SOLID = 0;
         var DASH = 1;
 
-        var lineType = SOLID;
+        function _createLineData() {
+            return {
+                isDrawLine: false,
 
-        var lineAlpha = 1;
+                needRestoreDrawForLineAlpha: false,
+
+                lineType: SOLID,
+
+                lineAlpha: 1,
 
 
-        var totalDrawPointArr = [];
+                totalDrawPointArr: [],
 
-        var oneDragDrawPointArr = [];
+                oneDragDrawPointArr: [],
+            }
+        }
+
+        function _createMarkData() {
+            return {
+                isBeginMark: false,
+                totalMarkPosInWorld: []
+            }
+        }
 
 
 
 
-        var markData = {
-            isBeginMark: false,
-            totalMarkPosInWorld: []
+        var skybox1Data = {
+            lineData: _createLineData(),
+            markData: _createMarkData()
+        };
+
+
+        var skybox2Data = {
+            lineData: _createLineData(),
+            markData: _createMarkData()
         };
 
 
 
+        function _getCurrentSkyboxData() {
+            switch (currentSkybox) {
+                case 0:
+                    return skybox1Data;
+                case 1:
+                    return skybox2Data;
+            }
+        }
+
+        function _setCurrentSkyboxIndex(index) {
+            currentSkybox = index;
+        };
 
 
         window.onload = function () {
@@ -540,11 +598,10 @@
             ) {
                 console.log("begin");
 
-                var state = wd.setSkyboxImage(
-                    [
-                        px, nx, py, ny, pz, nz
-                    ], state
-                );
+
+                var state = _switchSkybox1([
+                    px, nx, py, ny, pz, nz
+                ], state);
 
 
                 var uiCanvas = document.querySelector("#ui-canvas");
@@ -658,6 +715,8 @@
 
 
                 document.querySelector("#begin_draw_line").addEventListener("touchstart", function () {
+                    var lineData = _getCurrentSkyboxData().lineData;
+
                     var state = wd.unsafeGetState();
 
                     var state =
@@ -667,7 +726,7 @@
 
                     wd.setState(state);
 
-                    isDrawLine = true;
+                    lineData.isDrawLine = true;
 
                 }, true);
 
@@ -698,9 +757,11 @@
 
 
                 document.querySelector("#end_draw_line").addEventListener("touchend", function () {
+                    var lineData = _getCurrentSkyboxData().lineData;
+
                     wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
 
-                    isDrawLine = false;
+                    lineData.isDrawLine = false;
                 }, true)
 
 
@@ -709,9 +770,10 @@
 
 
                 document.querySelector("#clear_draw_line").addEventListener("touchend", function () {
-                    // isDrawLine = false;
-                    oneDragDrawPointArr = [];
-                    totalDrawPointArr = [];
+                    var lineData = _getCurrentSkyboxData().lineData;
+
+                    lineData.oneDragDrawPointArr = [];
+                    lineData.totalDrawPointArr = [];
                 }, true)
 
 
@@ -756,15 +818,22 @@
 
 
                 document.querySelector("#line_alpha").addEventListener("touchstart", function () {
-                    if (isDrawLine) {
-                        isDrawLine = false;
+                    var lineData = _getCurrentSkyboxData().lineData;
 
-                        needRestoreDrawForLineAlpha = true;
+                    var {
+                        isDrawLine
+                    } = lineData;
+
+
+                    if (isDrawLine) {
+                        lineData.isDrawLine = false;
+
+                        lineData.needRestoreDrawForLineAlpha = true;
 
                         return;
                     }
 
-                    needRestoreDrawForLineAlpha = false;
+                    lineData.needRestoreDrawForLineAlpha = false;
 
 
                     var state = wd.unsafeGetState();
@@ -778,10 +847,16 @@
                 }, true);
 
                 document.querySelector("#line_alpha").addEventListener("touchend", function () {
-                    if (needRestoreDrawForLineAlpha) {
-                        isDrawLine = true;
+                    var lineData = _getCurrentSkyboxData().lineData;
 
-                        needRestoreDrawForLineAlpha = false;
+                    var {
+                        needRestoreDrawForLineAlpha
+                    } = lineData;
+
+                    if (needRestoreDrawForLineAlpha) {
+                        lineData.isDrawLine = true;
+
+                        lineData.needRestoreDrawForLineAlpha = false;
 
                         return;
                     }
@@ -806,6 +881,8 @@
 
 
                 document.querySelector("#mark_begin_button").addEventListener("touchend", function () {
+                    var markData = _getCurrentSkyboxData().markData;
+
                     markData.isBeginMark = true;
 
                     var state = wd.unsafeGetState();
@@ -821,6 +898,8 @@
 
 
                 document.querySelector("#mark_end_button").addEventListener("touchend", function () {
+                    var markData = _getCurrentSkyboxData().markData;
+
                     markData.isBeginMark = false;
 
                     var state = wd.unsafeGetState();
@@ -836,23 +915,43 @@
 
 
                 document.querySelector("#clear_draw_mark").addEventListener("touchend", function () {
-                    markData = {
+                    _getCurrentSkyboxData().markData = {
                         isBeginMark: false,
                         totalMarkPosInWorld: []
                     }
                 }, true)
 
+                function _switchSkybox1(skyboxImageArr, state) {
+                    _setCurrentSkyboxIndex(0);
+
+                    var state = wd.setSkyboxImage(
+                        skyboxImageArr, state
+                    );
+
+                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
+
+                    return state;
+                }
+
+                function _switchSkybox2(skyboxImageArr, state) {
+                    _setCurrentSkyboxIndex(1);
+
+                    var state = wd.setSkyboxImage(
+                        skyboxImageArr, state
+                    );
+
+                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
+
+                    return state;
+                }
 
                 document.querySelector("#switch_skybox1").addEventListener("touchstart", function () {
                     var state = wd.unsafeGetState();
 
-                    var state = wd.setSkyboxImage(
-                        [
-                            px, nx, py, ny, pz, nz
-                        ], state
-                    );
-
-                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
+                    var state = _switchSkybox1([
+                        px, nx, py, ny, pz, nz
+                    ],
+                        state);
 
                     wd.setState(state);
                 }, true);
@@ -860,13 +959,10 @@
                 document.querySelector("#switch_skybox2").addEventListener("touchstart", function () {
                     var state = wd.unsafeGetState();
 
-                    var state = wd.setSkyboxImage(
-                        [
-                            px2, nx2, py2, ny2, pz2, nz2
-                        ], state
-                    );
-
-                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
+                    var state = _switchSkybox2([
+                        px2, nx2, py2, ny2, pz2, nz2
+                    ],
+                        state);
 
                     wd.setState(state);
                 }, true);
@@ -879,8 +975,15 @@
                         wd.getPointDownEventName(),
                         0,
                         (event, state) => {
+                            var markData = _getCurrentSkyboxData().markData;
+
+                            var {
+                                isBeginMark
+                            } = markData;
+
+
                             if (
-                                !markData.isBeginMark
+                                !isBeginMark
                                 || _isTargetDom(
                                     wd.getPointEventEventOfEvent(
                                         wd.getCustomEventUserData(event)
@@ -909,6 +1012,11 @@
                         0,
                         (event, state) => {
                             // _preventDefault(event);
+                            var lineData = _getCurrentSkyboxData().lineData;
+
+                            var {
+                                isDrawLine,
+                            } = lineData;
 
                             if (!isDrawLine) {
                                 return [state, event];
@@ -917,20 +1025,20 @@
                             var lineTypeSelectDom = document.querySelector("#line_type");
                             switch (lineTypeSelectDom.options[lineTypeSelectDom.selectedIndex].value) {
                                 case "solid":
-                                    lineType = SOLID;
+                                    lineData.lineType = SOLID;
                                     break;
 
                                 case "dash":
-                                    lineType = DASH;
+                                    lineData.lineType = DASH;
                                     break
                             };
 
-                            lineAlpha = Number(document.querySelector("#line_alpha").value);
+                            lineData.lineAlpha = Number(document.querySelector("#line_alpha").value);
 
 
-                            oneDragDrawPointArr = [];
-                            totalDrawPointArr.push(
-                                oneDragDrawPointArr
+                            lineData.oneDragDrawPointArr = [];
+                            lineData.totalDrawPointArr.push(
+                                lineData.oneDragDrawPointArr
                             );
 
                             return [state, event];
@@ -945,6 +1053,13 @@
                         0,
                         (event, state) => {
                             // _preventDefault(event);
+                            var lineData = _getCurrentSkyboxData().lineData;
+
+                            var {
+                                isDrawLine,
+                                lineType,
+                                lineAlpha,
+                            } = lineData;
 
                             if (!isDrawLine) {
                                 return [state, event];
@@ -952,7 +1067,7 @@
 
 
 
-                            oneDragDrawPointArr.push(
+                            lineData.oneDragDrawPointArr.push(
                                 [
                                     _getInterctedPoint(event, cameraGameObject, state, box2),
                                     lineType,
@@ -967,11 +1082,20 @@
 
 
                 var state = wd.registerNoWorkerLoopJob("update_ui", (_, state) => {
+                    var lineData = _getCurrentSkyboxData().lineData;
+
+                    var {
+                        totalDrawPointArr
+                    } = lineData;
+
                     uiContext.clearRect(0, 0, uiCanvas.width, uiCanvas.height);
 
                     _drawLine(uiContext, totalDrawPointArr, cameraGameObject, state);
 
-                    markData = _drawMark(
+
+                    var markData = _getCurrentSkyboxData().markData;
+
+                    _getCurrentSkyboxData().markData = _drawMark(
                         uiContext,
                         markData, cameraGameObject, state
                     );
