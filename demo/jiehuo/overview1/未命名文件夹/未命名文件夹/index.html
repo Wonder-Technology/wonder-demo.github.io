@@ -85,7 +85,7 @@
     left:100px;
     top:100px;
     z-index:101;
-    ">清空</button>
+    ">清空线</button>
 
 
 
@@ -106,13 +106,33 @@
 
 
 
-    <button id="mark_button" style="
+    <button id="mark_begin_button" style="
     width:50px;height:50px;
     position:absolute;
     left:150px;
     top:100px;
     z-index:101;
-    ">标记</button>
+    ">开始标记</button>
+
+
+    <button id="mark_end_button" style="
+    width:50px;height:50px;
+    position:absolute;
+    left:200px;
+    top:100px;
+    z-index:101;
+    ">结束标记</button>
+
+
+
+    <button id="clear_draw_mark" style="
+    width:50px;height:50px;
+    position:absolute;
+    left:250px;
+    top:100px;
+    z-index:101;
+    ">清空标记</button>
+
 
 
 
@@ -137,8 +157,7 @@
 
 
         var markData = {
-            isPressMarkButton: false,
-            markPosInWorld: null,
+            isBeginMark: false,
             totalMarkPosInWorld: []
         };
 
@@ -430,6 +449,11 @@
             }
 
 
+            function _isTargetDom(event, domId) {
+                return event.target.id === domId
+            }
+
+
             function initSample(
                 [
                     px, nx, py, ny, pz, nz
@@ -613,7 +637,6 @@
 
 
 
-
                 // document.querySelector("#line_type").addEventListener("touchstart", function () {
                 //     if(isDrawLine){
                 //         return
@@ -701,8 +724,8 @@
 
 
 
-                document.querySelector("#mark_button").addEventListener("touchend", function () {
-                    markData.isPressMarkButton = true;
+                document.querySelector("#mark_begin_button").addEventListener("touchend", function () {
+                    markData.isBeginMark = true;
 
                     var state = wd.unsafeGetState();
 
@@ -716,31 +739,27 @@
 
 
 
+                document.querySelector("#mark_end_button").addEventListener("touchend", function () {
+                    markData.isBeginMark = false;
+
+                    var state = wd.unsafeGetState();
+
+                    var state =
+                        _bindArcballCameraControllerEvent(
+                            cameraController, state
+                        );
+
+                    wd.setState(state);
+                }, true)
 
 
 
-
-
-
-                // var state =
-                //     wd.onCustomGlobalEvent(
-                //         wd.getPointDownEventName(),
-                //         0,
-                //         (event, state) => {
-                //             if (!markData.isPressMarkButton) {
-                //                 return [state, event];
-                //             }
-
-                //             var state =
-                //                 wd.unbindArcballCameraControllerEvent(
-                //                     cameraController, state
-                //                 );
-
-
-                //             return [state, event];
-
-                //         }, state
-                //     );
+                document.querySelector("#clear_draw_mark").addEventListener("touchend", function () {
+                    markData = {
+                        isBeginMark: false,
+                        totalMarkPosInWorld: []
+                    }
+                }, true)
 
 
 
@@ -750,7 +769,15 @@
                         wd.getPointDownEventName(),
                         0,
                         (event, state) => {
-                            if (!markData.isPressMarkButton) {
+                            if (
+                                !markData.isBeginMark
+                                || _isTargetDom(
+                                    wd.getPointEventEventOfEvent(
+                                        wd.getCustomEventUserData(event)
+                                    ),
+                                    "mark_end_button"
+                                )
+                            ) {
                                 return [state, event];
                             }
 
@@ -759,34 +786,10 @@
                                 document.querySelector("#mark_text").value
                             ]);
 
-                            markData.isPressMarkButton = false;
-
-                            var state = _bindArcballCameraControllerEvent(cameraController, state);
-
-
                             return [state, event];
 
                         }, state
                     );
-
-
-                // var state =
-                //     wd.onCustomGlobalEvent(
-                //         wd.getPointUpEventName(),
-                //         0,
-                //         (event, state) => {
-                //             if (!markData.isPressMarkButton) {
-                //                 return [state, event];
-                //             }
-
-                //             var state = _bindArcballCameraControllerEvent(cameraController, state);
-
-                //             return [state, event];
-
-                //         }, state
-                //     );
-
-
 
 
 
