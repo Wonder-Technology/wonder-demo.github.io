@@ -134,6 +134,23 @@
     ">清空标记</button>
 
 
+    <button id="switch_skybox1" style="width:50px;height:50px;
+    position:absolute;
+    left:0px;
+    top:150px;
+    z-index:101;
+    ">skybox1</button>
+
+
+    <button id="switch_skybox2" style="width:50px;height:50px;
+    position:absolute;
+    left:50px;
+    top:150px;
+    z-index:101;
+    ">skybox2</button>
+
+
+
 
 
     <script>
@@ -171,39 +188,97 @@
                     // initSample(wd.unsafeGetState())
 
                     var nx = new Image();
-                    nx.src = "./res/skybox/nx.jpg";
+                    nx.src = "./res/skybox1/nx.jpg";
                     nx.onload = () => {
 
                         var px = new Image();
-                        px.src = "./res/skybox/px.jpg";
+                        px.src = "./res/skybox1/px.jpg";
                         px.onload = () => {
 
 
 
                             var ny = new Image();
-                            ny.src = "./res/skybox/ny.jpg";
+                            ny.src = "./res/skybox1/ny.jpg";
                             ny.onload = () => {
 
 
 
                                 var py = new Image();
-                                py.src = "./res/skybox/py.jpg";
+                                py.src = "./res/skybox1/py.jpg";
                                 py.onload = () => {
 
 
                                     var nz = new Image();
-                                    nz.src = "./res/skybox/nz.jpg";
+                                    nz.src = "./res/skybox1/nz.jpg";
                                     nz.onload = () => {
 
                                         var pz = new Image();
-                                        pz.src = "./res/skybox/pz.jpg";
+                                        pz.src = "./res/skybox1/pz.jpg";
                                         pz.onload = () => {
+                                            var nx2 = new Image();
+                                            nx2.src = "./res/skybox2/nx.jpg";
+                                            nx2.onload = () => {
 
-                                            return initSample(
-                                                [
-                                                    px, nx, py, ny, pz, nz
-                                                ],
-                                                wd.unsafeGetState());
+                                                var px2 = new Image();
+                                                px2.src = "./res/skybox2/px.jpg";
+                                                px2.onload = () => {
+
+
+
+                                                    var ny2 = new Image();
+                                                    ny2.src = "./res/skybox2/ny.jpg";
+                                                    ny2.onload = () => {
+
+
+
+                                                        var py2 = new Image();
+                                                        py2.src = "./res/skybox2/py.jpg";
+                                                        py2.onload = () => {
+
+
+                                                            var nz2 = new Image();
+                                                            nz2.src = "./res/skybox2/nz.jpg";
+                                                            nz2.onload = () => {
+
+                                                                var pz2 = new Image();
+                                                                pz2.src = "./res/skybox2/pz.jpg";
+                                                                pz2.onload = () => {
+
+                                                                    return initSample(
+                                                                        [
+                                                                            px, nx, py, ny, pz, nz
+                                                                        ],
+                                                                        [
+                                                                            px2, nx2, py2, ny2, pz2, nz2
+                                                                        ],
+                                                                        wd.unsafeGetState());
+
+
+                                                                };
+
+                                                            };
+
+
+
+                                                        };
+
+
+
+
+                                                    };
+
+
+                                                };
+
+
+                                            };
+
+
+
+
+
+
+
 
 
                                         };
@@ -458,6 +533,9 @@
                 [
                     px, nx, py, ny, pz, nz
                 ],
+                [
+                    px2, nx2, py2, ny2, pz2, nz2
+                ],
                 state
             ) {
                 console.log("begin");
@@ -569,6 +647,9 @@
                     wd.bindArcballCameraControllerEvent(
                         cameraController, state
                     );
+
+
+
 
 
 
@@ -760,6 +841,35 @@
                         totalMarkPosInWorld: []
                     }
                 }, true)
+
+
+                document.querySelector("#switch_skybox1").addEventListener("touchstart", function () {
+                    var state = wd.unsafeGetState();
+
+                    var state = wd.setSkyboxImage(
+                        [
+                            px, nx, py, ny, pz, nz
+                        ], state
+                    );
+
+                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
+
+                    wd.setState(state);
+                }, true);
+
+                document.querySelector("#switch_skybox2").addEventListener("touchstart", function () {
+                    var state = wd.unsafeGetState();
+
+                    var state = wd.setSkyboxImage(
+                        [
+                            px2, nx2, py2, ny2, pz2, nz2
+                        ], state
+                    );
+
+                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
+
+                    wd.setState(state);
+                }, true);
 
 
 
