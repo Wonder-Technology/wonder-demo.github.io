@@ -817,8 +817,35 @@
 
 
 
+                document.querySelector("#line_alpha").addEventListener("focus", function () {
+                    console.log("focus")
+                    var state = wd.unsafeGetState();
+
+                    var state =
+                        wd.unbindArcballCameraControllerEvent(
+                            cameraController, state
+                        );
+
+                    wd.setState(state);
+                }, true);
+
+
 
                 document.querySelector("#line_alpha").addEventListener("touchstart", function () {
+                    console.log("touchstart")
+
+
+
+                    var state = wd.unsafeGetState();
+
+                    var state =
+                        wd.unbindArcballCameraControllerEvent(
+                            cameraController, state
+                        );
+
+                    wd.setState(state);
+
+
                     var lineData = _getCurrentSkyboxData().lineData;
 
                     var {
@@ -835,19 +862,13 @@
                     }
 
                     lineData.needRestoreDrawForLineAlpha = false;
-
-
-                    var state = wd.unsafeGetState();
-
-                    var state =
-                        wd.unbindArcballCameraControllerEvent(
-                            cameraController, state
-                        );
-
-                    wd.setState(state);
                 }, true);
 
                 document.querySelector("#line_alpha").addEventListener("touchend", function () {
+                    console.log("touchend")
+
+                    wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
+
                     var lineData = _getCurrentSkyboxData().lineData;
 
                     var {
@@ -862,7 +883,6 @@
                         return;
                     }
 
-                    wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
                 }, true);
 
 
