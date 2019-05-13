@@ -247,117 +247,69 @@
                         [
                         ],
                         function (state) {
-                            var nx = new Image();
-                            nx.src = "./res/skybox1/nx.jpg";
-                            nx.onload = () => {
-
-                                var px = new Image();
-                                px.src = "./res/skybox1/px.jpg";
-                                px.onload = () => {
 
 
 
-                                    var ny = new Image();
-                                    ny.src = "./res/skybox1/ny.jpg";
-                                    ny.onload = () => {
-
-
-
-                                        var py = new Image();
-                                        py.src = "./res/skybox1/py.jpg";
-                                        py.onload = () => {
-
-
-                                            var nz = new Image();
-                                            nz.src = "./res/skybox1/nz.jpg";
-                                            nz.onload = () => {
-
-                                                var pz = new Image();
-                                                pz.src = "./res/skybox1/pz.jpg";
-                                                pz.onload = () => {
-                                                    var nx2 = new Image();
-                                                    nx2.src = "./res/skybox2/nx.jpg";
-                                                    nx2.onload = () => {
-
-                                                        var px2 = new Image();
-                                                        px2.src = "./res/skybox2/px.jpg";
-                                                        px2.onload = () => {
-
-
-
-                                                            var ny2 = new Image();
-                                                            ny2.src = "./res/skybox2/ny.jpg";
-                                                            ny2.onload = () => {
-
-
-
-                                                                var py2 = new Image();
-                                                                py2.src = "./res/skybox2/py.jpg";
-                                                                py2.onload = () => {
-
-
-                                                                    var nz2 = new Image();
-                                                                    nz2.src = "./res/skybox2/nz.jpg";
-                                                                    nz2.onload = () => {
-
-                                                                        var pz2 = new Image();
-                                                                        pz2.src = "./res/skybox2/pz.jpg";
-                                                                        pz2.onload = () => {
-
-                                                                            return initSample(
-                                                                                [
-                                                                                    px, nx, py, ny, pz, nz
-                                                                                ],
-                                                                                [
-                                                                                    px2, nx2, py2, ny2, pz2, nz2
-                                                                                ],
-                                                                                state
-                                                                            );
-                                                                        };
-
-                                                                    };
-
-
-
-                                                                };
-
-
-
-
-                                                            };
-
-
-                                                        };
-
-
-                                                    };
-
-
-
-
-
-
-
-
-
-                                                };
-
-                                            };
-
-
-
-                                        };
-
-
-
-
-                                    };
-
-
-                                };
-
-
-                            };
+                            wd.loadImageDataArr(
+                                [
+                                    [
+                                        "./res/skybox1/nx.jpg", "skybox1_nx",
+                                    ],
+                                    [
+                                        "./res/skybox1/px.jpg", "skybox1_px",
+                                    ],
+                                    [
+                                        "./res/skybox1/ny.jpg", "skybox1_ny",
+                                    ],
+                                    [
+                                        "./res/skybox1/py.jpg", "skybox1_py",
+                                    ],
+                                    [
+                                        "./res/skybox1/nz.jpg", "skybox1_nz",
+                                    ],
+                                    [
+                                        "./res/skybox1/pz.jpg", "skybox1_pz",
+                                    ],
+                                    [
+                                        "./res/skybox2/nx.jpg", "skybox2_nx",
+                                    ],
+                                    [
+                                        "./res/skybox2/px.jpg", "skybox2_px",
+                                    ],
+                                    [
+                                        "./res/skybox2/ny.jpg", "skybox2_ny",
+                                    ],
+                                    [
+                                        "./res/skybox2/py.jpg", "skybox2_py",
+                                    ],
+                                    [
+                                        "./res/skybox2/nz.jpg", "skybox2_nz",
+                                    ],
+                                    [
+                                        "./res/skybox2/pz.jpg", "skybox2_pz",
+                                    ],
+                                ]
+                            ).then((resultMap) => {
+                                return initSample(
+                                    [
+                                        resultMap["skybox1_px"],
+                                        resultMap["skybox1_nx"],
+                                        resultMap["skybox1_py"],
+                                        resultMap["skybox1_ny"],
+                                        resultMap["skybox1_pz"],
+                                        resultMap["skybox1_nz"],
+                                    ],
+                                    [
+                                        resultMap["skybox2_px"],
+                                        resultMap["skybox2_nx"],
+                                        resultMap["skybox2_py"],
+                                        resultMap["skybox2_ny"],
+                                        resultMap["skybox2_pz"],
+                                        resultMap["skybox2_nz"],
+                                    ],
+                                    state
+                                );
+                            })
                         },
                         wd.unsafeGetState()
                     );
