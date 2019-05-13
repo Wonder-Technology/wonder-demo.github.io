@@ -817,17 +817,17 @@
 
 
 
-                document.querySelector("#line_alpha").addEventListener("focus", function () {
-                    console.log("focus")
-                    var state = wd.unsafeGetState();
+                // document.querySelector("#line_alpha").addEventListener("focus", function () {
+                //     console.log("focus")
+                //     var state = wd.unsafeGetState();
 
-                    var state =
-                        wd.unbindArcballCameraControllerEvent(
-                            cameraController, state
-                        );
+                //     var state =
+                //         wd.unbindArcballCameraControllerEvent(
+                //             cameraController, state
+                //         );
 
-                    wd.setState(state);
-                }, true);
+                //     wd.setState(state);
+                // }, true);
 
 
 
@@ -846,22 +846,22 @@
                     wd.setState(state);
 
 
-                    var lineData = _getCurrentSkyboxData().lineData;
+                    // var lineData = _getCurrentSkyboxData().lineData;
 
-                    var {
-                        isDrawLine
-                    } = lineData;
+                    // var {
+                    //     isDrawLine
+                    // } = lineData;
 
 
-                    if (isDrawLine) {
-                        lineData.isDrawLine = false;
+                    // if (isDrawLine) {
+                    //     lineData.isDrawLine = false;
 
-                        lineData.needRestoreDrawForLineAlpha = true;
+                    //     lineData.needRestoreDrawForLineAlpha = true;
 
-                        return;
-                    }
+                    //     return;
+                    // }
 
-                    lineData.needRestoreDrawForLineAlpha = false;
+                    // lineData.needRestoreDrawForLineAlpha = false;
                 }, true);
 
                 document.querySelector("#line_alpha").addEventListener("touchend", function () {
@@ -869,19 +869,19 @@
 
                     wd.setState(_bindArcballCameraControllerEvent(cameraController, wd.unsafeGetState()));
 
-                    var lineData = _getCurrentSkyboxData().lineData;
+                    // var lineData = _getCurrentSkyboxData().lineData;
 
-                    var {
-                        needRestoreDrawForLineAlpha
-                    } = lineData;
+                    // var {
+                    //     needRestoreDrawForLineAlpha
+                    // } = lineData;
 
-                    if (needRestoreDrawForLineAlpha) {
-                        lineData.isDrawLine = true;
+                    // if (needRestoreDrawForLineAlpha) {
+                    //     lineData.isDrawLine = true;
 
-                        lineData.needRestoreDrawForLineAlpha = false;
+                    //     lineData.needRestoreDrawForLineAlpha = false;
 
-                        return;
-                    }
+                    //     return;
+                    // }
 
                 }, true);
 
