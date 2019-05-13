@@ -694,14 +694,15 @@
                     }, state
                 );
 
+                var lastIsSeleted = false;
 
                 var state = wd.setIMGUIFunc(
                     1, (customData, api, state) => {
                         var [state, isSelected, value] =
                             api.sliderFloat(
-                                [[200, 50, 50, 50], 20],
+                                [[200, 50, 120, 50], 20],
                                 [0.0, 1.0, 2],
-                                [1.0, "a:"],
+                                [1.0, ""],
                                 state
                             );
 
@@ -710,45 +711,25 @@
                         lineData.lineAlpha = Number(value);
 
 
+                        if (isSelected && !lineData.isDrawLine) {
+                            lastIsSeleted = isSelected;
 
+                            var state = wd.unbindArcballCameraControllerEvent(
+                                cameraController, state
+                            );
 
-                    // var lineData = _getCurrentSkyboxData().lineData;
+                            return state;
+                        }
 
-                    // var {
-                    //     isDrawLine
-                    // } = lineData;
+                        if (lastIsSeleted) {
+                            lastIsSeleted = false;
 
+                            var state = _bindArcballCameraControllerEvent(
+                                cameraController, state
+                            );
 
-                    // if (isDrawLine) {
-                    //     lineData.isDrawLine = false;
-
-                    //     lineData.needRestoreDrawForLineAlpha = true;
-
-                    //     return;
-                    // }
-
-                    // lineData.needRestoreDrawForLineAlpha = false;
-
-
-
-                    // var lineData = _getCurrentSkyboxData().lineData;
-
-                    // var {
-                    //     needRestoreDrawForLineAlpha
-                    // } = lineData;
-
-                    // if (needRestoreDrawForLineAlpha) {
-                    //     lineData.isDrawLine = true;
-
-                    //     lineData.needRestoreDrawForLineAlpha = false;
-
-                    //     return;
-                    // }
-
-
-
-
-
+                            return state;
+                        }
 
                         return state;
                     }, state);
@@ -866,10 +847,10 @@
                 var state = wd.addGameObjectArcballCameraControllerComponent(cameraGameObject, cameraController, state);
 
 
-                // var state =
-                //     wd.bindArcballCameraControllerEvent(
-                //         cameraController, state
-                //     );
+                var state =
+                    wd.bindArcballCameraControllerEvent(
+                        cameraController, state
+                    );
 
 
 
