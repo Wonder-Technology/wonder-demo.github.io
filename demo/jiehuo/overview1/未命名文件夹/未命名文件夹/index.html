@@ -23,7 +23,47 @@
 
 
 
-    <title>Wonder</title>
+    <style>
+        #whole-loading {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background: #1d1b22;
+        }
+
+        #whole-loading .loading-content {
+            /* width: 50%;
+            height: 50%; */
+            text-align: center;
+            display: flex;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        #whole-loading .loading-content .loading-img {
+            width: 100px;
+            height: 100px;
+        }
+
+        #whole-loading .loading-content .loading-text {
+            color: #e7981f;
+            margin-top: 10px;
+            font-size: 45px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+
+
+
+
+
+
+<title>Wonder</title>
 </head>
 
 <body>
@@ -37,6 +77,16 @@
     <script src="../../dist/wd.js"></script>
 
 
+    <div id="whole-loading">
+        <div class="loading-content">
+            <div>
+                <img id="logo" class="loading-img" src="./res/logo.png" />
+            </div>
+            <div>
+                <div id="text" class="loading-text">加载中...</div>
+            </div>
+        </div>
+    </div>
 
     <canvas id="ui-canvas" style="
     position:absolute;
@@ -238,11 +288,25 @@
         };
 
 
+        function showWholeLoading() {
+            // document.querySelector("#stream-loading").style.display = "none";
+            document.querySelector("#whole-loading").style.display = "flex";
+        }
+
+        function removeLoadingInfo() {
+            // document.querySelector("#stream-loading").remove();
+            document.querySelector("#whole-loading").remove();
+        }
+
+
+
+
         window.onload = function () {
+            showWholeLoading();
+
+
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
                 try {
-
-
                     AssetTool.loadIMGUIAsset("./res/font/Lato-Regular-64.fnt", "./res/font/lato.png",
                         [
                         ],
@@ -290,6 +354,9 @@
                                     ],
                                 ]
                             ).then((resultMap) => {
+                                removeLoadingInfo();
+
+
                                 return initSample(
                                     [
                                         resultMap["skybox1_px"],
