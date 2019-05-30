@@ -138,22 +138,6 @@
     ">清空标记</button>
 
 
-    <button id="switch_skybox1" style="width:50px;height:50px;
-    position:absolute;
-    left:0px;
-    top:150px;
-    z-index:101;
-    ">skybox1</button>
-
-
-    <button id="switch_skybox2" style="width:50px;height:50px;
-    position:absolute;
-    left:50px;
-    top:150px;
-    z-index:101;
-    ">skybox2</button>
-
-
 
     <script>
 
@@ -170,16 +154,83 @@
         }
 
 
+        // TODO add more skybox data
 
 
         var skybox1Data = {
-            markData: _createMarkData()
+            markData: _createMarkData(),
+            skyboxData:
+                [
+                    [
+                        "./res/skybox1/7计算机楼内right.jpg", "skybox1_px",
+                    ],
+                    [
+                        "./res/skybox1/7计算机楼内left.jpg", "skybox1_nx",
+                    ],
+                    [
+                        "./res/skybox1/7计算机楼内top.jpg", "skybox1_py",
+                    ],
+                    [
+                        "./res/skybox1/7计算机楼内bottom.jpg", "skybox1_ny",
+                    ],
+                    [
+                        "./res/skybox1/7计算机楼内front.jpg", "skybox1_pz",
+                    ],
+                    [
+                        "./res/skybox1/7计算机楼内back.jpg", "skybox1_nz",
+                    ]
+                ],
+            jumpData: [{
+                /*
+                line 925: console.log the posInWorld when mousedown
+
+                so you can get the posInWorld by mousedown!
+                */
+                posInWorld:
+                    [2.5570664216941297, -1.0112567313798855, 5],
+                text: "通往大门",
+                //jump to skybox2
+                skyboxIndex: 1
+            }]
         };
 
 
         var skybox2Data = {
-            markData: _createMarkData()
+            markData: _createMarkData(),
+            skyboxData: [
+                [
+                    "./res/skybox2/px.jpg", "skybox2_px",
+                ],
+                [
+                    "./res/skybox2/nx.jpg", "skybox2_nx",
+                ],
+                [
+                    "./res/skybox2/py.jpg", "skybox2_py",
+                ],
+                [
+                    "./res/skybox2/ny.jpg", "skybox2_ny",
+                ],
+                [
+                    "./res/skybox2/pz.jpg", "skybox2_pz",
+                ],
+                [
+                    "./res/skybox2/nz.jpg", "skybox2_nz",
+                ]
+            ],
+            jumpData: [{
+                posInWorld:
+                    [2.5570664216941297, -1.0112567313798855, 5],
+                text: "通往校园",
+                //jump to skybox1
+                skyboxIndex: 0
+            }]
         };
+
+
+
+        function _getAllSkyboxData() {
+            return [skybox1Data, skybox2Data];
+        }
 
 
 
@@ -216,71 +267,40 @@
 
             return AssetTool.loadConfig(["./config/setting.json", "./config/"], null, function () {
                 try {
-                    var state = wd.unsafeGetState();
 
-                    wd.loadImageDataArr(
+                    AssetTool.loadIMGUIAsset("./res/font/Lato-Regular-64.fnt", "./res/font/lato.png",
                         [
-                            [
-                                "./res/skybox1/7计算机楼内left.jpg", "skybox1_nx",
-                            ],
-                            [
-                                "./res/skybox1/7计算机楼内right.jpg", "skybox1_px",
-                            ],
-                            [
-                                "./res/skybox1/7计算机楼内bottom.jpg", "skybox1_ny",
-                            ],
-                            [
-                                "./res/skybox1/7计算机楼内top.jpg", "skybox1_py",
-                            ],
-                            [
-                                "./res/skybox1/7计算机楼内back.jpg", "skybox1_nz",
-                            ],
-                            [
-                                "./res/skybox1/7计算机楼内front.jpg", "skybox1_pz",
-                            ],
-                            [
-                                "./res/skybox2/nx.jpg", "skybox2_nx",
-                            ],
-                            [
-                                "./res/skybox2/px.jpg", "skybox2_px",
-                            ],
-                            [
-                                "./res/skybox2/ny.jpg", "skybox2_ny",
-                            ],
-                            [
-                                "./res/skybox2/py.jpg", "skybox2_py",
-                            ],
-                            [
-                                "./res/skybox2/nz.jpg", "skybox2_nz",
-                            ],
-                            [
-                                "./res/skybox2/pz.jpg", "skybox2_pz",
-                            ],
-                        ]
-                    ).then((resultMap) => {
-                        removeLoadingInfo();
+                            ["./res/jump/flag.png", "jump"]
+                        ],
+                        function (state) {
+
+                            wd.loadImageDataArr(
+                                _getAllSkyboxData().reduce((result, { skyboxData }) => {
+                                    return result.concat(skyboxData)
+                                }, [])
+                            ).then((resultMap) => {
+                                removeLoadingInfo();
+
+                                return initSample(
+                                    _getAllSkyboxData().reduce((result, { skyboxData }) => {
+                                        result.push(
+                                            skyboxData.map(([_, id]) => {
+                                                return resultMap[id]
+                                            })
+                                        );
+
+                                        return result;
+                                    }, []),
 
 
-                        return initSample(
-                            [
-                                resultMap["skybox1_px"],
-                                resultMap["skybox1_nx"],
-                                resultMap["skybox1_py"],
-                                resultMap["skybox1_ny"],
-                                resultMap["skybox1_pz"],
-                                resultMap["skybox1_nz"],
-                            ],
-                            [
-                                resultMap["skybox2_px"],
-                                resultMap["skybox2_nx"],
-                                resultMap["skybox2_py"],
-                                resultMap["skybox2_ny"],
-                                resultMap["skybox2_pz"],
-                                resultMap["skybox2_nz"],
-                            ],
-                            state
-                        );
-                    })
+                                    state
+                                );
+                            })
+                        },
+                        wd.unsafeGetState()
+                    );
+
+
 
 
 
@@ -418,31 +438,263 @@
             }
 
 
+            function _drawJumpText(uiContext, jumpData, cameraGameObject, state) {
+                jumpData.forEach(({
+                    posInWorld,
+                    text
+                }) => {
+                    var [screenWidth, screenHeight] = _getScreenSize();
+
+                    var pointInScreen =
+                        wd.convertWorldToScreen(
+                            wd.unsafeGetGameObjectBasicCameraViewComponent(
+                                cameraGameObject, state
+                            ),
+                            wd.unsafeGetGameObjectPerspectiveCameraProjectionComponent(
+                                cameraGameObject, state
+                            ),
+                            [
+                                posInWorld[0],
+                                posInWorld[1],
+                                posInWorld[2],
+                                screenWidth, screenHeight
+                            ],
+                            state
+                        );
+
+                    if (!_isPointInScreenValid(pointInScreen)) {
+                        return;
+                    }
+
+
+
+                    uiContext.textAlign = "center";
+                    uiContext.textBaseline = "middle";
+
+                    uiContext.fillStyle = "red";
+
+                    uiContext.fillText(text, pointInScreen[0], pointInScreen[1] + 20);
+                });
+
+
+                return jumpData;
+            }
+
+
             function _isTargetDom(event, domId) {
                 return event.target.id === domId
             }
 
 
+            function _isPickJump(
+                [x, y],
+                jumpData,
+                cameraGameObject,
+                state) {
+                var [screenWidth, screenHeight] = _getScreenSize();
+
+                return jumpData.reduce((result,
+                    {
+                        posInWorld,
+                        text,
+                        skyboxIndex
+                    }
+                ) => {
+                    var [isPick, _] = result;
+
+                    if (isPick) {
+                        return result;
+                    }
+
+
+
+                    var pointInScreen =
+                        wd.convertWorldToScreen(
+                            wd.unsafeGetGameObjectBasicCameraViewComponent(
+                                cameraGameObject, state
+                            ),
+                            wd.unsafeGetGameObjectPerspectiveCameraProjectionComponent(
+                                cameraGameObject, state
+                            ),
+                            [
+                                posInWorld[0],
+                                posInWorld[1],
+                                posInWorld[2],
+                                screenWidth, screenHeight
+                            ],
+                            state
+                        );
+
+                    if (!_isPointInScreenValid(pointInScreen)) {
+                        return result;
+                    }
+
+
+                    if (
+                        Math.abs(pointInScreen[0] - x) <= 20
+                        &&
+                        Math.abs(pointInScreen[1] - y) <= 80
+                    ) {
+                        return [true, skyboxIndex];
+                    }
+
+                    return result;
+                }, [false, -1]);
+            }
+
+
             function initSample(
-                [
-                    px, nx, py, ny, pz, nz
-                ],
-                [
-                    px2, nx2, py2, ny2, pz2, nz2
-                ],
+                skyboxImageDataArr,
                 state
             ) {
                 console.log("begin");
 
 
 
+                var state = wd.setSetting(
+                    {
+                        "textColor": [1.0, 1.0, 1.0],
+                        "buttonSetting": {
+                            "buttonColor": [0.5, 0.5, 0.5],
+                            "hoverButtonColor": [0.5, 0.0, 1.0],
+                            "clickButtonColor": [0.5, 1.0, 0.0]
+                        },
+                        "radioButtonSetting": {
+
+                            "radioButtonOuterColor": [0.3, 0.3, 0.3],
+                            "radioButtonInnerColor":
+
+
+
+                                [0.15, 0.15, 0.15],
+
+
+                            "radioButtonOuterColorHover":
+                                [0.33, 0.33, 0.33],
+
+
+                            "radioButtonInnerColorHover":
+
+                                [0.15, 0.15, 0.15],
+
+                            "radioButtonCircleSegments":
+
+                                9,
+
+                            "radioButtonInnerRadius": 0.6,
+
+                            "radioButtonOuterRadius":
+                                1.0
+                        },
+                        "checkboxSetting": {
+
+                            "checkboxOuterColor": [0.3, 0.3, 0.3],
+                            "checkboxInnerColor":
+
+
+
+                                [0.15, 0.15, 0.15],
+
+
+                            "checkboxOuterColorHover":
+                                [0.33, 0.33, 0.33],
+
+
+                            "checkboxInnerColorHover":
+
+                                [0.15, 0.15, 0.15],
+
+
+                            "checkboxInnerSizeRatio": 0.6,
+
+                            "checkboxOuterSizeRatio":
+                                1.0
+                        },
+                        "sliderSetting": {
+
+                            "sliderBackgroundColor": [0.3, 0.3, 0.3],
+                            "sliderFillColor":
+
+
+
+                                [0.15, 0.15, 0.15],
+
+
+                            "sliderBackgroundColorHover":
+                                [0.33, 0.33, 0.33],
+
+
+                            "sliderFillColorHover":
+
+                                [0.15, 0.15, 0.15],
+                        },
+                        "fontTexUvForWhite": [0.045, 0.012]
+                    }, state
+                );
+
+
+
+                var state = wd.setIMGUIFunc(
+                    1, (customData, api, state) => {
+                        var jumpData = _getCurrentSkyboxData().jumpData;
+
+
+                        var [screenWidth, screenHeight] = _getScreenSize();
+
+                        var state = jumpData.reduce((state, {
+                            posInWorld,
+                            text
+                        }) => {
+
+                            var pointInScreen =
+                                wd.convertWorldToScreen(
+                                    wd.unsafeGetGameObjectBasicCameraViewComponent(
+                                        cameraGameObject, state
+                                    ),
+                                    wd.unsafeGetGameObjectPerspectiveCameraProjectionComponent(
+                                        cameraGameObject, state
+                                    ),
+                                    [
+                                        posInWorld[0],
+                                        posInWorld[1],
+                                        posInWorld[2],
+                                        screenWidth, screenHeight
+                                    ],
+                                    state
+                                );
+
+                            if (!_isPointInScreenValid(pointInScreen)) {
+                                return state;
+                            }
+
+
+                            var state = api.image(
+                                [pointInScreen[0] - 50, pointInScreen[1] - 100, 100, 100], [0, 0, 1, 1], "jump", state
+                            );
+
+
+
+                            return state;
+                        }, state);
+
+
+
+                        return state;
+                    }, state);
 
 
 
 
-                var state = _switchSkybox1([
-                    px, nx, py, ny, pz, nz
-                ], state);
+
+
+
+                var state = _switchSkybox(
+                    0,
+                    skyboxImageDataArr,
+                    // [
+                    //     px, nx, py, ny, pz, nz
+                    // ],
+                    state);
 
 
                 var uiCanvas = document.querySelector("#ui-canvas");
@@ -584,7 +836,6 @@
 
 
                 document.querySelector("#mark_end_button").addEventListener("mousedown", function () {
-                    console.log("zzz")
                     var markData = _getCurrentSkyboxData().markData;
 
                     markData.isBeginMark = false;
@@ -608,11 +859,14 @@
                     }
                 }, true)
 
-                function _switchSkybox1(skyboxImageArr, state) {
-                    _setCurrentSkyboxIndex(0);
+
+                function _switchSkybox(index, skyboxImageDataArr, state) {
+                    currentSkybox = index;
+
+                    _setCurrentSkyboxIndex(index);
 
                     var state = wd.setSkyboxImage(
-                        skyboxImageArr, state
+                        skyboxImageDataArr[index], state
                     );
 
                     var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
@@ -620,43 +874,9 @@
                     return state;
                 }
 
-                function _switchSkybox2(skyboxImageArr, state) {
-                    _setCurrentSkyboxIndex(1);
 
-                    var state = wd.setSkyboxImage(
-                        skyboxImageArr, state
-                    );
-
-                    var state = wd.setSkyboxNeedUpdateCubeTexture(true, state);
-
-                    return state;
-                }
-
-                document.querySelector("#switch_skybox1").addEventListener("mousedown", function () {
-                    var state = wd.unsafeGetState();
-
-
-                    var state = _switchSkybox1([
-                        px, nx, py, ny, pz, nz
-                    ],
-                        state);
-
-                    wd.setState(state);
-                }, true);
-
-                document.querySelector("#switch_skybox2").addEventListener("mousedown", function () {
-                    var state = wd.unsafeGetState();
-
-
-                    var state = _switchSkybox2([
-                        px2, nx2, py2, ny2, pz2, nz2
-                    ],
-                        state);
-
-                    wd.setState(state);
-                }, true);
-
-
+                var isPickRef = false
+                var skyboxIndexRef = -1;
 
 
                 var state =
@@ -664,6 +884,54 @@
                         wd.getPointDownEventName(),
                         0,
                         (event, state) => {
+                            var [isPick, skyboxIndex] =
+                                _isPickJump(
+                                    wd.getPointEventLocationInViewOfEvent(wd.getCustomEventUserData(event)),
+                                    _getCurrentSkyboxData().jumpData,
+                                    cameraGameObject,
+                                    state
+                                );
+
+                            if (isPick) {
+                                isPickRef = isPick;
+                                skyboxIndexRef = skyboxIndex;
+                            }
+                            else {
+                                isPickRef = false;
+                                skyboxIndexRef = skyboxIndex;
+                            }
+
+                            return [state, event];
+
+                        }, state
+                    );
+
+                var state =
+                    wd.onCustomGlobalEvent(
+                        wd.getPointTapEventName(),
+                        0,
+                        (event, state) => {
+                            if (isPickRef) {
+                                var state = _switchSkybox(skyboxIndexRef, skyboxImageDataArr, state);
+
+                                return [state, event];
+                            }
+
+                            return [state, event];
+
+                        }, state
+                    );
+
+
+                var state =
+                    wd.onCustomGlobalEvent(
+                        wd.getPointDownEventName(),
+                        0,
+                        (event, state) => {
+                            console.log("posInWorld: ",
+                                _getInterctedPoint(event, cameraGameObject, state, box2),
+                            );
+
                             var markData = _getCurrentSkyboxData().markData;
 
                             var {
@@ -707,6 +975,15 @@
                         uiContext,
                         markData, cameraGameObject, state
                     );
+
+
+                    var jumpData = _getCurrentSkyboxData().jumpData;
+
+                    _getCurrentSkyboxData().jumpData = _drawJumpText(
+                        uiContext,
+                        jumpData, cameraGameObject, state
+                    );
+
 
                     return state;
                 }, state);
